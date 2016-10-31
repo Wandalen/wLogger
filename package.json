@@ -1,6 +1,6 @@
 {
   "name": "wLogger",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Module in JavaScript providing convenient, multilevel, cross-platform means for colorful logging",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [
