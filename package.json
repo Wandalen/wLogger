@@ -1,7 +1,8 @@
 {
+
   "name": "wLogger",
   "version": "0.3.1",
-  "description": "Module in JavaScript providing convenient, multilevel, cross-platform means for colorful logging",
+  "description": "Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [
     {
@@ -14,7 +15,7 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/amid/mapping/Bitmask.s",
+  "main": "staging/abase/object/printer/printer/Logger.s",
   "files": [
     "staging/abase",
     "production"
@@ -44,10 +45,11 @@
   "keywords": [
     "wTools",
     "logger",
+    "logging",
     "log",
     "colorful log",
+    "multilevel log",
     "colors",
-    "color",
-    "multilevel"
+    "color"
   ]
 }
