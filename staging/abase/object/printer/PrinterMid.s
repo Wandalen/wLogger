@@ -85,9 +85,9 @@ var topic = ( function()
   return function topic()
   {
     var self = this;
-    debugger;
 
-    throw _.err( 'not tested' );
+    debugger;
+    //throw _.err( 'not tested' );
 
     var s = _.str.apply( _,arguments );
 
