@@ -55,35 +55,61 @@ var writeDoing = function( args )
     var chalk = require( 'chalk' );
     var res = '';
     var i = 0;
-    str = _.strSplit( { src : str, splitter : [ '#' ] } );
-
-    while( i < str.length )
+    var regex = /#\w+ : \w+#\w+/mg;
+    str = str.replace( regex, function ( match )
     {
-      var options =  _.strSplit( { src : str[ i ], splitter : [ ',', ':' ] } );
-      var style = options[ 0 ];
-      var color = options[ 1 ];
+      var split = _.strSplit( { src : match, splitter : [ '#', ' : ' ] } );
+      var style = split[ 0 ];
+      var color = split[ 1 ];
+      var text = split[ 2 ];
 
       if( !chalk.styles[ color ] )
       color = 'white';
 
       if( style === 'foreground')
       {
-        res += chalk[ color ]( str[ i + 1 ] );
-        i+=2;
+        match = chalk[ color ]( text );
       }
       else if( style === 'background' )
       {
         color = 'bg' + _.strCapitalize( color );
-        res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
-        i+=2;
+        match = eval(`chalk[ '${color}' ]( '${text}' )`);
       }
-      else
-      {
-        res += str[ i ];
-        ++i;
-      }
-    }
-    return res;
+      return match;
+    });
+
+
+    // while( i < str.length )
+    // {
+    //   var options =  str[ i ].split( ' : ' );
+    //   if( options.length === 1 )
+    //   {
+    //     res += str[ i ];
+    //     ++i;
+    //   }
+    //   else
+    //   {
+    //     var style = options[ 0 ];
+    //     var color = options[ 1 ];
+    //
+    //     if( !chalk.styles[ color ] )
+    //     color = 'white';
+    //
+    //     if( style === 'foreground')
+    //     {
+    //       res += chalk[ color ]( str[ i + 1 ] );
+    //     }
+    //     else if( style === 'background' )
+    //     {
+    //       color = 'bg' + _.strCapitalize( color );
+    //       res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
+    //     }
+    //     i+=2;
+    //   }
+    //
+    //
+    // }
+    return str;
 }
   return _parse( result );
 }
