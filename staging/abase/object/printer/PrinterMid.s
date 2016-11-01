@@ -50,7 +50,42 @@ var writeDoing = function( args )
 
   var result = _.strConcat.apply( optionsForStr,args );
 
-  return result;
+  var _parse = function( str )
+  {
+    var chalk = require( 'chalk' );
+    var res = '';
+    var i = 0;
+    str = _.strSplit( { src : str, splitter : [ '#' ] } );
+
+    while( i < str.length )
+    {
+      var options =  _.strSplit( { src : str[ i ], splitter : [ ',', ':' ] } );
+      var style = options[ 0 ];
+      var color = options[ 1 ];
+
+      if( !chalk.styles[ color ] )
+      color = 'white';
+
+      if( style === 'foreground')
+      {
+        res += chalk[ color ]( str[ i + 1 ] );
+        i+=2;
+      }
+      else if( style === 'background' )
+      {
+        color = 'bg' + _.strCapitalize( color );
+        res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
+        i+=2;
+      }
+      else
+      {
+        res += str[ i ];
+        ++i;
+      }
+    }
+    return res;
+}
+  return _parse( result );
 }
 
 //
