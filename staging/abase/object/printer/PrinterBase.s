@@ -251,9 +251,7 @@ var writeDoing = function( args )
 
   _.assert( arguments.length === 1 );
 
-  debugger;
   var result = _.str.apply( _,args );
-  debugger;
 
   return result;
 }
@@ -266,7 +264,7 @@ var up = function( dLevel )
   if( dLevel === undefined )
   dLevel = 1;
 
-  debugger;
+  //debugger;
   //console.log( 'up' );
 
   _.assert( arguments.length <= 1 );
@@ -298,7 +296,7 @@ var down = function( dLevel )
   if( dLevel === undefined )
   dLevel = 1;
 
-  debugger;
+  //debugger;
   //console.log( 'down' );
 
   _.assert( arguments.length <= 1 );
