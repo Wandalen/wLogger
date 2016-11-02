@@ -55,61 +55,37 @@ var writeDoing = function( args )
     var chalk = require( 'chalk' );
     var res = '';
     var i = 0;
-    var regex = /#\w+ : \w+#\w+/mg;
-    str = str.replace( regex, function ( match )
+    str = str.split( '#' );
+
+    while( i < str.length )
     {
-      var split = _.strSplit( { src : match, splitter : [ '#', ' : ' ] } );
-      var style = split[ 0 ];
-      var color = split[ 1 ];
-      var text = split[ 2 ];
-
-      if( !chalk.styles[ color ] )
-      color = 'white';
-
-      if( style === 'foreground')
+      var options =  str[ i ].split( ' : ' );
+      if( options.length === 1 )
       {
-        match = chalk[ color ]( text );
+        res += str[ i ];
+        ++i;
       }
-      else if( style === 'background' )
+      else
       {
-        color = 'bg' + _.strCapitalize( color );
-        match = eval(`chalk[ '${color}' ]( '${text}' )`);
+        var style = options[ 0 ];
+        var color = options[ 1 ];
+
+        if( !chalk.styles[ color ] )
+        color = 'white';
+
+        if( style === 'foreground')
+        {
+          res += chalk[ color ]( str[ i + 1 ] );
+        }
+        else if( style === 'background' )
+        {
+          color = 'bg' + _.strCapitalize( color );
+          res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
+        }
+        i+=2;
       }
-      return match;
-    });
-
-
-    // while( i < str.length )
-    // {
-    //   var options =  str[ i ].split( ' : ' );
-    //   if( options.length === 1 )
-    //   {
-    //     res += str[ i ];
-    //     ++i;
-    //   }
-    //   else
-    //   {
-    //     var style = options[ 0 ];
-    //     var color = options[ 1 ];
-    //
-    //     if( !chalk.styles[ color ] )
-    //     color = 'white';
-    //
-    //     if( style === 'foreground')
-    //     {
-    //       res += chalk[ color ]( str[ i + 1 ] );
-    //     }
-    //     else if( style === 'background' )
-    //     {
-    //       color = 'bg' + _.strCapitalize( color );
-    //       res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
-    //     }
-    //     i+=2;
-    //   }
-    //
-    //
-    // }
-    return str;
+    }
+    return res;
 }
   return _parse( result );
 }
