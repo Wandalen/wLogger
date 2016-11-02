@@ -7,4 +7,4 @@ var _ = wTools;
 
 var logger = new wLogger();
 
-logger.log('some #text',_.strColorForeground( 'text','red' ),_.strColorBackground( 'text','yellow' ) )
+logger.log('some text',_.strColor.fg( 'text','red' ),_.strColor.bg( 'text','yellow' ) )
