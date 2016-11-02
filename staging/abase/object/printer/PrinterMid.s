@@ -2,8 +2,11 @@
 
 'use strict';
 
+var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
+
+  isBrowser = false;
 
   if( typeof wPrinterBase === 'undefined' )
   require( './PrinterBase.s' )
@@ -36,6 +39,61 @@ var init = function( o )
 
 //
 
+var Chalk;
+var _writeDoingChalk = function( str )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  if( Chalk === undefined && typeof module !== 'undefined' )
+  try
+  {
+    Chalk = require( 'chalk' );
+  }
+  catch( err ) 
+  {
+    Chalk = null;
+  }
+
+  var result = '';
+  var i = 0;
+  str = str.split( '#' );
+
+  while( i < str.length )
+  {
+    var options =  str[ i ].split( ' : ' );
+    var style = options[ 0 ];
+    var color = options[ 1 ];
+
+    if( !Chalk.styles[ color ] )
+    color = 'reset';
+
+    if( style === 'foreground')
+    {
+      result += Chalk[ color ]( str[ i + 1 ] );
+      i+=2;
+    }
+    else if( style === 'background' )
+    {
+      if( color !== 'reset' )
+      color = 'bg' + _.strCapitalize( color );
+      result += Chalk[ color ]( str[ i + 1 ] );
+      i+=2;
+    }
+    else
+    {
+      result += str[ i ];
+      ++i;
+    }
+
+  }
+
+  return result;
+}
+
+//
+
 var writeDoing = function( args )
 {
   var self = this;
@@ -50,44 +108,10 @@ var writeDoing = function( args )
 
   var result = _.strConcat.apply( optionsForStr,args );
 
-  var _parse = function( str )
-  {
-    var chalk = require( 'chalk' );
-    var res = '';
-    var i = 0;
-    str = str.split( '#' );
+  if( !isBrowser )
+  result = self._writeDoingChalk( result );
 
-    while( i < str.length )
-    {
-      var options =  str[ i ].split( ' : ' );
-      var style = options[ 0 ];
-      var color = options[ 1 ];
-
-      if( !chalk.styles[ color ] )
-      color = 'reset';
-
-      if( style === 'foreground')
-      {
-        res += chalk[ color ]( str[ i + 1 ] );
-        i+=2;
-      }
-      else if( style === 'background' )
-      {
-        if( color !== 'reset' )
-        color = 'bg' + _.strCapitalize( color );
-        res += eval(`chalk[ '${color}' ]( str[ i + 1 ] )`);
-        i+=2;
-      }
-      else
-      {
-        res += str[ i ];
-        ++i;
-      }
-
-    }
-    return res;
-}
-  return _parse( result );
+  return result;
 }
 
 //
@@ -117,7 +141,7 @@ var levelSet = function( level )
 var topic = ( function()
 {
 
-  var Chalk;
+  // var Chalk;
 
   return function topic()
   {
@@ -206,6 +230,7 @@ var Proto =
   init : init,
 
   writeDoing : writeDoing,
+  _writeDoingChalk : _writeDoingChalk,
 
   levelSet : levelSet,
 
