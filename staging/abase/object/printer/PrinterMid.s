@@ -66,20 +66,36 @@ var _writeDoingChalk = function( str )
     var style = options[ 0 ];
     var color = options[ 1 ];
 
-    if( !Chalk.styles[ color ] )
-    color = 'reset';
+    // if( !Chalk.styles[ color ] )
+    // color = 'reset';
 
     if( style === 'foreground')
     {
-      result += Chalk[ color ]( str[ i + 1 ] );
-      i+=2;
+      if( color !== 'default' )
+      {
+        self._fgcolor = color;
+        result+= Chalk.styles[ color ].open;
+      }
+      else
+      {
+        result+= Chalk.styles[ self._fgcolor ].close;
+      }
+      ++i;
     }
     else if( style === 'background' )
     {
-      if( color !== 'reset' )
-      color = 'bg' + _.strCapitalize( color );
-      result += Chalk[ color ]( str[ i + 1 ] );
-      i+=2;
+      if( color !== 'default' )
+      {
+        self._bgcolor = color;
+        color = 'bg' + _.strCapitalize( color );
+        result+= Chalk.styles[ color ].open;
+      }
+      else
+      {
+        color = 'bg' + _.strCapitalize( self._bgcolor );
+        result+= Chalk.styles[ color ].close;
+      }
+      ++i;
     }
     else
     {
@@ -88,7 +104,6 @@ var _writeDoingChalk = function( str )
     }
 
   }
-
   return result;
 }
 
@@ -110,6 +125,8 @@ var writeDoing = function( args )
 
   if( !isBrowser )
   result = self._writeDoingChalk( result );
+  else
+  result = self._writeDoing( result );
 
   return result;
 }
@@ -207,6 +224,9 @@ var Composes =
 
   _dprefix : '  ',
   _dpostfix : '',
+
+  _fgcolor : null,
+  _bgcolor : null
 
 }
 
