@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   if( typeof wPrinterBase === 'undefined' )
   require( './PrinterBase.s' )
-
+  require( 'wColor' );
 }
 
 //
@@ -39,21 +39,41 @@ var init = function( o )
 
 //
 
-var Chalk;
+var _rgbToCode = function( rgb )
+{
+  	var r = rgb[0];
+  	var g = rgb[1];
+  	var b = rgb[2];
+
+  	var ansi = 30	+ ( ( Math.round( b ) << 2 ) | (Math.round( g ) << 1 )	| Math.round( r ) );
+
+  	return ansi;
+
+}
+
 var _writeDoingChalk = function( str )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
 
-  if( Chalk === undefined && typeof module !== 'undefined' )
-  try
+  var ColorMap =
   {
-    Chalk = require( 'chalk' );
+    // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
+    // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
+    'white'       : [ 1.0,1.0,1.0 ],
+    'black'       : [ 0.0,0.0,0.0 ],
+    'red'         : [ 1.0,0.0,0.0 ],
+    'green'       : [ 0.0,1.0,0.0 ],
+    'blue'        : [ 0.0,0.0,1.0 ],
+    'yellow'      : [ 1.0,1.0,0.0 ],
   }
-  catch( err ) 
+
+  if( !self._colorTable )
   {
-    Chalk = null;
+    self._colorTable = [];
+    for( var key in ColorMap  )
+    self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
   }
 
   var result = '';
@@ -66,19 +86,24 @@ var _writeDoingChalk = function( str )
     var style = options[ 0 ];
     var color = options[ 1 ];
 
-    // if( !Chalk.styles[ color ] )
-    // color = 'reset';
+    if( color && color!='default' )
+    {
+      if( self._colorTable[ color ] )
+      color = self._colorTable[ color ];
+      else
+      color = self._rgbToCode( _.colorFrom( color ) );
+    }
 
     if( style === 'foreground')
     {
       if( color !== 'default' )
       {
         self._fgcolor = color;
-        result+= Chalk.styles[ color ].open;
+        result+= `\u001B[${ self._fgcolor }m`;
       }
       else
       {
-        result+= Chalk.styles[ self._fgcolor ].close;
+        result+= `\u001B[39m`;
       }
       ++i;
     }
@@ -87,13 +112,11 @@ var _writeDoingChalk = function( str )
       if( color !== 'default' )
       {
         self._bgcolor = color;
-        color = 'bg' + _.strCapitalize( color );
-        result+= Chalk.styles[ color ].open;
+        result+= `\u001B[${ self._bgcolor + 10 }m`;
       }
       else
       {
-        color = 'bg' + _.strCapitalize( self._bgcolor );
-        result+= Chalk.styles[ color ].close;
+        result+= `\u001B[49m`;
       }
       ++i;
     }
@@ -224,7 +247,8 @@ var Composes =
   _dpostfix : '',
 
   _fgcolor : null,
-  _bgcolor : null
+  _bgcolor : null,
+  _colorTable : null,
 
 }
 
@@ -249,6 +273,7 @@ var Proto =
 
   writeDoing : writeDoing,
   _writeDoingChalk : _writeDoingChalk,
+  _rgbToCode : _rgbToCode,
 
   levelSet : levelSet,
 
