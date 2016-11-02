@@ -125,8 +125,6 @@ var writeDoing = function( args )
 
   if( !isBrowser )
   result = self._writeDoingChalk( result );
-  else
-  result = self._writeDoing( result );
 
   return result;
 }
