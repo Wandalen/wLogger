@@ -78,54 +78,63 @@ var _writeDoingChalk = function( str )
 
   var result = '';
   var i = 0;
-  str = str.split( '#' );
 
-  while( i < str.length )
+  var onStrip = function( strip )
   {
-    var options =  str[ i ].split( ' : ' );
-    var style = options[ 0 ];
-    var color = options[ 1 ];
+    var allowedKeys = [ 'bg','background','fg','foreground' ];
+    var parts = strip.split( ' : ' )
+    if( parts.length === 2 )
+    {
+      if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
+      return;
+      return parts;
+    }
+  }
 
-    if( color && color!='default' )
-    {
-      if( self._colorTable[ color ] )
-      color = self._colorTable[ color ];
-      else
-      color = self._rgbToCode( _.colorFrom( color ) );
-    }
+  var splitted = _.strExtractStrips( str, { onStrip : onStrip } );
 
-    if( style === 'foreground')
-    {
-      if( color !== 'default' )
-      {
-        self._fgcolor = color;
-        result+= `\u001B[${ self._fgcolor }m`;
-      }
-      else
-      {
-        result+= `\u001B[39m`;
-      }
-      ++i;
-    }
-    else if( style === 'background' )
-    {
-      if( color !== 'default' )
-      {
-        self._bgcolor = color;
-        result+= `\u001B[${ self._bgcolor + 10 }m`;
-      }
-      else
-      {
-        result+= `\u001B[49m`;
-      }
-      ++i;
-    }
+  for( var i = 0; i < splitted.length; i++ )
+  {
+    if( _.strIs( splitted[ i ] ) )
+    result += splitted[ i ];
     else
     {
-      result += str[ i ];
-      ++i;
-    }
+      var style = splitted[ i ][ 0 ];
+      var color = splitted[ i ][ 1 ];
 
+      if( color && color!='default' )
+      {
+        if( self._colorTable[ color ] )
+        color = self._colorTable[ color ];
+        else
+        color = self._rgbToCode( _.colorFrom( color ) );
+      }
+
+      if( style === 'foreground')
+      {
+        if( color !== 'default' )
+        {
+          self._fgcolor = color;
+          result+= `\x1b[${ self._fgcolor }m`;
+        }
+        else
+        {
+          result+= `\x1b[39m`;
+        }
+      }
+      else if( style === 'background' )
+      {
+        if( color !== 'default' )
+        {
+          self._bgcolor = color;
+          result+= `\x1b[${ self._bgcolor + 10 }m`;
+        }
+        else
+        {
+          result+= `\x1b[49m`;
+        }
+      }
+    }
   }
   return result;
 }
