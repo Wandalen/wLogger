@@ -207,7 +207,8 @@ var _makeWrapForWriteMethodClass = function( name )
 
     //return context[ name ].apply( context,args );
 
-    return this[ nameAct ]( args );
+    // return this[ nameAct ]( args );
+    return this[ nameAct ].apply( this,args );
   }
 
   /* */
