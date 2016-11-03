@@ -259,7 +259,7 @@ _.protoMake
 _.accessor
 ({
   object : Self.prototype,
-  rewriting : 1,
+  combining : 'rewrite',
   names :
   {
     level : 'level',
