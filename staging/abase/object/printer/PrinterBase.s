@@ -208,6 +208,8 @@ var _makeWrapForWriteMethodClass = function( name )
     //return context[ name ].apply( context,args );
 
     // return this[ nameAct ]( args );
+
+    _.assert( _.arrayIs( args ) );
     return this[ nameAct ].apply( this,args );
   }
 
@@ -252,7 +254,7 @@ var writeDoing = function( args )
 
   _.assert( arguments.length === 1 );
 
-  var result = _.str.apply( _,args );
+  var result = [ _.str.apply( _,args ) ];
 
   return result;
 }
