@@ -51,6 +51,76 @@ var _rgbToCode = function( rgb )
 
 }
 
+//
+
+var _onStrip = function( strip )
+{
+  var allowedKeys = [ 'bg','background','fg','foreground' ];
+  var parts = strip.split( ' : ' )
+  if( parts.length === 2 )
+  {
+    if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
+    return;
+    return parts;
+  }
+}
+
+var _writeDoingChalkBrowser = function( str )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  var result = [ '' ];
+
+  var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
+  var isStyled=0;
+  for( var i = 0; i < splitted.length; i++ )
+  {
+    if( _.arrayIs( splitted[ i ] ) )
+    {
+      var style = splitted[ i ][ 0 ];
+      var color = splitted[ i ][ 1 ];
+
+      if( style === 'foreground')
+      {
+        if( color !== 'default' )
+        {
+          self._fgcolor = color;
+          isStyled = 1;
+        }
+        else
+        {
+          result.push( `color:${ self._fgcolor }` );
+          isStyled = 0;
+        }
+      }
+      else if( style === 'background')
+      {
+        if( color !== 'default' )
+        {
+          self._bgcolor = color;
+          isStyled = 1;
+        }
+        else
+        {
+          result.push( `background:${ self._bgcolor }` );
+          isStyled = 0;
+        }
+      }
+    }
+    else
+    {
+      result[ 0 ] += `%c${ splitted[ i ] }`;
+      if( !isStyled )
+      result.push( `color:none` );
+    }
+  }
+  return result;
+}
+
+//
+
 var _writeDoingChalk = function( str )
 {
   var self = this;
@@ -77,21 +147,8 @@ var _writeDoingChalk = function( str )
   }
 
   var result = '';
-  var i = 0;
 
-  var onStrip = function( strip )
-  {
-    var allowedKeys = [ 'bg','background','fg','foreground' ];
-    var parts = strip.split( ' : ' )
-    if( parts.length === 2 )
-    {
-      if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
-      return;
-      return parts;
-    }
-  }
-
-  var splitted = _.strExtractStrips( str, { onStrip : onStrip } );
+  var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -157,7 +214,8 @@ var writeDoing = function( args )
 
   if( !isBrowser )
   result = self._writeDoingChalk( result );
-
+  else
+  result = self._writeDoingChalkBrowser( result );
   return result;
 }
 
@@ -282,7 +340,9 @@ var Proto =
 
   writeDoing : writeDoing,
   _writeDoingChalk : _writeDoingChalk,
+  _writeDoingChalkBrowser : _writeDoingChalkBrowser,
   _rgbToCode : _rgbToCode,
+  _onStrip : _onStrip,
 
   levelSet : levelSet,
 
