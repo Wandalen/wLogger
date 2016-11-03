@@ -207,7 +207,7 @@ var levelSet = function( level )
 {
   var self = this;
 
-  _.assert( _.isFinite( level ) );
+  _.assert( isFinite( level ) );
 
   Parent.prototype.levelSet.call( self,level );
 
