@@ -1,4 +1,4 @@
-(function _PrinterMid_s_(){
+(function _PrinterMid_s_() {
 
 'use strict';
 
@@ -10,7 +10,15 @@ if( typeof module !== 'undefined' )
 
   if( typeof wPrinterBase === 'undefined' )
   require( './PrinterBase.s' )
-  require( 'wColor' );
+
+  try
+  {
+    require( 'wColor' );
+  }
+  catch( err )
+  {
+  }
+
 }
 
 //
