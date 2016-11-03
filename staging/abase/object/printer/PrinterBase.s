@@ -343,7 +343,7 @@ var levelSet = function( level )
   var self = this;
 
   _.assert( level >= 0, 'levelSet : cant go below zero level to',level );
-  _.assert( _.isFinite( level ) );
+  _.assert( isFinite( level ) );
 
   self[ symbolForLevel ] = level;
 
