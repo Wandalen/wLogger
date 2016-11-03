@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   if( typeof wPrinterBase === 'undefined' )
   require( './PrinterBase.s' )
-
+  require( 'wColor' );
 }
 
 //
@@ -39,56 +39,160 @@ var init = function( o )
 
 //
 
-var Chalk;
+var _rgbToCode = function( rgb )
+{
+  	var r = rgb[0];
+  	var g = rgb[1];
+  	var b = rgb[2];
+
+  	var ansi = 30	+ ( ( Math.round( b ) << 2 ) | (Math.round( g ) << 1 )	| Math.round( r ) );
+
+  	return ansi;
+
+}
+
+//
+
+var _onStrip = function( strip )
+{
+  var allowedKeys = [ 'bg','background','fg','foreground' ];
+  var parts = strip.split( ' : ' )
+  if( parts.length === 2 )
+  {
+    if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
+    return;
+    return parts;
+  }
+}
+
+var _writeDoingChalkBrowser = function( str )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  var result = [ '' ];
+
+  var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
+  var isStyled=0;
+  for( var i = 0; i < splitted.length; i++ )
+  {
+    if( _.arrayIs( splitted[ i ] ) )
+    {
+      var style = splitted[ i ][ 0 ];
+      var color = splitted[ i ][ 1 ];
+
+      if( style === 'foreground')
+      {
+        if( color !== 'default' )
+        {
+          self._fgcolor = color;
+          isStyled = 1;
+        }
+        else
+        {
+          result.push( `color:${ self._fgcolor }` );
+          isStyled = 0;
+        }
+      }
+      else if( style === 'background')
+      {
+        if( color !== 'default' )
+        {
+          self._bgcolor = color;
+          isStyled = 1;
+        }
+        else
+        {
+          result.push( `background:${ self._bgcolor }` );
+          isStyled = 0;
+        }
+      }
+    }
+    else
+    {
+      result[ 0 ] += `%c${ splitted[ i ] }`;
+      if( !isStyled )
+      result.push( `color:none` );
+    }
+  }
+  return result;
+}
+
+//
+
 var _writeDoingChalk = function( str )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
 
-  if( Chalk === undefined && typeof module !== 'undefined' )
-  try
+  var ColorMap =
   {
-    Chalk = require( 'chalk' );
+    // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
+    // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
+    'white'       : [ 1.0,1.0,1.0 ],
+    'black'       : [ 0.0,0.0,0.0 ],
+    'red'         : [ 1.0,0.0,0.0 ],
+    'green'       : [ 0.0,1.0,0.0 ],
+    'blue'        : [ 0.0,0.0,1.0 ],
+    'yellow'      : [ 1.0,1.0,0.0 ],
   }
-  catch( err ) 
+
+  if( !self._colorTable )
   {
-    Chalk = null;
+    self._colorTable = [];
+    for( var key in ColorMap  )
+    self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
   }
 
   var result = '';
-  var i = 0;
-  str = str.split( '#' );
 
-  while( i < str.length )
+  var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
+
+  for( var i = 0; i < splitted.length; i++ )
   {
-    var options =  str[ i ].split( ' : ' );
-    var style = options[ 0 ];
-    var color = options[ 1 ];
-
-    if( !Chalk.styles[ color ] )
-    color = 'reset';
-
-    if( style === 'foreground')
-    {
-      result += Chalk[ color ]( str[ i + 1 ] );
-      i+=2;
-    }
-    else if( style === 'background' )
-    {
-      if( color !== 'reset' )
-      color = 'bg' + _.strCapitalize( color );
-      result += Chalk[ color ]( str[ i + 1 ] );
-      i+=2;
-    }
+    if( _.strIs( splitted[ i ] ) )
+    result += splitted[ i ];
     else
     {
-      result += str[ i ];
-      ++i;
+      var style = splitted[ i ][ 0 ];
+      var color = splitted[ i ][ 1 ];
+
+      if( color && color!='default' )
+      {
+        if( self._colorTable[ color ] )
+        color = self._colorTable[ color ];
+        else
+        color = self._rgbToCode( _.colorFrom( color ) );
+      }
+
+      if( style === 'foreground')
+      {
+        if( color !== 'default' )
+        {
+          self._fgcolor = color;
+          result+= `\x1b[${ self._fgcolor }m`;
+        }
+        else
+        {
+          result+= `\x1b[39m`;
+        }
+      }
+      else if( style === 'background' )
+      {
+        if( color !== 'default' )
+        {
+          self._bgcolor = color;
+          result+= `\x1b[${ self._bgcolor + 10 }m`;
+        }
+        else
+        {
+          result+= `\x1b[49m`;
+        }
+      }
     }
-
   }
-
   return result;
 }
 
@@ -110,7 +214,8 @@ var writeDoing = function( args )
 
   if( !isBrowser )
   result = self._writeDoingChalk( result );
-
+  else
+  result = self._writeDoingChalkBrowser( result );
   return result;
 }
 
@@ -208,6 +313,10 @@ var Composes =
   _dprefix : '  ',
   _dpostfix : '',
 
+  _fgcolor : null,
+  _bgcolor : null,
+  _colorTable : null,
+
 }
 
 var Aggregates =
@@ -231,6 +340,9 @@ var Proto =
 
   writeDoing : writeDoing,
   _writeDoingChalk : _writeDoingChalk,
+  _writeDoingChalkBrowser : _writeDoingChalkBrowser,
+  _rgbToCode : _rgbToCode,
+  _onStrip : _onStrip,
 
   levelSet : levelSet,
 
