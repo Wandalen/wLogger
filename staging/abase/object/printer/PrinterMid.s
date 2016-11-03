@@ -74,7 +74,7 @@ var _writeDoingChalkBrowser = function( str )
   var result = [ '' ];
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var isStyled=0;
+
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.arrayIs( splitted[ i ] ) )
@@ -84,36 +84,23 @@ var _writeDoingChalkBrowser = function( str )
 
       if( style === 'foreground')
       {
-        if( color !== 'default' )
-        {
-          self._fgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self._fgcolor = null;
         else
-        {
-          result.push( `color:${ self._fgcolor }` );
-          isStyled = 0;
-        }
+        self._fgcolor = color;
       }
       else if( style === 'background')
       {
-        if( color !== 'default' )
-        {
-          self._bgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self._bgcolor = null;
         else
-        {
-          result.push( `background:${ self._bgcolor }` );
-          isStyled = 0;
-        }
+        self._bgcolor = color;
       }
     }
     else
     {
       result[ 0 ] += `%c${ splitted[ i ] }`;
-      if( !isStyled )
-      result.push( `color:none` );
+      result.push( `color:${ self._fgcolor };background:${ self._bgcolor };` );
     }
   }
   return result;
@@ -169,27 +156,21 @@ var _writeDoingChalk = function( str )
 
       if( style === 'foreground')
       {
-        if( color !== 'default' )
-        {
-          self._fgcolor = color;
-          result+= `\x1b[${ self._fgcolor }m`;
-        }
+        if( color === 'default' )
+        self._fgcolor = 39;
         else
-        {
-          result+= `\x1b[39m`;
-        }
+        self._fgcolor = color;
+
+        result+= `\x1b[${ self._fgcolor }m`;
       }
       else if( style === 'background' )
       {
-        if( color !== 'default' )
-        {
-          self._bgcolor = color;
-          result+= `\x1b[${ self._bgcolor + 10 }m`;
-        }
+        if( color === 'default' )
+        self._bgcolor = 39;
         else
-        {
-          result+= `\x1b[49m`;
-        }
+        self._bgcolor = color;
+
+        result+= `\x1b[${ self._bgcolor + 10 }m`;
       }
     }
   }
@@ -213,7 +194,7 @@ var writeDoing = function( args )
   var result = _.strConcat.apply( optionsForStr,args );
 
   if( !isBrowser )
-  result = self._writeDoingChalk( result );
+  result = [ self._writeDoingChalk( result ) ];
   else
   result = self._writeDoingChalkBrowser( result );
   return result;
