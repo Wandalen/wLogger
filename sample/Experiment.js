@@ -9,9 +9,10 @@ var _ = wTools;
 
 var logger = new wLogger();
 
-logger.log( 'some text',_.strColor.fg( 'text','red' ),_.strColor.bg( 'text','yellow' ) )
+logger.log( 'some text',_.strColor.fg( 'text','red' ),_.strColor.bg( 'text','yellow' ) );
 
-// logger.log( '#foreground : red#this is red text' );
-// logger.log( 'this is too#foreground : default#' );
-// logger.log( '#background : green#green background' );
-// logger.log( 'this is too#background : default#' );
+logger.log( '#foreground : red#this is red text' );
+logger.log( 'this is too#foreground : default#' );
+logger.log( '#background : green#green background' );
+logger.log( 'this is too#background : default#' );
+logger.log( 'simple text next' );
