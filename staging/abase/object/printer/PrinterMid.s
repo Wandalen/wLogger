@@ -75,6 +75,22 @@ var _onStrip = function( strip )
 
 //
 
+var colorForegroundGet = function()
+{
+  var self = this;
+  return self.foregroundColor;
+}
+
+//
+
+var colorBackgroundGet = function()
+{
+  var self = this;
+  return self.backgroundColor;
+}
+
+//
+
 var _writeDoingBrowser = function( str )
 {
   var self = this;
@@ -82,8 +98,14 @@ var _writeDoingBrowser = function( str )
   _.assert( arguments.length === 1 );
 
   var result = [ '' ];
+
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var isStyled = 0;
+
+  if( splitted.length === 1 && !self._isStyled )
+  {
+    if( !_.arrayIs( splitted[ 0 ] ) )
+    return splitted;
+  }
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -94,45 +116,31 @@ var _writeDoingBrowser = function( str )
 
       if( style === 'foreground')
       {
-        if( color !== 'default' )
-        {
-          self._fgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self.foregroundColor = null;
         else
-        {
-          result.push( `color:${ self._fgcolor }` );
-          isStyled = 0;
-        }
+        self.foregroundColor = color;
       }
       else if( style === 'background')
       {
-        if( color !== 'default' )
-        {
-          self._bgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self.backgroundColor = null;
         else
-        {
-          result.push( `background:${ self._bgcolor }` );
-          isStyled = 0;
-        }
+        self.backgroundColor = color;
       }
+      if( !self.foregroundColor && !self.backgroundColor )
+      self._isStyled = 0;
+      else if( new Boolean( self.foregroundColor ) | new Boolean( self.backgroundColor ) )
+      self._isStyled = 1;
     }
     else
     {
-      if( !isStyled )
-      {
-        result[ 0 ] = splitted[ i ];
-      }
-      else
-      {
-        result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:none` );
-      }
+      result[ 0 ] += `%c${ splitted[ i ] }`;
+      result.push( `color:${ self.foregroundColor };background:${ self.backgroundColor };` );
     }
   }
-
+  if( !result[ 0 ].length )
+  return [];
   return result;
 }
 
@@ -188,8 +196,8 @@ var _writeDoingChalk = function( str )
       {
         if( color !== 'default' )
         {
-          self._fgcolor = color;
-          result+= `\x1b[${ self._fgcolor }m`;
+          self.foregroundColor = color;
+          result+= `\x1b[${ self.foregroundColor }m`;
         }
         else
         {
@@ -200,8 +208,8 @@ var _writeDoingChalk = function( str )
       {
         if( color !== 'default' )
         {
-          self._bgcolor = color;
-          result+= `\x1b[${ self._bgcolor + 10 }m`;
+          self.backgroundColor = color;
+          result+= `\x1b[${ self.backgroundColor + 10 }m`;
         }
         else
         {
@@ -332,9 +340,10 @@ var Composes =
   _dprefix : '  ',
   _dpostfix : '',
 
-  _fgcolor : null,
-  _bgcolor : null,
+  foregroundColor : null,
+  backgroundColor : null,
   _colorTable : null,
+  _isStyled : 0
 
 }
 
@@ -362,7 +371,8 @@ var Proto =
   _writeDoingBrowser : _writeDoingBrowser,
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
-
+  colorForegroundGet : colorForegroundGet,
+  colorBackgroundGet : colorBackgroundGet,
   levelSet : levelSet,
 
   topic : topic,
@@ -394,6 +404,8 @@ _.accessor
   names :
   {
     level : 'level',
+    foregroundColor : 'foregroundColor',
+    backgroundColor : 'backgroundColor',
   }
 });
 
