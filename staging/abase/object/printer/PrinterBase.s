@@ -15,6 +15,7 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
+  require( 'wCopyable' );
 }
 
 //
@@ -448,6 +449,8 @@ _.protoMake
   parent : Parent,
   extend : Proto,
 });
+
+wCopyable.mixin( Self );
 
 Self.prototype.initClass();
 
