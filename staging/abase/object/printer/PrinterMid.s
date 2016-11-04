@@ -82,9 +82,9 @@ var _writeDoingBrowser = function( str )
   _.assert( arguments.length === 1 );
 
   var result = [ '' ];
-
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var isStyled=0;
+  var isStyled = 0;
+
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.arrayIs( splitted[ i ] ) )
@@ -121,11 +121,18 @@ var _writeDoingBrowser = function( str )
     }
     else
     {
-      result[ 0 ] += `%c${ splitted[ i ] }`;
       if( !isStyled )
-      result.push( `color:none` );
+      {
+        result[ 0 ] = splitted[ i ];
+      }
+      else
+      {
+        result[ 0 ] += `%c${ splitted[ i ] }`;
+        result.push( `color:none` );
+      }
     }
   }
+
   return result;
 }
 
