@@ -119,24 +119,24 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         self.foregroundColor = null;
         else
-        self.foregroundColor = color;
+        self.foregroundColor = _.colorFrom( color );
       }
       else if( style === 'background')
       {
         if( color === 'default' )
         self.backgroundColor = null;
         else
-        self.backgroundColor = color;
+        self.backgroundColor = _.colorFrom( color );
       }
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
-      else if( new Boolean( self.foregroundColor ) | new Boolean( self.backgroundColor ) )
+      else if( !!self.foregroundColor | !!self.backgroundColor )
       self._isStyled = 1;
     }
     else
     {
       result[ 0 ] += `%c${ splitted[ i ] }`;
-      result.push( `color:${ self.foregroundColor };background:${ self.backgroundColor };` );
+      result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
     }
   }
   if( !result[ 0 ].length )
