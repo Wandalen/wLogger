@@ -100,12 +100,11 @@ var _writeDoingBrowser = function( str )
   var result = [ '' ];
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-
-  if( splitted.length === 1 && !self._isStyled )
-  {
-    if( !_.arrayIs( splitted[ 0 ] ) )
-    return splitted;
-  }
+  // if( splitted.length === 1 && !self._isStyled )
+  // {
+  //   if( !_.arrayIs( splitted[ 0 ] ) )
+  //   return splitted;
+  // }
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -135,10 +134,18 @@ var _writeDoingBrowser = function( str )
     }
     else
     {
-      result[ 0 ] += `%c${ splitted[ i ] }`;
-      result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
+      if( self._isStyled )
+      {
+        result[ 0 ] += `%c${ splitted[ i ] }`;
+        result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
+      }
+      else
+      {
+        result[ 0 ] +=  splitted[ i ];
+      }
     }
   }
+
   if( !result[ 0 ].length )
   return [];
   return result;
