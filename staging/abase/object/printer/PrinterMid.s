@@ -159,24 +159,24 @@ var _writeDoingChalk = function( str )
 
   _.assert( arguments.length === 1 );
 
-  var ColorMap =
-  {
-    // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
-    // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
-    'white'       : [ 1.0,1.0,1.0 ],
-    'black'       : [ 0.0,0.0,0.0 ],
-    'red'         : [ 1.0,0.0,0.0 ],
-    'green'       : [ 0.0,1.0,0.0 ],
-    'blue'        : [ 0.0,0.0,1.0 ],
-    'yellow'      : [ 1.0,1.0,0.0 ],
-  }
-
-  if( !self._colorTable )
-  {
-    self._colorTable = [];
-    for( var key in ColorMap  )
-    self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
-  }
+  // var ColorMap =
+  // {
+  //   // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
+  //   // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
+  //   'white'       : [ 1.0,1.0,1.0 ],
+  //   'black'       : [ 0.0,0.0,0.0 ],
+  //   'red'         : [ 1.0,0.0,0.0 ],
+  //   'green'       : [ 0.0,1.0,0.0 ],
+  //   'blue'        : [ 0.0,0.0,1.0 ],
+  //   'yellow'      : [ 1.0,1.0,0.0 ],
+  // }
+  //
+  // if( !self._colorTable )
+  // {
+  //   self._colorTable = [];
+  //   for( var key in ColorMap  )
+  //   self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
+  // }
 
   var result = '';
 
@@ -193,10 +193,10 @@ var _writeDoingChalk = function( str )
 
       if( color && color!='default' )
       {
-        if( self._colorTable[ color ] )
-        color = self._colorTable[ color ];
-        else
-        color = self._rgbToCode( _.colorFrom( color ) );
+        // if( self._colorTable[ color ] )
+        // color = self._colorTable[ color ];
+        // else
+        color = _.colorFrom( color );
       }
 
       if( style === 'foreground')
@@ -204,10 +204,11 @@ var _writeDoingChalk = function( str )
         if( color !== 'default' )
         {
           self.foregroundColor = color;
-          result+= `\x1b[${ self.foregroundColor }m`;
+          result+= `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
         }
         else
         {
+          self.foregroundColor = null;
           result+= `\x1b[39m`;
         }
       }
@@ -216,10 +217,11 @@ var _writeDoingChalk = function( str )
         if( color !== 'default' )
         {
           self.backgroundColor = color;
-          result+= `\x1b[${ self.backgroundColor + 10 }m`;
+          result+= `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
         }
         else
         {
+          self.backgroundColor = null;
           result+= `\x1b[49m`;
         }
       }
