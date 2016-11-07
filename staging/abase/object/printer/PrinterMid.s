@@ -100,11 +100,11 @@ var _writeDoingBrowser = function( str )
   var result = [ '' ];
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  // if( splitted.length === 1 && !self._isStyled )
-  // {
-  //   if( !_.arrayIs( splitted[ 0 ] ) )
-  //   return splitted;
-  // }
+  if( splitted.length === 1 && !self._isStyled )
+  {
+    if( !_.arrayIs( splitted[ 0 ] ) )
+    return splitted;
+  }
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -134,14 +134,19 @@ var _writeDoingBrowser = function( str )
     }
     else
     {
-      if( self._isStyled )
+      if( !i && !self._isStyled )
       {
-        result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
+        result[ 0 ] += splitted[ i ];
       }
       else
       {
-        result[ 0 ] +=  splitted[ i ];
+        if( !self.foregroundColor )
+        self.foregroundColor = 'none';
+        if( !self.backgroundColor )
+        self.backgroundColor = 'none';
+
+        result[ 0 ] += `%c${ splitted[ i ] }`;
+        result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
       }
     }
   }
