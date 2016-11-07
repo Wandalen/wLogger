@@ -1,4 +1,4 @@
-(function _Logger_s_() {
+(function _LoggerToFile_s_() {
 
 'use strict';
 
@@ -7,16 +7,16 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterMid === 'undefined' )
-  require( '../PrinterMid.s' )
+  if( typeof wLogger === 'undefined' )
+  require( './Logger.s' )
 
 }
 
 //
 
 var _ = wTools;
-var Parent = wPrinterMid;
-var Self = function wLogger()
+var Parent = wLogger;
+var Self = function wLoggerToFile()
 {
   if( !( this instanceof Self ) )
   if( o instanceof Self )
@@ -34,6 +34,9 @@ var init = function( o )
 
   Parent.prototype.init.call( self,o );
 
+  if( self.output )
+  self.outputTo( self.output );
+
 }
 
 // --
@@ -50,7 +53,8 @@ var Aggregates =
 
 var Associates =
 {
-  output : console,
+  output : null,
+  outputPath : null,
 }
 
 // --
@@ -89,9 +93,7 @@ if( typeof module !== 'undefined' && module !== null )
   module[ 'exports' ] = Self;
 }
 
-_global_[ Self.name ] = wTools.Logger = Self;
-if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self();
+_global_[ Self.name ] = wTools.LoggerToFile = Self;
 
 return Self;
 

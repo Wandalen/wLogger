@@ -258,13 +258,13 @@ var writeDoing = function( args )
 //
 
 var symbolForLevel = Symbol.for( 'level' );
-var levelSet = function( level )
+var _levelSet = function( level )
 {
   var self = this;
 
   _.assert( isFinite( level ) );
 
-  Parent.prototype.levelSet.call( self,level );
+  Parent.prototype._levelSet.call( self,level );
 
   var level = self[ symbolForLevel ];
 
@@ -375,14 +375,18 @@ var Proto =
 
   init : init,
 
-  writeDoing : writeDoing,
-  _writeDoingChalk : _writeDoingChalk,
-  _writeDoingBrowser : _writeDoingBrowser,
-  _rgbToCode : _rgbToCode,
-  _onStrip : _onStrip,
   colorForegroundGet : colorForegroundGet,
   colorBackgroundGet : colorBackgroundGet,
-  levelSet : levelSet,
+
+  _rgbToCode : _rgbToCode,
+  _onStrip : _onStrip,
+
+  _writeDoingChalk : _writeDoingChalk,
+  _writeDoingBrowser : _writeDoingBrowser,
+
+  writeDoing : writeDoing,
+
+  _levelSet : _levelSet,
 
   topic : topic,
 

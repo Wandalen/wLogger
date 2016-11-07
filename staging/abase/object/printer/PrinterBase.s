@@ -29,6 +29,10 @@ if( typeof module !== 'undefined' )
 
 //
 
+var symbolForLevel = Symbol.for( 'level' );
+
+//
+
 var _ = wTools;
 var Parent = null;
 var Self = function wPrinterBase()
@@ -47,141 +51,35 @@ var init = function( o )
 {
   var self = this;
 
+  self.outputs = [];
   _.protoComplementInstance( self );
+  Object.preventExtensions( self );
 
   if( o )
   self.copy( o );
 
-  self.bindTo( null );
-
-  Object.preventExtensions( self );
-
-  // var self = _.mapExtend( this,o );
-  // self.format = _.entityClone( self.format );
+  // self.outputTo( null );
+  //Object.preventExtensions( self );
 
   return self;
 }
 
 //
 
-var initClass = function()
+var init_static = function()
 {
   var proto = this;
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
-  for( var m = 0 ; m < proto.methodsToBind.length ; m++ )
-  if( !proto[ proto.methodsToBind[ m ] ] )
-  proto._makeWrapForWriteMethodClass( methodsToBind[ m ] );
+  for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
+  if( !proto[ proto.outputWriteMethods[ m ] ] )
+  proto._init_static( outputWriteMethods[ m ] );
 
 }
 
 //
 
-var bindTo = function( target,rewriting )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1 );
-  _.assert( _.objectIs( target ) || target === null );
-
-  for( var m = 0 ; m < self.methodsToBind.length ; m++ )
-  {
-    var name = self.methodsToBind[ m ];
-    var nameAct = name + 'Act';
-
-    if( !rewriting && _.routineIs( self[ nameAct ] ) )
-    continue;
-
-    if( target === null )
-    {
-      self[ nameAct ] = null;
-      continue;
-    }
-
-    _.assert( target[ name ],'bindTo expects target has method',name );
-
-    self[ nameAct ] = _.routineJoin( target,target[ name ] );
-
-  }
-
-}
-
-//
-// //
-//
-// var bindWriter = function( name,routine,context )
-// {
-//
-//   /* */
-//
-//   var write = function()
-//   {
-//
-//     var args = Array.prototype.slice.call( arguments,0 );
-//
-//     for( var a = 0 ; a < args.length ; a++ )
-//     {
-//       var arg = args[ a ];
-//       if( !_.strIs( arg ) )
-//       arg = _.toStr( arg );
-//       args[ a ] = arg.split( '\n' ).join( '\n' + this.format.prefix.current );
-//     }
-//
-//     if( args.length === 0 )
-//     args = [ '' ];
-//
-//     args[ 0 ] = this.format.prefix.current + args[ 0 ];
-//     args[ args.length-1 ] += this.format.postfix.current;
-//
-//     return context[ name ].apply( context,args );
-//   }
-//
-//   /* */
-//
-//   var writeUp = function()
-//   {
-//
-//     var result = this[ name ].apply( this,arguments );
-//     this.up();
-//     return result;
-//
-//   }
-//
-//   /* */
-//
-//   var writeDown = function()
-//   {
-//
-//     this.down();
-//     if( arguments.length )
-//     var result = this[ name ].apply( this,arguments );
-//     return result;
-//
-//   }
-//
-//   debugger;
-//
-//   this[ name ] = write;
-//   this[ name + 'Up' ] = writeUp;
-//   this[ name + 'Down' ] = writeDown;
-//
-// }
-
-//
-
-// var _makeJoinForWriteMethod = function( name,context,routine )
-// {
-//   var self = this;
-//
-//   _.assert( arguments.length === 2 );
-//   _.assert( _.strIs( name ) );
-//
-//   self[ name + 'Act' ] =
-//
-// }
-
-//var bindWrite = function( name,routine,context )
-var _makeWrapForWriteMethodClass = function( name )
+var _init_static = function( name )
 {
   var proto = this;
 
@@ -197,31 +95,10 @@ var _makeWrapForWriteMethodClass = function( name )
 
   var write = function()
   {
-
-    //debugger;
-    //var args = Array.prototype.slice.call( arguments );
-
     var args = this.writeDoing( arguments );
 
-    // for( var a = 0 ; a < args.length ; a++ )
-    // {
-    //   var arg = args[ a ];
-    //   if( !_.strIs( arg ) )
-    //   arg = _.toStr( arg );
-    //   args[ a ] = arg.split( '\n' ).join( '\n' + this.format.prefix.current );
-    // }
-
-    // if( args.length === 0 )
-    // args = [ '' ];
-    //
-    // args[ 0 ] = this.format.prefix.current + args[ 0 ];
-    // args[ args.length-1 ] += this.format.postfix.current;
-
-    //return context[ name ].apply( context,args );
-
-    // return this[ nameAct ]( args );
-
     _.assert( _.arrayIs( args ) );
+
     return this[ nameAct ].apply( this,args );
   }
 
@@ -229,13 +106,11 @@ var _makeWrapForWriteMethodClass = function( name )
 
   var writeUp = function()
   {
-
-    //console.log( nameUp );
-
     var result = this[ name ].apply( this,arguments );
-    this.up();
-    return result;
 
+    this.up();
+
+    return result;
   }
 
   /* */
@@ -243,13 +118,11 @@ var _makeWrapForWriteMethodClass = function( name )
   var writeDown = function()
   {
 
-    //console.log( nameDown );
-
     this.down();
     if( arguments.length )
     var result = this[ name ].apply( this,arguments );
-    return result;
 
+    return result;
   }
 
   proto[ name ] = write;
@@ -257,6 +130,167 @@ var _makeWrapForWriteMethodClass = function( name )
   proto[ nameDown ] = writeDown;
 
 }
+
+//
+
+var outputTo = function( output,o )
+{
+  var self = this;
+  var o = o || {};
+  var combiningAllowed = [ 'rewrite','supplement','apppend','prepend' ];
+
+  _.routineOptions( self.outputTo,o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.objectIs( output ) || output === null );
+
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1 );
+  _.assert( !o.combining || o.combining === 'rewrite','not implemented combining mode' );
+  _.assert( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
+
+  /* output */
+
+  if( output )
+  {
+
+    if( self.outputs.indexOf( output ) !== -1 )
+    return false;
+
+    if( self.outputs.length )
+    {
+      if( self.outputs.length )
+      return false;
+      else if( o.combining === 'rewrite' )
+      self.outputs.splice( 0,self.outputs.length );
+    }
+
+    var descriptor = {};
+    descriptor.output = output;
+    descriptor.methods = {};
+
+    if( !o.combining )
+    _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
+
+    self.outputs.push( descriptor );
+
+  }
+
+  /* write */
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
+  {
+
+    var name = self.outputWriteMethods[ m ];
+    var nameAct = name + 'Act';
+
+    // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
+    // continue;
+
+    if( output === null )
+    {
+      self[ nameAct ] = null;
+      continue;
+    }
+
+    _.assert( output[ name ],'outputTo expects output has method',name );
+
+    descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
+
+    if( self.outputs.length > 1 ) ( function()
+    {
+      var n = nameAct;
+      self[ n ] = function()
+      {
+        for( var d = 0 ; d < this.outputs.length ; d++ )
+        this.outputs[ d ].methods[ n ].apply( this,arguments );
+      }
+    })()
+    else
+    {
+      self[ nameAct ] = descriptor.methods[ nameAct ];
+    }
+
+  }
+
+  /* change level */
+
+  for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+  {
+
+    var name = self.outputChangeLevelMethods[ m ];
+    var nameAct = name + 'Act';
+
+    // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
+    // continue;
+
+    if( output === null )
+    {
+      self[ nameAct ] = null;
+      continue;
+    }
+
+    if( output[ name ] && p.leveling === 'delta' )
+    descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
+    else
+    descriptor.methods[ nameAct ] = function(){};
+
+    self[ nameAct ] = descriptor.methods[ nameAct ]
+
+  }
+
+  return true;
+}
+
+outputTo.defaults =
+{
+  combining : 0,
+  leveling : 0,
+}
+
+//
+
+var inputFrom = function( input,o )
+{
+  var self = this;
+  var o = o || {};
+
+  _.routineOptions( self.inputFrom,o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.objectIs( output ) || output === null );
+
+  debugger;
+
+  if( _.routineIs( input.outputTo ) )
+  {
+    input.outputTo( self,o );
+    return;
+  }
+
+  debugger;
+
+  /* write */
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  {
+    var name = self.outputWriteMethods[ m ];
+
+    _.assert( input[ name ],'inputFrom expects input has method',name );
+
+    var original = input[ name ];
+    input[ name ] = function()
+    {
+      debugger;
+    }
+
+  })();
+
+}
+
+inputFrom.defaults =
+{
+  rewriting : 'rewrite',
+}
+
+inputFrom.defaults.__proto__ = outputTo.defaults;
 
 //
 
@@ -279,27 +313,10 @@ var up = function( dLevel )
   if( dLevel === undefined )
   dLevel = 1;
 
-  //debugger;
-  //console.log( 'up' );
-
   _.assert( arguments.length <= 1 );
   _.assert( isFinite( dLevel ) );
 
-  self.levelSet( self.level + dLevel );
-
-  // if( delta === undefined ) delta = 1;
-  // for( var d = 0 ; d < delta ; d++ )
-  // {
-  //   var fix = this.format.prefix;
-  //   if( _.strIs( fix.up ) ) fix.current += fix.up;
-  //   else if( _.arrayIs( fix.up ) ) fix.current = fix.current.substring( fix.up[0],fix.current.length - fix.up[1] );
-  //
-  //   var fix = this.format.postfix;
-  //   if( _.strIs( fix.up ) ) fix.current += fix.up;
-  //   else if( _.arrayIs( fix.up ) ) fix.current = fix.current.substring( fix.up[0],fix.current.length - fix.up[1] );
-  //
-  //   this.format.level++;
-  // }
+  self._levelSet( self.level+dLevel );
 
 }
 
@@ -311,83 +328,52 @@ var down = function( dLevel )
   if( dLevel === undefined )
   dLevel = 1;
 
-  //debugger;
-  //console.log( 'down' );
-
   _.assert( arguments.length <= 1 );
   _.assert( isFinite( dLevel ) );
 
-  self.levelSet( self.level - dLevel );
-
-  // var self = this;
-  // debugger;
-  //
-  // if( delta === undefined ) delta = 1;
-  // for( var d = 0 ; d < delta ; d++ )
-  // {
-  //   this.format.level--;
-  //
-  //   var fix = this.format.prefix;
-  //   if( _.strIs( fix.down ) )
-  //   fix.current += fix.down;
-  //   else if( _.arrayIs( fix.down ) )
-  //   fix.current = fix.current.substring( fix.down[0],fix.current.length - fix.down[1] );
-  //
-  //   var fix = this.format.postfix;
-  //   if( _.strIs( fix.down ) )
-  //   fix.current += fix.down;
-  //   else if( _.arrayIs( fix.down ) )
-  //   fix.current = fix.current.substring( fix.down[0],fix.current.length - fix.down[1] );
-  // }
+  self._levelSet( self.level-dLevel );
 
 }
 
 //
 
-// var levelGet = function()
-// {
-//   var self = this;
-//   return self.format.level;
-// }
-
-//
-
-var symbolForLevel = Symbol.for( 'level' );
-var levelSet = function( level )
+var _levelSet = function( level )
 {
   var self = this;
 
-  _.assert( level >= 0, 'levelSet : cant go below zero level to',level );
+  _.assert( level >= 0, '_levelSet : cant go below zero level to',level );
   _.assert( isFinite( level ) );
 
-  self[ symbolForLevel ] = level;
+  var dLevel = level - self[ symbolForLevel ];
 
-  // self.format.level = level;
-  // self.format.prefix.current = _.strTimes( self.format.prefix.up,level );
-  // self.format.postfix.current = _.strTimes( self.format.postfix.up,level );
+  if( dLevel > 0 )
+  self.upAct( +dLevel );
+  else if( dLevel < 0 )
+  self.downAct( -dLevel );
+
+  self[ symbolForLevel ] = level ;
 
 }
 
-// --
-// var
-// --
+//
 
-// var format =
-// {
-//   level : 0,
-//   prefix :
-//   {
-//     current : '',
-//     up : '  ',
-//     down : [ 2,0 ]
-//   },
-//   postfix :
-//   {
-//     current : '',
-//     up : '',
-//     down : ''
-//   }
-// }
+var _outputSet = function( output )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  self.outputTo( output,{ combining : 'rewrite' } );
+
+}
+
+//
+
+var _outputGet = function( output )
+{
+  var self = this;
+  return self.outputs.length ? self.outputs[ self.outputs.length-1 ] : null;
+}
 
 // --
 // relationships
@@ -404,14 +390,25 @@ var Aggregates =
 
 var Associates =
 {
+
+  output : null,
+  outputs : [],
+  outputsDescriptors : [],
+
 }
 
-var methodsToBind =
+var outputWriteMethods =
 [
   'log',
   'error',
   'info',
   'warn',
+];
+
+var outputChangeLevelMethods =
+[
+  'up',
+  'down',
 ];
 
 // --
@@ -424,21 +421,24 @@ var Proto =
   // routine
 
   init : init,
-  bindTo : bindTo,
+  outputTo : outputTo,
 
-  initClass : initClass,
-  _makeWrapForWriteMethodClass : _makeWrapForWriteMethodClass,
+  init_static : init_static,
+  _init_static : _init_static,
   writeDoing : writeDoing,
 
   up : up,
   down : down,
 
-  levelSet : levelSet,
+  _levelSet : _levelSet,
 
+  _outputSet : _outputSet,
+  _outputGet : _outputGet,
 
   // var
 
-  methodsToBind : methodsToBind,
+  outputWriteMethods : outputWriteMethods,
+  outputChangeLevelMethods : outputChangeLevelMethods,
 
 
   // relationships
@@ -461,7 +461,7 @@ _.protoMake
 
 wCopyable.mixin( Self );
 
-Self.prototype.initClass();
+Self.prototype.init_static();
 
 //
 
@@ -471,6 +471,7 @@ _.accessor
   names :
   {
     level : 'level',
+    output : 'output',
   }
 });
 
