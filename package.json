@@ -36,7 +36,8 @@
   },
   "dependencies": {
     "wTools": "",
-    "wCopyable": ""
+    "wCopyable": "",
+    "wColor": ""
   },
   "devDependencies": {
     "wTesting": ""
