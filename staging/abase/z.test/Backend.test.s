@@ -102,6 +102,16 @@ var colorConsole = function( test )
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49m\u001b[39mtext';
   test.identical( _escaping( got ), _escaping( expected ) );
 
+  test.description = 'case5: unknown color ';
+  var got = logger.log( _.strColor.fg( 'text', 'xxx') )[ 0 ];
+  var expected = '\u001b[39mtext\u001b[39m';
+  test.identical( _escaping( got ), _escaping( expected ) );
+
+  test.description = 'case6: text without styles  ';
+  var got = logger.log( 'text' )[ 0 ];
+  var expected = 'text';
+  test.identical( got, expected );
+
 }
 
 //
