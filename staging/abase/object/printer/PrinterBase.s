@@ -157,7 +157,7 @@ var outputTo = function( output,o )
 
     if( self.outputs.length )
     {
-      if( self.outputs.length )
+      if( o.combining === 'supplement' )
       return false;
       else if( o.combining === 'rewrite' )
       self.outputs.splice( 0,self.outputs.length );
@@ -228,7 +228,7 @@ var outputTo = function( output,o )
       continue;
     }
 
-    if( output[ name ] && p.leveling === 'delta' )
+    if( output[ name ] && o.leveling === 'delta' )
     descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
     else
     descriptor.methods[ nameAct ] = function(){};
@@ -372,7 +372,7 @@ var _outputSet = function( output )
 var _outputGet = function( output )
 {
   var self = this;
-  return self.outputs.length ? self.outputs[ self.outputs.length-1 ] : null;
+  return self.outputs.length ? self.outputs[ self.outputs.length-1 ].output : null;
 }
 
 // --
