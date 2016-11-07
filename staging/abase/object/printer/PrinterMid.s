@@ -75,6 +75,22 @@ var _onStrip = function( strip )
 
 //
 
+var colorForegroundGet = function()
+{
+  var self = this;
+  return self.foregroundColor;
+}
+
+//
+
+var colorBackgroundGet = function()
+{
+  var self = this;
+  return self.backgroundColor;
+}
+
+//
+
 var _writeDoingBrowser = function( str )
 {
   var self = this;
@@ -82,8 +98,13 @@ var _writeDoingBrowser = function( str )
   _.assert( arguments.length === 1 );
 
   var result = [ '' ];
+
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var isStyled = 0;
+  // if( splitted.length === 1 && !self._isStyled )
+  // {
+  //   if( !_.arrayIs( splitted[ 0 ] ) )
+  //   return splitted;
+  // }
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -94,45 +115,39 @@ var _writeDoingBrowser = function( str )
 
       if( style === 'foreground')
       {
-        if( color !== 'default' )
-        {
-          self._fgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self.foregroundColor = null;
         else
-        {
-          result.push( `color:${ self._fgcolor }` );
-          isStyled = 0;
-        }
+        self.foregroundColor = _.colorFrom( color );
       }
       else if( style === 'background')
       {
-        if( color !== 'default' )
-        {
-          self._bgcolor = color;
-          isStyled = 1;
-        }
+        if( color === 'default' )
+        self.backgroundColor = null;
         else
-        {
-          result.push( `background:${ self._bgcolor }` );
-          isStyled = 0;
-        }
+        self.backgroundColor = _.colorFrom( color );
       }
+      if( !self.foregroundColor && !self.backgroundColor )
+      self._isStyled = 0;
+      else if( !!self.foregroundColor | !!self.backgroundColor )
+      self._isStyled = 1;
     }
     else
     {
-      if( !isStyled )
+      if( self._isStyled )
       {
-        result[ 0 ] = splitted[ i ];
+        result[ 0 ] += `%c${ splitted[ i ] }`;
+        result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
       }
       else
       {
-        result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:none` );
+        result[ 0 ] +=  splitted[ i ];
       }
     }
   }
 
+  if( !result[ 0 ].length )
+  return [];
   return result;
 }
 
@@ -144,24 +159,24 @@ var _writeDoingChalk = function( str )
 
   _.assert( arguments.length === 1 );
 
-  var ColorMap =
-  {
-    // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
-    // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
-    'white'       : [ 1.0,1.0,1.0 ],
-    'black'       : [ 0.0,0.0,0.0 ],
-    'red'         : [ 1.0,0.0,0.0 ],
-    'green'       : [ 0.0,1.0,0.0 ],
-    'blue'        : [ 0.0,0.0,1.0 ],
-    'yellow'      : [ 1.0,1.0,0.0 ],
-  }
-
-  if( !self._colorTable )
-  {
-    self._colorTable = [];
-    for( var key in ColorMap  )
-    self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
-  }
+  // var ColorMap =
+  // {
+  //   // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
+  //   // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
+  //   'white'       : [ 1.0,1.0,1.0 ],
+  //   'black'       : [ 0.0,0.0,0.0 ],
+  //   'red'         : [ 1.0,0.0,0.0 ],
+  //   'green'       : [ 0.0,1.0,0.0 ],
+  //   'blue'        : [ 0.0,0.0,1.0 ],
+  //   'yellow'      : [ 1.0,1.0,0.0 ],
+  // }
+  //
+  // if( !self._colorTable )
+  // {
+  //   self._colorTable = [];
+  //   for( var key in ColorMap  )
+  //   self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
+  // }
 
   var result = '';
 
@@ -178,21 +193,22 @@ var _writeDoingChalk = function( str )
 
       if( color && color!='default' )
       {
-        if( self._colorTable[ color ] )
-        color = self._colorTable[ color ];
-        else
-        color = self._rgbToCode( _.colorFrom( color ) );
+        // if( self._colorTable[ color ] )
+        // color = self._colorTable[ color ];
+        // else
+        color = _.colorFrom( color );
       }
 
       if( style === 'foreground')
       {
         if( color !== 'default' )
         {
-          self._fgcolor = color;
-          result+= `\x1b[${ self._fgcolor }m`;
+          self.foregroundColor = color;
+          result+= `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
         }
         else
         {
+          self.foregroundColor = null;
           result+= `\x1b[39m`;
         }
       }
@@ -200,11 +216,12 @@ var _writeDoingChalk = function( str )
       {
         if( color !== 'default' )
         {
-          self._bgcolor = color;
-          result+= `\x1b[${ self._bgcolor + 10 }m`;
+          self.backgroundColor = color;
+          result+= `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
         }
         else
         {
+          self.backgroundColor = null;
           result+= `\x1b[49m`;
         }
       }
@@ -245,7 +262,7 @@ var levelSet = function( level )
 {
   var self = this;
 
-  _.assert( _.isFinite( level ) );
+  _.assert( isFinite( level ) );
 
   Parent.prototype.levelSet.call( self,level );
 
@@ -332,9 +349,10 @@ var Composes =
   _dprefix : '  ',
   _dpostfix : '',
 
-  _fgcolor : null,
-  _bgcolor : null,
+  foregroundColor : null,
+  backgroundColor : null,
   _colorTable : null,
+  _isStyled : 0
 
 }
 
@@ -362,7 +380,8 @@ var Proto =
   _writeDoingBrowser : _writeDoingBrowser,
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
-
+  colorForegroundGet : colorForegroundGet,
+  colorBackgroundGet : colorBackgroundGet,
   levelSet : levelSet,
 
   topic : topic,
@@ -394,6 +413,8 @@ _.accessor
   names :
   {
     level : 'level',
+    foregroundColor : 'foregroundColor',
+    backgroundColor : 'backgroundColor',
   }
 });
 

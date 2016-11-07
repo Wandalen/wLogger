@@ -16,12 +16,17 @@ if( typeof module !== 'undefined' )
 {
 
   require( 'wTools' );
+  require( '../../../../wTools/staging/abase/component/StringTools.s' );
   require( '../object/printer/printer/Logger.s' );
 
-  if( require( 'fs' ).existsSync( __dirname + '/../../amid/diagnostic/Testing.debug.s' ) )
-  require( '../../amid/diagnostic/Testing.debug.s' );
-  else
-  require( 'wTesting' );
+  try
+  {
+    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
+  }
+  catch ( err )
+  {
+    require ( 'wTesting' );
+  }
 
 }
 
@@ -48,6 +53,8 @@ var simplest = function( test )
   test.identical( 1,1 );
 
 }
+
+
 
 //
 
