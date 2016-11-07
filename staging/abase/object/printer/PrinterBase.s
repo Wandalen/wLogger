@@ -15,7 +15,16 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
-  require( 'wCopyable' );
+  if( typeof wCopyable === 'undefined' )
+  try
+  {
+    require( '../mixin/Copyable.s' );
+  }
+  catch( err )
+  {
+    require( 'wCopyable' );
+  }
+
 }
 
 //
