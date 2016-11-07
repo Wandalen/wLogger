@@ -186,7 +186,7 @@ var _writeDoingChalk = function( str )
   var result = '';
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-
+  var fgopened,bgopened;
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
@@ -204,17 +204,36 @@ var _writeDoingChalk = function( str )
         color = _.colorFrom( color );
       }
 
+      if( !color )
+      color = 'default';
+
       if( style === 'foreground')
       {
         if( color !== 'default' )
         {
           self.foregroundColor = color;
+          if( !fgopened )
+          {
+            fgopened = color;
+          }
           result+= `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+
         }
         else
         {
-          self.foregroundColor = null;
-          result+= `\x1b[39m`;
+          if( fgopened && self.foregroundColor != fgopened )
+          {
+            result+= `\x1b[${ self._rgbToCode( fgopened ) }m`;
+            fgopened = 0;
+          }
+          else
+          {
+            self.foregroundColor = null;
+            result+= `\x1b[39m`;
+            fgopened = 0;
+
+          }
+
         }
       }
       else if( style === 'background' )
@@ -222,12 +241,25 @@ var _writeDoingChalk = function( str )
         if( color !== 'default' )
         {
           self.backgroundColor = color;
+          if( !bgopened )
+          {
+            bgopened = color;
+          }
           result+= `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
         }
         else
         {
-          self.backgroundColor = null;
-          result+= `\x1b[49m`;
+          if( bgopened && self.backgroundColor != bgopened )
+          {
+            result+= `\x1b[${ self._rgbToCode( bgopened )+ 10 }m`;
+            bgopened = 0;
+          }
+          else
+          {
+            self.backgroundColor = null;
+            result+= `\x1b[49m`;
+            bgopened = 0;
+          }
         }
       }
     }
