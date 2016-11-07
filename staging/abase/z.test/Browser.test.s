@@ -74,13 +74,13 @@ var colorConsole = function( test )
   test.description = 'case1';
   var msg = _.strColor.fg( 'msg', 'black' );
   var got = logger.log( msg );
-  var expected = [ '%cmsg','color:rgb( 0, 0, 0 );background:null;' ];
+  var expected = [ '%cmsg','color:rgb( 0, 0, 0 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case2';
   var msg = _.strColor.bg( 'msg', 'black' );
   var got = logger.log( msg );
-  var expected = [ '%cmsg','color:null;background:rgb( 0, 0, 0 );' ];
+  var expected = [ '%cmsg','color:none;background:rgb( 0, 0, 0 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3';
@@ -92,19 +92,19 @@ var colorConsole = function( test )
   test.description = 'case4';
   var msg = _.strColor.fg( 'yellow text' + _.strColor.bg( _.strColor.fg( 'red text', 'red' ), 'black' ), 'yellow')
   var got = logger.log( msg );
-  var expected = [ '%cyellow text%cred text','color:rgb( 255, 255, 0 );background:null;', 'color:rgb( 255, 0, 0 );background:rgb( 0, 0, 0 );' ];
+  var expected = [ '%cyellow text%cred text','color:rgb( 255, 255, 0 );background:none;', 'color:rgb( 255, 0, 0 );background:rgb( 0, 0, 0 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5: unknown color';
   var msg = _.strColor.fg( 'msg', 'unknown')
   var got = logger.log( msg );
-  var expected = [ 'msg' ];
+  var expected = [ '%cmsg','color:none;background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case6: hex color';
   var msg = _.strColor.fg( 'msg', 'ff00ff' )
   var got = logger.log( msg );
-  var expected = [ '%cmsg','color:rgb( 255, 0, 255 );background:null;' ];
+  var expected = [ '%cmsg','color:rgb( 255, 0, 255 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
 
