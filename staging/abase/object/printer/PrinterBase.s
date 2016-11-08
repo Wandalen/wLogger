@@ -99,6 +99,9 @@ var _init_static = function( name )
 
     _.assert( _.arrayIs( args ) );
 
+    if( this.onWrite )
+    this.onWrite( args );
+
     return this[ nameAct ].apply( this,args );
   }
 
@@ -453,6 +456,7 @@ var _outputGet = function( output )
 var Composes =
 {
   level : 0,
+  onWrite : null
 }
 
 var Aggregates =
