@@ -68,7 +68,7 @@ var colorConsole = function( test )
     warn : _.routineJoin( console,console.warn ),
   }
 
-  var logger = new wLogger( { console : fakeConsole });
+  var logger = new wLogger( { output : fakeConsole });
 
 
   test.description = 'case1';
