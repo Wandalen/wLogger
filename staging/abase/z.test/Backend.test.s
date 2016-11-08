@@ -79,7 +79,7 @@ var colorConsole = function( test )
     warn : _.routineJoin( console,console.warn ),
   }
 
-  var logger = new wLogger({ console : fakeConsole });
+  var logger = new wLogger({ output : fakeConsole });
 
 
   test.description = 'case1: red text';
@@ -97,7 +97,7 @@ var colorConsole = function( test )
   var expected = '\u001b[43m\u001b[31mtext\u001b[39m\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case4: yellow text on red background ';
+  test.description = 'case4: yellow text on red background  + not styled text';
   var got = logger.log( 'text' + _.strColor.fg( _.strColor.bg( 'text', 'red'), 'yellow') + 'text' )[ 0 ];
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49m\u001b[39mtext';
   test.identical( _escaping( got ), _escaping( expected ) );
