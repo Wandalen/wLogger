@@ -133,18 +133,86 @@ var _init_static = function( name )
 
 //
 
+/**
+ * Adds new logger( output ) to output list. Each message from current logger will be transfered
+ * to each logger from that list. Supports several combining modes: 0, rewrite, supplement, append, prepend.
+ * Returns true if new output is succesfully added, otherwise return false.
+ *
+ * @param { Object } output - Logger that must be added to list.
+ * @param { Object } o - Options.
+ * @param { Object } [ o.leveling=null ] - Controls logger leveling mode: 0, false or '' - uses it own leveling methods,
+ * 'delta' -  current logger will use leveling methods from output logger.
+ * @param { Object } [ o.combining=null ] - Mode which controls how new output appears in list:
+ *  0, false or '' - combining is disabled;
+ * 'rewrite' - clears list before adding new output;
+ * 'append' - adds output to the end of list;
+ * 'prepend' - adds output at the beginning;
+ * 'supplement' - adds output if it not exist in list.
+ *
+ * @example
+ *  var l = new wLogger();
+ *  l.outputTo( logger, { combining : 'rewrite' } ); //returns true
+ *  logger._prefix = '--';
+ *  l.log( 'abc' );//logger prints '--abc'
+ *
+ * @example
+ *  var l1 = new wLogger();
+ *  var l2 = new wLogger();
+ *  l1.outputTo( logger, { combining : 'rewrite' } );
+ *  l2.outputTo( l1, { combining : 'rewrite' } );
+ *  logger._prefix = '*';
+ *  logger._postfix = '*';
+ *  l2.log( 'msg from l2' );//logger prints '*msg from l2*'
+ *
+ * @example
+ *  var l1 = new wLogger();
+ *  var l2 = new wLogger();
+ *  var l3 = new wLogger();
+ *  logger.outputTo( l1, { combining : 'rewrite' } );
+ *  logger.outputTo( l2, { combining : 'append' } );
+ *  logger.outputTo( l3, { combining : 'append' } );
+ *  l1._prefix = '*';
+ *  l2._prefix = '**';
+ *  l3._prefix = '***';
+ *  logger.log( 'msg from logger' );
+ *  //l1 prints '*msg from logger'
+ *  //l2 prints '**msg from logger'
+ *  //l3 prints '***msg from logger'
+ *
+ * @example
+ *  var l1 = new wLogger();
+ *  l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
+ *  logger.up( 2 );
+ *  l.up( 1 );
+ *  logger.log( 'aaa\nbbb' );
+ *  l.log( 'ccc\nddd' );
+ *  //logger prints
+ *  // ---aaa
+ *  // ---bbb
+ *  // ----ccc
+ *  // -----ddd
+ *
+ * @method outputTo
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( output ) is not a Object or null.
+ * @throws { Exception } If specified combining mode is not allowed.
+ * @throws { Exception } If specified leveling mode is not allowed.
+ * @throws { Exception } If combining mode is disabled and output list has multiple elements.
+ * @memberof wTools
+ *
+ */
 var outputTo = function( output,o )
 {
   var self = this;
   var o = o || {};
-  var combiningAllowed = [ 'rewrite','supplement','apppend','prepend' ];
+  var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.objectIs( output ) || output === null );
 
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1 );
-  _.assert( !o.combining || o.combining === 'rewrite','not implemented combining mode' );
+  _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
   _.assert( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
@@ -170,6 +238,9 @@ var outputTo = function( output,o )
     if( !o.combining )
     _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
 
+    if( o.combining === 'prepend' )
+    self.outputs.unshift( descriptor );
+    else
     self.outputs.push( descriptor );
 
   }
