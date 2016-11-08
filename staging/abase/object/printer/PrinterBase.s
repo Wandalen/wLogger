@@ -322,6 +322,40 @@ outputTo.defaults =
 
 //
 
+var unOutputTo = function( output )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.objectIs( output ) );
+  _.assert( self.outputs.length, 'unOutputTo : outputs is empty' );
+
+  for( var i = 0; i < self.outputs.length; i++ )
+  {
+    if( self.outputs[ i ].output === output )
+    {
+      self.outputs.splice( i, 1 );
+    }
+  }
+
+  if( !self.outputs.length )
+  {
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
+    {
+      var nameAct = self.outputWriteMethods[ m ] + 'Act';
+      self[ nameAct ] =  function(){};
+    }
+
+    for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+    {
+      var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
+      self[ nameAct ] =  function(){};
+    }
+  }
+}
+
+//
+
 var inputFrom = function( input,o )
 {
   var self = this;
@@ -497,6 +531,7 @@ var Proto =
 
   init : init,
   outputTo : outputTo,
+  unOutputTo : unOutputTo,
 
   init_static : init_static,
   _init_static : _init_static,

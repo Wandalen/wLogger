@@ -186,6 +186,43 @@ var chainingParallel = function( test )
 
 //
 
+var unOutputTo = function( test )
+{
+  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+
+  test.description = 'case1 delete l1 from l2 outputs, l2 still have one output';
+  var got = [];
+  var l1 = new wLogger( { onWrite : _onWrite  } );
+  var l2 = new wLogger( { onWrite : _onWrite  } );
+  l2.outputTo( l1, { combining : 'append' } );
+  l2.unOutputTo( l1 )
+  l2.log( 'msg' );
+  var expected = [ 'msg' ];
+  test.identical( got, expected );
+
+  test.description = 'case2 delete l1 from l2 outputs, no msg transfered';
+  var got = [];
+  var l1 = new wLogger( { onWrite : _onWrite  } );
+  var l2 = new wLogger();
+  l2.outputTo( l1, { combining : 'rewrite' } );
+  l2.unOutputTo( l1 );
+  l2.log( 'msg' )
+  var expected = [];
+  test.identical( got, expected );
+
+  test.description = 'case3: delete l1 from l2 outputs';
+  var got = [];
+  var l1 = new wLogger( { onWrite : _onWrite  } );
+  var l2 = new wLogger( { onWrite : _onWrite  } );
+  var l3 = new wLogger();
+  l2.outputTo( l1, { combining : 'append' } );
+  l3.outputTo( l2, { combining : 'append' } );
+  l2.unOutputTo( l1 );
+  l3.log( 'msg' )
+  var expected = [ 'msg' ];
+  test.identical( got, expected );
+}
+
 var Proto =
 {
 
@@ -196,7 +233,8 @@ var Proto =
 
     levelsTest : levelsTest,
     chaining : chaining,
-    chainingParallel : chainingParallel
+    chainingParallel : chainingParallel,
+    unOutputTo : unOutputTo
 
   },
 
