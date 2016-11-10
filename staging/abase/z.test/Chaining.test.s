@@ -182,6 +182,56 @@ var chainingParallel = function( test )
   l4.log( 'l4' );
   var expected = [ 'l2','l3','l4' ];
   test.identical( got, expected );
+
+
+}
+
+//
+
+var outputTo = function( test )
+{
+
+  test.description = 'output already exist';
+  var l = new wLogger();
+  l.outputTo( logger, { combining : 'append' } );
+  var got = l.outputTo( logger, { combining : 'append' } );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'output already exist, combining : rewrite';
+  var l = new wLogger();
+  l.outputTo( logger, { combining : 'append' } );
+  var got = l.outputTo( logger, { combining : 'rewrite' } );
+  var expected = true;
+  test.identical( got, expected );
+
+
+  if( Config.debug )
+  {
+    test.description = 'no args';
+    test.shouldThrowError( function()
+    {
+      logger.outputTo();
+    });
+
+    test.description = 'output is not a Object';
+    test.shouldThrowError( function()
+    {
+      logger.outputTo( 'output', { combining : 'rewrite' } );
+    });
+
+    test.description = 'not allowed combining mode';
+    test.shouldThrowError( function()
+    {
+      logger.outputTo( console, { combining : 'mode' } );
+    });
+
+    test.description = 'not allowed leveling mode';
+    test.shouldThrowError( function()
+    {
+      logger.outputTo( console, { combining : 'rewrite', leveling : 'mode' } );
+    });
+  }
 }
 
 //
@@ -234,6 +284,7 @@ var Proto =
     levelsTest : levelsTest,
     chaining : chaining,
     chainingParallel : chainingParallel,
+    outputTo : outputTo,
     unOutputTo : unOutputTo
 
   },
