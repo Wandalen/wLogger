@@ -204,6 +204,7 @@ var _init_static = function( name )
  * @memberof wTools
  *
  */
+
 var outputTo = function( output,o )
 {
   var self = this;
@@ -322,19 +323,54 @@ outputTo.defaults =
 
 //
 
+/**
+ * Removes output( output ) from output list if it exists. Removed target will not be receiving any messages from current logger.
+ * Returns true if output is succesfully removed from the list, otherwise returns false.
+ *
+ * @param { Object } output - Logger that must be deleted from output list.
+ *
+ * @example
+ *  var l1 = new wLogger();
+ *  var l2 = new wLogger();
+ *  var l3 = new wLogger();
+ *  logger.outputTo( l1, { combining : 'rewrite' } );
+ *  logger.outputTo( l2, { combining : 'append' } );
+ *  logger.outputTo( l3, { combining : 'append' } );
+ *  l1._prefix = '*';
+ *  l2._prefix = '**';
+ *  l3._prefix = '***';
+ *
+ *  logger.unOutputTo( l1 );
+ *  //returns true
+ *  logger.unOutputTo( l1 );
+ *  //returns false because l1 not exists in the list anymore
+ *  logger.log( 'msg from logger' );
+ *  //l2 prints '**msg from logger'
+ *  //l3 prints '***msg from logger'
+ *
+ * @method unOutputTo
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( output ) is not a Object.
+ * @throws { Exception } If outputs list is empty.
+ * @memberof wTools
+ *
+ */
+
 var unOutputTo = function( output )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( arguments.length === 1 );
   _.assert( _.objectIs( output ) );
-  _.assert( self.outputs.length, 'unOutputTo : outputs is empty' );
+  _.assert( self.outputs.length, 'unOutputTo : outputs list is empty' );
 
   for( var i = 0; i < self.outputs.length; i++ )
   {
     if( self.outputs[ i ].output === output )
     {
       self.outputs.splice( i, 1 );
+      if( self.outputs.length )
+      return true;
     }
   }
 
@@ -351,7 +387,11 @@ var unOutputTo = function( output )
       var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
       self[ nameAct ] =  function(){};
     }
+
+    return true;
   }
+
+  return false;
 }
 
 //
