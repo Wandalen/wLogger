@@ -139,7 +139,9 @@ var _init_static = function( name )
 /**
  * Adds new logger( output ) to output list. Each message from current logger will be transfered
  * to each logger from that list. Supports several combining modes: 0, rewrite, supplement, append, prepend.
- * Returns true if new output is succesfully added, otherwise return false.
+ * If output already exists in the list and combining mode is not 'rewrite'.
+ * Returns true if new output is succesfully added, otherwise return false if output already exists and combining mode is not 'rewrite'
+ * or if list is not empty and combining mode is 'supplement'.
  *
  * @param { Object } output - Logger that must be added to list.
  * @param { Object } o - Options.
@@ -150,7 +152,7 @@ var _init_static = function( name )
  * 'rewrite' - clears list before adding new output;
  * 'append' - adds output to the end of list;
  * 'prepend' - adds output at the beginning;
- * 'supplement' - adds output if it not exist in list.
+ * 'supplement' - adds output if list is empty.
  *
  * @example
  *  var l = new wLogger();
