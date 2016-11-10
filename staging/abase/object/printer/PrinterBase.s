@@ -226,8 +226,15 @@ var outputTo = function( output,o )
   if( output )
   {
 
-    if( self.outputs.indexOf( output ) !== -1 )
-    return false;
+    // if( self.outputs.indexOf( output ) !== -1 )
+    // return false;
+
+    if( o.combining !== 'rewrite' )
+    for( var d = 0 ; d < self.outputs.length ; d++ )
+    {
+      if( self.outputs[ d ].output === output )
+      return false;
+    }
 
     if( self.outputs.length )
     {
