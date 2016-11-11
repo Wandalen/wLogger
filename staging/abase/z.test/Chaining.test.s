@@ -145,6 +145,27 @@ var chaining = function( test )
     'l2', 'l2',
   ];
   test.identical( got, expected );
+
+  test.description = 'case4: input test ';
+  var got = [];
+  var l1 = new wLogger( { output : fakeConsole, onWrite : _onWrite } );
+  var l2 = new wLogger( { onWrite : _onWrite } );
+  var l3 = new wLogger( { onWrite : _onWrite } );
+  var l4 = new wLogger( { onWrite : _onWrite } );
+  l3.inputFrom( l4 );
+  l2.inputFrom( l3 );
+  l1.inputFrom( l2 );
+
+  l4.log( 'l4' );
+  l3.log( 'l3' );
+  l2.log( 'l2' );
+  var expected =
+  [
+    'l4', 'l4', 'l4', 'l4',
+    'l3', 'l3', 'l3',
+    'l2', 'l2',
+  ];
+  test.identical( got, expected );
 }
 
 //
@@ -181,6 +202,41 @@ var chainingParallel = function( test )
   l3.log( 'l3' );
   l4.log( 'l4' );
   var expected = [ 'l2','l3','l4' ];
+  test.identical( got, expected );
+
+  test.description = 'case3: *inputs -> 1';
+  var got = [];
+  var l1 = new wLogger( { output : fakeConsole, onWrite : _onWrite  } );
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  var l4 = new wLogger();
+  l1.inputFrom( l2, { combining : 'rewrite' } );
+  l1.inputFrom( l3, { combining : 'rewrite' } );
+  l1.inputFrom( l4, { combining : 'rewrite' } );
+
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+  l4.log( 'l4' );
+  var expected = [ 'l2','l3','l4' ];
+  test.identical( got, expected );
+
+  test.description = 'case4: outputTo/inputFrom, remove some outputs ';
+  var got = [];
+  var l1 = new wLogger( { output : fakeConsole, onWrite : _onWrite  } );
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  var l4 = new wLogger();
+  l1.inputFrom( l2, { combining : 'rewrite' } );
+  l1.inputFrom( l3, { combining : 'rewrite' } );
+  l4.outputTo( l1, { combining : 'rewrite' } );
+
+  l2.unOutputTo( l1 );
+  l1.unInputFrom( l4 );
+
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+  l4.log( 'l4' );
+  var expected = [ 'l3' ];
   test.identical( got, expected );
 
 
@@ -271,7 +327,145 @@ var unOutputTo = function( test )
   l3.log( 'msg' )
   var expected = [ 'msg' ];
   test.identical( got, expected );
+
+
+  if( Config.debug )
+  {
+    test.description = 'no args';
+    test.shouldThrowError( function()
+    {
+      logger.unOutputTo();
+    });
+
+    test.description = 'incorrect type';
+    test.shouldThrowError( function()
+    {
+      logger.unOutputTo( '1' );
+    });
+
+    test.description = 'empty outputs list';
+    test.shouldThrowError( function()
+    {
+      var l = new wLogger();
+      l.outputTo( logger, { combining : 'rewrite' } );
+      l.unOutputTo( logger );
+      l.unOutputTo( logger );
+    });
+
+  }
 }
+
+//
+
+var inputFrom = function( test )
+{
+  var onWrite = function ( args ){ got.push( args[ 0 ] ) };
+
+  test.description = 'case1: input already exist';
+  var l = new wLogger();
+  l.inputFrom( console );
+  var got = l.inputFrom( console );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'case2: input already exist';
+  var l = new wLogger();
+  logger.inputFrom( l );
+  var got = logger.inputFrom( l, { combining : 'append' } );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'case3: console as input';
+  var got = [];
+  var l = new wLogger( { onWrite : onWrite } );
+  l.inputFrom( console );
+  l._prefix = '*';
+  console.log( 'abc' )
+  var expected = [ '*abc' ];
+  l.unInputFrom( console );
+  test.identical( got, expected );
+
+  test.description = 'case4: logger as input';
+  var got = [];
+  var l = new wLogger( { onWrite : onWrite } );
+  var l2 = new wLogger( );
+  l.inputFrom( l2 );
+  l._prefix = '--';
+  l2.log( 'abc' )
+  var expected = [ '--abc' ];
+  test.identical( got, expected );
+
+  if( Config.debug )
+  {
+    test.description = 'no args';
+    test.shouldThrowError( function()
+    {
+      logger.inputFrom();
+    });
+
+    test.description = 'incorrect type';
+    test.shouldThrowError( function()
+    {
+      logger.inputFrom( '1' );
+    });
+  }
+}
+
+//
+
+var unInputFrom = function( test )
+{
+  var onWrite = function ( args ){ got.push( args[ 0 ] ) };
+
+  test.description = 'case1: input not exist in the list';
+  var l = new wLogger();
+  var got = l.unInputFrom( console );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'case2: input not exist in the list';
+  var l = new wLogger();
+  var got = l.unInputFrom( logger );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'case3: remove console from input';
+  var got = [];
+  var l = new wLogger( { onWrite : onWrite } );
+  l.inputFrom( console );
+  l.unInputFrom( console );
+  console.log( '1' );
+  var expected = [];
+  test.identical( got, expected );
+
+  test.description = 'case4: remove logger from input';
+  var got = [];
+  var l1 = new wLogger( { onWrite : onWrite } );
+  var l2 = new wLogger();
+  l1.inputFrom( l2 );
+  l1.unInputFrom( l2 );
+  l2.log( '1' );
+  var expected = [];
+  test.identical( got, expected );
+
+
+  if( Config.debug )
+  {
+    test.description = 'no args';
+    test.shouldThrowError( function()
+    {
+      logger.unInputFrom();
+    });
+
+    test.description = 'incorrect type';
+    test.shouldThrowError( function()
+    {
+      logger.unInputFrom( '1' );
+    });
+  }
+}
+
+//
 
 var Proto =
 {
@@ -285,7 +479,9 @@ var Proto =
     chaining : chaining,
     chainingParallel : chainingParallel,
     outputTo : outputTo,
-    unOutputTo : unOutputTo
+    unOutputTo : unOutputTo,
+    inputFrom : inputFrom,
+    unInputFrom : unInputFrom,
 
   },
 
