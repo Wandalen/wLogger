@@ -405,7 +405,7 @@ var unOutputTo = function( output )
 
 /**
  * Adds current logger( self ) to output list of logger( input ). Logger( self ) will take each message from source( input ).
- * If( input ) is not a Logger, write and leveling methods from current logger will be added to( input ).
+ * If( input ) is not a Logger, write methods from current logger will be added/replaced in( input ).
  * Returns true if logger( self ) is succesfully added to source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will be input for current logger.
@@ -417,12 +417,6 @@ var unOutputTo = function( output )
  * logger.inputFrom( console );
  * logger._prefix = '*';
  * console.log( 'msg for logger' ); //logger prints '*msg for logger'
- *
- * @example
- * logger.inputFrom( console );
- * logger._dprefix = '*';
- * console.up( 2 );
- * console.log( 'msg for logger' ); //logger prints '**msg for logger'
  *
  * @example
  * var l = new wLogger();
@@ -473,11 +467,11 @@ var inputFrom = function( input,o )
 
   self.inputs.push( { input : input, methods : original } );
 
-  for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
-  {
-    var name = self.outputChangeLevelMethods[ m ];
-    input[ name ] = _.routineJoin( self,self[ name ] );
-  })();
+  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
+  // {
+  //   var name = self.outputChangeLevelMethods[ m ];
+  //   input[ name ] = _.routineJoin( self,self[ name ] );
+  // })();
 
   return true;
 }
@@ -493,7 +487,7 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
 
 /**
  * Removes current logger( self ) from output list of logger( input ). Logger( self ) will not be receiving any messages from source( input ).
- * If( input ) is not a Logger, restores it write methods, but disables leveling methods.
+ * If( input ) is not a Logger, restores it write methods.
  * Returns true if logger( self ) is succesfully removed from source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will not be longer an input for current logger( self ).
@@ -544,11 +538,11 @@ var unInputFrom = function( input )
       input[ name ] = self.inputs[ i ].methods[ name ];
     })();
 
-    for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
-    {
-      var name = self.outputChangeLevelMethods[ m ];
-      input[ name ] = function(){};
-    })();
+    // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
+    // {
+    //   var name = self.outputChangeLevelMethods[ m ];
+    //   input[ name ] = function(){};
+    // })();
 
     self.inputs.splice( i, 1 );
 
