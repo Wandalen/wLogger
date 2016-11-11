@@ -405,7 +405,7 @@ var unOutputTo = function( output )
 
 /**
  * Adds current logger( self ) to output list of logger( input ). Logger( self ) will take each message from source( input ).
- * If( input ) is not a Logger, write methods from current logger will be added/replaced in( input ).
+ * If( input ) is not a Logger, write methods in( input ) will be replaced with methods from current logger( self ).
  * Returns true if logger( self ) is succesfully added to source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will be input for current logger.
@@ -487,7 +487,7 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
 
 /**
  * Removes current logger( self ) from output list of logger( input ). Logger( self ) will not be receiving any messages from source( input ).
- * If( input ) is not a Logger, restores it write methods.
+ * If( input ) is not a Logger, restores it original write methods.
  * Returns true if logger( self ) is succesfully removed from source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will not be longer an input for current logger( self ).
