@@ -533,7 +533,7 @@ var unInputFrom = function( input )
     {
       var name = self.outputWriteMethods[ m ];
 
-      _.assert( input[ name ],'inputFrom expects input has method',name );
+      _.assert( input[ name ],'unInputFrom expects input has method',name );
 
       input[ name ] = self.inputs[ i ].methods[ name ];
     })();
