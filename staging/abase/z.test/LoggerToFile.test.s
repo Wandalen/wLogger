@@ -39,7 +39,8 @@ var Self = {};
 
 var toFile = function( test )
 {
-  File.directoryMake({ pathFile : __dirname + '/tmp', sync : 1 })
+  File.directoryMake({ pathFile : __dirname + '/tmp', sync : 1 });
+
   test.description = 'case1';
   try
   {
@@ -60,6 +61,30 @@ var toFile = function( test )
     sync : 1
   });
   var expected = '123';
+  test.identical( got, expected );
+
+  test.description = 'case2';
+  try
+  {
+    File.fileDeleteAct
+    ({
+      pathFile : __dirname +'/tmp/out.txt',
+      sync : 1
+    });
+  } catch( err) {}
+
+  var fl = new wLoggerToFile({ outputPath : __dirname +'/tmp/out.txt' });
+  var l = new wLogger();
+  l.outputTo( fl, { combining : 'rewrite' } );
+  l._dprefix = '*';
+  l.up( 2 );
+  l.log( 'msg' );
+  var got = File.fileReadAct
+  ({
+    pathFile : __dirname +'/tmp/out.txt',
+    sync : 1
+  });
+  var expected = '**msg';
   test.identical( got, expected );
 }
 //
