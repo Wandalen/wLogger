@@ -66,13 +66,7 @@ var _init_static = function( name )
 
   var write = function()
   {
-    var args = this.writeDoing( arguments );
-
-    _.assert( _.arrayIs( args ) );
-
-    var result = _.strConcat.apply( {}, args );
-
-    return this._writeToFile( result )
+    return this._writeToFile.apply(this, arguments );
   }
 
   proto[ name ] = write;
@@ -80,16 +74,16 @@ var _init_static = function( name )
 
 //
 
-var _writeToFile = function ( src )
+var _writeToFile = function ( )
 {
   var self = this;
-  _.assert( _.strIs( src ) );
+  _.assert( _.strIs( arguments[ 0 ] ) );
   _.assert( _.strIs( self.outputPath ) );
 
   File.fileWriteAct
   ({
     pathFile :  self.outputPath,
-    data : src,
+    data : arguments[ 0 ],
     writeMode : 'append',
     sync : 1
   });
@@ -109,7 +103,7 @@ var Aggregates =
 
 var Associates =
 {
-  output : null,
+  output : console,
   outputPath : null,
 }
 
