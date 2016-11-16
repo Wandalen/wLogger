@@ -61,13 +61,17 @@ var _init_static = function( name )
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
+  var nameAct = name + 'Act';
 
   /* */
 
   var write = function()
   {
-    return this._writeToFile.apply(this, arguments );
+    this._writeToFile.apply(this, arguments );
+    if( this.output )
+    return this[ nameAct ].apply( this,arguments );
   }
+
 
   proto[ name ] = write;
 }
@@ -76,14 +80,14 @@ var _init_static = function( name )
 
 var _writeToFile = function ( )
 {
-  var self = this;
-  _.assert( _.strIs( arguments[ 0 ] ) );
-  _.assert( _.strIs( self.outputPath ) );
+  _.assert( arguments.length );
+  _.assert( _.strIs( this.outputPath ) );
 
+ var data = _.strConcat.apply( { },arguments ) + '\n';
   File.fileWriteAct
   ({
-    pathFile :  self.outputPath,
-    data : arguments[ 0 ],
+    pathFile :  this.outputPath,
+    data : data,
     writeMode : 'append',
     sync : 1
   });
@@ -103,7 +107,7 @@ var Aggregates =
 
 var Associates =
 {
-  output : console,
+  output : null,
   outputPath : null,
 }
 
