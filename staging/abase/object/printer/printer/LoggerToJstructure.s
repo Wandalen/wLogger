@@ -35,8 +35,15 @@ var init = function( o )
 
   Parent.prototype.init.call( self,o );
 
+  for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+  {
+    var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
+    self[ nameAct ] = function() {};
+  }
+
   if( self.output )
   self.outputTo( self.output );
+
 }
 
 var init_static = function()
@@ -65,7 +72,9 @@ var _init_static = function( name )
 
   var write = function()
   {
-    return this._writeToStruct.apply(this, arguments );
+    this._writeToStruct.apply(this, arguments );
+    if( this.output )
+    return this[ nameAct ].apply( this,arguments );
   }
 
   proto[ name ] = write;
@@ -78,16 +87,19 @@ var _writeToStruct = function()
   if( !arguments.length )
   return;
 
-  var data = _.strConcat.apply( {},arguments );
+  var data = _.strConcat.apply( {}, arguments );
   var _changeLevel = function( arr, level )
   {
     if( !level )
     return arr;
     if( !arr[ 0 ] )
     arr[ 0 ] = [ ];
+    else if( !_.arrayIs( arr[ 0 ] ) )
+    arr.unshift( [] );
     return _changeLevel( arr[ 0 ], --level );
   }
-  _changeLevel( this.structure, this.level ).push( data );
+
+  _changeLevel( this.outputData, this.level ).push( data );
 }
 
 //
@@ -95,7 +107,7 @@ var _writeToStruct = function()
 var toJson = function()
 {
   var self = this;
-  return _.toStr( self.structure, { json : 1 } );
+  return _.toStr( self.outputData, { json : 1 } );
 }
 
 // --
@@ -112,9 +124,9 @@ var Aggregates =
 
 var Associates =
 {
-  output : console,
+  output : null,
   outputData : [],
-  structure : [],
+
 }
 
 // --
