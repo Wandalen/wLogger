@@ -166,6 +166,39 @@ var chaining = function( test )
     'l2', 'l2',
   ];
   test.identical( got, expected );
+
+  test.description = 'case5: l1->l2->l3 leveling off ';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l1.outputTo( l2, { combining : 'rewrite', leveling : '' } );
+  l2.outputTo( l3, { combining : 'rewrite', leveling : '' } );
+  l1.up( 2 );
+  l2.up( 2 );
+  var got =
+  [
+    l1.level,
+    l2.level,
+    l3.level,
+  ];
+  var expected = [ 2, 2, 0 ];
+  test.identical( got, expected );
+
+  test.description = 'case6: l1->l2->l3 leveling on ';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l1.outputTo( l2, { combining : 'rewrite', leveling : 'delta' } );
+  l2.outputTo( l3, { combining : 'rewrite', leveling : 'delta' } );
+  l1.up( 2 );
+  var got =
+  [
+    l1.level,
+    l2.level,
+    l3.level,
+  ];
+  var expected = [ 2, 2, 2 ];
+  test.identical( got, expected );
 }
 
 //
@@ -237,6 +270,38 @@ var chainingParallel = function( test )
   l3.log( 'l3' );
   l4.log( 'l4' );
   var expected = [ 'l3' ];
+  test.identical( got, expected );
+
+  test.description = 'case5: l1->* leveling off ';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l1.outputTo( l2, { combining : 'rewrite', leveling : '' } );
+  l1.outputTo( l3, { combining : 'append', leveling : '' } );
+  l1.up( 2 );
+  var got =
+  [
+    l1.level,
+    l2.level,
+    l3.level,
+  ];
+  var expected = [ 2, 0, 0 ];
+  test.identical( got, expected );
+
+  test.description = 'case6: l1->* leveling on ';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l1.outputTo( l2, { combining : 'rewrite', leveling : 'delta' } );
+  l1.outputTo( l3, { combining : 'append', leveling : 'delta' } );
+  l1.up( 2 );
+  var got =
+  [
+    l1.level,
+    l2.level,
+    l3.level,
+  ];
+  var expected = [ 2, 2, 2 ];
   test.identical( got, expected );
 
 
