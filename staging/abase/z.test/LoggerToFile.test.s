@@ -136,6 +136,16 @@ var chaining = function( test )
   var got = _readFromFile( path1 );
   var expected = '1\n2\n'
   test.identical( got, expected );
+
+  test.description = 'case5: leveling delta';
+  var path1 = __dirname +'/tmp/out.txt';
+  var loggerToFile = new wLoggerToFile({ outputPath : path1 });
+  var l1 = new wLogger();
+  l.outputTo( loggerToFile, { combining : 'rewrite', leveling : 'delta' } );
+  l.up( 2 );
+  var got = loggerToFile.level;
+  var expected = 0;
+  test.identical( got, expected );
 }
 
 var Proto =
