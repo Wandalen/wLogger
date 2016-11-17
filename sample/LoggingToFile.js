@@ -11,7 +11,6 @@ var _ = wTools;
 var logger = new wLogger();
 
 var loggerToFile = new wLoggerToFile({ outputPath : __dirname +'/out.txt' });
-logger.outputTo( loggerToFile, { combining : 'rewrite' } );
-logger._dprefix = '*'
-logger.up( 2 );
-logger.log( 'message' );
+logger.outputTo( loggerToFile, { combining : 'append', leveling : 'delta' } );
+loggerToFile.up( 2 )
+logger.log( '1' )
