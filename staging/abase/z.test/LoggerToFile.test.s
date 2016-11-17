@@ -124,6 +124,18 @@ var chaining = function( test )
   var got = [ _readFromFile( path1 ), _readFromFile( path2 ) ];
   var expected = [ 'msg\n', 'msg\n' ]
   test.identical( got, expected );
+
+  test.description = 'case4: * -> LoggerToFile';
+  var path1 = __dirname +'/tmp/out.txt';
+  _deleteFile( path1 );
+  var loggerToFile = new wLoggerToFile({ outputPath : path1 });
+  var l1 = new wLogger({ output : loggerToFile });
+  var l2 = new wLogger({ output : loggerToFile });
+  l1.log( '1' );
+  l2.log( '2' );
+  var got = _readFromFile( path1 );
+  var expected = '1\n2\n'
+  test.identical( got, expected );
 }
 
 var Proto =
