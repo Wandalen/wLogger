@@ -145,8 +145,8 @@ var _init_static = function( name )
  *
  * @param { Object } output - Logger that must be added to list.
  * @param { Object } o - Options.
- * @param { Object } [ o.leveling=null ] - Controls logger leveling mode: 0, false or '' - uses it own leveling methods,
- * 'delta' -  current logger will use leveling methods from output logger.
+ * @param { Object } [ o.leveling=null ] - Controls logger leveling mode: 0, false or '' - logger uses it own leveling methods,
+ * 'delta' -  chains together logger and output leveling methods.
  * @param { Object } [ o.combining=null ] - Mode which controls how new output appears in list:
  *  0, false or '' - combining is disabled;
  * 'rewrite' - clears list before adding new output;
