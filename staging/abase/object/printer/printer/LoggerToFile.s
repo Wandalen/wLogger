@@ -50,6 +50,11 @@ var init_static = function()
   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
   proto._init_static( proto.outputWriteMethods[ m ] );
 
+  for( var m = 0 ; m < proto.outputChangeLevelMethods.length ; m++ )
+  {
+    var name = proto.outputChangeLevelMethods[ m ];
+    proto[ name ] = null;
+  }
 }
 
 //
