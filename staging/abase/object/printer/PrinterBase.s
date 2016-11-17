@@ -317,7 +317,19 @@ var outputTo = function( output,o )
     else
     descriptor.methods[ nameAct ] = function(){};
 
-    self[ nameAct ] = descriptor.methods[ nameAct ]
+    if( self.outputs.length > 1 ) ( function()
+    {
+      var n = nameAct;
+      self[ n ] = function()
+      {
+        for( var d = 0 ; d < this.outputs.length ; d++ )
+        this.outputs[ d ].methods[ n ].apply( this,arguments );
+      }
+    })()
+    else
+    {
+      self[ nameAct ] = descriptor.methods[ nameAct ]
+    }
 
   }
 
