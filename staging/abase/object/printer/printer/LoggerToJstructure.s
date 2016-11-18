@@ -17,6 +17,61 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wLogger;
+/**
+ *
+ *
+ * @classdesc Logger based on [wLogger]{@link wLogger} that writes messages( incoming & outgoing ) to own data structure( array of arrays ).
+ *
+ * Each inner array represent new level of the structure. On write logger puts messages into structure level which is equal to logger level property value.<br>
+ * If needed level not exists logger creates it. Next level is always placed at zero index of previous.<br>
+ * <br><b>Methods:</b><br><br>
+ * Output:
+ * <ul>
+ * <li>log
+ * <li>error
+ * <li>info
+ * <li>warn
+ * </ul>
+ * Leveling:
+ * <ul>
+ *  <li>Increase current level [up]{@link wPrinterBase.up}
+ *  <li>Decrease current level [down]{@link wPrinterBase.down}
+ * </ul>
+ * Chaining:
+ * <ul>
+ *  <li>Add object to output list [outputTo]{@link wPrinterBase.outputTo}
+ *  <li>Remove object from output list [unOutputTo]{@link wPrinterBase.unOutputTo}
+ *  <li>Add current logger to target's output list [inputFrom]{@link wPrinterBase.inputFrom}
+ *  <li>Remove current logger from target's output list [unInputFrom]{@link wPrinterBase.unInputFrom}
+ * </ul>
+ * Other:
+ * <ul>
+ * <li>Convert data structure to json string [toJson]{@link wLoggerToJstructure.toJson}
+ * </ul>
+ * @class wLoggerToJstructure
+ * @param { Object } o - Options.
+ * @param { Object } [ o.output=null ] - Specifies single output object for current logger.
+ * @param { Object } [ o.outputData=[ ] ] - Specifies where to write messages.
+ *
+ * @example
+ * var l = new wLoggerToJstructure();
+ * l.log( '1' );
+ * l.outputData; //returns [ '1' ]
+ *
+ * @example
+ * var data = [];
+ * var l = new wLoggerToJstructure({ outputData : data });
+ * l.log( '1' );
+ * console.log( data ); //returns [ '1' ]
+ *
+ * @example
+ * var l = new wLoggerToJstructure({ output : console });
+ * l.log( '1' ); // console prints '1'
+ * l.outputData; //returns [ '1' ]
+ *
+
+ */
+
 var Self = function wLoggerToJstructure()
 {
   if( !( this instanceof Self ) )
@@ -104,6 +159,25 @@ var _writeToStruct = function()
 
 //
 
+
+/**
+ * Converts logger data structure to JSON string.
+ * @returns Data structure as JSON string.
+ *
+ * @example
+ * var l = new wLoggerToJstructure();
+ * l.up( 2 );
+ * l.log( '1' );
+ * l.toJson();
+ * //returns
+ * //[
+ * // [
+ * //  [ '1' ]
+ * // ]
+ * //]
+ * @method toJson
+ * @memberof wLoggerToJstructure
+ */
 var toJson = function()
 {
   var self = this;
