@@ -16,6 +16,11 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wPrinterMid;
+
+/**
+ * @class wLogger
+ */
+
 var Self = function wLogger()
 {
   if( !( this instanceof Self ) )
