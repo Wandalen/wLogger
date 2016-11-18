@@ -33,6 +33,9 @@ var symbolForLevel = Symbol.for( 'level' );
 
 //
 
+/**
+ * @class wPrinterBase
+ */
 var _ = wTools;
 var Parent = null;
 var Self = function wPrinterBase()
@@ -137,10 +140,12 @@ var _init_static = function( name )
 //
 
 /**
- * Adds new logger( output ) to output list. Each message from current logger will be transfered
+ * Adds new logger( output ) to output list.
+ *
+ * Each message from current logger will be transfered
  * to each logger from that list. Supports several combining modes: 0, rewrite, supplement, append, prepend.
  * If output already exists in the list and combining mode is not 'rewrite'.
- * Returns true if new output is succesfully added, otherwise return false if output already exists and combining mode is not 'rewrite'
+ * @returns True if new output is succesfully added, otherwise return false if output already exists and combining mode is not 'rewrite'
  * or if list is not empty and combining mode is 'supplement'.
  *
  * @param { Object } output - Logger that must be added to list.
@@ -203,7 +208,7 @@ var _init_static = function( name )
  * @throws { Exception } If specified combining mode is not allowed.
  * @throws { Exception } If specified leveling mode is not allowed.
  * @throws { Exception } If combining mode is disabled and output list has multiple elements.
- * @memberof wTools
+ * @memberof wPrinterBase
  *
  */
 
@@ -345,8 +350,10 @@ outputTo.defaults =
 //
 
 /**
- * Removes output( output ) from output list if it exists. Removed target will not be receiving any messages from current logger.
- * Returns true if output is succesfully removed from the list, otherwise returns false.
+ * Removes output( output ) from output list if it exists.
+ *
+ * Removed target will not be receiving any messages from current logger.
+ * @returns True if output is succesfully removed from the list, otherwise returns false.
  *
  * @param { Object } output - Logger that must be deleted from output list.
  *
@@ -371,7 +378,7 @@ outputTo.defaults =
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( output ) is not a Object.
  * @throws { Exception } If outputs list is empty.
- * @memberof wTools
+ * @memberof wPrinterBase
  *
  */
 
@@ -416,9 +423,11 @@ var unOutputTo = function( output )
 //
 
 /**
- * Adds current logger( self ) to output list of logger( input ). Logger( self ) will take each message from source( input ).
+ * Adds current logger( self ) to output list of logger( input ).
+ *
+ * Logger( self ) will take each message from source( input ).
  * If( input ) is not a Logger, write methods in( input ) will be replaced with methods from current logger( self ).
- * Returns true if logger( self ) is succesfully added to source( input ) output list, otherwise returns false.
+ * @returns True if logger( self ) is succesfully added to source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will be input for current logger.
  * @param { Object } o  - Options.
@@ -439,7 +448,7 @@ var unOutputTo = function( output )
  * @method inputFrom
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wTools
+ * @memberof wPrinterBase
  *
  */
 
@@ -498,9 +507,11 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
 //
 
 /**
- * Removes current logger( self ) from output list of logger( input ). Logger( self ) will not be receiving any messages from source( input ).
+ * Removes current logger( self ) from output list of logger( input ).
+ *
+ * Logger( self ) will not be receiving any messages from source( input ).
  * If( input ) is not a Logger, restores it original write methods.
- * Returns true if logger( self ) is succesfully removed from source( input ) output list, otherwise returns false.
+ * @returns True if logger( self ) is succesfully removed from source( input ) output list, otherwise returns false.
  *
  * @param { Object } input - Object that will not be longer an input for current logger( self ).
  *
@@ -520,7 +531,7 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * @method unInputFrom
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wTools
+ * @memberof wPrinterBase
  *
  */
 
@@ -579,6 +590,22 @@ var writeDoing = function( args )
 
 //
 
+/**
+ * Increases value of logger level property by( dLevel ).
+ *
+ * If argument( dLevel ) is not specified, increases by one.
+ *
+ * @example
+ * var l = new wLogger();
+ * l.up( 2 );
+ * console.log( l.level )
+ * //returns 2
+ * @method up
+ * @throws { Exception } If more then one argument specified.
+ * @throws { Exception } If( dLevel ) is not a finite number.
+ * @memberof wPrinterBase
+ */
+
 var up = function( dLevel )
 {
   var self = this;
@@ -593,6 +620,22 @@ var up = function( dLevel )
 }
 
 //
+
+/**
+ * Decreases value of logger level property by( dLevel ).
+ * If argument( dLevel ) is not specified, decreases by one.
+ *
+ * @example
+ * var l = new wLogger();
+ * l.up( 2 );
+ * l.down( 2 );
+ * console.log( l.level )
+ * //returns 0
+ * @method down
+ * @throws { Exception } If more then one argument specified.
+ * @throws { Exception } If( dLevel ) is not a finite number.
+ * @memberof wPrinterBase
+ */
 
 var down = function( dLevel )
 {
