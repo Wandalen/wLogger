@@ -279,7 +279,7 @@ var outputTo = function( output,o )
 
     if( output === null )
     {
-      self[ nameAct ] = null;
+      self[ nameAct ] = function(){};
       continue;
     }
 
@@ -316,7 +316,7 @@ var outputTo = function( output,o )
 
     if( output === null )
     {
-      self[ nameAct ] = null;
+      self[ nameAct ] = function(){};
       continue;
     }
 
