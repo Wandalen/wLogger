@@ -17,7 +17,58 @@ if( typeof module !== 'undefined' )
 //
 
 var _ = wTools;
-var Parent = wLogger;
+var Parent = wPrinterMid;
+/**
+ * @classdesc Logger based on [wLogger]{@link wLogger} that writes messages( incoming & outgoing ) to file specified by path( outputPath ).
+ *
+ * Writes each message to the end of file. Creates new file( outputPath ) if it doesn't exists.
+ *
+ * <br><b>Methods:</b><br><br>
+ * Output:
+ * <ul>
+ * <li>log
+ * <li>error
+ * <li>info
+ * <li>warn
+ * </ul>
+ * Chaining:
+ * <ul>
+ *  <li>Add object to output list [outputTo]{@link wPrinterBase.outputTo}
+ *  <li>Remove object from output list [unOutputTo]{@link wPrinterBase.unOutputTo}
+ *  <li>Add current logger to target's output list [inputFrom]{@link wPrinterBase.inputFrom}
+ *  <li>Remove current logger from target's output list [unInputFrom]{@link wPrinterBase.unInputFrom}
+ * </ul>
+ * @class wLoggerToFile
+ * @param { Object } o - Options.
+ * @param { Object } [ o.output=null ] - Specifies single output object for current logger.
+ * @param { Object } [ o.outputPath=null ] - Specifies file path for output.
+ *
+ * @example
+ * var path = __dirname +'/out.txt';
+ * var l = new wLoggerToJstructure({ outputPath : path });
+ * var File = _.FileProvider.HardDrive();
+ * l.log( '1' );
+ * FilefileReadAct
+ * ({
+ *  pathFile : path,
+ *  sync : 1
+ * });
+ * //returns '1'
+ *
+ * @example
+ * var path = __dirname +'/out2.txt';
+ * var l = new wLoggerToJstructure({ outputPath : path });
+ * vae l2 = new wLogger({ output : l });
+ * var File = _.FileProvider.HardDrive();
+ * l2.log( '1' );
+ * FilefileReadAct
+ * ({
+ *  pathFile : path,
+ *  sync : 1
+ * });
+ * //returns '1'
+ *
+ */
 var Self = function wLoggerToFile()
 {
   if( !( this instanceof Self ) )
@@ -111,6 +162,14 @@ var _writeToFile = function ( )
 
 }
 
+//
+
+var up = function(){};
+
+//
+
+var down = function(){};
+
 // --
 // relationships
 // --
@@ -142,6 +201,8 @@ var Proto =
   _init_static : _init_static,
 
   _writeToFile : _writeToFile,
+  up : up,
+  down : down,
 
   // relationships
 
