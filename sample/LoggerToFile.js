@@ -6,6 +6,7 @@ require( '../staging/abase/object/printer/printer/Logger.s' );
 var _ = wTools;
 //var logger = new wLoggerToFile({ output : null });
 var logger = new wLoggerToFile();
+logger.output = null;
 
 console.log( 'outputPath',logger.outputPath );
 
