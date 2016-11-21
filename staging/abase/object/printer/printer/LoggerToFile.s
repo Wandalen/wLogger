@@ -224,7 +224,6 @@ _.protoMake
   extend : Proto,
 });
 
-debugger;
 Self.prototype.init_static();
 
 // --
