@@ -1,3 +1,13 @@
-node_modules
-.todo
+.*
+-*
+*.log
+*.db
+*.sh
+*.bat
+*.tmp
+*.todo
 tmp
+builder
+proto
+node_modules
+html.build.coffee
