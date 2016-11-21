@@ -55,7 +55,7 @@ var currentColor = function( test )
     warn : _.routineJoin( console,console.warn ),
   }
 
-  var logger = new wLogger( { console : fakeConsole } );
+  var logger = new wLogger( { output : fakeConsole } );
 
   test.description = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );

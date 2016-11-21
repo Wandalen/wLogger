@@ -33,6 +33,9 @@ var symbolForLevel = Symbol.for( 'level' );
 
 //
 
+/**
+ * @class wPrinterBase
+ */
 var _ = wTools;
 var Parent = null;
 var Self = function wPrinterBase()
@@ -99,6 +102,9 @@ var _init_static = function( name )
 
     _.assert( _.arrayIs( args ) );
 
+    if( this.onWrite )
+    this.onWrite( args );
+
     return this[ nameAct ].apply( this,args );
   }
 
@@ -133,18 +139,91 @@ var _init_static = function( name )
 
 //
 
+/**
+ * Adds new logger( output ) to output list.
+ *
+ * Each message from current logger will be transfered
+ * to each logger from that list. Supports several combining modes: 0, rewrite, supplement, append, prepend.
+ * If output already exists in the list and combining mode is not 'rewrite'.
+ * @returns True if new output is succesfully added, otherwise return false if output already exists and combining mode is not 'rewrite'
+ * or if list is not empty and combining mode is 'supplement'.
+ *
+ * @param { Object } output - Logger that must be added to list.
+ * @param { Object } o - Options.
+ * @param { Object } [ o.leveling=null ] - Controls logger leveling mode: 0, false or '' - logger uses it own leveling methods,
+ * 'delta' -  chains together logger and output leveling methods.
+ * @param { Object } [ o.combining=null ] - Mode which controls how new output appears in list:
+ *  0, false or '' - combining is disabled;
+ * 'rewrite' - clears list before adding new output;
+ * 'append' - adds output to the end of list;
+ * 'prepend' - adds output at the beginning;
+ * 'supplement' - adds output if list is empty.
+ *
+ * @example
+ * var l = new wLogger();
+ * l.outputTo( logger, { combining : 'rewrite' } ); //returns true
+ * logger._prefix = '--';
+ * l.log( 'abc' );//logger prints '--abc'
+ *
+ * @example
+ * var l1 = new wLogger();
+ * var l2 = new wLogger();
+ * l1.outputTo( logger, { combining : 'rewrite' } );
+ * l2.outputTo( l1, { combining : 'rewrite' } );
+ * logger._prefix = '*';
+ * logger._postfix = '*';
+ * l2.log( 'msg from l2' );//logger prints '*msg from l2*'
+ *
+ * @example
+ * var l1 = new wLogger();
+ * var l2 = new wLogger();
+ * var l3 = new wLogger();
+ * logger.outputTo( l1, { combining : 'rewrite' } );
+ * logger.outputTo( l2, { combining : 'append' } );
+ * logger.outputTo( l3, { combining : 'append' } );
+ * l1._prefix = '*';
+ * l2._prefix = '**';
+ * l3._prefix = '***';
+ * logger.log( 'msg from logger' );
+ * //l1 prints '*msg from logger'
+ * //l2 prints '**msg from logger'
+ * //l3 prints '***msg from logger'
+ *
+ * @example
+ * var l1 = new wLogger();
+ * l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
+ * logger.up( 2 );
+ * l.up( 1 );
+ * logger.log( 'aaa\nbbb' );
+ * l.log( 'ccc\nddd' );
+ * //logger prints
+ * // ---aaa
+ * // ---bbb
+ * // ----ccc
+ * // -----ddd
+ *
+ * @method outputTo
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( output ) is not a Object or null.
+ * @throws { Exception } If specified combining mode is not allowed.
+ * @throws { Exception } If specified leveling mode is not allowed.
+ * @throws { Exception } If combining mode is disabled and output list has multiple elements.
+ * @memberof wPrinterBase
+ *
+ */
+
 var outputTo = function( output,o )
 {
   var self = this;
   var o = o || {};
-  var combiningAllowed = [ 'rewrite','supplement','apppend','prepend' ];
+  var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.objectIs( output ) || output === null );
 
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1 );
-  _.assert( !o.combining || o.combining === 'rewrite','not implemented combining mode' );
+  _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
   _.assert( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
@@ -152,8 +231,15 @@ var outputTo = function( output,o )
   if( output )
   {
 
-    if( self.outputs.indexOf( output ) !== -1 )
-    return false;
+    // if( self.outputs.indexOf( output ) !== -1 )
+    // return false;
+
+    if( o.combining !== 'rewrite' )
+    for( var d = 0 ; d < self.outputs.length ; d++ )
+    {
+      if( self.outputs[ d ].output === output )
+      return false;
+    }
 
     if( self.outputs.length )
     {
@@ -170,6 +256,9 @@ var outputTo = function( output,o )
     if( !o.combining )
     _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
 
+    if( o.combining === 'prepend' )
+    self.outputs.unshift( descriptor );
+    else
     self.outputs.push( descriptor );
 
   }
@@ -233,7 +322,19 @@ var outputTo = function( output,o )
     else
     descriptor.methods[ nameAct ] = function(){};
 
-    self[ nameAct ] = descriptor.methods[ nameAct ]
+    if( self.outputs.length > 1 ) ( function()
+    {
+      var n = nameAct;
+      self[ n ] = function()
+      {
+        for( var d = 0 ; d < this.outputs.length ; d++ )
+        this.outputs[ d ].methods[ n ].apply( this,arguments );
+      }
+    })()
+    else
+    {
+      self[ nameAct ] = descriptor.methods[ nameAct ]
+    }
 
   }
 
@@ -248,6 +349,109 @@ outputTo.defaults =
 
 //
 
+/**
+ * Removes output( output ) from output list if it exists.
+ *
+ * Removed target will not be receiving any messages from current logger.
+ * @returns True if output is succesfully removed from the list, otherwise returns false.
+ *
+ * @param { Object } output - Logger that must be deleted from output list.
+ *
+ * @example
+ * var l1 = new wLogger();
+ * var l2 = new wLogger();
+ * var l3 = new wLogger();
+ * logger.outputTo( l1, { combining : 'rewrite' } );
+ * logger.outputTo( l2, { combining : 'append' } );
+ * logger.outputTo( l3, { combining : 'append' } );
+ * l1._prefix = '*';
+ * l2._prefix = '**';
+ * l3._prefix = '***';
+ *
+ * logger.unOutputTo( l1 ); //returns true
+ * logger.unOutputTo( l1 ); //returns false because l1 not exists in the list anymore
+ * logger.log( 'msg from logger' );
+ * //l2 prints '**msg from logger'
+ * //l3 prints '***msg from logger'
+ *
+ * @method unOutputTo
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( output ) is not a Object.
+ * @throws { Exception } If outputs list is empty.
+ * @memberof wPrinterBase
+ *
+ */
+
+var unOutputTo = function( output )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( output ) );
+  _.assert( self.outputs.length, 'unOutputTo : outputs list is empty' );
+
+  for( var i = 0; i < self.outputs.length; i++ )
+  {
+    if( self.outputs[ i ].output === output )
+    {
+      self.outputs.splice( i, 1 );
+      if( self.outputs.length )
+      return true;
+    }
+  }
+
+  if( !self.outputs.length )
+  {
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
+    {
+      var nameAct = self.outputWriteMethods[ m ] + 'Act';
+      self[ nameAct ] =  function(){};
+    }
+
+    for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+    {
+      var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
+      self[ nameAct ] =  function(){};
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+//
+
+/**
+ * Adds current logger( self ) to output list of logger( input ).
+ *
+ * Logger( self ) will take each message from source( input ).
+ * If( input ) is not a Logger, write methods in( input ) will be replaced with methods from current logger( self ).
+ * @returns True if logger( self ) is succesfully added to source( input ) output list, otherwise returns false.
+ *
+ * @param { Object } input - Object that will be input for current logger.
+ * @param { Object } o  - Options.
+ * @param { String } [ o.combining='rewrite' ] - Specifies combining mode for outputTo method @see {@link wTools.outputTo}.
+ * By default rewrites output list of( input ) object if it exists.
+ *
+ * @example
+ * logger.inputFrom( console );
+ * logger._prefix = '*';
+ * console.log( 'msg for logger' ); //logger prints '*msg for logger'
+ *
+ * @example
+ * var l = new wLogger();
+ * logger.inputFrom( l );
+ * logger._prefix = '*';
+ * l.log( 'msg from logger' ); //logger prints '*msg from logger'
+ *
+ * @method inputFrom
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( input ) is not a Object.
+ * @memberof wPrinterBase
+ *
+ */
+
 var inputFrom = function( input,o )
 {
   var self = this;
@@ -255,42 +459,121 @@ var inputFrom = function( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( output ) || output === null );
+  _.assert( _.objectIs( input ) || input === null );
 
   debugger;
 
   if( _.routineIs( input.outputTo ) )
   {
-    input.outputTo( self,o );
-    return;
+    return input.outputTo( self,o );
   }
 
   debugger;
+  /* input check */
+  for( var i = 0; i < self.inputs.length ; i++ )
+  if( self.inputs[ i ].input === input )
+  return false;
 
   /* write */
-
+  var original = [];
   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
   {
     var name = self.outputWriteMethods[ m ];
 
     _.assert( input[ name ],'inputFrom expects input has method',name );
 
-    var original = input[ name ];
-    input[ name ] = function()
-    {
-      debugger;
-    }
-
+    original[ name ] = input[ name ];
+    input[ name ] = _.routineJoin( self,self[ name ] );
   })();
 
+  self.inputs.push( { input : input, methods : original } );
+
+  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
+  // {
+  //   var name = self.outputChangeLevelMethods[ m ];
+  //   input[ name ] = _.routineJoin( self,self[ name ] );
+  // })();
+
+  return true;
 }
 
 inputFrom.defaults =
 {
-  rewriting : 'rewrite',
+  combining : 'rewrite',
 }
 
 inputFrom.defaults.__proto__ = outputTo.defaults;
+
+//
+
+/**
+ * Removes current logger( self ) from output list of logger( input ).
+ *
+ * Logger( self ) will not be receiving any messages from source( input ).
+ * If( input ) is not a Logger, restores it original write methods.
+ * @returns True if logger( self ) is succesfully removed from source( input ) output list, otherwise returns false.
+ *
+ * @param { Object } input - Object that will not be longer an input for current logger( self ).
+ *
+ * @example
+ * logger.unInputFrom( console );
+ * logger._prefix = '*';
+ * console.log( 'msg for logger' ); //console prints 'msg for logger'
+ *
+ * @example
+ * var l = new wLogger();
+ * logger.inputFrom( l, { combining : 'append' } );
+ * logger._prefix = '*';
+ * l.log( 'msg for logger' ) //logger prints '*msg for logger'
+ * logger.unInputFrom( l );
+ * l.log( 'msg for logger' ) //l prints 'msg for logger'
+ *
+ * @method unInputFrom
+ * @throws { Exception } If no arguments provided.
+ * @throws { Exception } If( input ) is not a Object.
+ * @memberof wPrinterBase
+ *
+ */
+
+var unInputFrom = function( input )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( input ) || input === null );
+
+  debugger;
+
+  if( _.routineIs( input.unOutputTo ) )
+  {
+    return input.unOutputTo( self );
+  }
+
+  for( var i = 0; i < self.inputs.length ; i++ )
+  if( self.inputs[ i ].input === input )
+  {
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+    {
+      var name = self.outputWriteMethods[ m ];
+
+      _.assert( input[ name ],'unInputFrom expects input has method',name );
+
+      input[ name ] = self.inputs[ i ].methods[ name ];
+    })();
+
+    // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
+    // {
+    //   var name = self.outputChangeLevelMethods[ m ];
+    //   input[ name ] = function(){};
+    // })();
+
+    self.inputs.splice( i, 1 );
+
+    return true;
+  }
+
+  return false;
+}
 
 //
 
@@ -307,6 +590,22 @@ var writeDoing = function( args )
 
 //
 
+/**
+ * Increases value of logger level property by( dLevel ).
+ *
+ * If argument( dLevel ) is not specified, increases by one.
+ *
+ * @example
+ * var l = new wLogger();
+ * l.up( 2 );
+ * console.log( l.level )
+ * //returns 2
+ * @method up
+ * @throws { Exception } If more then one argument specified.
+ * @throws { Exception } If( dLevel ) is not a finite number.
+ * @memberof wPrinterBase
+ */
+
 var up = function( dLevel )
 {
   var self = this;
@@ -321,6 +620,22 @@ var up = function( dLevel )
 }
 
 //
+
+/**
+ * Decreases value of logger level property by( dLevel ).
+ * If argument( dLevel ) is not specified, decreases by one.
+ *
+ * @example
+ * var l = new wLogger();
+ * l.up( 2 );
+ * l.down( 2 );
+ * console.log( l.level )
+ * //returns 0
+ * @method down
+ * @throws { Exception } If more then one argument specified.
+ * @throws { Exception } If( dLevel ) is not a finite number.
+ * @memberof wPrinterBase
+ */
 
 var down = function( dLevel )
 {
@@ -382,6 +697,7 @@ var _outputGet = function( output )
 var Composes =
 {
   level : 0,
+  onWrite : null
 }
 
 var Aggregates =
@@ -394,6 +710,7 @@ var Associates =
   output : null,
   outputs : [],
   outputsDescriptors : [],
+  inputs : []
 
 }
 
@@ -422,6 +739,10 @@ var Proto =
 
   init : init,
   outputTo : outputTo,
+  unOutputTo : unOutputTo,
+
+  inputFrom : inputFrom,
+  unInputFrom : unInputFrom,
 
   init_static : init_static,
   _init_static : _init_static,

@@ -7,6 +7,12 @@
     "dictionaries": [ "jsdoc","closure" ]
   },
 
+  "plugins" :
+  [
+    "plugins/markdown",
+    "plugins/summarize"
+  ],
+
   "templates":
   {
 
@@ -44,7 +50,7 @@
   "source":
   {
 
-    "includePattern": ".+\.(js|ss|s)(doc)?$",
+    "includePattern": ".+\\.(js|ss|s)(doc)?$",
     "excludePattern": "(^|\/)(\\.|-|node_modules|shared|3rd|old|external)",
 
     "include":
