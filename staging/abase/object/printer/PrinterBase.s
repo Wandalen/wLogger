@@ -225,8 +225,8 @@ var outputTo = function( output,o )
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.objectIs( output ) || output === null );
 
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1 );
-  _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'not implemented combining mode' );
+  // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
   _.assert( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
@@ -264,6 +264,14 @@ var outputTo = function( output,o )
     else
     self.outputs.push( descriptor );
 
+  }
+  else
+  {
+    if( self.outputs.length )
+    {
+      if( o.combining === 'rewrite' )
+      self.outputs.splice( 0,self.outputs.length );
+    }
   }
 
   /* write */
