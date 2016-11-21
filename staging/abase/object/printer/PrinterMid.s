@@ -22,6 +22,8 @@ if( typeof module !== 'undefined' )
 
 }
 
+var symbolForLevel = Symbol.for( 'level' );
+
 //
 
 var _ = wTools;
@@ -158,30 +160,11 @@ var _writeDoingBrowser = function( str )
 
 //
 
-var _writeDoingChalk = function( str )
+var _writeDoingShell = function( str )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
-
-  // var ColorMap =
-  // {
-  //   // 'invisible'   : [ 0.0,0.0,0.0,0.0 ],
-  //   // 'transparent' : [ 1.0,1.0,1.0,0.5 ],
-  //   'white'       : [ 1.0,1.0,1.0 ],
-  //   'black'       : [ 0.0,0.0,0.0 ],
-  //   'red'         : [ 1.0,0.0,0.0 ],
-  //   'green'       : [ 0.0,1.0,0.0 ],
-  //   'blue'        : [ 0.0,0.0,1.0 ],
-  //   'yellow'      : [ 1.0,1.0,0.0 ],
-  // }
-  //
-  // if( !self._colorTable )
-  // {
-  //   self._colorTable = [];
-  //   for( var key in ColorMap  )
-  //   self._colorTable[ key ] = self._rgbToCode( ColorMap[ key ] );
-  // }
 
   var result = '';
 
@@ -198,9 +181,6 @@ var _writeDoingChalk = function( str )
 
       if( color && color!='default' )
       {
-        // if( self._colorTable[ color ] )
-        // color = self._colorTable[ color ];
-        // else
         color = _.colorFrom( color );
       }
 
@@ -285,7 +265,7 @@ var writeDoing = function( args )
   var result = _.strConcat.apply( optionsForStr,args );
 
   if( !isBrowser )
-  result = self._writeDoingChalk( result );
+  result = self._writeDoingShell( result );
   else
   result = self._writeDoingBrowser( result );
 
@@ -294,7 +274,6 @@ var writeDoing = function( args )
 
 //
 
-var symbolForLevel = Symbol.for( 'level' );
 var _levelSet = function( level )
 {
   var self = this;
@@ -308,10 +287,6 @@ var _levelSet = function( level )
   self._prefix = _.strTimes( self._dprefix,level );
   self._postfix = _.strTimes( self._dpostfix,level );
 
-  // self.format.level = level;
-  // self.format.prefix.current = _.strTimes( self.format.prefix.up,level );
-  // self.format.postfix.current = _.strTimes( self.format.postfix.up,level );
-
 }
 
 //
@@ -319,14 +294,11 @@ var _levelSet = function( level )
 var topic = ( function()
 {
 
-  // var Chalk;
-
   return function topic()
   {
     var self = this;
 
     debugger;
-    //throw _.err( 'not tested' );
 
     var s = _.str.apply( _,arguments );
 
@@ -353,27 +325,6 @@ var topic = ( function()
 })();
 
 // --
-// var
-// --
-
-// var format =
-// {
-//   level : 0,
-//   prefix :
-//   {
-//     current : '',
-//     up : '  ',
-//     down : [ 2,0 ]
-//   },
-//   postfix :
-//   {
-//     current : '',
-//     up : '',
-//     down : ''
-//   }
-// }
-
-// --
 // relationships
 // --
 
@@ -388,6 +339,7 @@ var Composes =
 
   foregroundColor : null,
   backgroundColor : null,
+
   _colorTable : null,
   _isStyled : 0
 
@@ -418,7 +370,7 @@ var Proto =
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
 
-  _writeDoingChalk : _writeDoingChalk,
+  _writeDoingShell : _writeDoingShell,
   _writeDoingBrowser : _writeDoingBrowser,
 
   writeDoing : writeDoing,
