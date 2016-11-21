@@ -263,8 +263,8 @@ var chainingParallel = function( test )
   l1.inputFrom( l3, { combining : 'rewrite' } );
   l4.outputTo( l1, { combining : 'rewrite' } );
 
-  l2.unOutputTo( l1 );
-  l1.unInputFrom( l4 );
+  l2.outputToUnchain( l1 );
+  l1.inputFromUnchain( l4 );
 
   l2.log( 'l2' );
   l3.log( 'l3' );
@@ -357,7 +357,7 @@ var outputTo = function( test )
 
 //
 
-var unOutputTo = function( test )
+var outputToUnchain = function( test )
 {
   var _onWrite = function( args ) { got.push( args[ 0 ] ) };
 
@@ -366,7 +366,7 @@ var unOutputTo = function( test )
   var l1 = new wLogger( { onWrite : _onWrite  } );
   var l2 = new wLogger( { onWrite : _onWrite  } );
   l2.outputTo( l1, { combining : 'append' } );
-  l2.unOutputTo( l1 )
+  l2.outputToUnchain( l1 )
   l2.log( 'msg' );
   var expected = [ 'msg' ];
   test.identical( got, expected );
@@ -376,7 +376,7 @@ var unOutputTo = function( test )
   var l1 = new wLogger( { onWrite : _onWrite  } );
   var l2 = new wLogger();
   l2.outputTo( l1, { combining : 'rewrite' } );
-  l2.unOutputTo( l1 );
+  l2.outputToUnchain( l1 );
   l2.log( 'msg' )
   var expected = [];
   test.identical( got, expected );
@@ -388,7 +388,7 @@ var unOutputTo = function( test )
   var l3 = new wLogger();
   l2.outputTo( l1, { combining : 'append' } );
   l3.outputTo( l2, { combining : 'append' } );
-  l2.unOutputTo( l1 );
+  l2.outputToUnchain( l1 );
   l3.log( 'msg' )
   var expected = [ 'msg' ];
   test.identical( got, expected );
@@ -399,13 +399,13 @@ var unOutputTo = function( test )
     test.description = 'no args';
     test.shouldThrowError( function()
     {
-      logger.unOutputTo();
+      logger.outputToUnchain();
     });
 
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
-      logger.unOutputTo( '1' );
+      logger.outputToUnchain( '1' );
     });
 
     test.description = 'empty outputs list';
@@ -413,8 +413,8 @@ var unOutputTo = function( test )
     {
       var l = new wLogger();
       l.outputTo( logger, { combining : 'rewrite' } );
-      l.unOutputTo( logger );
-      l.unOutputTo( logger );
+      l.outputToUnchain( logger );
+      l.outputToUnchain( logger );
     });
 
   }
@@ -447,7 +447,7 @@ var inputFrom = function( test )
   l._prefix = '*';
   console.log( 'abc' )
   var expected = [ '*abc' ];
-  l.unInputFrom( console );
+  l.inputFromUnchain( console );
   test.identical( got, expected );
 
   test.description = 'case4: logger as input';
@@ -478,19 +478,19 @@ var inputFrom = function( test )
 
 //
 
-var unInputFrom = function( test )
+var inputFromUnchain = function( test )
 {
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
   test.description = 'case1: input not exist in the list';
   var l = new wLogger();
-  var got = l.unInputFrom( console );
+  var got = l.inputFromUnchain( console );
   var expected = false;
   test.identical( got, expected );
 
   test.description = 'case2: input not exist in the list';
   var l = new wLogger();
-  var got = l.unInputFrom( logger );
+  var got = l.inputFromUnchain( logger );
   var expected = false;
   test.identical( got, expected );
 
@@ -498,7 +498,7 @@ var unInputFrom = function( test )
   var got = [];
   var l = new wLogger( { onWrite : onWrite } );
   l.inputFrom( console );
-  l.unInputFrom( console );
+  l.inputFromUnchain( console );
   console.log( '1' );
   var expected = [];
   test.identical( got, expected );
@@ -508,7 +508,7 @@ var unInputFrom = function( test )
   var l1 = new wLogger( { onWrite : onWrite } );
   var l2 = new wLogger();
   l1.inputFrom( l2 );
-  l1.unInputFrom( l2 );
+  l1.inputFromUnchain( l2 );
   l2.log( '1' );
   var expected = [];
   test.identical( got, expected );
@@ -519,13 +519,13 @@ var unInputFrom = function( test )
     test.description = 'no args';
     test.shouldThrowError( function()
     {
-      logger.unInputFrom();
+      logger.inputFromUnchain();
     });
 
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
-      logger.unInputFrom( '1' );
+      logger.inputFromUnchain( '1' );
     });
   }
 }
@@ -544,9 +544,9 @@ var Proto =
     chaining : chaining,
     chainingParallel : chainingParallel,
     outputTo : outputTo,
-    unOutputTo : unOutputTo,
+    outputToUnchain : outputToUnchain,
     inputFrom : inputFrom,
-    unInputFrom : unInputFrom,
+    inputFromUnchain : inputFromUnchain,
 
   },
 

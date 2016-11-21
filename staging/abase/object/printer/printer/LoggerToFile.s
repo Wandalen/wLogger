@@ -33,9 +33,9 @@ if( typeof module !== 'undefined' )
  * Chaining:
  * <ul>
  *  <li>Add object to output list [outputTo]{@link wPrinterBase.outputTo}
- *  <li>Remove object from output list [unOutputTo]{@link wPrinterBase.unOutputTo}
+ *  <li>Remove object from output list [outputToUnchain]{@link wPrinterBase.outputToUnchain}
  *  <li>Add current logger to target's output list [inputFrom]{@link wPrinterBase.inputFrom}
- *  <li>Remove current logger from target's output list [unInputFrom]{@link wPrinterBase.unInputFrom}
+ *  <li>Remove current logger from target's output list [inputFromUnchain]{@link wPrinterBase.inputFromUnchain}
  * </ul>
  * @class wLoggerToFile
  * @param { Object } o - Options.

@@ -289,7 +289,7 @@ var outputTo = function( output,o )
     {
       //debugger;
       //self[ nameAct ] = function(){};
-      self[ nameAct ] = null;
+      //self[ nameAct ] = null;
       continue;
     }
 
@@ -328,7 +328,7 @@ var outputTo = function( output,o )
     {
       //debugger;
       //self[ nameAct ] = function(){};
-      self[ nameAct ] = null;
+      //self[ nameAct ] = null;
       continue;
     }
 
@@ -383,13 +383,13 @@ outputTo.defaults =
  * l2._prefix = '**';
  * l3._prefix = '***';
  *
- * logger.unOutputTo( l1 ); //returns true
- * logger.unOutputTo( l1 ); //returns false because l1 not exists in the list anymore
+ * logger.outputToUnchain( l1 ); //returns true
+ * logger.outputToUnchain( l1 ); //returns false because l1 not exists in the list anymore
  * logger.log( 'msg from logger' );
  * //l2 prints '**msg from logger'
  * //l3 prints '***msg from logger'
  *
- * @method unOutputTo
+ * @method outputToUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( output ) is not a Object.
  * @throws { Exception } If outputs list is empty.
@@ -397,13 +397,13 @@ outputTo.defaults =
  *
  */
 
-var unOutputTo = function( output )
+var outputToUnchain = function( output )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( output ) );
-  _.assert( self.outputs.length, 'unOutputTo : outputs list is empty' );
+  _.assert( self.outputs.length, 'outputToUnchain : outputs list is empty' );
 
   for( var i = 0; i < self.outputs.length; i++ )
   {
@@ -484,6 +484,7 @@ var inputFrom = function( input,o )
   }
 
   debugger;
+
   /* input check */
   for( var i = 0; i < self.inputs.length ; i++ )
   if( self.inputs[ i ].input === input )
@@ -531,7 +532,7 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * @param { Object } input - Object that will not be longer an input for current logger( self ).
  *
  * @example
- * logger.unInputFrom( console );
+ * logger.inputFromUnchain( console );
  * logger._prefix = '*';
  * console.log( 'msg for logger' ); //console prints 'msg for logger'
  *
@@ -540,17 +541,17 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * logger.inputFrom( l, { combining : 'append' } );
  * logger._prefix = '*';
  * l.log( 'msg for logger' ) //logger prints '*msg for logger'
- * logger.unInputFrom( l );
+ * logger.inputFromUnchain( l );
  * l.log( 'msg for logger' ) //l prints 'msg for logger'
  *
- * @method unInputFrom
+ * @method inputFromUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
  * @memberof wPrinterBase
  *
  */
 
-var unInputFrom = function( input )
+var inputFromUnchain = function( input )
 {
   var self = this;
 
@@ -559,9 +560,9 @@ var unInputFrom = function( input )
 
   debugger;
 
-  if( _.routineIs( input.unOutputTo ) )
+  if( _.routineIs( input.outputToUnchain ) )
   {
-    return input.unOutputTo( self );
+    return input.outputToUnchain( self );
   }
 
   for( var i = 0; i < self.inputs.length ; i++ )
@@ -571,7 +572,7 @@ var unInputFrom = function( input )
     {
       var name = self.outputWriteMethods[ m ];
 
-      _.assert( input[ name ],'unInputFrom expects input has method',name );
+      _.assert( input[ name ],'inputFromUnchain expects input has method',name );
 
       input[ name ] = self.inputs[ i ].methods[ name ];
     })();
@@ -605,6 +606,8 @@ var writeDoing = function( args )
 
 //
 
+// !!! poor description
+
 /**
  * Increases value of logger level property by( dLevel ).
  *
@@ -635,6 +638,8 @@ var up = function( dLevel )
 }
 
 //
+
+// !!! poor description
 
 /**
  * Decreases value of logger level property by( dLevel ).
@@ -753,14 +758,15 @@ var Proto =
   // routine
 
   init : init,
-  outputTo : outputTo,
-  unOutputTo : unOutputTo,
-
-  inputFrom : inputFrom,
-  unInputFrom : unInputFrom,
-
   init_static : init_static,
   _init_static : _init_static,
+
+  outputTo : outputTo,
+  outputToUnchain : outputToUnchain,
+
+  inputFrom : inputFrom,
+  inputFromUnchain : inputFromUnchain,
+
   writeDoing : writeDoing,
 
   up : up,
@@ -770,6 +776,7 @@ var Proto =
 
   _outputSet : _outputSet,
   _outputGet : _outputGet,
+
 
   // var
 
