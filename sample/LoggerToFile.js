@@ -4,7 +4,7 @@ require( '../staging/abase/object/printer/printer/Logger.s' );
 //require( 'wLogger' );
 
 var _ = wTools;
-var logger = new wLoggerToFile();
+var logger = new wLoggerToFile({ output : null });
 
 console.log( 'outputPath',logger.outputPath );
 
@@ -13,7 +13,7 @@ logger.log( 'a1\nb1' );
 logger.up( 2 );
 logger.log( 'a2\nb2' );
 
-// --aaa
-// --bbb
-// ---ccc
-// ---ddd
+// a1
+// b1
+// a2
+// b2

@@ -36,6 +36,10 @@ var init = function( o )
 
   Parent.prototype.init.call( self,o );
 
+  debugger;
+  if( typeof __dirname !== 'undefined' )
+  self.outputPath = _.pathJoin( _.pathBaseDir(),self.outputPath );
+
   // what is it for?
   // if( self.output )
   // self.outputTo( self.output );
@@ -90,14 +94,12 @@ var _writeToFile = function ( )
   var self = this;
 
   _.assert( arguments.length );
-  _.assert( _.strIs( self.outputPath ) );
+  _.assert( _.strIs( self.outputPath ),'outputPath is not defined for LoggerToFile' );
 
   if( !self.fileProvider )
   self.fileProvider = _.FileProvider.HardDrive();
 
   var data = _.strConcat.apply( { },arguments ) + '\n';
-
-  console.log( 'outputPath',self.outputPath );
 
   self.fileProvider.fileWriteAct
   ({
@@ -115,7 +117,7 @@ var _writeToFile = function ( )
 
 var Composes =
 {
-  outputPath : null,
+  outputPath : 'output.log',
 }
 
 var Aggregates =
