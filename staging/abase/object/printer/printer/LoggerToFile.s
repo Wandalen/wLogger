@@ -16,8 +16,6 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = wTools;
-var Parent = wPrinterMid;
 /**
  * @classdesc Logger based on [wLogger]{@link wLogger} that writes messages( incoming & outgoing ) to file specified by path( outputPath ).
  *
@@ -69,6 +67,10 @@ var Parent = wPrinterMid;
  * //returns '1'
  *
  */
+
+var _ = wTools;
+//var Parent = wPrinterMid;
+var Parent = wLogger;
 var Self = function wLoggerToFile()
 {
   if( !( this instanceof Self ) )
@@ -201,8 +203,8 @@ var Proto =
   _init_static : _init_static,
 
   _writeToFile : _writeToFile,
-  up : up,
-  down : down,
+  // up : up,
+  // down : down,
 
   // relationships
 
