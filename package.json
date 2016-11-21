@@ -37,7 +37,8 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
-    "wColor": ""
+    "wColor": "",
+    "wFiles": ""
   },
   "devDependencies": {
     "wTesting": ""

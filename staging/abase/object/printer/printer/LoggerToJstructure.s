@@ -159,7 +159,6 @@ var _writeToStruct = function()
 
 //
 
-
 /**
  * Converts logger data structure to JSON string.
  * @returns Data structure as JSON string.
@@ -178,6 +177,7 @@ var _writeToStruct = function()
  * @method toJson
  * @memberof wLoggerToJstructure
  */
+
 var toJson = function()
 {
   var self = this;

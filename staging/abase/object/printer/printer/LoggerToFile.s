@@ -18,7 +18,6 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wLogger;
-var File = _.FileProvider.HardDrive();
 var Self = function wLoggerToFile()
 {
   if( !( this instanceof Self ) )
@@ -37,36 +36,40 @@ var init = function( o )
 
   Parent.prototype.init.call( self,o );
 
-  if( self.output )
-  self.outputTo( self.output );
+  // what is it for?
+  // if( self.output )
+  // self.outputTo( self.output );
 
 }
 
-var init_static = function()
-{
-  var proto = this;
-  _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
+//
 
-  for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  proto._init_static( proto.outputWriteMethods[ m ] );
-
-  for( var m = 0 ; m < proto.outputChangeLevelMethods.length ; m++ )
-  {
-    var name = proto.outputChangeLevelMethods[ m ];
-    proto[ name ] = null;
-  }
-}
+// var init_static = function()
+// {
+//   var proto = this;
+//   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
+//
+//   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
+//   proto._init_static( proto.outputWriteMethods[ m ] );
+//
+//   // for( var m = 0 ; m < proto.outputChangeLevelMethods.length ; m++ )
+//   // {
+//   //   var name = proto.outputChangeLevelMethods[ m ];
+//   //   proto[ name ] = null;
+//   // }
+//
+// }
 
 //
 
 var _init_static = function( name )
 {
   var proto = this;
+  var nameAct = name + 'Act';
 
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
-  var nameAct = name + 'Act';
 
   /* */
 
@@ -77,7 +80,6 @@ var _init_static = function( name )
     return this[ nameAct ].apply( this,arguments );
   }
 
-
   proto[ name ] = write;
 }
 
@@ -85,17 +87,26 @@ var _init_static = function( name )
 
 var _writeToFile = function ( )
 {
-  _.assert( arguments.length );
-  _.assert( _.strIs( this.outputPath ) );
+  var self = this;
 
- var data = _.strConcat.apply( { },arguments ) + '\n';
-  File.fileWriteAct
+  _.assert( arguments.length );
+  _.assert( _.strIs( self.outputPath ) );
+
+  if( !self.fileProvider )
+  self.fileProvider = _.FileProvider.HardDrive();
+
+  var data = _.strConcat.apply( { },arguments ) + '\n';
+
+  console.log( 'outputPath',self.outputPath );
+
+  self.fileProvider.fileWriteAct
   ({
-    pathFile :  this.outputPath,
+    pathFile :  self.outputPath,
     data : data,
     writeMode : 'append',
     sync : 1
   });
+
 }
 
 // --
@@ -104,6 +115,8 @@ var _writeToFile = function ( )
 
 var Composes =
 {
+  //output : null,
+  outputPath : null,
 }
 
 var Aggregates =
@@ -112,11 +125,8 @@ var Aggregates =
 
 var Associates =
 {
-  output : null,
-  outputPath : null,
+  fileProvider : null,
 }
-
-
 
 // --
 // prototype
@@ -126,12 +136,14 @@ var Proto =
 {
 
   init : init,
-  init_static : init_static,
+
+  // init_static : init_static,
   _init_static : _init_static,
+
+  _writeToFile : _writeToFile,
 
   // relationships
 
-  _writeToFile : _writeToFile,
   constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
@@ -148,6 +160,7 @@ _.protoMake
   extend : Proto,
 });
 
+debugger;
 Self.prototype.init_static();
 
 // --

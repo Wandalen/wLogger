@@ -75,7 +75,7 @@ var init_static = function()
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  if( !proto[ proto.outputWriteMethods[ m ] ] )
+  //if( !proto[ proto.outputWriteMethods[ m ] ] )
   proto._init_static( outputWriteMethods[ m ] );
 
 }
@@ -89,6 +89,9 @@ var _init_static = function( name )
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
   _.assert( arguments.length === 1 );
   _.assert( _.strIs( name ) );
+
+  if( proto[ name ] )
+  return;
 
   var nameAct = name + 'Act';
   var nameUp = name + 'Up';
