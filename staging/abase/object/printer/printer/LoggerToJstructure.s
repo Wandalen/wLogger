@@ -14,9 +14,6 @@ if( typeof module !== 'undefined' )
 
 //
 
-
-var _ = wTools;
-var Parent = wLogger;
 /**
  *
  *
@@ -72,6 +69,8 @@ var Parent = wLogger;
 
  */
 
+var _ = wTools;
+var Parent = wLogger;
 var Self = function wLoggerToJstructure()
 {
   if( !( this instanceof Self ) )
@@ -101,15 +100,17 @@ var init = function( o )
 
 }
 
-var init_static = function()
-{
-  var proto = this;
-  _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
+//
 
-  for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  proto._init_static( proto.outputWriteMethods[ m ] );
-
-}
+// var init_static = function()
+// {
+//   var proto = this;
+//   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
+//
+//   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
+//   proto._init_static( proto.outputWriteMethods[ m ] );
+//
+// }
 
 //
 
@@ -198,9 +199,8 @@ var Aggregates =
 
 var Associates =
 {
-  output : null,
+  //output : null,
   outputData : [],
-
 }
 
 // --
@@ -211,7 +211,7 @@ var Proto =
 {
 
   init : init,
-  init_static : init_static,
+  //init_static : init_static,
   _init_static : _init_static,
 
   _writeToStruct : _writeToStruct,

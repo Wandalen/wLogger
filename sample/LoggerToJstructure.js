@@ -1,21 +1,22 @@
 
-
 if( typeof module !== 'undefined' )
-require( 'wLogger' );
+require( '../staging/abase/object/printer/printer/Logger.s' );
+//require( 'wLogger' );
 
 var _ = wTools;
-var l = new wLogger({ output : logger });
+//var logger = new wLoggerToJstructure({ output : null });
+var logger = new wLoggerToJstructure();
+
+console.log( 'outputData',logger.outputData );
 
 logger._dprefix = '-';
-l._dprefix = '-';
-
+logger.log( 'a1\nb1' );
 logger.up( 2 );
-l.up( 1 );
+logger.log( 'a2\nb2' );
 
-logger.log( 'aaa\nbbb' );
-l.log( 'ccc\nddd' );
+console.log( 'outputData',logger.outputData );
 
-// --aaa
-// --bbb
-// ---ccc
-// ---ddd
+// a1
+// b1
+// a2
+// b2
