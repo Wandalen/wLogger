@@ -8,9 +8,10 @@ if( typeof module !== 'undefined' )
 {
 
   if( typeof wLogger === 'undefined' )
-  require( './Logger.s' )
+  require( './Logger.s' );
 
-  require( 'wFiles' )
+  if( !wTools.FileProvider  )
+  require( 'wFiles' );
 
 }
 

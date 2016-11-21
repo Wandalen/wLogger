@@ -8,6 +8,7 @@ var _ = wTools;
 var logger = new wLoggerToFile();
 logger.output = null;
 
+console.log( 'output',logger.output );
 console.log( 'outputPath',logger.outputPath );
 
 logger._dprefix = '-';
