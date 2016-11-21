@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 var _ = wTools;
 
 var logger = new wLogger();
-
 var loggerToFile = new wLoggerToFile({ outputPath : __dirname +'/out.txt' });
+
 logger.outputTo( loggerToFile, { combining : 'append' } );
 logger.log( 'message' );

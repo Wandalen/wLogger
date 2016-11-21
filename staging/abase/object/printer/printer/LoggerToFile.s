@@ -75,7 +75,7 @@ var _init_static = function( name )
 
   var write = function()
   {
-    this._writeToFile.apply(this, arguments );
+    this._writeToFile.apply( this, arguments );
     if( this.output )
     return this[ nameAct ].apply( this,arguments );
   }
@@ -115,7 +115,6 @@ var _writeToFile = function ( )
 
 var Composes =
 {
-  //output : null,
   outputPath : null,
 }
 
@@ -173,7 +172,5 @@ if( typeof module !== 'undefined' && module !== null )
 }
 
 _global_[ Self.name ] = wTools.LoggerToFile = Self;
-
-return Self;
 
 })();

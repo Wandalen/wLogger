@@ -1,9 +1,12 @@
 
 if( typeof module !== 'undefined' )
-require( 'wLogger' );
+require( '../staging/abase/object/printer/printer/Logger.s' );
+//require( 'wLogger' );
 
 var _ = wTools;
 var logger = new wLoggerToFile();
+
+console.log( 'outputPath',logger.outputPath );
 
 logger._dprefix = '-';
 logger.log( 'a1\nb1' );
