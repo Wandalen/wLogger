@@ -95,8 +95,10 @@ var init = function( o )
     self[ nameAct ] = function() {};
   }
 
-  if( self.output )
-  self.outputTo( self.output );
+  self.currentArray = self.outputData;
+
+  // if( self.output )
+  // self.outputTo( self.output );
 
 }
 
@@ -155,7 +157,19 @@ var _writeToStruct = function()
     return _changeLevel( arr[ 0 ], --level );
   }
 
-  _changeLevel( this.outputData, this.level ).push( data );
+  if( this.currentLevel !== this.level )
+  {
+    if( this.level < this.currentLevel )
+    this.currentArray = _changeLevel( this.outputData, this.level );
+    else
+    this.currentArray = _changeLevel( this.currentArray, this.level - this.currentLevel );
+
+    this.currentLevel = this.level;
+  }
+
+  this.currentArray.push( data );
+
+
 }
 
 //
@@ -203,6 +217,12 @@ var Associates =
   outputData : [],
 }
 
+var Restricts =
+{
+  currentArray : null,
+  currentLevel : 0
+}
+
 // --
 // prototype
 // --
@@ -224,6 +244,7 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
 
 }
 
