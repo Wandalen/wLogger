@@ -183,7 +183,7 @@ var _levelSet = function( level )
   else if( dLevel < 0 )
   {
     self.downAct( -dLevel );
-    self.currentArray = _changeLevel( self.outputData, self[ symbolForLevel ] );
+    self.currentArray = _changeLevel( self.outputData, level );
   }
 
   self[ symbolForLevel ] = level ;
