@@ -515,7 +515,7 @@ var inputFrom = function( input,o )
 
 inputFrom.defaults =
 {
-  combining : 'rewrite',
+  combining : 'append',
 }
 
 inputFrom.defaults.__proto__ = outputTo.defaults;
