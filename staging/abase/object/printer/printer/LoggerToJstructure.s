@@ -97,7 +97,7 @@ var init = function( o )
   //   self[ nameAct ] = function() {};
   // }
 
-  self.currentArray = self.outputData;
+  self.currentContainer = self.outputData;
 
   // if( self.output )
   // self.outputTo( self.output );
@@ -149,7 +149,7 @@ var _writeToStruct = function()
 
   var data = _.strConcat.apply( {}, arguments );
 
-  this.currentArray.push( data );
+  this.currentContainer.push( data );
 }
 
 //
@@ -177,13 +177,13 @@ var _levelSet = function( level )
   if( dLevel > 0 )
   {
     self.upAct( +dLevel );
-    self.currentArray = _changeLevel( self.currentArray, +dLevel );
+    self.currentContainer = _changeLevel( self.currentContainer, +dLevel );
 
   }
   else if( dLevel < 0 )
   {
     self.downAct( -dLevel );
-    self.currentArray = _changeLevel( self.outputData, level );
+    self.currentContainer = _changeLevel( self.outputData, level );
   }
 
   self[ symbolForLevel ] = level ;
@@ -237,7 +237,7 @@ var Associates =
 
 var Restricts =
 {
-  currentArray : null
+  currentContainer : null
 }
 
 // --
