@@ -223,6 +223,13 @@ var outputToUnchain = function( test )
     l.outputToUnchain();
   });
 
+  test.description = 'output is not a object';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.outputToUnchain( 1 );
+  });
+
   test.description = 'empty ouputs';
   test.shouldThrowError( function()
   {
@@ -237,6 +244,65 @@ var outputToUnchain = function( test )
     l.outputToUnchain( l );
   });
 
+}
+
+//
+
+var inputFrom = function( test )
+{
+  test.description = 'try to add existing input';
+  var l = new wLogger();
+  var l1 = new wLogger({ output : l });
+  var got = [ l.inputFrom( l1 ), l.inputs.length, l1.outputs.length ];
+  var expected = [ false, 1, 1 ];
+  test.identical( got, expected );
+
+  test.description = 'try to add console';
+  var l = new wLogger();
+  var got = [ l.inputFrom( console ), l.inputs.length ];
+  var expected = [ true, 1 ];
+  test.identical( got, expected );
+
+  test.description = 'try to add other logger';
+  var l = new wLogger();
+  var l1 = new wLogger();
+  var got = [ l.inputFrom( l1 ), l.inputs.length,l1.outputs.length ];
+  var expected = [ true, 1, 2 ];
+  test.identical( got, expected );
+
+  test.description = 'try to add itself';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.inputFrom( l );
+  });
+
+  test.description = 'try to add null';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.inputFrom( null );
+  });
+
+  test.description = 'simple recursion';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    var l1 = new wLogger();
+    l1.inputFrom( l );
+    l1.inputFrom( l1 );
+  });
+
+  test.description = 'l1->l2,l2->l3,l3->l1';
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger();
+    var l2 = new wLogger();
+    var l3 = new wLogger();
+    l1.inputFrom( l3 );
+    l2.inputFrom( l1 );
+    l3.inputFrom( l2 );
+  });
 }
 
 //
@@ -327,9 +393,10 @@ var Proto =
   tests :
   {
 
-    // outputTo : outputTo,
+    outputTo : outputTo,
     outputToUnchain : outputToUnchain,
-    // recursion : recursion
+    inputFrom : inputFrom,
+    recursion : recursion
 
   },
 
