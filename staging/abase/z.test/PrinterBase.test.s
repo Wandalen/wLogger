@@ -44,15 +44,21 @@ var outputTo = function( test )
   var expected = console;
   test.identical( got, expected );
 
+  test.description = '';
+  var l = new wLogger();
+  var got = l.outputTo( null );
+  var expected = false;
+  test.identical( got, expected );
+
   /*rewrite*/
-  test.description = 'case1 : rewrite';
+  test.description = 'rewrite with null';
   var l = new wLogger();
   l.outputTo( null, { combining : 'rewrite' } );
   var got = [ l.output, l.outputs ];
   var expected = [ null, [] ];
   test.identical( got, expected );
 
-  test.description = 'case2 : rewrite';
+  test.description = 'rewrite';
   var l = new wLogger();
   l.outputTo( logger, { combining : 'rewrite' } );
   var got = ( l.output === logger && l.outputs.length === 1 );
@@ -60,21 +66,28 @@ var outputTo = function( test )
   test.identical( got, expected );
 
  /*append*/
- test.description = 'case3 : append';
+ test.description = 'append';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'append' } );
  var got = ( l.output === logger && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
- test.description = 'case4 : append';
+ test.description = 'append list is empty';
  var l = new wLogger({ output : null});
  l.outputTo( logger, { combining : 'append' } );
  var got = ( l.output === logger && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
- test.description = 'case5: append existing';
+ test.description = 'append null';
+ var l = new wLogger();
+ l.outputTo( null, { combining : 'append' } );
+ var got = ( l.output === logger && l.outputs.length === 1 );
+ var expected = false;
+ test.identical( got, expected );
+
+ test.description = 'append existing';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'append' } );
 
@@ -83,36 +96,49 @@ var outputTo = function( test )
  test.identical( got, expected );
 
  /*prepend*/
- test.description = 'case5 : prepend';
+ test.description = 'prepend';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'prepend' } );
  var got = ( l.outputs[ 0 ].output === logger && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
- test.description = 'case5 : prepend existing';
+ test.description = 'prepend existing';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'prepend' } );
  var got = l.outputTo( logger, { combining : 'prepend' } );
  var expected = false;
  test.identical( got, expected );
 
+ test.description = 'prepend null';
+ var l = new wLogger();
+ l.outputTo( logger, { combining : 'prepend' } );
+ var got = l.outputTo( null, { combining : 'prepend' } );
+ var expected = false;
+ test.identical( got, expected );
+
  /*supplement*/
- test.description = 'case6 : supplement';
+ test.description = 'try supplement not empty list';
  var l = new wLogger();
  var got = l.outputTo( logger, { combining : 'supplement' } );
  var expected = false;
  test.identical( got, expected );
 
- test.description = 'case7 : supplement';
+ test.description = 'supplement';
  var l = new wLogger({  output : null });
  l.outputTo( logger, { combining : 'supplement' } );
  var got = ( l.output && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
+ test.description = 'supplement null';
+ var l = new wLogger();
+ var got = l.outputTo( null, { combining : 'supplement' } );
+ var expected = false;
+ test.identical( got, expected );
+
  /*combining off*/
- test.description = 'case8 : combining off';
+ test.description = 'combining off';
  var l = new wLogger({  output : null });
  l.outputTo( logger );
  var got = ( l.output && l.outputs.length === 1 );
