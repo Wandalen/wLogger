@@ -442,6 +442,7 @@ var outputToUnchain = function( output )
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( output ) );
   _.assert( self.outputs.length, 'outputToUnchain : outputs list is empty' );
+  _.assert( self !== output, 'outputToUnchain: Can not remove itself from outputs' );
 
   for( var i = 0; i < self.outputs.length; i++ )
   {
