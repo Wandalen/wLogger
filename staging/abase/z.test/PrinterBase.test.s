@@ -187,6 +187,60 @@ var outputTo = function( test )
 
 //
 
+var outputToUnchain = function( test )
+{
+  test.description = 'remove console from output';
+  var l = new wLogger();
+  var got = l.outputToUnchain( console );
+  var expected = true;
+  test.identical( got, expected );
+
+  test.description = 'output not exists';
+  var l = new wLogger();
+  var got = l.outputToUnchain( {} );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'remove from output';
+  var l1 = new wLogger();
+  var l2 = new wLogger({ output : l1 });
+  var got = [ l2.outputToUnchain( l1 ), l2.outputs.length, l1.inputs.length]
+  var expected = [ true, 0, 0 ];
+  test.identical( got, expected );
+
+  test.description = 'remove from output';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  l2.outputTo( l1, { combining : 'append' } );
+  var got = [ l2.outputToUnchain( l1 ), l2.outputs.length, l1.inputs.length ]
+  var expected = [ true, 1, 0 ];
+  test.identical( got, expected );
+
+  test.description = 'no args';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.outputToUnchain();
+  });
+
+  test.description = 'empty ouputs';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger({ output : null });
+    l.outputToUnchain( console );
+  });
+
+  test.description = 'try to remove itself';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.outputToUnchain( l );
+  });
+
+}
+
+//
+
 var recursion = function( test )
 {
   test.description = 'add own object to outputs';
@@ -248,11 +302,18 @@ var recursion = function( test )
     b.outputTo( console );
   });
 
-  test.description = 'console->a->b->console';
+  test.description = 'input from existing output';
   test.shouldThrowError( function()
   {
     var a = new wLogger();
     a.inputFrom( console );
+  });
+
+  test.description = 'add existing output';
+  test.shouldThrowError( function()
+  {
+    var a = new wLogger();
+    a.outputTo( console, { combining : 'append' } );
   });
 }
 
@@ -266,8 +327,9 @@ var Proto =
   tests :
   {
 
-    outputTo : outputTo,
-    recursion : recursion
+    // outputTo : outputTo,
+    outputToUnchain : outputToUnchain,
+    // recursion : recursion
 
   },
 
