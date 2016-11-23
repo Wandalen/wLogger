@@ -306,6 +306,7 @@ var outputTo = function( output,o )
     {
       if( o.combining === 'rewrite' )
       self.outputs.splice( 0,self.outputs.length );
+      else return false;
     }
   }
 
