@@ -447,8 +447,21 @@ var outputToUnchain = function( output )
     if( self.outputs[ i ].output === output )
     {
       self.outputs.splice( i, 1 );
+      if( self.outputs.length && !output.inputs )
+      return true;
+      break;
+    }
+  }
+
+  if( output.inputs )
+  for( var i = 0; i < output.inputs.length; i++ )
+  {
+    if( output.inputs[ i ].input === self )
+    {
+      output.inputs.splice( i, 1 );
       if( self.outputs.length )
       return true;
+      break;
     }
   }
 
