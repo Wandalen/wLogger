@@ -237,12 +237,35 @@ var outputTo = function( output,o )
     // if( self.outputs.indexOf( output ) !== -1 )
     // return false;
 
+    _.assert( self !== output, 'outputTo: Adding of own object to output is not allowed' );
+
     if( o.combining !== 'rewrite' )
     for( var d = 0 ; d < self.outputs.length ; d++ )
     {
       if( self.outputs[ d ].output === output )
       return false;
     }
+
+    var _check = function( inputs )
+    {
+      for( var d = 0 ; d < inputs.length ; d++ )
+      {
+        if( inputs[ d ].input === output)
+        {
+          return false;
+        }
+        else if( inputs[ d ].input.inputs )
+        {
+          return _check( inputs[ d ].input.inputs )
+        }
+      }
+      return true;
+    }
+
+    if( self.inputs )
+    if( !_check( self.inputs ) )
+    throw _.err( 'outputTo: This object already exists in chain', output );
+
 
     if( self.outputs.length )
     {
@@ -256,13 +279,25 @@ var outputTo = function( output,o )
     descriptor.output = output;
     descriptor.methods = {};
 
+    var descriptorInput = {};
+    descriptorInput.input = self;
+    descriptorInput.methods = {};
+
     if( !o.combining )
     _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
 
     if( o.combining === 'prepend' )
-    self.outputs.unshift( descriptor );
+    {
+      self.outputs.unshift( descriptor );
+      if( output.inputs )
+      output.inputs.unshift( descriptorInput );
+    }
     else
-    self.outputs.push( descriptor );
+    {
+      self.outputs.push( descriptor );
+      if( output.inputs )
+      output.inputs.push( descriptorInput );
+    }
 
   }
   else
@@ -288,14 +323,15 @@ var outputTo = function( output,o )
     if( output === null )
     {
       //debugger;
-      //self[ nameAct ] = function(){};
-      //self[ nameAct ] = null;
+      self[ nameAct ] = function(){};
+      // self[ nameAct ] = null;
       continue;
     }
 
     _.assert( output[ name ],'outputTo expects output has method',name );
 
     descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
+    // descriptorInput.methods[ name ] = self[ name ];
 
     if( self.outputs.length > 1 ) ( function()
     {
@@ -327,7 +363,7 @@ var outputTo = function( output,o )
     if( output === null )
     {
       //debugger;
-      //self[ nameAct ] = function(){};
+      self[ nameAct ] = function(){};
       //self[ nameAct ] = null;
       continue;
     }
@@ -336,6 +372,7 @@ var outputTo = function( output,o )
     descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
     else
     descriptor.methods[ nameAct ] = function(){};
+    // descriptorInput.methods[ name ] = self[ name ];
 
     if( self.outputs.length > 1 ) ( function()
     {
