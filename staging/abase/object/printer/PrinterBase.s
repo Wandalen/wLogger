@@ -526,7 +526,7 @@ var inputFrom = function( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || input === null );
+  _.assert( _.objectIs( input ) );
 
   debugger;
 
