@@ -37,6 +37,13 @@ var Self = {};
 
 var outputTo = function( test )
 {
+  test.description = '';
+  var l = new wLogger({ output : null });
+  l.outputTo( console );
+  var got = l.outputs[ 0 ].output;
+  var expected = console;
+  test.identical( got, expected );
+
   /*rewrite*/
   test.description = 'case1 : rewrite';
   var l = new wLogger();
@@ -152,7 +159,76 @@ var outputTo = function( test )
  }
 }
 
+//
 
+var recursion = function( test )
+{
+  test.description = 'add own object to outputs';
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger({ output : null });
+    l.outputTo( l );
+  });
+
+  test.description = 'l1->l2->l1';
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger({ output : null });
+    var l2 = new wLogger({ output : null });
+    l1.outputTo( l2 );
+    l2.outputTo( l1 );
+  });
+
+  test.description = 'l1->l2->l1';
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger();
+    var l2 = new wLogger();
+    l1.outputTo( l2, { combining : 'rewrite' } );
+    l2.outputTo( l1, { combining : 'rewrite' } );
+  });
+
+  test.description = 'multiple inputs, try to add existing input to output';
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger();
+    var l2 = new wLogger();
+    var l3 = new wLogger();
+    var l4 = new wLogger();
+    l1.outputTo( l4, { combining : 'rewrite' } );
+    l2.outputTo( l4, { combining : 'rewrite' } );
+    l3.outputTo( l4, { combining : 'rewrite' } );
+    l4.outputTo( l1, { combining : 'rewrite' } );
+  });
+
+  test.description = 'l3->l2,l2->l1,l1->l3';
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger();
+    var l2 = new wLogger();
+    var l3 = new wLogger();
+    l1.inputFrom( l2, { combining : 'rewrite' } );
+    l3.inputFrom( l1, { combining : 'rewrite' } );
+    l2.inputFrom( l3, { combining : 'rewrite' } );
+  });
+
+  test.description = 'console->a->b->console';
+  test.shouldThrowError( function()
+  {
+    var a = new wLogger({ output : null });
+    var b = new wLogger({ output : null });
+    a.inputFrom( console );
+    b.inputFrom( a );
+    b.outputTo( console );
+  });
+
+  test.description = 'console->a->b->console';
+  test.shouldThrowError( function()
+  {
+    var a = new wLogger();
+    a.inputFrom( console );
+  });
+}
 
 //
 
@@ -165,6 +241,7 @@ var Proto =
   {
 
     outputTo : outputTo,
+    recursion : recursion
 
   },
 
