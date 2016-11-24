@@ -174,6 +174,9 @@ var _levelSet = function( level )
 
   var dLevel = level - self[ symbolForLevel ];
 
+  // !!! call somewhere
+  // Parent.prototype._levelSet.call( self,level );
+
   if( dLevel > 0 )
   {
     self.upAct( +dLevel );

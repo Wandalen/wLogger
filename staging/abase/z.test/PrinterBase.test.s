@@ -31,6 +31,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = wTools;
+var Parent = wTools.Testing;
 var Self = {};
 
 //
@@ -388,7 +389,7 @@ var recursion = function( test )
 var Proto =
 {
 
-  name : '',
+  name : 'PrinterBase',
 
   tests :
   {
@@ -400,14 +401,14 @@ var Proto =
 
   },
 
-  verbose : 1,
+  /* verbose : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-
+_.Testing.register( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self );
 

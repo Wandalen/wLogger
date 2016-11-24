@@ -33,6 +33,7 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var File = _.FileProvider.HardDrive();
+var Parent = wTools.Testing;
 var Self = {};
 
 //
@@ -161,14 +162,14 @@ var Proto =
 
   },
 
-  verbose : 1,
+  /* verbose : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-
+_.Testing.register( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self );
 
