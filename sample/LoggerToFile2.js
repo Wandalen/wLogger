@@ -11,7 +11,7 @@ console.log( 'l1.outputPath',l1.outputPath );
 console.log( 'l2.outputPath',l2.outputPath );
 
 logger.outputTo( l1,{ combining : 'append' } );
-logger.outputTo( l2,{ combining : 'append' } );
+logger.outputTo( l2,{ combining : 'append' } ); 
 
 logger._dprefix = '~';
 l1._dprefix = '+';
