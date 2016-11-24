@@ -12,6 +12,8 @@ if( typeof module !== 'undefined' )
 
 }
 
+var symbolForLevel = Symbol.for( 'level' );
+
 //
 
 /**
@@ -89,14 +91,16 @@ var init = function( o )
 
   Parent.prototype.init.call( self,o );
 
-  for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
-  {
-    var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
-    self[ nameAct ] = function() {};
-  }
+  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+  // {
+  //   var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
+  //   self[ nameAct ] = function() {};
+  // }
 
-  if( self.output )
-  self.outputTo( self.output );
+  self.currentContainer = self.outputData;
+
+  // if( self.output )
+  // self.outputTo( self.output );
 
 }
 
@@ -144,6 +148,19 @@ var _writeToStruct = function()
   return;
 
   var data = _.strConcat.apply( {}, arguments );
+
+  this.currentContainer.push( data );
+}
+
+//
+
+var _levelSet = function( level )
+{
+  var self = this;
+
+  _.assert( level >= 0, '_levelSet : cant go below zero level to',level );
+  _.assert( isFinite( level ) );
+
   var _changeLevel = function( arr, level )
   {
     if( !level )
@@ -155,7 +172,22 @@ var _writeToStruct = function()
     return _changeLevel( arr[ 0 ], --level );
   }
 
-  _changeLevel( this.outputData, this.level ).push( data );
+  var dLevel = level - self[ symbolForLevel ];
+
+  if( dLevel > 0 )
+  {
+    self.upAct( +dLevel );
+    self.currentContainer = _changeLevel( self.currentContainer, +dLevel );
+
+  }
+  else if( dLevel < 0 )
+  {
+    self.downAct( -dLevel );
+    self.currentContainer = _changeLevel( self.outputData, level );
+  }
+
+  self[ symbolForLevel ] = level ;
+
 }
 
 //
@@ -203,6 +235,11 @@ var Associates =
   outputData : [],
 }
 
+var Restricts =
+{
+  currentContainer : null
+}
+
 // --
 // prototype
 // --
@@ -215,6 +252,7 @@ var Proto =
   _init_static : _init_static,
 
   _writeToStruct : _writeToStruct,
+  _levelSet : _levelSet,
 
   toJson : toJson,
 
@@ -224,6 +262,7 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
 
 }
 
@@ -237,6 +276,18 @@ _.protoMake
 });
 
 Self.prototype.init_static();
+
+//
+
+_.accessor
+({
+  object : Self.prototype,
+  names :
+  {
+    level : 'level',
+  },
+  combining : 'rewrite'
+});
 
 // --
 // export

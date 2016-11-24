@@ -98,6 +98,9 @@ var init = function( o )
   // if( self.output )
   // self.outputTo( self.output );
 
+  if( !self.fileProvider )
+  self.fileProvider = _.FileProvider.HardDrive();
+
 }
 
 //
@@ -150,8 +153,8 @@ var _writeToFile = function ( )
   _.assert( arguments.length );
   _.assert( _.strIs( self.outputPath ),'outputPath is not defined for LoggerToFile' );
 
-  if( !self.fileProvider )
-  self.fileProvider = _.FileProvider.HardDrive();
+  // if( !self.fileProvider )
+  // self.fileProvider = _.FileProvider.HardDrive();
 
   var data = _.strConcat.apply( { },arguments ) + '\n';
 

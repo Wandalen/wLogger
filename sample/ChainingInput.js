@@ -21,3 +21,14 @@ l2.up( 3 );
 logger.log( 'aa\nbb' );
 l1.log( 'cc\ndd' );
 l2.log( 'ee\nff' );
+
+// ~aa
+// ~bb
+// ++~aa
+// ++~bb
+// ---~aa
+// ---~bb
+// ++cc
+// ++dd
+// ---ee
+// ---ff

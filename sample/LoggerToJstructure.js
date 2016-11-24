@@ -14,6 +14,8 @@ logger.log( 'c1' );
 logger.up( 2 );
 logger.log( 'a2\nb2' );
 logger.log( 'c2' );
+logger.level = 0;
+logger.log( 'c1' );
 
 console.log( 'outputData',logger.outputData );
 console.log( logger.toJson() );
@@ -23,5 +25,6 @@ console.log( logger.toJson() );
 //     [ "a2\nb2", "c2" ]
 //   ],
 //   "a1\nb1",
+//   "c1",
 //   "c1"
 // ]
