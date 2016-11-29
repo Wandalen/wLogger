@@ -262,6 +262,7 @@ var inputFrom = function( test )
   var l = new wLogger();
   var got = [ l.inputFrom( console ), l.inputs.length ];
   var expected = [ true, 1 ];
+  l.inputFromUnchain( console );
   test.identical( got, expected );
 
   test.description = 'try to add other logger';
@@ -303,6 +304,103 @@ var inputFrom = function( test )
     l1.inputFrom( l3 );
     l2.inputFrom( l1 );
     l3.inputFrom( l2 );
+  });
+}
+
+//
+
+var inputFromUnchain = function( test )
+{
+  test.description = 'remove existing input';
+  var l = new wLogger({ output : null });
+  l.inputFrom( console );
+  var got = [ l.inputFromUnchain( console ), console.outputs ];
+  var expected = [ true, undefined ];
+  test.identical( got, expected );
+
+  test.description = 'input not exists';
+  var l = new wLogger();
+  var got = l.inputFromUnchain( console );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'remove logger from input';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  l2.inputFrom( l1 );
+  var got = [ l2.inputFromUnchain( l1 ), l2.inputs.length, l1.outputs.length ];
+  var expected = [ true, 0, 1 ];
+  test.identical( got, expected );
+
+  test.description = 'remove logger from input#2';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l3.inputFrom( l1 );
+  l3.inputFrom( l2 );
+  var got = [ l3.inputFromUnchain( l1 ), l3.inputs.length, l1.outputs.length ];
+  var expected = [ true, 1, 1 ];
+  test.identical( got, expected );
+
+  test.description = 'no args';
+  test.shouldThrowError( function()
+  {
+    logger.inputFromUnchain();
+  });
+
+  test.description = 'try to remove itself';
+  test.shouldThrowError( function()
+  {
+    logger.inputFromUnchain( logger );
+  });
+}
+
+//
+
+var hasInput = function( test )
+{
+  test.description = 'has console in inputs';
+  var l = new wLogger({ output : null });
+  l.inputFrom( console );
+  var got = l.hasInput( console );
+  var expected = true;
+  test.identical( got, expected );
+
+  test.description = 'has logger in inputs';
+  var l = new wLogger({ output : null });
+  var got = l.hasInput( logger );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'no args';
+  test.shouldThrowError( function()
+  {
+    logger.hasInput();
+  });
+}
+
+//
+
+var hasOutput = function( test )
+{
+  test.description = 'has logger in outputs';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  l1.outputTo( l2,{ combining : 'rewrite' } );
+  var got = l1.hasOutput( l2 );
+  var expected = true;
+  test.identical( got, expected );
+
+  test.description = 'object not exists in outputs';
+  var l1 = new wLogger();
+  var got = l1.hasOutput( {} );
+  var expected = false;
+  test.identical( got, expected );
+
+  test.description = 'no args';
+  test.shouldThrowError( function()
+  {
+    logger.hasOutput();
   });
 }
 
@@ -397,6 +495,9 @@ var Proto =
     outputTo : outputTo,
     outputToUnchain : outputToUnchain,
     inputFrom : inputFrom,
+    inputFromUnchain : inputFromUnchain,
+    hasInput : hasInput,
+    hasOutput : hasOutput,
     recursion : recursion
 
   },
