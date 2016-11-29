@@ -504,6 +504,7 @@ var inputFrom = function( input,o )
 {
   var self = this;
   var o = o || {};
+  var combiningAllowed = [ 'rewrite','append','prepend' ];
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -516,32 +517,59 @@ var inputFrom = function( input,o )
     return input.outputTo( self,o );
   }
 
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+
   debugger;
 
   /* input check */
-  for( var i = 0; i < self.inputs.length ; i++ )
-  if( self.inputs[ i ].input === input )
-  return false;
+  if( o.combining !== 'rewrite' )
+  if( self.hasInput( input ) )
+  throw _.err( 'inputFrom: This input already exists in logger inputs', input );
 
-  /* write */
-  var original = [];
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  /*recursive outputs check*/
+  if( self._hasOutput( input ) )
+  throw _.err( 'inputFrom: This input already exists in chain', input );
+
+
+  if( !input.outputs )
+  {
+    input.outputs = [];
+  }
+
+  if( input.outputs.length )
+  {
+    if( o.combining === 'rewrite' )
+    input.outputs.splice( 0,input.outputs.length );
+  }
+
+  var descriptor = {};
+  descriptor.output = self;
+  descriptor.methods = {};
+
+  if( o.combining === 'prepend' )
+  input.outputs.unshift( descriptor );
+  else
+  input.outputs.push( descriptor );
+
+  var original = {};
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
   {
     var name = self.outputWriteMethods[ m ];
-
     _.assert( input[ name ],'inputFrom expects input has method',name );
 
+    descriptor.methods[ name ] = _.routineJoin( self, self[ name ] );
     original[ name ] = input[ name ];
-    input[ name ] = _.routineJoin( self,self[ name ] );
+
+    input[ name ] = function()
+    {
+      original[ name ].apply( input, arguments );
+      for( var d = 0 ; d < input.outputs.length ; d++ )
+      input.outputs[ d ].methods[ name ].apply( self, arguments );
+    }
   })();
 
   self.inputs.push( { input : input, methods : original } );
-
-  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
-  // {
-  //   var name = self.outputChangeLevelMethods[ m ];
-  //   input[ name ] = _.routineJoin( self,self[ name ] );
-  // })();
 
   return true;
 }
