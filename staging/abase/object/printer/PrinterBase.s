@@ -645,6 +645,72 @@ var inputFromUnchain = function( input )
 
 //
 
+var hasInput = function( input )
+{
+  _.assert( _.objectIs( input ) );
+
+  var self = this;
+
+  for( var d = 0; d < self.inputs.length ; d++ )
+  if( self.inputs[ d ].input === input )
+  return true;
+
+  return false;
+}
+
+//
+
+var _hasInput = function( input )
+{
+  for( var d = 0 ; d < this.inputs.length ; d++ )
+  {
+    if( this.inputs[ d ].input === input )
+    {
+      return true;
+    }
+    else if( this.inputs[ d ].input.inputs )
+    {
+      return this._hasInput.call( this.inputs[ d ].input, input );
+    }
+  }
+  return false;
+}
+
+//
+
+var hasOutput = function( output )
+{
+  _.assert( _.objectIs( output ) );
+
+  var self = this;
+
+  for( var d = 0; d < self.outputs.length ; d++ )
+  if( self.outputs[ d ].output === output )
+  return true;
+
+  return false;
+}
+
+//
+
+var _hasOutput = function( output )
+{
+  for( var d = 0 ; d < this.outputs.length ; d++ )
+  {
+    if( this.outputs[ d ].output === output )
+    {
+      return true;
+    }
+    else if( this.outputs[ d ].output.outputs )
+    {
+      return this._hasOutput.call( this.outputs[ d ].output, output );
+    }
+  }
+  return false;
+}
+
+//
+
 var writeDoing = function( args )
 {
   var self = this;
@@ -818,6 +884,11 @@ var Proto =
 
   inputFrom : inputFrom,
   inputFromUnchain : inputFromUnchain,
+
+  hasInput : hasInput,
+  _hasInput : _hasInput,
+  hasOutput : hasOutput,
+  _hasOutput : _hasOutput,
 
   writeDoing : writeDoing,
 
