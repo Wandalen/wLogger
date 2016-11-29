@@ -314,11 +314,14 @@ var outputTo = function( test )
 {
 
   test.description = 'output already exist';
-  var l = new wLogger();
-  l.outputTo( logger, { combining : 'append' } );
-  var got = l.outputTo( logger, { combining : 'append' } );
-  var expected = false;
+
   test.identical( got, expected );
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.outputTo( logger, { combining : 'append' } );
+    l.outputTo( logger, { combining : 'append' } );
+  });
 
   test.description = 'output already exist, combining : rewrite';
   var l = new wLogger();
@@ -428,18 +431,21 @@ var inputFrom = function( test )
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
   test.description = 'case1: input already exist';
-  var l = new wLogger();
-  l.inputFrom( console );
-  var got = l.inputFrom( console );
-  var expected = false;
-  test.identical( got, expected );
+  test.shouldThrowError( function()
+  {
+    var l1 = new wLogger();
+    var l2 = new wLogger({ output : l1 });
+    l1.inputFrom( l2 );
+  });
 
   test.description = 'case2: input already exist';
-  var l = new wLogger();
-  logger.inputFrom( l );
-  var got = logger.inputFrom( l, { combining : 'append' } );
-  var expected = false;
-  test.identical( got, expected );
+  test.shouldThrowError( function()
+  {
+    var l = new wLogger();
+    l.outputTo( logger, { combining : 'append' } )
+    logger.inputFrom( l );
+  });
+
 
   test.description = 'case3: console as input';
   var got = [];
