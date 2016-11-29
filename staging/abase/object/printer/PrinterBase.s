@@ -629,14 +629,23 @@ var inputFromUnchain = function( input )
   for( var i = 0; i < self.inputs.length ; i++ )
   if( self.inputs[ i ].input === input )
   {
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+    for( var d = 0; d < input.outputs.length ; d++ )
+    if( input.outputs[ d ].output === self )
+    input.outputs.splice( d, 1 );
+
+    if( !input.outputs.length )
     {
-      var name = self.outputWriteMethods[ m ];
+      for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+      {
+        var name = self.outputWriteMethods[ m ];
 
-      _.assert( input[ name ],'inputFromUnchain expects input has method',name );
+        _.assert( input[ name ],'inputFromUnchain expects input has method',name );
 
-      input[ name ] = self.inputs[ i ].methods[ name ];
-    })();
+        input[ name ] = self.inputs[ i ].methods[ name ];
+      })();
+
+      delete input.outputs;
+    }
 
     // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
     // {
