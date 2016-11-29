@@ -240,30 +240,11 @@ var outputTo = function( output,o )
     _.assert( self !== output, 'outputTo: Adding of own object to output is not allowed' );
 
     if( o.combining !== 'rewrite' )
-    for( var d = 0 ; d < self.outputs.length ; d++ )
-    {
-      if( self.outputs[ d ].output === output )
-      return false;
-    }
-
-    var _check = function( inputs )
-    {
-      for( var d = 0 ; d < inputs.length ; d++ )
-      {
-        if( inputs[ d ].input === output)
-        {
-          return false;
-        }
-        else if( inputs[ d ].input.inputs )
-        {
-          return _check( inputs[ d ].input.inputs )
-        }
-      }
-      return true;
-    }
+    if( self.hasOutput( output ) )
+    return false;
 
     if( self.inputs )
-    if( !_check( self.inputs ) )
+    if( self._hasInput( output ) )
     throw _.err( 'outputTo: This object already exists in chain', output );
 
 
