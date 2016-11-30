@@ -241,11 +241,12 @@ var outputTo = function( output,o )
 
     if( o.combining !== 'rewrite' )
     if( self.hasOutput( output ) )
-    return false;
+    throw _.err( 'outputTo: This output already exists in outputs', output );
+
 
     if( self.inputs )
     if( self._hasInput( output ) )
-    throw _.err( 'outputTo: This object already exists in chain', output );
+    throw _.err( 'outputTo: This object already exists in inputs chain', output );
 
 
     if( self.outputs.length )
