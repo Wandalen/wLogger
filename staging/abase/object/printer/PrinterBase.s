@@ -55,7 +55,7 @@ var init = function( o )
   var self = this;
 
   self.outputs = [];
-  _.protoComplementInstance( self );
+  _.instanceInit( self );
   Object.preventExtensions( self );
 
   if( o )
