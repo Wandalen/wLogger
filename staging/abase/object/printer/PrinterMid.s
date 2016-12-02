@@ -120,14 +120,14 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         self.foregroundColor = null;
         else
-        self.foregroundColor = _.colorFrom( color );
+        self.foregroundColor = _.color.rgbaFrom( color );
       }
       else if( style === 'background')
       {
         if( color === 'default' )
         self.backgroundColor = null;
         else
-        self.backgroundColor = _.colorFrom( color );
+        self.backgroundColor = _.color.rgbaFrom( color );
       }
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
@@ -148,7 +148,7 @@ var _writeDoingBrowser = function( str )
         self.backgroundColor = 'none';
 
         result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.colorToRgbHtml( self.foregroundColor ) };background:${ _.colorToRgbHtml( self.backgroundColor ) };` );
+        result.push( `color:${ _.color.colorToRgbHtml( self.foregroundColor ) };background:${ _.color.colorToRgbHtml( self.backgroundColor ) };` );
       }
     }
   }
@@ -181,7 +181,7 @@ var _writeDoingShell = function( str )
 
       if( color && color!='default' )
       {
-        color = _.colorFrom( color );
+        color = _.color.rgbaFrom( color );
       }
 
       if( !color )
