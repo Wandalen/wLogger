@@ -268,6 +268,7 @@ var _writeDoingShell = function( str )
         if( color !== 'default' )
         {
           if( self.backgroundColor )
+          self._addToStack( self.backgroundColor, style );
 
           self.backgroundColor = color;
         }
