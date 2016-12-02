@@ -175,22 +175,19 @@ var _levelSet = function( level )
   var dLevel = level - self[ symbolForLevel ];
 
   // !!! call somewhere
-  // Parent.prototype._levelSet.call( self,level );
+  Parent.prototype._levelSet.call( self,level );
 
   if( dLevel > 0 )
   {
-    self.upAct( +dLevel );
+    // self.upAct( +dLevel );
     self.currentContainer = _changeLevel( self.currentContainer, +dLevel );
-
   }
   else if( dLevel < 0 )
   {
-    self.downAct( -dLevel );
+    // self.downAct( -dLevel );
     self.currentContainer = _changeLevel( self.outputData, level );
   }
-
-  self[ symbolForLevel ] = level ;
-
+  // self[ symbolForLevel ] = level ;
 }
 
 //

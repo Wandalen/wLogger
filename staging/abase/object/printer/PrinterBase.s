@@ -240,31 +240,13 @@ var outputTo = function( output,o )
     _.assert( self !== output, 'outputTo: Adding of own object to output is not allowed' );
 
     if( o.combining !== 'rewrite' )
-    for( var d = 0 ; d < self.outputs.length ; d++ )
-    {
-      if( self.outputs[ d ].output === output )
-      return false;
-    }
+    if( self.hasOutput( output ) )
+    throw _.err( 'outputTo: This output already exists in outputs', output );
 
-    var _check = function( inputs )
-    {
-      for( var d = 0 ; d < inputs.length ; d++ )
-      {
-        if( inputs[ d ].input === output)
-        {
-          return false;
-        }
-        else if( inputs[ d ].input.inputs )
-        {
-          return _check( inputs[ d ].input.inputs )
-        }
-      }
-      return true;
-    }
 
     if( self.inputs )
-    if( !_check( self.inputs ) )
-    throw _.err( 'outputTo: This object already exists in chain', output );
+    if( self._hasInput( output ) )
+    throw _.err( 'outputTo: This object already exists in inputs chain', output );
 
 
     if( self.outputs.length )
@@ -523,6 +505,7 @@ var inputFrom = function( input,o )
 {
   var self = this;
   var o = o || {};
+  var combiningAllowed = [ 'rewrite','append','prepend' ];
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -535,32 +518,59 @@ var inputFrom = function( input,o )
     return input.outputTo( self,o );
   }
 
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+
   debugger;
 
   /* input check */
-  for( var i = 0; i < self.inputs.length ; i++ )
-  if( self.inputs[ i ].input === input )
-  return false;
+  if( o.combining !== 'rewrite' )
+  if( self.hasInput( input ) )
+  throw _.err( 'inputFrom: This input already exists in logger inputs', input );
 
-  /* write */
-  var original = [];
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  /*recursive outputs check*/
+  if( self._hasOutput( input ) )
+  throw _.err( 'inputFrom: This input already exists in chain', input );
+
+
+  if( !input.outputs )
+  {
+    input.outputs = [];
+  }
+
+  if( input.outputs.length )
+  {
+    if( o.combining === 'rewrite' )
+    input.outputs.splice( 0,input.outputs.length );
+  }
+
+  var descriptor = {};
+  descriptor.output = self;
+  descriptor.methods = {};
+
+  if( o.combining === 'prepend' )
+  input.outputs.unshift( descriptor );
+  else
+  input.outputs.push( descriptor );
+
+  var original = {};
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
   {
     var name = self.outputWriteMethods[ m ];
-
     _.assert( input[ name ],'inputFrom expects input has method',name );
 
+    descriptor.methods[ name ] = _.routineJoin( self, self[ name ] );
     original[ name ] = input[ name ];
-    input[ name ] = _.routineJoin( self,self[ name ] );
+
+    input[ name ] = function()
+    {
+      original[ name ].apply( input, arguments );
+      for( var d = 0 ; d < input.outputs.length ; d++ )
+      input.outputs[ d ].methods[ name ].apply( self, arguments );
+    }
   })();
 
   self.inputs.push( { input : input, methods : original } );
-
-  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
-  // {
-  //   var name = self.outputChangeLevelMethods[ m ];
-  //   input[ name ] = _.routineJoin( self,self[ name ] );
-  // })();
 
   return true;
 }
@@ -620,14 +630,23 @@ var inputFromUnchain = function( input )
   for( var i = 0; i < self.inputs.length ; i++ )
   if( self.inputs[ i ].input === input )
   {
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+    for( var d = 0; d < input.outputs.length ; d++ )
+    if( input.outputs[ d ].output === self )
+    input.outputs.splice( d, 1 );
+
+    if( !input.outputs.length )
     {
-      var name = self.outputWriteMethods[ m ];
+      for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+      {
+        var name = self.outputWriteMethods[ m ];
 
-      _.assert( input[ name ],'inputFromUnchain expects input has method',name );
+        _.assert( input[ name ],'inputFromUnchain expects input has method',name );
 
-      input[ name ] = self.inputs[ i ].methods[ name ];
-    })();
+        input[ name ] = self.inputs[ i ].methods[ name ];
+      })();
+
+      delete input.outputs;
+    }
 
     // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
     // {
@@ -640,6 +659,72 @@ var inputFromUnchain = function( input )
     return true;
   }
 
+  return false;
+}
+
+//
+
+var hasInput = function( input )
+{
+  _.assert( _.objectIs( input ) );
+
+  var self = this;
+
+  for( var d = 0; d < self.inputs.length ; d++ )
+  if( self.inputs[ d ].input === input )
+  return true;
+
+  return false;
+}
+
+//
+
+var _hasInput = function( input )
+{
+  for( var d = 0 ; d < this.inputs.length ; d++ )
+  {
+    if( this.inputs[ d ].input === input )
+    {
+      return true;
+    }
+    else if( this.inputs[ d ].input.inputs )
+    {
+      return this._hasInput.call( this.inputs[ d ].input, input );
+    }
+  }
+  return false;
+}
+
+//
+
+var hasOutput = function( output )
+{
+  _.assert( _.objectIs( output ) );
+
+  var self = this;
+
+  for( var d = 0; d < self.outputs.length ; d++ )
+  if( self.outputs[ d ].output === output )
+  return true;
+
+  return false;
+}
+
+//
+
+var _hasOutput = function( output )
+{
+  for( var d = 0 ; d < this.outputs.length ; d++ )
+  {
+    if( this.outputs[ d ].output === output )
+    {
+      return true;
+    }
+    else if( this.outputs[ d ].output.outputs )
+    {
+      return this._hasOutput.call( this.outputs[ d ].output, output );
+    }
+  }
   return false;
 }
 
@@ -818,6 +903,11 @@ var Proto =
 
   inputFrom : inputFrom,
   inputFromUnchain : inputFromUnchain,
+
+  hasInput : hasInput,
+  _hasInput : _hasInput,
+  hasOutput : hasOutput,
+  _hasOutput : _hasOutput,
 
   writeDoing : writeDoing,
 
