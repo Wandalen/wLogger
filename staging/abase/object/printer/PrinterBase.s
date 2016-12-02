@@ -853,8 +853,13 @@ var _outputGet = function( output )
 
 var Composes =
 {
+
   level : 0,
-  onWrite : null
+  onWrite : null,
+
+  outputs : [],
+  inputs : [],
+
 }
 
 var Aggregates =
@@ -865,9 +870,8 @@ var Associates =
 {
 
   output : null,
-  outputs : [],
-  outputsDescriptors : [],
-  inputs : []
+
+  //outputsDescriptors : [],
 
 }
 

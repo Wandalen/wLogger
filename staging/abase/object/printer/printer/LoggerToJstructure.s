@@ -227,12 +227,11 @@ var Composes =
 
 var Aggregates =
 {
+  outputData : [],
 }
 
 var Associates =
 {
-  //output : null,
-  outputData : [],
 }
 
 var Restricts =
