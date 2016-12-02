@@ -58,8 +58,6 @@ var Associates =
   output : console,
 }
 
-debugger;
-
 // --
 // prototype
 // --
