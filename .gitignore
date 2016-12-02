@@ -11,4 +11,3 @@ builder
 proto
 node_modules
 html.build.coffee
-doc
