@@ -74,7 +74,7 @@ var colorConsole = function( test )
 
   var fakeConsole =
   {
-    log : _.routineJoin( console,log ),
+    log : _.routineJoin( this,log ),
     error : _.routineJoin( console,console.error ),
     info : _.routineJoin( console,console.info ),
     warn : _.routineJoin( console,console.warn ),
@@ -105,6 +105,7 @@ var colorConsole = function( test )
 
   test.description = 'case5: unknown color ';
   var got = logger.log( _.strColor.fg( 'text', 'xxx') )[ 0 ];
+  console.log( got );
   var expected = '\u001b[39mtext\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 

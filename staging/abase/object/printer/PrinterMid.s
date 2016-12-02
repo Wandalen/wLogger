@@ -93,6 +93,40 @@ var colorBackgroundGet = function()
 
 //
 
+var _addToStack = function( color, style )
+{
+  var self = this;
+
+  if( !self.colorsStack )
+  {
+    self.colorsStack = { 'foreground' : [], 'background' : [] };
+  }
+
+  self.colorsStack[ style ].push( color );
+}
+
+//
+
+var _getFromStack = function( style )
+{
+  var self = this;
+
+  return self.colorsStack[ style ].pop();
+}
+
+//
+
+var _stackIsNotEmpty = function( style )
+{
+  var self = this;
+  if( self.colorsStack && self.colorsStack[ style ].length )
+  return true;
+
+  return false;
+}
+
+//
+
 var _writeDoingBrowser = function( str )
 {
   var self = this;
@@ -118,16 +152,36 @@ var _writeDoingBrowser = function( str )
       if( style === 'foreground')
       {
         if( color === 'default' )
-        self.foregroundColor = null;
+        {
+          if( self._stackIsNotEmpty( style ) )
+          self.foregroundColor = self._getFromStack( style )
+          else
+          self.foregroundColor = null;
+        }
         else
-        self.foregroundColor = _.color.rgbaFrom( color );
+        {
+          if( self.foregroundColor )
+          self._addToStack( self.foregroundColor, style )
+
+          self.foregroundColor = _.color.rgbFrom( color );
+        }
       }
       else if( style === 'background')
       {
         if( color === 'default' )
-        self.backgroundColor = null;
+        {
+          if( self._stackIsNotEmpty( style ) )
+          self.backgroundColor = self._getFromStack( style )
+          else
+          self.backgroundColor = null;
+        }
         else
-        self.backgroundColor = _.color.rgbaFrom( color );
+        {
+          if( self.backgroundColor )
+          self._addToStack( self.backgroundColor, style )
+
+          self.backgroundColor = _.color.rgbFrom( color );
+        }
       }
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
@@ -169,7 +223,7 @@ var _writeDoingShell = function( str )
   var result = '';
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var fgopened,bgopened;
+
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
@@ -191,56 +245,45 @@ var _writeDoingShell = function( str )
       {
         if( color !== 'default' )
         {
-          self.foregroundColor = color;
-          if( !fgopened )
-          {
-            fgopened = color;
-          }
-          result+= `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+          if( self.foregroundColor )
+          self._addToStack( self.foregroundColor, style );
 
+          self.foregroundColor = color;
         }
         else
         {
-          if( fgopened && self.foregroundColor != fgopened )
-          {
-            result+= `\x1b[${ self._rgbToCode( fgopened ) }m`;
-            fgopened = 0;
-          }
+          if( self._stackIsNotEmpty( style ) )
+          self.foregroundColor = self._getFromStack( style );
           else
-          {
-            self.foregroundColor = null;
-            result+= `\x1b[39m`;
-            fgopened = 0;
-
-          }
-
+          self.foregroundColor = null;
         }
+
+        if( self.foregroundColor )
+        result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+        else
+        result += `\x1b[39m`;
       }
       else if( style === 'background' )
       {
         if( color !== 'default' )
         {
+          if( self.backgroundColor )
+          self._addToStack( self.foregroundColor, style );
+
           self.backgroundColor = color;
-          if( !bgopened )
-          {
-            bgopened = color;
-          }
-          result+= `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
         }
         else
         {
-          if( bgopened && self.backgroundColor != bgopened )
-          {
-            result+= `\x1b[${ self._rgbToCode( bgopened )+ 10 }m`;
-            bgopened = 0;
-          }
+          if( self._stackIsNotEmpty( style ) )
+          self.backgroundColor = self._getFromStack( style );
           else
-          {
-            self.backgroundColor = null;
-            result+= `\x1b[49m`;
-            bgopened = 0;
-          }
+          self.backgroundColor = null;
         }
+
+        if( self.backgroundColor )
+        result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+        else
+        result += `\x1b[49m`;
       }
     }
   }
@@ -340,6 +383,8 @@ var Composes =
   foregroundColor : null,
   backgroundColor : null,
 
+  colorsStack : null,
+
   _colorTable : null,
   _isStyled : 0
 
@@ -369,6 +414,10 @@ var Proto =
 
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
+
+  _addToStack : _addToStack,
+  _getFromStack : _getFromStack,
+  _stackIsNotEmpty : _stackIsNotEmpty,
 
   _writeDoingShell : _writeDoingShell,
   _writeDoingBrowser : _writeDoingBrowser,

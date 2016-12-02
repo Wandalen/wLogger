@@ -748,7 +748,8 @@ var writeDoing = function( args )
 /**
  * Increases value of logger level property by( dLevel ).
  *
- * If argument( dLevel ) is not specified, increases by one.
+ * Also 'up' method will be called for each output object chained with leveling mode: 'delta' that has
+ * own 'up' method. If argument( dLevel ) is not specified, increases by one.
  *
  * @example
  * var l = new wLogger();
@@ -780,7 +781,9 @@ var up = function( dLevel )
 
 /**
  * Decreases value of logger level property by( dLevel ).
- * If argument( dLevel ) is not specified, decreases by one.
+ *
+ * Also 'down' method will be called for each output object chained with leveling mode: 'delta' that has
+ * own 'down' method. If argument( dLevel ) is not specified, decreases by one.
  *
  * @example
  * var l = new wLogger();
