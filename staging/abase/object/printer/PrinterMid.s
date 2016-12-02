@@ -163,7 +163,7 @@ var _writeDoingBrowser = function( str )
           if( self.foregroundColor )
           self._addToStack( self.foregroundColor, style )
 
-          self.foregroundColor = _.color.rgbFrom( color );
+          self.foregroundColor = _.color.rgbaFrom( color );
         }
       }
       else if( style === 'background')
@@ -180,7 +180,7 @@ var _writeDoingBrowser = function( str )
           if( self.backgroundColor )
           self._addToStack( self.backgroundColor, style )
 
-          self.backgroundColor = _.color.rgbFrom( color );
+          self.backgroundColor = _.color.rgbaFrom( color );
         }
       }
       if( !self.foregroundColor && !self.backgroundColor )
@@ -202,7 +202,7 @@ var _writeDoingBrowser = function( str )
         self.backgroundColor = 'none';
 
         result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.color.colorToRgbHtml( self.foregroundColor ) };background:${ _.color.colorToRgbHtml( self.backgroundColor ) };` );
+        result.push( `color:${ _.color.colorToRgbaHtml( self.foregroundColor ) };background:${ _.color.colorToRgbaHtml( self.backgroundColor ) };` );
       }
     }
   }
@@ -235,7 +235,7 @@ var _writeDoingShell = function( str )
 
       if( color && color != 'default' )
       {
-        color = _.color.rgbaFrom( color );
+        color = _.color.rgbFrom( color );
       }
 
       if( !color )
