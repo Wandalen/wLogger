@@ -93,7 +93,7 @@ var colorBackgroundGet = function()
 
 //
 
-var _addToStack = function( color, style )
+var _stackPush = function( style, color )
 {
   var self = this;
 
@@ -107,7 +107,7 @@ var _addToStack = function( color, style )
 
 //
 
-var _getFromStack = function( style )
+var _stackPop = function( style )
 {
   var self = this;
 
@@ -154,14 +154,14 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         {
           if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._getFromStack( style )
+          self.foregroundColor = self._stackPop( style )
           else
           self.foregroundColor = null;
         }
         else
         {
           if( self.foregroundColor )
-          self._addToStack( self.foregroundColor, style )
+          self._stackPush( style, self.foregroundColor )
 
           self.foregroundColor = _.color.rgbaFrom( color );
         }
@@ -171,14 +171,14 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         {
           if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._getFromStack( style )
+          self.backgroundColor = self._stackPop( style )
           else
           self.backgroundColor = null;
         }
         else
         {
           if( self.backgroundColor )
-          self._addToStack( self.backgroundColor, style )
+          self._stackPush( style, self.backgroundColor )
 
           self.backgroundColor = _.color.rgbaFrom( color );
         }
@@ -227,7 +227,24 @@ var _writeDoingShell = function( str )
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
-    result += splitted[ i ];
+    {
+      if( self.foregroundColor )
+      result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+      else
+      result += `\x1b[39m`;
+
+      if( self.backgroundColor )
+      result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+      else
+      result += `\x1b[49m`;
+
+      if( self._isStyled  )
+      { //restores cursos pos
+        result += `\x1b[u`;
+        self._isStyled = 0;
+      }
+      result +=  splitted[ i ];
+    }
     else
     {
       var style = splitted[ i ][ 0 ];
@@ -246,44 +263,50 @@ var _writeDoingShell = function( str )
         if( color !== 'default' )
         {
           if( self.foregroundColor )
-          self._addToStack( self.foregroundColor, style );
+          self._stackPush( style, self.foregroundColor );
 
           self.foregroundColor = color;
         }
         else
         {
           if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._getFromStack( style );
+          self.foregroundColor = self._stackPop( style );
           else
           self.foregroundColor = null;
         }
 
-        if( self.foregroundColor )
-        result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-        else
-        result += `\x1b[39m`;
+        // if( self.foregroundColor )
+        // result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+        // else
+        // result += `\x1b[39m`;
       }
       else if( style === 'background' )
       {
         if( color !== 'default' )
         {
           if( self.backgroundColor )
-          self._addToStack( self.backgroundColor, style );
+          self._stackPush( style, self.backgroundColor );
 
           self.backgroundColor = color;
         }
         else
         {
           if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._getFromStack( style );
+          self.backgroundColor = self._stackPop( style );
           else
           self.backgroundColor = null;
         }
 
-        if( self.backgroundColor )
-        result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-        else
-        result += `\x1b[49m`;
+        // if( self.backgroundColor )
+        // result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+        // else
+        // result += `\x1b[49m`;
+      }
+
+      if( splitted.length === 1 && !self._isStyled )
+      { //unexpected nl after #style : xxx# input,fix saves cursor position
+        self._isStyled = 1;
+        return [ '\x1b[s' ];
       }
     }
   }
@@ -415,8 +438,8 @@ var Proto =
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
 
-  _addToStack : _addToStack,
-  _getFromStack : _getFromStack,
+  _stackPush : _stackPush,
+  _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
 
   _writeDoingShell : _writeDoingShell,
