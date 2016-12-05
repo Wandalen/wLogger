@@ -11,13 +11,14 @@ npm install wLogger
 ```
 ## Usage
 ### Options
-* output { object }[ optional, default : console ] - single output object for current logger;
-* level { number }[ optional, default : 0 ] - controls current output level;
-* _prefix { string }[ optional, default : '' ] - string inserted before each message;
-* _postfix { string }[ optional, default : '' ] - string inserted after each message;
-* _dprefix { string }[ optional, default : '  ' ] - string inserted before each message if level > 1, count of insertions depends on level property;
-* _dpostfix { string }[ optional, default : '' ] - string inserted after each message if level > 1,count of insertions depends on level property.
-
+| Option | Type | Default | Description
+| ------------- |---------------------------| -----|-------------|
+| output | object | console |single output object for current logger
+| level | number | 0 |controls current output level
+| _prefix | string | '' |string inserted before each message
+| _postfix| string | '' |string inserted after each message
+| _dprefix| string | ' ' |string inserted before each message if level > 1, count of insertions depends on level property
+| _dpostfix| string | '' |string inserted after each message if level > 1,count of insertions depends on level property
 ### Methods
 Output:
 * log
