@@ -17,7 +17,7 @@ npm install wLogger
 | level | number | 0 |controls current output level
 | _prefix | string | '' |string inserted before each message
 | _postfix| string | '' |string inserted after each message
-| _dprefix| string | ' ' |string inserted before each message if level > 1, count of insertions depends on level property
+| _dprefix| string | '&nbsp;&nbsp;' |string inserted before each message if level > 1, count of insertions depends on level property
 | _dpostfix| string | '' |string inserted after each message if level > 1,count of insertions depends on level property
 ### Methods
 Output:
