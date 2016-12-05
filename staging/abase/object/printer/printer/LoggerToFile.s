@@ -11,7 +11,14 @@ if( typeof module !== 'undefined' )
   require( './Logger.s' );
 
   if( !wTools.FileProvider  )
-  require( 'wFiles' );
+  try
+  {
+    require( '../../../../amid/file/Files.ss' );
+  }
+  catch( err )
+  {
+    require( 'wFiles' );
+  }
 
 }
 
