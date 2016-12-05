@@ -228,21 +228,6 @@ var _writeDoingShell = function( str )
   {
     if( _.strIs( splitted[ i ] ) )
     {
-      if( self.foregroundColor )
-      result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-      else
-      result += `\x1b[39m`;
-
-      if( self.backgroundColor )
-      result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-      else
-      result += `\x1b[49m`;
-
-      if( self._isStyled  )
-      { //restores cursos pos
-        result += `\x1b[u`;
-        self._isStyled = 0;
-      }
       result +=  splitted[ i ];
     }
     else
@@ -252,7 +237,18 @@ var _writeDoingShell = function( str )
 
       if( color && color != 'default' )
       {
-        color = _.color.rgbFrom( color );
+        try
+        {
+          color = _.color.rgbFrom( color );
+        }
+        catch ( err )
+        {
+          var name = _.color.colorNameNearest( color );
+          if( name )
+          color = _.color.ColorMap[ name ];
+          else
+          color = 'default';
+        }
       }
 
       if( !color )
@@ -275,10 +271,10 @@ var _writeDoingShell = function( str )
           self.foregroundColor = null;
         }
 
-        // if( self.foregroundColor )
-        // result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-        // else
-        // result += `\x1b[39m`;
+        if( self.foregroundColor )
+        result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+        else
+        result += `\x1b[39m`;
       }
       else if( style === 'background' )
       {
@@ -297,16 +293,10 @@ var _writeDoingShell = function( str )
           self.backgroundColor = null;
         }
 
-        // if( self.backgroundColor )
-        // result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-        // else
-        // result += `\x1b[49m`;
-      }
-
-      if( splitted.length === 1 && !self._isStyled )
-      { //unexpected nl after #style : xxx# input,fix saves cursor position
-        self._isStyled = 1;
-        return [ '\x1b[s' ];
+        if( self.backgroundColor )
+        result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+        else
+        result += `\x1b[49m`;
       }
     }
   }
