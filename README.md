@@ -19,6 +19,9 @@ npm install wLogger
 | _postfix| string | '' |string inserted after each message
 | _dprefix| string | '&nbsp;&nbsp;' |string inserted before each message if level > 1, count of insertions depends on level property
 | _dpostfix| string | '' |string inserted after each message if level > 1,count of insertions depends on level property
+| colorForeground| array | null |current foreground color
+| colorBackground| array | null |current background color
+
 ### Methods
 Output:
 * log
@@ -39,5 +42,3 @@ Chaining:
 Other:
 * Check if object exists in logger's inputs list - [hasInput](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterBase.html#.hasInput)
 * Check if object exists in logger's outputs list - [hasOutput](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterBase.html#.hasOutput)
-* Current text foreground color - [colorForegroundGet](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterMid.html#.colorForegroundGet)
-* Current text background color - [colorBackgroundGet](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterMid.html#.colorForegroundGet)
