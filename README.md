@@ -2,7 +2,9 @@
 Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging.
 
 ## wLogger
-
+Logger that writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
+Supports colorful output in browser and shell, multilevel output, chaining with other objects to perform message transfering
+between multiple inputs/outputs.
 
 
 ## Installation
@@ -11,16 +13,8 @@ npm install wLogger
 ```
 ## Usage
 ### Options
-| Option | Type | Default | Description
-| ------------- |---------------------------| -----|-------------|
-| output | object | console |single output object for current logger
-| level | number | 0 |controls current output level
-| _prefix | string | '' |string inserted before each message
-| _postfix| string | '' |string inserted after each message
-| _dprefix| string | '&nbsp;&nbsp;' |string inserted before each message if level > 1, count of insertions depends on level property
-| _dpostfix| string | '' |string inserted after each message if level > 1,count of insertions depends on level property
-| colorForeground| array | null |current foreground color
-| colorBackground| array | null |current background color
+* output { object }[ optional, default : console ] - single output object for current logger.
+* level  { number }[ optional, default : 0 ] - controls current output level.
 
 ### Methods
 Output:
@@ -42,3 +36,59 @@ Chaining:
 Other:
 * Check if object exists in logger's inputs list - [hasInput](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterBase.html#.hasInput)
 * Check if object exists in logger's outputs list - [hasOutput](https://rawgit.com/Wandalen/wLogger/master/doc/reference/wPrinterBase.html#.hasOutput)
+
+##### Example #1
+```javascript
+/*Simple output*/
+var l = new wLogger();
+l.log( 'abc' );
+```
+##### Example #2
+```javascript
+/*Leveling*/
+var l = new wLogger();
+l.log('0 level')
+/*Increase current level by 2*/
+l.up( 2 );
+l.log('2 level')
+/*
+0 level
+    2 level
+*/
+```
+##### Example #3
+```javascript
+/*Chaining*/
+/*Disabling default output for l1*/
+var l1 = new wLogger({ output : null });
+var l2 = new wLogger();
+/*Setting prefix for second logger*/
+l2._prefix = 'l2_'
+/*Setting second logger as output*/
+l1.outputTo( l2 );
+/*Each message from l1 will be transfered to l2*/
+l1.log('message1')
+l1.log('message2')
+/*
+l2_message1
+l2_message2
+*/
+```
+##### Example #3
+```javascript
+/*Simple colorful logging*/
+var l = new wLogger();
+/* prints message with red color,then sets foreground color to default */
+l.log( '#foreground : red#text here#foreground : default#' );
+/* prints message on yellow background,then sets background color to default */
+l.log( '#background : yellow#text here#background : default#' );
+```
+##### Example #5
+```javascript
+/*Colorful logging using wTools.strColor*/
+var l = new wLogger();
+/* prints message with red color */
+l.log( wTools.strColor.fg( 'message','red' ) );
+/* prints message with yellow background */
+l.log( wTools.strColor.bg( 'message','yellow' ) );
+```
