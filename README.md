@@ -74,7 +74,7 @@ l2_message1
 l2_message2
 */
 ```
-##### Example #3
+##### Example #4
 ```javascript
 /*Simple colorful logging*/
 var l = new wLogger();
