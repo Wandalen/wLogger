@@ -23,6 +23,8 @@ if( typeof module !== 'undefined' )
 }
 
 var symbolForLevel = Symbol.for( 'level' );
+var symbolForForeground = Symbol.for( 'foregroundColor' );
+var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 //
 
@@ -77,18 +79,96 @@ var _onStrip = function( strip )
 
 //
 
-var colorForegroundGet = function()
+var _colorConvert = function ( color )
 {
-  var self = this;
-  return self.foregroundColor;
+  if( !color )
+  return null;
+
+  try
+  {
+    if( !isBrowser )
+    color = _.color.rgbFrom( color );
+    else
+    color = _.color.rgbaFrom( color );
+  }
+  catch ( err )
+  {
+    var name = _.color.colorNameNearest( color );
+    if( name )
+    color = _.color.ColorMap[ name ];
+    else
+    return null;
+  }
+
+  return color;
 }
 
 //
 
-var colorBackgroundGet = function()
+var _foregroundColorGet = function()
 {
   var self = this;
-  return self.backgroundColor;
+  return self[ symbolForForeground ];
+}
+
+//
+
+var _backgroundColorGet = function()
+{
+  var self = this;
+  return self[ symbolForBackground ];
+}
+
+//
+
+var _foregroundColorSet = function( color )
+{
+  var self = this;
+  var style = 'foreground';
+
+
+  color = self._colorConvert( color );
+
+  if( !color || color === 'default' )
+  {
+    if( self._stackIsNotEmpty( style ) )
+    self[ symbolForForeground ] = self._stackPop( style );
+    else
+    self[ symbolForForeground ] = null;
+  }
+  else
+  {
+    if( self[ symbolForForeground ] )
+    self._stackPush( style, self[ symbolForForeground ] );
+
+    self[ symbolForForeground ] = color;
+  }
+}
+
+//
+
+var _backgroundColorSet = function( color )
+{
+  var self = this;
+  var style = 'background';
+
+
+  color = self._colorConvert( color );
+
+  if( !color || color === 'default' )
+  {
+    if( self._stackIsNotEmpty( style ) )
+    self[ symbolForBackground ] = self._stackPop( style );
+    else
+    self[ symbolForBackground ] = null;
+  }
+  else
+  {
+    if( self[ symbolForBackground ] )
+    self._stackPush( style, self[ symbolForBackground ] );
+
+    self[ symbolForBackground ] = color;
+  }
 }
 
 //
@@ -151,37 +231,11 @@ var _writeDoingBrowser = function( str )
 
       if( style === 'foreground')
       {
-        if( color === 'default' )
-        {
-          if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._stackPop( style )
-          else
-          self.foregroundColor = null;
-        }
-        else
-        {
-          if( self.foregroundColor )
-          self._stackPush( style, self.foregroundColor )
-
-          self.foregroundColor = _.color.rgbaFrom( color );
-        }
+        self.foregroundColor = color;
       }
       else if( style === 'background')
       {
-        if( color === 'default' )
-        {
-          if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._stackPop( style )
-          else
-          self.backgroundColor = null;
-        }
-        else
-        {
-          if( self.backgroundColor )
-          self._stackPush( style, self.backgroundColor )
-
-          self.backgroundColor = _.color.rgbaFrom( color );
-        }
+        self.backgroundColor = color;
       }
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
@@ -196,13 +250,11 @@ var _writeDoingBrowser = function( str )
       }
       else
       {
-        if( !self.foregroundColor )
-        self.foregroundColor = 'none';
-        if( !self.backgroundColor )
-        self.backgroundColor = 'none';
+        var fg = self.foregroundColor || 'none';
+        var bg = self.backgroundColor || 'none';
 
         result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.color.colorToRgbaHtml( self.foregroundColor ) };background:${ _.color.colorToRgbaHtml( self.backgroundColor ) };` );
+        result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
       }
     }
   }
@@ -235,41 +287,9 @@ var _writeDoingShell = function( str )
       var style = splitted[ i ][ 0 ];
       var color = splitted[ i ][ 1 ];
 
-      if( color && color != 'default' )
-      {
-        try
-        {
-          color = _.color.rgbFrom( color );
-        }
-        catch ( err )
-        {
-          var name = _.color.colorNameNearest( color );
-          if( name )
-          color = _.color.ColorMap[ name ];
-          else
-          color = 'default';
-        }
-      }
-
-      if( !color )
-      color = 'default';
-
       if( style === 'foreground')
       {
-        if( color !== 'default' )
-        {
-          if( self.foregroundColor )
-          self._stackPush( style, self.foregroundColor );
-
-          self.foregroundColor = color;
-        }
-        else
-        {
-          if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._stackPop( style );
-          else
-          self.foregroundColor = null;
-        }
+        self.foregroundColor = color;
 
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
@@ -278,20 +298,7 @@ var _writeDoingShell = function( str )
       }
       else if( style === 'background' )
       {
-        if( color !== 'default' )
-        {
-          if( self.backgroundColor )
-          self._stackPush( style, self.backgroundColor );
-
-          self.backgroundColor = color;
-        }
-        else
-        {
-          if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._stackPop( style );
-          else
-          self.backgroundColor = null;
-        }
+        self.backgroundColor = color;
 
         if( self.backgroundColor )
         result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
@@ -422,10 +429,14 @@ var Proto =
 
   init : init,
 
-  colorForegroundGet : colorForegroundGet,
-  colorBackgroundGet : colorBackgroundGet,
+  _foregroundColorGet : _foregroundColorGet,
+  _backgroundColorGet : _backgroundColorGet,
+
+  _foregroundColorSet : _foregroundColorSet,
+  _backgroundColorSet : _backgroundColorSet,
 
   _rgbToCode : _rgbToCode,
+  _colorConvert : _colorConvert,
   _onStrip : _onStrip,
 
   _stackPush : _stackPush,
