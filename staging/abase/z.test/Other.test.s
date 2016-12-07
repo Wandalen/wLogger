@@ -11,10 +11,10 @@ npm install
 node ./staging/abase/z.test/Other.test.s
 
 */
-
+var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-
+  isBrowser = false;
   require( 'wTools' );
   require( '../../../../wTools/staging/abase/component/StringTools.s' );
   require( '../object/printer/printer/Logger.s' );
@@ -56,11 +56,19 @@ var currentColor = function( test )
 
   test.description = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );
-  test.identical( logger.foregroundColor, [ 1, 0, 0 ] );
+  if( isBrowser )
+  var expected = [ 1, 0, 0, 1 ];
+  else
+  var expected = [ 1, 0, 0 ];
+  test.identical( logger.foregroundColor, expected );
 
   test.description = 'case2 : next line color must be red too';
   logger.log( 'line' );
-  test.identical( logger.foregroundColor, [ 1, 0, 0 ] );
+  if( isBrowser )
+  var expected = [1, 0, 0, 1 ];
+  else
+  var expected = [ 1, 0, 0 ];
+  test.identical( logger.foregroundColor, expected );
 
   test.description = 'case3 : setting color to default';
   logger.log( '#foreground : default#' );
@@ -69,16 +77,31 @@ var currentColor = function( test )
   test.description = 'case4 : setting two styles';
   logger.log( '#foreground : red##background : black#' );
   var got = [ logger.foregroundColor,logger.backgroundColor]
+  if( isBrowser )
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 0, 0, 0 ]
+    [ 1, 0, 0, 1 ],
+    [ 0, 0, 0, 1 ]
   ]
+  else
+  var expected =
+  [
+    [ 1, 0, 0  ],
+    [ 0, 0, 0  ]
+  ]
+
   test.identical( got, expected  );
 
   test.description = 'case5 : setting foreground to default, bg still black';
   logger.log( '#foreground : default#' );
   var got = [ logger.foregroundColor,logger.backgroundColor]
+  if( isBrowser )
+  var expected =
+  [
+    null,
+    [ 0, 0, 0, 1 ]
+  ]
+  else
   var expected =
   [
     null,
