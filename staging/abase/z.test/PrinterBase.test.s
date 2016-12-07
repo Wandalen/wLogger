@@ -91,10 +91,11 @@ var outputTo = function( test )
  test.description = 'append existing';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'append' } );
+ test.shouldThrowError(function ()
+ {
 
- var got =  l.outputTo( logger, { combining : 'append' } );
- var expected = false;
- test.identical( got, expected );
+   l.outputTo( logger, { combining : 'append' } );
+ })
 
  /*prepend*/
  test.description = 'prepend';
@@ -107,9 +108,11 @@ var outputTo = function( test )
  test.description = 'prepend existing';
  var l = new wLogger();
  l.outputTo( logger, { combining : 'prepend' } );
- var got = l.outputTo( logger, { combining : 'prepend' } );
- var expected = false;
- test.identical( got, expected );
+ test.shouldThrowError(function ()
+ {
+
+   l.outputTo( logger, { combining : 'prepend' } );
+ })
 
  test.description = 'prepend null';
  var l = new wLogger();
@@ -254,12 +257,20 @@ var inputFrom = function( test )
   test.description = 'try to add existing input';
   var l = new wLogger();
   var l1 = new wLogger({ output : l });
-  var got = [ l.inputFrom( l1 ), l.inputs.length, l1.outputs.length ];
-  var expected = [ false, 1, 1 ];
-  test.identical( got, expected );
+  test.shouldThrowError( function ()
+  {
+    l.inputFrom( l1 );
+  });
+
+  test.description = 'try to add console that exists in output';
+  var l = new wLogger();
+  test.shouldThrowError( function ()
+  {
+    l.inputFrom( console );
+  });
 
   test.description = 'try to add console';
-  var l = new wLogger();
+  var l = new wLogger({ output : null });
   var got = [ l.inputFrom( console ), l.inputs.length ];
   var expected = [ true, 1 ];
   l.inputFromUnchain( console );
