@@ -92,3 +92,4 @@ l.log( wTools.strColor.fg( 'message','red' ) );
 /* prints message with yellow background */
 l.log( wTools.strColor.bg( 'message','yellow' ) );
 ```
+
