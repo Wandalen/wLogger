@@ -305,6 +305,17 @@ var chainingParallel = function( test )
   var expected = [ 2, 2, 2 ];
   test.identical( got, expected );
 
+  test.description = 'case7: input from console twice ';
+  var l1 = new wLogger({ output : null,onWrite : _onWrite });
+  var l2 = new wLogger({ output : null,onWrite : _onWrite });
+  l1.inputFrom( console );
+  l2.inputFrom( console );
+  var got = [];
+  console.log('something');
+  l1.inputFromUnchain( console );
+  l2.inputFromUnchain( console );
+  var expected = [ 'something', 'something' ];
+  test.identical( got, expected );
 
 }
 
@@ -449,7 +460,7 @@ var inputFrom = function( test )
 
   test.description = 'case3: console as input';
   var got = [];
-  var l = new wLogger( { onWrite : onWrite } );
+  var l = new wLogger( { output : null, onWrite : onWrite } );
   l.inputFrom( console );
   l._prefix = '*';
   console.log( 'abc' )
@@ -480,6 +491,12 @@ var inputFrom = function( test )
     {
       logger.inputFrom( '1' );
     });
+
+    test.description = 'console exists as output';
+    test.shouldThrowError( function()
+    {
+      logger.inputFrom( console );
+    });
   }
 }
 
@@ -503,7 +520,7 @@ var inputFromUnchain = function( test )
 
   test.description = 'case3: remove console from input';
   var got = [];
-  var l = new wLogger( { onWrite : onWrite } );
+  var l = new wLogger( { output : null,onWrite : onWrite } );
   l.inputFrom( console );
   l.inputFromUnchain( console );
   console.log( '1' );
