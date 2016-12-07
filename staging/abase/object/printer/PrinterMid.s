@@ -93,7 +93,7 @@ var colorBackgroundGet = function()
 
 //
 
-var _addToStack = function( color, style )
+var _stackPush = function( style, color )
 {
   var self = this;
 
@@ -107,7 +107,7 @@ var _addToStack = function( color, style )
 
 //
 
-var _getFromStack = function( style )
+var _stackPop = function( style )
 {
   var self = this;
 
@@ -154,14 +154,14 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         {
           if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._getFromStack( style )
+          self.foregroundColor = self._stackPop( style )
           else
           self.foregroundColor = null;
         }
         else
         {
           if( self.foregroundColor )
-          self._addToStack( self.foregroundColor, style )
+          self._stackPush( style, self.foregroundColor )
 
           self.foregroundColor = _.color.rgbaFrom( color );
         }
@@ -171,14 +171,14 @@ var _writeDoingBrowser = function( str )
         if( color === 'default' )
         {
           if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._getFromStack( style )
+          self.backgroundColor = self._stackPop( style )
           else
           self.backgroundColor = null;
         }
         else
         {
           if( self.backgroundColor )
-          self._addToStack( self.backgroundColor, style )
+          self._stackPush( style, self.backgroundColor )
 
           self.backgroundColor = _.color.rgbaFrom( color );
         }
@@ -227,7 +227,9 @@ var _writeDoingShell = function( str )
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
-    result += splitted[ i ];
+    {
+      result +=  splitted[ i ];
+    }
     else
     {
       var style = splitted[ i ][ 0 ];
@@ -235,7 +237,18 @@ var _writeDoingShell = function( str )
 
       if( color && color != 'default' )
       {
-        color = _.color.rgbFrom( color );
+        try
+        {
+          color = _.color.rgbFrom( color );
+        }
+        catch ( err )
+        {
+          var name = _.color.colorNameNearest( color );
+          if( name )
+          color = _.color.ColorMap[ name ];
+          else
+          color = 'default';
+        }
       }
 
       if( !color )
@@ -246,14 +259,14 @@ var _writeDoingShell = function( str )
         if( color !== 'default' )
         {
           if( self.foregroundColor )
-          self._addToStack( self.foregroundColor, style );
+          self._stackPush( style, self.foregroundColor );
 
           self.foregroundColor = color;
         }
         else
         {
           if( self._stackIsNotEmpty( style ) )
-          self.foregroundColor = self._getFromStack( style );
+          self.foregroundColor = self._stackPop( style );
           else
           self.foregroundColor = null;
         }
@@ -268,14 +281,14 @@ var _writeDoingShell = function( str )
         if( color !== 'default' )
         {
           if( self.backgroundColor )
-          self._addToStack( self.backgroundColor, style );
+          self._stackPush( style, self.backgroundColor );
 
           self.backgroundColor = color;
         }
         else
         {
           if( self._stackIsNotEmpty( style ) )
-          self.backgroundColor = self._getFromStack( style );
+          self.backgroundColor = self._stackPop( style );
           else
           self.backgroundColor = null;
         }
@@ -415,8 +428,8 @@ var Proto =
   _rgbToCode : _rgbToCode,
   _onStrip : _onStrip,
 
-  _addToStack : _addToStack,
-  _getFromStack : _getFromStack,
+  _stackPush : _stackPush,
+  _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
 
   _writeDoingShell : _writeDoingShell,

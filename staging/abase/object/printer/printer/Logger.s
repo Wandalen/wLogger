@@ -101,13 +101,13 @@ _global_.logger = _global_[ 'logger' ] = new Self();
 
 // require
 
-if( typeof module !== 'undefined' )
-{
-
-  require( './LoggerToFile.s' );
-  require( './LoggerToJstructure.s' );
-
-}
+// if( typeof module !== 'undefined' )
+// {
+//
+//   require( './LoggerToFile.s' );
+//   require( './LoggerToJstructure.s' );
+//
+// }
 
 return Self;
 
