@@ -126,9 +126,6 @@ var _foregroundColorSet = function( color )
   var self = this;
   var style = 'foreground';
 
-
-  color = self._colorConvert( color );
-
   if( !color || color === 'default' )
   {
     if( self._stackIsNotEmpty( style ) )
@@ -141,7 +138,7 @@ var _foregroundColorSet = function( color )
     if( self[ symbolForForeground ] )
     self._stackPush( style, self[ symbolForForeground ] );
 
-    self[ symbolForForeground ] = color;
+    self[ symbolForForeground ] = self._colorConvert( color );
   }
 }
 
@@ -151,9 +148,6 @@ var _backgroundColorSet = function( color )
 {
   var self = this;
   var style = 'background';
-
-
-  color = self._colorConvert( color );
 
   if( !color || color === 'default' )
   {
@@ -167,7 +161,7 @@ var _backgroundColorSet = function( color )
     if( self[ symbolForBackground ] )
     self._stackPush( style, self[ symbolForBackground ] );
 
-    self[ symbolForBackground ] = color;
+    self[ symbolForBackground ] = self._colorConvert( color );
   }
 }
 
