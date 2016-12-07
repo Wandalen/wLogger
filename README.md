@@ -1,10 +1,7 @@
-# wLogger
-Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging.
-
 ## wLogger
-Logger that writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
-Supports colorful output in browser and shell, multilevel output, chaining with other objects to perform message transfering
-between multiple inputs/outputs.
+Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging.
+Logger writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
+Supports colorful output in browser and shell, multilevel output, chaining with other console-like objects to perform message transfering between multiple inputs/outputs.
 
 
 ## Installation
@@ -92,4 +89,3 @@ l.log( wTools.strColor.fg( 'message','red' ) );
 /* prints message with yellow background */
 l.log( wTools.strColor.bg( 'message','yellow' ) );
 ```
-
