@@ -269,11 +269,18 @@ var _writeDoingShell = function( str )
   var result = '';
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-
+  var stylesOnly = true;
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
     {
+      stylesOnly = false;
+
+      if( self._cursorSaved )
+      { /*restores cursos position*/
+        result +=  '\x1b[u';
+        self._cursorSaved = 0;
+      }
       result +=  splitted[ i ];
     }
     else
@@ -300,6 +307,12 @@ var _writeDoingShell = function( str )
         result += `\x1b[49m`;
       }
     }
+  }
+
+  if( stylesOnly )
+  { /*saves cursos position*/
+    self._cursorSaved = 1;
+    result += '\x1b[s';
   }
 
   return [ result ];
@@ -400,8 +413,8 @@ var Composes =
   colorsStack : null,
 
   _colorTable : null,
-  _isStyled : 0
-
+  _isStyled : 0,
+  _cursorSaved : 0
 }
 
 var Aggregates =
