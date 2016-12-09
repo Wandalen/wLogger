@@ -248,6 +248,8 @@ var outputTo = function( output,o )
     if( self._hasInput( output ) )
     throw _.err( 'outputTo: This object already exists in inputs chain', output );
 
+    if( !output.inputs )
+    output.inputs = [];
 
     if( self.outputs.length )
     {
@@ -271,13 +273,11 @@ var outputTo = function( output,o )
     if( o.combining === 'prepend' )
     {
       self.outputs.unshift( descriptor );
-      if( output.inputs )
       output.inputs.unshift( descriptorInput );
     }
     else
     {
       self.outputs.push( descriptor );
-      if( output.inputs )
       output.inputs.push( descriptorInput );
     }
 
@@ -287,7 +287,12 @@ var outputTo = function( output,o )
     if( self.outputs.length )
     {
       if( o.combining === 'rewrite' )
-      self.outputs.splice( 0,self.outputs.length );
+      {
+        for( var d = 0; d < self.outputs.length ; d++ )
+        self.outputToUnchain( self.outputs[ d ].output );
+
+        self.outputs.splice( 0,self.outputs.length );
+      }
       else return false;
     }
   }
