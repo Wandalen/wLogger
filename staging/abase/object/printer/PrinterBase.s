@@ -690,9 +690,14 @@ var _hasInput = function( input )
     {
       return true;
     }
-    else if( this.inputs[ d ].input.inputs )
+  }
+  for( var d = 0 ; d < this.inputs.length ; d++ )
+  {
+    var inputs = this.inputs[ d ].input.inputs;
+    if( inputs && inputs.length )
     {
-      return this._hasInput.call( this.inputs[ d ].input, input );
+      if( _hasInput.call( this.inputs[ d ].input, input ) )
+      return true;
     }
   }
   return false;
@@ -723,9 +728,14 @@ var _hasOutput = function( output )
     {
       return true;
     }
-    else if( this.outputs[ d ].output.outputs )
+  }
+  for( var d = 0 ; d < this.outputs.length ; d++ )
+  {
+    var outputs = this.outputs[ d ].output.outputs;
+    if( outputs && outputs.length )
     {
-      return this._hasOutput.call( this.outputs[ d ].output, output );
+      if( _hasOutput.call( this.outputs[ d ].output, output ) )
+      return true;
     }
   }
   return false;
