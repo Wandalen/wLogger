@@ -495,6 +495,7 @@ var inputFrom = function( test )
     test.description = 'console exists as output';
     test.shouldThrowError( function()
     {
+      var logger = new wLogger();
       logger.inputFrom( console );
     });
   }

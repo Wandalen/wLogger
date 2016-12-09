@@ -43,6 +43,7 @@ var outputTo = function( test )
   l.outputTo( console );
   var got = l.outputs[ 0 ].output;
   var expected = console;
+  l.outputToUnchain( console )
   test.identical( got, expected );
 
   test.description = '';
@@ -186,6 +187,16 @@ var outputTo = function( test )
    {
      logger.outputTo( { },{ combining : 'rewrite' } );
    });
+
+   test.description = ' ';
+   var l1 = new wLogger({ output : null });
+   var l2 = new wLogger();
+   test.shouldThrowError( function()
+   {
+     l1.inputFrom( console );
+     l1.outputTo( l2, { combining : 'append' } )
+   });
+   l1.inputFromUnchain( console );
  }
 }
 
@@ -316,6 +327,16 @@ var inputFrom = function( test )
     l2.inputFrom( l1 );
     l3.inputFrom( l2 );
   });
+
+  test.description = 'console->l1->l2->console';
+  var l1 = new wLogger();
+  var l2 = new wLogger({ output : null });
+  test.shouldThrowError( function()
+  {
+    l2.inputFrom( console );
+    l1.inputFrom( l2 );
+  });
+  l2.inputFromUnchain( console );
 }
 
 //
@@ -417,6 +438,59 @@ var hasOutput = function( test )
 
 //
 
+var _hasInput = function( test )
+{
+  test.description = 'l1->l2->l3, l3 has l1 in input chain';
+  var l1 = new wLogger({ output : null });
+  var l2 = new wLogger({ output : null });
+  var l3 = new wLogger({ output : null });
+  l1.outputTo( l2 )
+  l2.outputTo( l3 );
+  var got = l3._hasInput( l1 );
+  var expected = true;
+  test.identical( got, expected );
+
+  test.description = 'console->l1,l2,l3, l1->l2->l3, l3 has l1 in input chain';
+  var l1 = new wLogger({ output : null });
+  var l2 = new wLogger({ output : null });
+  var l3 = new wLogger({ output : null });
+  l1.inputFrom( console );
+  l2.inputFrom( console );
+  l3.inputFrom( console );
+  l2.inputFrom( l1 );
+  l3.inputFrom( l2 );
+  var got = l3._hasInput( l1 );
+  var expected = true;
+  test.identical( got, expected );
+}
+
+//
+
+var _hasOutput = function( test )
+{
+  test.description = 'l1->l2->l3, l1 has l3 in output chain';
+  var l1 = new wLogger({ output : null });
+  var l2 = new wLogger({ output : null });
+  var l3 = new wLogger({ output : null });
+  l1.outputTo( l2 )
+  l2.outputTo( l3 );
+  var got = l1._hasOutput( l3 );
+  var expected = true;
+  test.identical( got, expected );
+
+  test.description = 'two outputs for l1,l2, l1 has l3 in output chain';
+  var l1 = new wLogger();
+  var l2 = new wLogger();
+  var l3 = new wLogger();
+  l1.outputTo( l2, { combining : 'append' } );
+  l2.outputTo( l3, { combining : 'append' } );
+  var got = l1._hasOutput( l3 );
+  var expected = true;
+  test.identical( got, expected );
+}
+
+//
+
 var recursion = function( test )
 {
   test.description = 'add own object to outputs';
@@ -509,6 +583,8 @@ var Proto =
     inputFromUnchain : inputFromUnchain,
     hasInput : hasInput,
     hasOutput : hasOutput,
+    _hasInput : _hasInput,
+    _hasOutput : _hasOutput,
     recursion : recursion
 
   },
