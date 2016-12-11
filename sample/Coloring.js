@@ -27,6 +27,11 @@ logger.log( 'red' );
 logger.log( '#background : default#' );
 logger.log( 'default' );
 
+logger.log( '#foreground : yellow##background : red#' );
+logger.log( 'yellow on red' );
+logger.log( '#foreground : default##background : default#' );
+logger.log( 'default text' );
+
 logger.log( '#foreground : red#this is red text' );
 logger.log( 'this is too#foreground : default#' );
 logger.log( '#background : green#green background' );

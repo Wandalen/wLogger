@@ -16,6 +16,7 @@ if( typeof module !== 'undefined' )
 {
 
   require( 'wTools' );
+  require( '../object/printer/printer/Logger.s' );
 
   try
   {
@@ -30,8 +31,6 @@ if( typeof module !== 'undefined' )
   require( './Backend.test.s' );
   require( './Chaining.test.s' );
   require( './Logger.test.s' );
-  require( './LoggerToFile.test.s' );
-  require( './LoggerToJstructure.test.s' );
   require( './Other.test.s' );
 
 }
