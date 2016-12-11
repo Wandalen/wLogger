@@ -248,6 +248,8 @@ var outputTo = function( output,o )
     if( self._hasInput( output ) )
     throw _.err( 'outputTo: This object already exists in inputs chain', output );
 
+    if( !output.inputs )
+    output.inputs = [];
 
     if( self.outputs.length )
     {
@@ -271,13 +273,11 @@ var outputTo = function( output,o )
     if( o.combining === 'prepend' )
     {
       self.outputs.unshift( descriptor );
-      if( output.inputs )
       output.inputs.unshift( descriptorInput );
     }
     else
     {
       self.outputs.push( descriptor );
-      if( output.inputs )
       output.inputs.push( descriptorInput );
     }
 
@@ -287,7 +287,12 @@ var outputTo = function( output,o )
     if( self.outputs.length )
     {
       if( o.combining === 'rewrite' )
-      self.outputs.splice( 0,self.outputs.length );
+      {
+        for( var d = 0; d < self.outputs.length ; d++ )
+        self.outputToUnchain( self.outputs[ d ].output );
+
+        self.outputs.splice( 0,self.outputs.length );
+      }
       else return false;
     }
   }
@@ -501,79 +506,81 @@ var outputToUnchain = function( output )
  *
  */
 
-var inputFrom = function( input,o )
-{
-  var self = this;
-  var o = o || {};
-  var combiningAllowed = [ 'rewrite','append','prepend' ];
+ var inputFrom = function( input,o )
+ {
+   var self = this;
+   var o = o || {};
+   var combiningAllowed = [ 'rewrite','append','prepend' ];
 
-  _.routineOptions( self.inputFrom,o );
-  _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) );
+   _.routineOptions( self.inputFrom,o );
+   _.assert( arguments.length === 1 || arguments.length === 2 );
+   _.assert( _.objectIs( input ) );
 
-  debugger;
+   debugger;
 
-  if( _.routineIs( input.outputTo ) )
-  {
-    return input.outputTo( self,o );
-  }
+   if( _.routineIs( input.outputTo ) )
+   {
+     return input.outputTo( self,o );
+   }
 
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
-  debugger;
+   debugger;
 
-  /* input check */
-  if( o.combining !== 'rewrite' )
-  if( self.hasInput( input ) )
-  throw _.err( 'inputFrom: This input already exists in logger inputs', input );
+   /* input check */
+   if( o.combining !== 'rewrite' )
+   if( self.hasInput( input ) )
+   throw _.err( 'inputFrom: This input already exists in logger inputs', input );
 
-  /*recursive outputs check*/
-  if( self._hasOutput( input ) )
-  throw _.err( 'inputFrom: This input already exists in chain', input );
+   /*recursive outputs check*/
+   if( self._hasOutput( input ) )
+   throw _.err( 'inputFrom: This input already exists in chain', input );
 
 
-  if( !input.outputs )
-  {
-    input.outputs = [];
-  }
+   if( !input.outputs )
+   {
+     input.outputs = [];
+   }
 
-  if( input.outputs.length )
-  {
-    if( o.combining === 'rewrite' )
-    input.outputs.splice( 0,input.outputs.length );
-  }
+   if( input.outputs.length )
+   {
+     if( o.combining === 'rewrite' )
+     input.outputs.splice( 0,input.outputs.length );
+   }
 
-  var descriptor = {};
-  descriptor.output = self;
-  descriptor.methods = {};
+   var descriptor = {};
+   descriptor.output = self;
+   descriptor.methods = {};
 
-  if( o.combining === 'prepend' )
-  input.outputs.unshift( descriptor );
-  else
-  input.outputs.push( descriptor );
+   if( o.combining === 'prepend' )
+   input.outputs.unshift( descriptor );
+   else
+   input.outputs.push( descriptor );
 
-  var original = {};
+   if( !input._original )
+   input._original = {};
 
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
-  {
-    var name = self.outputWriteMethods[ m ];
-    _.assert( input[ name ],'inputFrom expects input has method',name );
+   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+   {
+     var name = self.outputWriteMethods[ m ];
+     _.assert( input[ name ],'inputFrom expects input has method',name );
 
-    descriptor.methods[ name ] = _.routineJoin( self, self[ name ] );
-    original[ name ] = input[ name ];
+     descriptor.methods[ name ] = _.routineJoin( self, self[ name ] );
+     if( !input._original[ name ] )
+     input._original[ name ] = _.routineJoin( input, input[ name ]);
 
-    input[ name ] = function()
-    {
-      original[ name ].apply( input, arguments );
-      for( var d = 0 ; d < input.outputs.length ; d++ )
-      input.outputs[ d ].methods[ name ].apply( self, arguments );
-    }
-  })();
+     input[ name ] = function()
+     {
+       input._original[ name ].apply( input, arguments );
+       for( var d = 0 ; d < input.outputs.length ; d++ )
+       input.outputs[ d ].methods[ name ].apply( self, arguments );
+     }
+   })();
 
-  self.inputs.push( { input : input, methods : original } );
+   self.inputs.push( { input : input, methods : input._original } );
 
-  return true;
-}
+   return true;
+ }
 
 inputFrom.defaults =
 {
@@ -646,6 +653,7 @@ var inputFromUnchain = function( input )
       })();
 
       delete input.outputs;
+      delete input._original;
     }
 
     // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
@@ -687,9 +695,14 @@ var _hasInput = function( input )
     {
       return true;
     }
-    else if( this.inputs[ d ].input.inputs )
+  }
+  for( var d = 0 ; d < this.inputs.length ; d++ )
+  {
+    var inputs = this.inputs[ d ].input.inputs;
+    if( inputs && inputs.length )
     {
-      return this._hasInput.call( this.inputs[ d ].input, input );
+      if( _hasInput.call( this.inputs[ d ].input, input ) )
+      return true;
     }
   }
   return false;
@@ -720,9 +733,14 @@ var _hasOutput = function( output )
     {
       return true;
     }
-    else if( this.outputs[ d ].output.outputs )
+  }
+  for( var d = 0 ; d < this.outputs.length ; d++ )
+  {
+    var outputs = this.outputs[ d ].output.outputs;
+    if( outputs && outputs.length )
     {
-      return this._hasOutput.call( this.outputs[ d ].output, output );
+      if( _hasOutput.call( this.outputs[ d ].output, output ) )
+      return true;
     }
   }
   return false;
