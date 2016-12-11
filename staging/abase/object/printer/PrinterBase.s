@@ -952,6 +952,8 @@ wCopyable.mixin( Self );
 
 Self.prototype.init_static();
 
+_.assert( Self.prototype.init === init );
+
 //
 
 _.accessor
