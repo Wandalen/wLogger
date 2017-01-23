@@ -92,3 +92,4 @@ l.log( _.strColor.fg( 'message','red' ) );
 /* prints message with yellow background */
 l.log( _.strColor.bg( 'message','yellow' ) );
 ```
+
