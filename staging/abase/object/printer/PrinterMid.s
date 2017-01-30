@@ -2,10 +2,13 @@
 
 'use strict';
 
-var Chalk;
+// var Chalk;
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
+
+  if( typeof wPrinterMid !== 'undefined' )
+  return;
 
   isBrowser = false;
 
@@ -14,10 +17,11 @@ if( typeof module !== 'undefined' )
 
   try
   {
-    require( 'wColor' );
+    require( '../../../amid/color/Color.s' );
   }
   catch( err )
   {
+    require( 'wColor' );
   }
 
 }
@@ -320,11 +324,27 @@ var _writeDoingShell = function( str )
 
 //
 
-var writeDoing = function( args )
+var writeDoing = function writeDoing( args )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
+
+  var result = self._strConcat.apply( self,args );
+
+  if( !isBrowser )
+  result = self._writeDoingShell( result );
+  else
+  result = self._writeDoingBrowser( result );
+
+  return result;
+}
+
+//
+
+var _strConcat = function _strConcat()
+{
+  var self = this;
 
   var optionsForStr =
   {
@@ -332,12 +352,7 @@ var writeDoing = function( args )
     linePostfix : self._postfix,
   }
 
-  var result = _.strConcat.apply( optionsForStr,args );
-
-  if( !isBrowser )
-  result = self._writeDoingShell( result );
-  else
-  result = self._writeDoingBrowser( result );
+  var result = _.strConcat.apply( optionsForStr,arguments );
 
   return result;
 }
@@ -361,38 +376,74 @@ var _levelSet = function( level )
 
 //
 
-var topic = ( function()
+// var topic = ( function()
+// {
+//
+//   return function topic()
+//   {
+//     var self = this;
+//
+//     debugger;
+//
+//     var s = _.str.apply( _,arguments );
+//
+//     if( Chalk === undefined && typeof module !== 'undefined' )
+//     try
+//     {
+//       Chalk = require( 'chalk' );
+//     }
+//     catch( err ) 
+//     {
+//       Chalk = null;
+//     }
+//
+//     if( Chalk )
+//     s = Chalk.bgWhite( Chalk.black( s ) );
+//
+//     this.log();
+//     this.log( s );
+//     this.log();
+//
+//     return s;
+//   }
+//
+// })();
+
+function topicUp()
 {
+  var self = this;
 
-  return function topic()
-  {
-    var self = this;
+  debugger;
 
-    debugger;
+  var result = self._strConcat( arguments );
 
-    var s = _.str.apply( _,arguments );
+  result = _.strColor.bg( result,'white' );
 
-    if( Chalk === undefined && typeof module !== 'undefined' )
-    try
-    {
-      Chalk = require( 'chalk' );
-    }
-    catch( err ) 
-    {
-      Chalk = null;
-    }
+  this.log();
+  this.logUp( result );
+  this.log();
 
-    if( Chalk )
-    s = Chalk.bgWhite( Chalk.black( s ) );
+  return result;
+}
 
-    this.log();
-    this.log( s );
-    this.log();
+//
 
-    return s;
-  }
+function topicDown()
+{
+  var self = this;
 
-})();
+  debugger;
+
+  var result = self._strConcat( arguments );
+
+  result = _.strColor.bg( result,'white' );
+
+  this.log();
+  this.logDown( result );
+  this.log();
+
+  return result;
+}
 
 // --
 // relationships
@@ -455,9 +506,12 @@ var Proto =
 
   writeDoing : writeDoing,
 
+  _strConcat : _strConcat,
+
   _levelSet : _levelSet,
 
-  topic : topic,
+  topicUp : topicUp,
+  topicDown : topicDown,
 
   // relationships
 

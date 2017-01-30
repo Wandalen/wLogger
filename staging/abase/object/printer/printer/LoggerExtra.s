@@ -135,11 +135,11 @@ var _hookConsoleToFileHandler = function( wasMethod, methodName, fileName )
   {
 
     var args = arguments;
-    //var args = _.arrayAppendMerging( [],arguments,_.stack() );
+    //var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );
 
     wasMethod.apply( console,args );
 
-    var fileProvider = _.FileProvider.def();
+    var fileProvider = _.FileProvider.Default();
     if( fileProvider.fileWrite )
     {
 
@@ -191,7 +191,7 @@ var _hookConsoleToAlertHandler = function( wasMethod, methodName )
   return function ()
   {
 
-    var args = _.arrayAppendMerging( [],arguments,_.stack() );
+    var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );
 
     wasMethod.apply( console,args );
     alert( args.join( '\n' ) );
@@ -228,7 +228,7 @@ var _hookConsoleToDomHandler = function( o, wasMethod, methodName )
   return function()
   {
 
-    /*var args = _.arrayAppendMerging( [],arguments,_.stack() );*/
+    /*var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );*/
     wasMethod.apply( console,arguments );
     var text = [].join.call( arguments,' ' );
     o.consoleDom.prepend( '<p>' + text + '</p>' );

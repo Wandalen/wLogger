@@ -5,6 +5,9 @@
 if( typeof module !== 'undefined' )
 {
 
+  if( typeof wPrinterBase !== 'undefined' )
+  return;
+
   if( typeof wBase === 'undefined' )
   try
   {
