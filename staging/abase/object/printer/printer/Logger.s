@@ -101,19 +101,19 @@ _global_[ Self.name ] = wTools.Logger = Self;
 if( !_global_.logger || _.mapIs( _global_.logger ) )
 _global_.logger = _global_[ 'logger' ] = new Self();
 
-if( Config.debug )
-{
-  // debugger;
-  var x1 = logger.Self;
-  var x2 = Self.prototype.Self;
-  var x3 = Self._SelfGet();
-  var x4 = Self.Self;
-  // debugger;
-  _.assert( x1 === x2 );
-  _.assert( x1 === x3 );
-  _.assert( x1 === x4 );
-  // debugger;
-}
+// if( Config.debug )
+// {
+//   // debugger;
+//   var x1 = logger.Self;
+//   var x2 = Self.prototype.Self;
+//   var x3 = Self._SelfGet();
+//   var x4 = Self.Self;
+//   // debugger;
+//   _.assert( x1 === x2 );
+//   _.assert( x1 === x3 );
+//   _.assert( x1 === x4 );
+//   // debugger;
+// }
 
 // require
 
