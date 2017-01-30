@@ -330,7 +330,7 @@ var writeDoing = function writeDoing( args )
 
   _.assert( arguments.length === 1 );
 
-  var result = self._strConcat.apply( self,args );
+  var result = self._strConcat( args );
 
   if( !isBrowser )
   result = self._writeDoingShell( result );
@@ -342,9 +342,11 @@ var writeDoing = function writeDoing( args )
 
 //
 
-var _strConcat = function _strConcat()
+var _strConcat = function _strConcat( args )
 {
   var self = this;
+
+  _.assert( arguments.length === 1 );
 
   var optionsForStr =
   {
@@ -352,7 +354,7 @@ var _strConcat = function _strConcat()
     linePostfix : self._postfix,
   }
 
-  var result = _.strConcat.apply( optionsForStr,arguments );
+  var result = _.strConcat.apply( optionsForStr,args );
 
   return result;
 }
