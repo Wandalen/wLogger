@@ -417,7 +417,8 @@ function topicUp()
 
   debugger;
 
-  var result = self._strConcat( arguments );
+  // var result = self._strConcat( arguments );
+  var result = _.strConcat.apply( undefined,arguments );
 
   result = _.strColor.bg( result,'white' );
 
@@ -436,9 +437,11 @@ function topicDown()
 
   debugger;
 
-  var result = self._strConcat( arguments );
+  // var result = self._strConcat( arguments );
+  var result = _.strConcat.apply( undefined,arguments );
 
   result = _.strColor.bg( result,'white' );
+
 
   this.log();
   this.logDown( result );
