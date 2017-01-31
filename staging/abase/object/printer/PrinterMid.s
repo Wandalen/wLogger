@@ -281,7 +281,8 @@ var _writeDoingShell = function( str )
       stylesOnly = false;
 
       if( self._cursorSaved )
-      { /*restores cursos position*/
+      {
+        /*restores cursos position*/
         result +=  '\x1b[u';
         self._cursorSaved = 0;
       }
@@ -450,6 +451,38 @@ function topicDown()
   return result;
 }
 
+//
+
+function begin()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var tag = arguments[ a ];
+    _.assert( _.strIs( tag ) );
+    self.tags[ tag ] = 1;
+  }
+
+  return self;
+}
+
+//
+
+function end()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var tag = arguments[ a ];
+    _.assert( _.strIs( tag ) );
+    self.tags[ tag ] = 0;
+  }
+
+  return self;
+}
+
 // --
 // relationships
 // --
@@ -468,9 +501,12 @@ var Composes =
 
   colorsStack : null,
 
-  _colorTable : null,
+  // _colorTable : null,
   _isStyled : 0,
-  _cursorSaved : 0
+  _cursorSaved : 0,
+
+  tags : {},
+
 }
 
 var Aggregates =
@@ -517,6 +553,10 @@ var Proto =
 
   topicUp : topicUp,
   topicDown : topicDown,
+
+  begin : begin,
+  end : end,
+
 
   // relationships
 

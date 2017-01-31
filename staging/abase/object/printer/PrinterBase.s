@@ -111,7 +111,9 @@ var _init_static = function( name )
     if( this.onWrite )
     this.onWrite( args );
 
-    return this[ nameAct ].apply( this,args );
+    this[ nameAct ].apply( this,args );
+
+    return this;
   }
 
   /* */
@@ -122,7 +124,7 @@ var _init_static = function( name )
 
     this.up();
 
-    return result;
+    return this;
   }
 
   /* */
@@ -134,7 +136,7 @@ var _init_static = function( name )
     if( arguments.length )
     var result = this[ name ].apply( this,arguments );
 
-    return result;
+    return this;
   }
 
   proto[ name ] = write;
