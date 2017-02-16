@@ -1,5 +1,5 @@
 
-require( '../staging/abase/object/printer/printer/Logger.s' );
+require( '../staging/abase/printer/printer/Logger.s' );
 
 var _ = wTools;
 

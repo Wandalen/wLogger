@@ -1,4 +1,4 @@
-( function _All_backend_test_s_( ) {
+( function _Backend_all_test_s_( ) {
 
 'use strict';
 
@@ -15,19 +15,10 @@ node ./staging/abase/z.test/All.backend.test.s
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../include/wTools.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
+  require( '../printer/Logger.s' );
 
   var _ = wTools;
 
-  _.include( 'wLogger' );
   _.include( 'wTesting' );
 
   require( './Chaining.test.s' );

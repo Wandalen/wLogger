@@ -16,19 +16,10 @@ if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
-  if( typeof wBase === 'undefined' )
-  try
-  {
-    require( '../include/wTools.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
-  }
+  require( '../printer/Logger.s' );
 
   var _ = wTools;
 
-  _.include( 'wLogger' );
   _.include( 'wTesting' );
 
 }

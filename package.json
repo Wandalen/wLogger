@@ -24,7 +24,7 @@
     "main": "staging/abase/printer/printer/Logger.s"
   },
   "scripts": {
-    "test": "node ./staging/abase/z.test/Logger.backend.all.test.s",
+    "test": "node ./staging/abase/printer/z.test/Backend.all.test.s",
     "make_doc": "./doc.sh"
   },
   "repository": {
