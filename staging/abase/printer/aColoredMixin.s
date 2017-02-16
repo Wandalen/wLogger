@@ -1,62 +1,64 @@
-(function _PrinterMid_s_() {
+(function _aColoredMixin_s_() {
 
 'use strict';
 
-// var Chalk;
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterMid !== 'undefined' )
-  return;
-
-  isBrowser = false;
-
-  if( typeof wPrinterBase === 'undefined' )
-  require( './PrinterBase.s' )
-
+  if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../../amid/color/Color.s' );
+    require( '../wTools.s' );
   }
   catch( err )
   {
-    require( 'wColor' );
+    require( 'wTools' );
   }
 
+  isBrowser = false;
+
+  var _ = wTools;
+
+  _.include( 'wColor' );
+
 }
-
-var symbolForLevel = Symbol.for( 'level' );
-var symbolForForeground = Symbol.for( 'foregroundColor' );
-var symbolForBackground = Symbol.for( 'backgroundColor' );
-
-//
 
 var _ = wTools;
-var Parent = wPrinterBase;
-var Self = function wPrinterMid()
+
+//
+
+function mixin( constructor )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+
+  var dst = constructor.prototype;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.routineIs( constructor ) );
+
+  _.mixin
+  ({
+    dst : dst,
+    mixin : Self,
+  });
+
+  _.accessor
+  ({
+    object : dst,
+    combining : 'rewrite',
+    names :
+    {
+      // level : 'level',
+      foregroundColor : 'foregroundColor',
+      backgroundColor : 'backgroundColor',
+    }
+  });
+
 }
 
 //
 
-var init = function( o )
-{
-  var self = this;
-
-  Parent.prototype.init.call( self,o );
-
-}
-
-//
-
-var _rgbToCode = function( rgb )
+function _rgbToCode( rgb )
 {
   var r = rgb[ 0 ];
   var g = rgb[ 1 ];
@@ -69,7 +71,7 @@ var _rgbToCode = function( rgb )
 
 //
 
-var _onStrip = function( strip )
+function _onStrip( strip )
 {
   var allowedKeys = [ 'bg','background','fg','foreground' ];
   var parts = strip.split( ' : ' )
@@ -83,7 +85,7 @@ var _onStrip = function( strip )
 
 //
 
-var _colorConvert = function ( color )
+function _colorConvert( color )
 {
   if( !color )
   return null;
@@ -109,7 +111,7 @@ var _colorConvert = function ( color )
 
 //
 
-var _foregroundColorGet = function()
+function _foregroundColorGet()
 {
   var self = this;
   return self[ symbolForForeground ];
@@ -117,7 +119,7 @@ var _foregroundColorGet = function()
 
 //
 
-var _backgroundColorGet = function()
+function _backgroundColorGet()
 {
   var self = this;
   return self[ symbolForBackground ];
@@ -125,7 +127,7 @@ var _backgroundColorGet = function()
 
 //
 
-var _foregroundColorSet = function( color )
+function _foregroundColorSet( color )
 {
   var self = this;
   var style = 'foreground';
@@ -148,7 +150,7 @@ var _foregroundColorSet = function( color )
 
 //
 
-var _backgroundColorSet = function( color )
+function _backgroundColorSet( color )
 {
   var self = this;
   var style = 'background';
@@ -171,7 +173,7 @@ var _backgroundColorSet = function( color )
 
 //
 
-var _stackPush = function( style, color )
+function _stackPush( style, color )
 {
   var self = this;
 
@@ -185,7 +187,7 @@ var _stackPush = function( style, color )
 
 //
 
-var _stackPop = function( style )
+function _stackPop( style )
 {
   var self = this;
 
@@ -194,7 +196,7 @@ var _stackPop = function( style )
 
 //
 
-var _stackIsNotEmpty = function( style )
+function _stackIsNotEmpty( style )
 {
   var self = this;
   if( self.colorsStack && self.colorsStack[ style ].length )
@@ -205,11 +207,12 @@ var _stackIsNotEmpty = function( style )
 
 //
 
-var _writeDoingBrowser = function( str )
+function _writeDoingBrowser( str )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
+  _.assert( _.strIs( str ) );
 
   var result = [ '' ];
 
@@ -264,11 +267,12 @@ var _writeDoingBrowser = function( str )
 
 //
 
-var _writeDoingShell = function( str )
+function _writeDoingShell( str )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
+  _.assert( _.strIs( str ) );
 
   var result = '';
 
@@ -325,7 +329,7 @@ var _writeDoingShell = function( str )
 
 //
 
-var writeDoing = function writeDoing( args )
+function _writeDoing( args )
 {
   var self = this;
 
@@ -338,85 +342,36 @@ var writeDoing = function writeDoing( args )
   else
   result = self._writeDoingBrowser( result );
 
-  return result;
-}
-
-//
-
-var _strConcat = function _strConcat( args )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1 );
-
-  var optionsForStr =
-  {
-    linePrefix : self._prefix,
-    linePostfix : self._postfix,
-  }
-
-  var result = _.strConcat.apply( optionsForStr,args );
+  _.assert( _.arrayIs( result ) );
 
   return result;
 }
 
 //
 
-var _levelSet = function( level )
-{
-  var self = this;
-
-  _.assert( isFinite( level ) );
-
-  Parent.prototype._levelSet.call( self,level );
-
-  var level = self[ symbolForLevel ];
-
-  self._prefix = _.strTimes( self._dprefix,level );
-  self._postfix = _.strTimes( self._dpostfix,level );
-
-}
-
-//
-
-// var topic = ( function()
-// {
-//
-//   return function topic()
-//   {
-//     var self = this;
-//
-//     debugger;
-//
-//     var s = _.str.apply( _,arguments );
-//
-//     if( Chalk === undefined && typeof module !== 'undefined' )
-//     try
-//     {
-//       Chalk = require( 'chalk' );
-//     }
-//     catch( err ) 
-//     {
-//       Chalk = null;
-//     }
-//
-//     if( Chalk )
-//     s = Chalk.bgWhite( Chalk.black( s ) );
-//
-//     this.log();
-//     this.log( s );
-//     this.log();
-//
-//     return s;
-//   }
-//
-// })();
-
-function topicUp()
+function topic()
 {
   var self = this;
 
   debugger;
+
+  // var result = self._strConcat( arguments );
+  var result = _.strConcat.apply( undefined,arguments );
+
+  result = _.strColor.bg( result,'white' );
+
+  this.log();
+  this.log( result );
+  this.log();
+
+  return result;
+}
+
+//
+
+function topicUp()
+{
+  var self = this;
 
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
@@ -436,8 +391,6 @@ function topicDown()
 {
   var self = this;
 
-  debugger;
-
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
@@ -451,61 +404,33 @@ function topicDown()
   return result;
 }
 
-//
-
-function begin()
-{
-  var self = this;
-
-  for( var a = 0 ; a < arguments.length ; a++ )
-  {
-    var tag = arguments[ a ];
-    _.assert( _.strIs( tag ) );
-    self.tags[ tag ] = 1;
-  }
-
-  return self;
-}
-
-//
-
-function end()
-{
-  var self = this;
-
-  for( var a = 0 ; a < arguments.length ; a++ )
-  {
-    var tag = arguments[ a ];
-    _.assert( _.strIs( tag ) );
-    self.tags[ tag ] = 0;
-  }
-
-  return self;
-}
 
 // --
 // relationships
 // --
 
+var symbolForLevel = Symbol.for( 'level' );
+var symbolForForeground = Symbol.for( 'foregroundColor' );
+var symbolForBackground = Symbol.for( 'backgroundColor' );
+
 var Composes =
 {
 
-  _prefix : '',
-  _postfix : '',
-
-  _dprefix : '  ',
-  _dpostfix : '',
+  // _prefix : '',
+  // _postfix : '',
+  //
+  // _dprefix : '  ',
+  // _dpostfix : '',
 
   foregroundColor : null,
   backgroundColor : null,
 
   colorsStack : null,
 
-  // _colorTable : null,
   _isStyled : 0,
   _cursorSaved : 0,
 
-  tags : {},
+  // tags : {},
 
 }
 
@@ -518,15 +443,11 @@ var Associates =
 }
 
 // --
-// prototype
+// proto
 // --
 
-var Proto =
+var Extend =
 {
-
-  // routine
-
-  init : init,
 
   _foregroundColorGet : _foregroundColorGet,
   _backgroundColorGet : _backgroundColorGet,
@@ -545,57 +466,39 @@ var Proto =
   _writeDoingShell : _writeDoingShell,
   _writeDoingBrowser : _writeDoingBrowser,
 
-  writeDoing : writeDoing,
+  _writeDoing : _writeDoing,
 
-  _strConcat : _strConcat,
-
-  _levelSet : _levelSet,
-
+  topic : topic,
   topicUp : topicUp,
   topicDown : topicDown,
-
-  begin : begin,
-  end : end,
 
 
   // relationships
 
-  constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
 
 }
 
-//
+var Self =
+{
 
-_.protoMake
-({
-  constructor : Self,
-  parent : Parent,
-  extend : Proto,
-});
+  Extend : Extend,
 
-//
+  mixin : mixin,
 
-_.accessor
-({
-  object : Self.prototype,
-  combining : 'rewrite',
-  names :
-  {
-    level : 'level',
-    foregroundColor : 'foregroundColor',
-    backgroundColor : 'backgroundColor',
-  }
-});
+  name : 'wPrinterColoredMixin',
+  nameShort : 'PrinterColoredMixin',
+
+}
 
 // export
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-_global_[ Self.name ] = wTools.PrinterMid = Self;
+_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
 
 return Self;
 

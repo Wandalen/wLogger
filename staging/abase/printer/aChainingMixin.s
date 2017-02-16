@@ -1,12 +1,10 @@
-(function _PrinterBase_s_() {
+(function _aChainingMixin_s_() {
 
 'use strict';
 
+var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-
-  if( typeof wPrinterBase !== 'undefined' )
-  return;
 
   if( typeof wBase === 'undefined' )
   try
@@ -18,74 +16,71 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
-  if( typeof wCopyable === 'undefined' )
-  try
-  {
-    require( '../mixin/Copyable.s' );
-  }
-  catch( err )
-  {
-    require( 'wCopyable' );
-  }
+  isBrowser = false;
 
 }
 
-//
-
-var symbolForLevel = Symbol.for( 'level' );
-
-//
-
-/**
- * @class wPrinterBase
- */
 var _ = wTools;
-var Parent = null;
-var Self = function wPrinterBase()
+
+//
+
+function mixin( constructor )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+
+  var dst = constructor.prototype;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.routineIs( constructor ) );
+
+  _.mixin
+  ({
+    dst : dst,
+    mixin : Self,
+  });
+
+  /* */
+
+  _.accessor
+  ({
+    object : dst,
+    names :
+    {
+      output : 'output',
+    }
+  });
+
+  /* */
+
+  _.accessorForbid
+  ({
+    object : dst,
+    names :
+    {
+      format : 'format',
+    }
+  });
+
+  /* */
+
+  dst._initChainingMixin();
+
 }
 
 //
 
-var init = function( o )
-{
-  var self = this;
-
-  self.outputs = [];
-  _.instanceInit( self );
-  Object.preventExtensions( self );
-
-  if( o )
-  self.copy( o );
-
-  // self.outputTo( null );
-  //Object.preventExtensions( self );
-
-  return self;
-}
-
-//
-
-var init_static = function()
+function _initChainingMixin()
 {
   var proto = this;
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  //if( !proto[ proto.outputWriteMethods[ m ] ] )
-  proto._init_static( outputWriteMethods[ m ] );
+  proto.__initChainingMixinWrite( outputWriteMethods[ m ] );
 
 }
 
 //
 
-var _init_static = function( name )
+function __initChainingMixinWrite( name )
 {
   var proto = this;
 
@@ -102,23 +97,21 @@ var _init_static = function( name )
 
   /* */
 
-  var write = function()
+  function write()
   {
-    var args = this.writeDoing( arguments );
 
-    _.assert( _.arrayIs( args ) );
+    var args = this.write.apply( this,arguments );
 
-    if( this.onWrite )
-    this.onWrite( args );
-
+    debugger;
     this[ nameAct ].apply( this,args );
+    // this[ nameAct ].apply( this,args );
 
     return this;
   }
 
   /* */
 
-  var writeUp = function()
+  function writeUp()
   {
     var result = this[ name ].apply( this,arguments );
 
@@ -129,11 +122,11 @@ var _init_static = function( name )
 
   /* */
 
-  var writeDown = function()
+  function writeDown()
   {
 
     this.down();
-    if( arguments.length )
+
     var result = this[ name ].apply( this,arguments );
 
     return this;
@@ -144,6 +137,24 @@ var _init_static = function( name )
   proto[ nameDown ] = writeDown;
 
 }
+
+// --
+// write
+// --
+
+// function write()
+// {
+//   var self = this;
+//
+//   var args = self._writeDoing( arguments );
+//
+//   _.assert( _.arrayIs( args ) );
+//
+//   if( self.onWrite )
+//   self.onWrite( args[ 0 ] );
+//
+//   return args;
+// }
 
 //
 
@@ -216,11 +227,11 @@ var _init_static = function( name )
  * @throws { Exception } If specified combining mode is not allowed.
  * @throws { Exception } If specified leveling mode is not allowed.
  * @throws { Exception } If combining mode is disabled and output list has multiple elements.
- * @memberof wPrinterBase
+ * @memberof wPrinterMid
  *
  */
 
-var outputTo = function( output,o )
+function outputTo( output,o )
 {
   var self = this;
   var o = o || {};
@@ -423,11 +434,11 @@ outputTo.defaults =
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( output ) is not a Object.
  * @throws { Exception } If outputs list is empty.
- * @memberof wPrinterBase
+ * @memberof wPrinterMid
  *
  */
 
-var outputToUnchain = function( output )
+function outputToUnchain( output )
 {
   var self = this;
 
@@ -507,11 +518,11 @@ var outputToUnchain = function( output )
  * @method inputFrom
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterBase
+ * @memberof wPrinterMid
  *
  */
 
- var inputFrom = function( input,o )
+ function inputFrom( input,o )
  {
    var self = this;
    var o = o || {};
@@ -621,11 +632,11 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * @method inputFromUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterBase
+ * @memberof wPrinterMid
  *
  */
 
-var inputFromUnchain = function( input )
+function inputFromUnchain( input )
 {
   var self = this;
 
@@ -677,7 +688,7 @@ var inputFromUnchain = function( input )
 
 //
 
-var hasInput = function( input )
+function hasInput( input )
 {
   _.assert( _.objectIs( input ) );
 
@@ -692,7 +703,7 @@ var hasInput = function( input )
 
 //
 
-var _hasInput = function( input )
+function _hasInput( input )
 {
   for( var d = 0 ; d < this.inputs.length ; d++ )
   {
@@ -715,7 +726,7 @@ var _hasInput = function( input )
 
 //
 
-var hasOutput = function( output )
+function hasOutput( output )
 {
   _.assert( _.objectIs( output ) );
 
@@ -730,7 +741,7 @@ var hasOutput = function( output )
 
 //
 
-var _hasOutput = function( output )
+function _hasOutput( output )
 {
   for( var d = 0 ; d < this.outputs.length ; d++ )
   {
@@ -753,106 +764,7 @@ var _hasOutput = function( output )
 
 //
 
-var writeDoing = function( args )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1 );
-
-  var result = [ _.str.apply( _,args ) ];
-
-  return result;
-}
-
-//
-
-// !!! poor description
-
-/**
- * Increases value of logger level property by( dLevel ).
- *
- * If argument( dLevel ) is not specified, increases by one.
- *
- * @example
- * var l = new wLogger();
- * l.up( 2 );
- * console.log( l.level )
- * //returns 2
- * @method up
- * @throws { Exception } If more then one argument specified.
- * @throws { Exception } If( dLevel ) is not a finite number.
- * @memberof wPrinterBase
- */
-
-var up = function( dLevel )
-{
-  var self = this;
-  if( dLevel === undefined )
-  dLevel = 1;
-
-  _.assert( arguments.length <= 1 );
-  _.assert( isFinite( dLevel ) );
-
-  self._levelSet( self.level+dLevel );
-
-}
-
-//
-
-// !!! poor description
-
-/**
- * Decreases value of logger level property by( dLevel ).
- * If argument( dLevel ) is not specified, decreases by one.
- *
- * @example
- * var l = new wLogger();
- * l.up( 2 );
- * l.down( 2 );
- * console.log( l.level )
- * //returns 0
- * @method down
- * @throws { Exception } If more then one argument specified.
- * @throws { Exception } If( dLevel ) is not a finite number.
- * @memberof wPrinterBase
- */
-
-var down = function( dLevel )
-{
-  var self = this;
-  if( dLevel === undefined )
-  dLevel = 1;
-
-  _.assert( arguments.length <= 1 );
-  _.assert( isFinite( dLevel ) );
-
-  self._levelSet( self.level-dLevel );
-
-}
-
-//
-
-var _levelSet = function( level )
-{
-  var self = this;
-
-  _.assert( level >= 0, '_levelSet : cant go below zero level to',level );
-  _.assert( isFinite( level ) );
-
-  var dLevel = level - self[ symbolForLevel ];
-
-  if( dLevel > 0 )
-  self.upAct( +dLevel );
-  else if( dLevel < 0 )
-  self.downAct( -dLevel );
-
-  self[ symbolForLevel ] = level ;
-
-}
-
-//
-
-var _outputSet = function( output )
+function _outputSet( output )
 {
   var self = this;
 
@@ -864,7 +776,7 @@ var _outputSet = function( output )
 
 //
 
-var _outputGet = function( output )
+function _outputGet( output )
 {
   var self = this;
   return self.outputs.length ? self.outputs[ self.outputs.length-1 ].output : null;
@@ -873,30 +785,6 @@ var _outputGet = function( output )
 // --
 // relationships
 // --
-
-var Composes =
-{
-
-  level : 0,
-  onWrite : null,
-
-  outputs : [],
-  inputs : [],
-
-}
-
-var Aggregates =
-{
-}
-
-var Associates =
-{
-
-  output : null,
-
-  //outputsDescriptors : [],
-
-}
 
 var outputWriteMethods =
 [
@@ -912,18 +800,55 @@ var outputChangeLevelMethods =
   'down',
 ];
 
+var symbolForLevel = Symbol.for( 'level' );
+
+var Composes =
+{
+
+  outputs : [],
+  inputs : [],
+
+}
+
+var Aggregates =
+{
+}
+
+var Associates =
+{
+
+  output : null,
+
+}
+
+var Statics =
+{
+  // var
+
+  outputWriteMethods : outputWriteMethods,
+  outputChangeLevelMethods : outputChangeLevelMethods,
+
+}
+
 // --
-// prototype
+// proto
 // --
 
-var Proto =
+var Supplement =
 {
 
   // routine
 
-  init : init,
-  init_static : init_static,
-  _init_static : _init_static,
+  _initChainingMixin : _initChainingMixin,
+  __initChainingMixinWrite : __initChainingMixinWrite,
+
+}
+
+var Extend =
+{
+
+
+  // chaining
 
   outputTo : outputTo,
   outputToUnchain : outputToUnchain,
@@ -936,76 +861,38 @@ var Proto =
   hasOutput : hasOutput,
   _hasOutput : _hasOutput,
 
-  writeDoing : writeDoing,
-
-  up : up,
-  down : down,
-
-  _levelSet : _levelSet,
-
   _outputSet : _outputSet,
   _outputGet : _outputGet,
 
 
-  // var
-
-  outputWriteMethods : outputWriteMethods,
-  outputChangeLevelMethods : outputChangeLevelMethods,
-
-
   // relationships
 
-  constructor : Self,
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Statics : Statics,
 
 }
 
-//
+var Self =
+{
 
-_.protoMake
-({
-  constructor : Self,
-  parent : Parent,
-  extend : Proto,
-});
+  Supplement : Supplement,
+  Extend : Extend,
 
-wCopyable.mixin( Self );
+  mixin : mixin,
 
-Self.prototype.init_static();
+  name : 'wPrinterChainingMixin',
+  nameShort : 'PrinterChainingMixin',
 
-_.assert( Self.prototype.init === init );
-
-//
-
-_.accessor
-({
-  object : Self.prototype,
-  names :
-  {
-    level : 'level',
-    output : 'output',
-  }
-});
-
-//
-
-_.accessorForbid
-({
-  object : Self.prototype,
-  names :
-  {
-    format : 'format',
-  }
-});
+}
 
 // export
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
-_global_[ Self.name ] = wTools.PrinterBase = Self;
+_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
 
 return Self;
 

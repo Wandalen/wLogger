@@ -7,8 +7,8 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterMid === 'undefined' )
-  require( '../PrinterMid.s' )
+  if( typeof wPrinterTop === 'undefined' )
+  require( '../PrinterTop.s' )
 
 }
 
@@ -16,12 +16,12 @@ if( typeof module !== 'undefined' )
 
 
 var _ = wTools;
-var Parent = wPrinterMid;
+var Parent = wPrinterTop;
 var Self = wLogger;
 
 //
 
-var _wrapProtoHandler = function( methodName, originalMethod, proto )
+function _wrapProtoHandler( methodName, originalMethod, proto )
 {
 
   debugger;
@@ -38,7 +38,7 @@ var _wrapProtoHandler = function( methodName, originalMethod, proto )
 
 //
 
-var wrapProto = function( proto,o )
+function wrapProto( proto,o )
 {
   var self = this;
   var o = o || {};
@@ -81,7 +81,7 @@ var wrapProto = function( proto,o )
 
 //
 
-var unwrapProto = function( proto )
+function unwrapProto( proto )
 {
   var self = this;
   var o = o || {};
@@ -128,7 +128,7 @@ var unwrapProto = function( proto )
 
 //
 
-var _hookConsoleToFileHandler = function( wasMethod, methodName, fileName )
+function _hookConsoleToFileHandler( wasMethod, methodName, fileName )
 {
 
   return function ()
@@ -159,7 +159,7 @@ var _hookConsoleToFileHandler = function( wasMethod, methodName, fileName )
 
 //
 
-var hookConsoleToFile = function( fileName )
+function hookConsoleToFile( fileName )
 {
   var self = this;
 
@@ -185,7 +185,7 @@ var hookConsoleToFile = function( fileName )
 
 //
 
-var _hookConsoleToAlertHandler = function( wasMethod, methodName )
+function _hookConsoleToAlertHandler( wasMethod, methodName )
 {
 
   return function ()
@@ -202,7 +202,7 @@ var _hookConsoleToAlertHandler = function( wasMethod, methodName )
 
 //
 
-var hookConsoleToAlert = function()
+function hookConsoleToAlert()
 {
   var self = this;
 
@@ -222,7 +222,7 @@ var hookConsoleToAlert = function()
 
 //
 
-var _hookConsoleToDomHandler = function( o, wasMethod, methodName )
+function _hookConsoleToDomHandler( o, wasMethod, methodName )
 {
 
   return function()
@@ -239,7 +239,7 @@ var _hookConsoleToDomHandler = function( o, wasMethod, methodName )
 
 //
 
-var hookConsoleToDom = function( o )
+function hookConsoleToDom( o )
 {
   var self = this;
   var o = o || {};
@@ -284,7 +284,7 @@ var hookConsoleToDom = function( o )
 
 //
 
-var _hookConsoleToServerSend = function( o, data )
+function _hookConsoleToServerSend( o, data )
 {
   var self = this;
 
@@ -302,7 +302,7 @@ var _hookConsoleToServerSend = function( o, data )
 
 //
 
-var _hookConsoleToServerHandler = function( o, originalMethod, methodName )
+function _hookConsoleToServerHandler( o, originalMethod, methodName )
 {
   var self = this;
 
@@ -325,7 +325,7 @@ var _hookConsoleToServerHandler = function( o, originalMethod, methodName )
 
 //
 
-var hookConsoleToServer = function( o )
+function hookConsoleToServer( o )
 {
   var self = this;
 
@@ -383,7 +383,7 @@ var hookConsoleToServer = function( o )
 
 //
 
-var unhookConsole = function( force )
+function unhookConsole( force )
 {
   var self = this;
 

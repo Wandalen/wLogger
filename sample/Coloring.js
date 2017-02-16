@@ -1,8 +1,12 @@
 
 if( typeof module !== 'undefined' )
+try
+{
+  require( 'wLogger' );
+}
+catch( err )
 {
   require( '../staging/abase/object/printer/printer/Logger.s' );
-  require('../../wTools/staging/abase/component/StringTools.s')
 }
 
 var _ = wTools;

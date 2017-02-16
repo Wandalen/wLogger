@@ -15,19 +15,21 @@ var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
   isBrowser = false;
-  require( 'wTools' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
-  require( '../object/printer/printer/Logger.s' );
 
+  if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
+    require( '../include/wTools.s' );
   }
-  catch ( err )
+  catch( err )
   {
-    require ( 'wTesting' );
+    require( 'wTools' );
   }
 
+  var _ = wTools;
+
+  _.include( 'wLogger' );
+  _.include( 'wTesting' );
 
 }
 

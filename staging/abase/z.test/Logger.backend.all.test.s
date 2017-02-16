@@ -15,21 +15,23 @@ node ./staging/abase/z.test/All.backend.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
-  require( '../object/printer/printer/Logger.s' );
-
+  if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
+    require( '../include/wTools.s' );
   }
-  catch ( err )
+  catch( err )
   {
-    require ( 'wTesting' );
+    require( 'wTools' );
   }
 
-  require( './PrinterBase.test.s' );
-  require( './Backend.test.s' );
+  var _ = wTools;
+
+  _.include( 'wLogger' );
+  _.include( 'wTesting' );
+
   require( './Chaining.test.s' );
+  require( './Backend.test.s' );
   require( './Logger.test.s' );
   require( './Other.test.s' );
 

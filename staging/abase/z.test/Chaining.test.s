@@ -15,18 +15,20 @@ node ./staging/abase/z.test/Chaining.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
-  require( '../object/printer/printer/Logger.s' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
-
+  if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
+    require( '../include/wTools.s' );
   }
-  catch ( err )
+  catch( err )
   {
-    require ( 'wTesting' );
+    require( 'wTools' );
   }
+
+  var _ = wTools;
+
+  _.include( 'wLogger' );
+  _.include( 'wTesting' );
 
 }
 
@@ -66,13 +68,13 @@ var levelsTest = function( test )
   test.description = 'case1 : ';
   logger.up( 2 );
   var got = l.log( 'abc' );
-  var expected = [ '--abc' ]
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case2 : add 2 levels, first logger level must be  2';
   l.up( 2 );
   var got = logger.log( 'abc' );
-  var expected = [ '--abc' ]
+  var expected = logger;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3 : current levels of loggers must be equal';
@@ -83,16 +85,15 @@ var levelsTest = function( test )
   test.description = 'case4 : logger level - 2, l level - 4, text must have level 6 ';
   l.up( 2 );
   var got = l.log( 'abc' );
-  var expected = [ '------abc' ];
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5 : zero level';
   l.down( 4 );
   logger.down( 2 );
   var got = l.log( 'abc' );
-  var expected = [ "abc" ];
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
-
 
   if( Config.debug )
   {

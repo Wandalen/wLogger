@@ -10,20 +10,19 @@ return;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterMid === 'undefined' )
-  require( '../PrinterMid.s' )
+  if( typeof wPrinterTop === 'undefined' )
+  require( '../PrinterTop.s' );
 
 }
 
 //
 
-var _ = wTools;
-var Parent = wPrinterMid;
-
 /**
  * @class wLogger
  */
 
+var _ = wTools;
+var Parent = wPrinterTop;
 var Self = function wLogger()
 {
   if( !( this instanceof Self ) )
@@ -36,7 +35,7 @@ var Self = function wLogger()
 
 //
 
-var init = function( o )
+function init( o )
 {
   var self = this;
 
@@ -100,30 +99,6 @@ if( typeof module !== 'undefined' && module !== null )
 _global_[ Self.name ] = wTools.Logger = Self;
 if( !_global_.logger || _.mapIs( _global_.logger ) )
 _global_.logger = _global_[ 'logger' ] = new Self();
-
-// if( Config.debug )
-// {
-//   // debugger;
-//   var x1 = logger.Self;
-//   var x2 = Self.prototype.Self;
-//   var x3 = Self._SelfGet();
-//   var x4 = Self.Self;
-//   // debugger;
-//   _.assert( x1 === x2 );
-//   _.assert( x1 === x3 );
-//   _.assert( x1 === x4 );
-//   // debugger;
-// }
-
-// require
-
-// if( typeof module !== 'undefined' )
-// {
-//
-//   require( './LoggerToFile.s' );
-//   require( './LoggerToJstructure.s' );
-//
-// }
 
 return Self;
 

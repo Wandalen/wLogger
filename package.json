@@ -14,17 +14,17 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/abase/object/printer/printer/Logger.s",
+  "main": "staging/abase/printer/printer/Logger.s",
   "files": [
     "staging/abase",
     "production"
   ],
   "directories": {
     "doc": "doc",
-    "main": "staging/abase/object/printer/printer/Logger.s"
+    "main": "staging/abase/printer/printer/Logger.s"
   },
   "scripts": {
-    "test": "node ./staging/abase/z.test/All.backend.test.s",
+    "test": "node ./staging/abase/z.test/Logger.backend.all.test.s",
     "make_doc": "./doc.sh"
   },
   "repository": {
