@@ -1,4 +1,4 @@
-( function _Backend_test_s_( ) {
+( function _Backend_test_ss_( ) {
 
 'use strict';
 

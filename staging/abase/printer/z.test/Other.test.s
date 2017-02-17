@@ -318,7 +318,7 @@ function colorsStack( test )
 var Self =
 {
 
-  name : 'Other test',
+  name : 'Logger other test',
 
   tests :
   {
@@ -353,4 +353,5 @@ _.timeReady( function()
   });
 
 });
-} )( );
+
+})();

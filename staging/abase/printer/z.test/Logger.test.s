@@ -596,7 +596,7 @@ if( typeof module !== 'undefined' && !module.parent )
 _.timeReady( function()
 {
 
-  debugger
+  // debugger
   Self = wTestSuite( Self.name );
   // Self.logger = wLoggerToJstructure();
 
