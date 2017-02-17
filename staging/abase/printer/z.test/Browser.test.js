@@ -25,7 +25,7 @@ var toStrEscaping = function ( str )
 
 //
 
-var simplest = function( test )
+function simplest( test )
 {
 
   test.description = 'simple1';
@@ -53,10 +53,10 @@ var _escaping = function ( str )
 
 //
 
-var colorConsole = function( test )
+function colorConsole( test )
 {
 
-  var fakelog = function()
+  function fakelog()
   {
     return arguments;
   }
@@ -116,7 +116,7 @@ var colorConsole = function( test )
 var Proto =
 {
 
-  name : 'Browser test',
+  name : 'Logger browser test',
 
   tests :
   {
@@ -126,13 +126,15 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-_.Testing.test( Self );
+Self = wTestSuite( Self );
+if( _.Testing && 0 )
+_.Testing.test( Self.name );
 
 } )( );

@@ -91,7 +91,7 @@ function end()
   {
     var tag = arguments[ a ];
     _.assert( _.strIs( tag ) );
-    self.tags[ tag ] = 0;
+    delete self.tags[ tag ];
   }
 
   return self;

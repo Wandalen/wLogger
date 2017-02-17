@@ -26,13 +26,12 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wTools.Testing;
-var Self = {};
 
 //
 
-var currentColor = function( test )
+function currentColor( test )
 {
-  var fakelog = function()
+  function fakelog()
   {
     return arguments;
   }
@@ -238,7 +237,7 @@ var currentColor = function( test )
 
 //
 
-var colorsStack = function( test )
+function colorsStack( test )
 {
   var logger = new wLogger({ output : null });
 
@@ -314,7 +313,9 @@ var colorsStack = function( test )
 
 }
 
-var Proto =
+//
+
+var Self =
 {
 
   name : 'Other test',
@@ -327,15 +328,29 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
-_.mapExtend( Self,Proto );
-_.Testing.register( Self );
-if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+Self = wTestSuite( Self );
 
+if( typeof module !== 'undefined' && !module.parent )
+_.timeReady( function()
+{
+
+  // debugger;
+  Self = wTestSuite( Self.name );
+  Self.logger = wLoggerToJstructure({ coloring : 0 });
+
+  _.Testing.test( Self.name )
+  .thenDo( function()
+  {
+    debugger;
+    logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+    debugger;
+  });
+
+});
 } )( );

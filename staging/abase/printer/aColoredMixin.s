@@ -207,7 +207,7 @@ function _stackIsNotEmpty( style )
 
 //
 
-function _writeDoingBrowser( str )
+function _writeBeginBrowser( str )
 {
   var self = this;
 
@@ -267,7 +267,7 @@ function _writeDoingBrowser( str )
 
 //
 
-function _writeDoingShell( str )
+function _writeBeginShell( str )
 {
   var self = this;
 
@@ -329,22 +329,46 @@ function _writeDoingShell( str )
 
 //
 
-function _writeDoing( args )
+function _writeBegin( original )
 {
-  var self = this;
 
-  _.assert( arguments.length === 1 );
+  return function _writeBegin( args )
+  {
+    var self = this;
 
-  var result = self._strConcat( args );
+    _.assert( arguments.length === 1 );
 
-  if( !isBrowser )
-  result = self._writeDoingShell( result );
-  else
-  result = self._writeDoingBrowser( result );
+    // var result = self._strConcat( args );
+    // debugger;
+    var result = original.call( self,args );
+    // debugger;
 
-  _.assert( _.arrayIs( result ) );
+    _.assert( _.arrayIs( result ) );
+    _.assert( result.length === 1 )
 
-  return result;
+    if( self.coloring )
+    {
+
+      if( self.coloringHeadAndTail )
+      {
+        if( self.tags.head )
+        result[ 0 ] = _.strColor.style( result[ 0 ],'head' )
+        else if( self.tags.tail )
+        result[ 0 ] = _.strColor.style( result[ 0 ],'tail' )
+      }
+
+      if( !isBrowser )
+      result = self._writeBeginShell( result[ 0 ] );
+      else
+      result = self._writeBeginBrowser( result[ 0 ] );
+
+    }
+
+    _.assert( _.arrayIs( result ) );
+
+    return result;
+  }
+
 }
 
 //
@@ -426,6 +450,8 @@ var Composes =
   backgroundColor : null,
 
   colorsStack : null,
+  coloring : 1,
+  coloringHeadAndTail : 1,
 
   _isStyled : 0,
   _cursorSaved : 0,
@@ -446,6 +472,13 @@ var Associates =
 // proto
 // --
 
+var Functor =
+{
+
+  _writeBegin : _writeBegin,
+
+}
+
 var Extend =
 {
 
@@ -463,10 +496,8 @@ var Extend =
   _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
 
-  _writeDoingShell : _writeDoingShell,
-  _writeDoingBrowser : _writeDoingBrowser,
-
-  _writeDoing : _writeDoing,
+  _writeBeginShell : _writeBeginShell,
+  _writeBeginBrowser : _writeBeginBrowser,
 
   topic : topic,
   topicUp : topicUp,
@@ -485,6 +516,7 @@ var Self =
 {
 
   Extend : Extend,
+  Functor : Functor,
 
   mixin : mixin,
 

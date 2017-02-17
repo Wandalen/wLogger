@@ -68,7 +68,7 @@ function write()
 {
   var self = this;
 
-  var args = self._writeDoing( arguments );
+  var args = self._writeBegin( arguments );
 
   _.assert( _.arrayIs( args ) );
 
@@ -80,7 +80,7 @@ function write()
 
 //
 
-function _writeDoing( args )
+function _writeBegin( args )
 {
   var self = this;
 
@@ -272,7 +272,7 @@ var Proto =
   // write
 
   write : write,
-  _writeDoing : _writeDoing,
+  _writeBegin : _writeBegin,
   _strConcat : _strConcat,
 
 

@@ -100,11 +100,13 @@ function __initChainingMixinWrite( name )
   function write()
   {
 
-    var args = this.write.apply( this,arguments );
+    var args = arguments;
+    // var args = this.write.apply( this,arguments );
 
-    debugger;
-    this[ nameAct ].apply( this,args );
+    // debugger;
     // this[ nameAct ].apply( this,args );
+
+    this._writeToChannel( name,args );
 
     return this;
   }
@@ -113,9 +115,16 @@ function __initChainingMixinWrite( name )
 
   function writeUp()
   {
-    var result = this[ name ].apply( this,arguments );
 
-    this.up();
+    this._writeToChannelUp( name,arguments );
+
+    // this.up();
+    //
+    // this.begin( 'head' );
+    //
+    // var result = this[ name ].apply( this,arguments );
+    //
+    // this.end( 'head' );
 
     return this;
   }
@@ -125,16 +134,76 @@ function __initChainingMixinWrite( name )
   function writeDown()
   {
 
-    this.down();
+    this._writeToChannelDown( name,arguments );
 
-    var result = this[ name ].apply( this,arguments );
+    // this.begin( 'tail' );
+    //
+    // var result = this[ name ].apply( this,arguments );
+    //
+    // this.end( 'tail' );
+    //
+    // this.down();
 
     return this;
   }
 
+  /* */
+
   proto[ name ] = write;
   proto[ nameUp ] = writeUp;
   proto[ nameDown ] = writeDown;
+
+}
+
+//
+
+function _writeToChannel( channelName,args )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.arrayLike( args ) );
+
+  var args = this.write.apply( this,args );
+
+  console[ channelName ].apply( console,args );
+
+}
+
+//
+
+function _writeToChannelUp( channelName,args )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.arrayLike( args ) );
+
+  this.up();
+
+  this.begin( 'head' );
+  self._writeToChannel( channelName,args );
+  this.end( 'head' );
+
+}
+
+//
+
+function _writeToChannelDown( channelName,args )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.arrayLike( args ) );
+
+  this.begin( 'tail' );
+  self._writeToChannel( channelName,args );
+  this.end( 'tail' );
+
+  this.down();
 
 }
 
@@ -146,7 +215,7 @@ function __initChainingMixinWrite( name )
 // {
 //   var self = this;
 //
-//   var args = self._writeDoing( arguments );
+//   var args = self._writeBegin( arguments );
 //
 //   _.assert( _.arrayIs( args ) );
 //
@@ -238,12 +307,12 @@ function outputTo( output,o )
   var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
-  _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( output ) || output === null );
+  _.assertNoDebugger( arguments.length === 1 || arguments.length === 2 );
+  _.assertNoDebugger( _.objectIs( output ) || output === null );
 
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  _.assertNoDebugger( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
   // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
-  _.assert( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
+  _.assertNoDebugger( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
 
@@ -332,7 +401,7 @@ function outputTo( output,o )
       continue;
     }
 
-    _.assert( output[ name ],'outputTo expects output has method',name );
+    _.assertNoDebugger( output[ name ],'outputTo expects output has method',name );
 
     descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
     // descriptorInput.methods[ name ] = self[ name ];
@@ -532,7 +601,7 @@ function outputToUnchain( output )
    _.assert( arguments.length === 1 || arguments.length === 2 );
    _.assert( _.objectIs( input ) );
 
-   debugger;
+  //  debugger;
 
    if( _.routineIs( input.outputTo ) )
    {
@@ -541,7 +610,7 @@ function outputToUnchain( output )
 
    _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
-   debugger;
+  //  debugger;
 
    /* input check */
    if( o.combining !== 'rewrite' )
@@ -642,8 +711,6 @@ function inputFromUnchain( input )
 
   _.assert( arguments.length === 1 );
   _.assert( _.objectIs( input ) || input === null );
-
-  debugger;
 
   if( _.routineIs( input.outputToUnchain ) )
   {
@@ -837,6 +904,10 @@ var Statics =
 var Supplement =
 {
 
+  _writeToChannel : _writeToChannel,
+  _writeToChannelUp : _writeToChannelUp,
+  _writeToChannelDown : _writeToChannelDown,
+
   // routine
 
   _initChainingMixin : _initChainingMixin,
@@ -846,7 +917,6 @@ var Supplement =
 
 var Extend =
 {
-
 
   // chaining
 

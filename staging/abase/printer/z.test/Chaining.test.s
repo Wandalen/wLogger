@@ -34,7 +34,7 @@ var _escaping = function ( str )
   return _.toStr( str,{ escaping : 1 } );
 }
 
-var log = function()
+function log()
 {
   return arguments;
 }
@@ -47,7 +47,7 @@ var fakeConsole =
   warn : _.routineJoin( console,console.warn ),
 }
 
-var levelsTest = function( test )
+function levelsTest( test )
 {
   var logger = new wLogger( { output : fakeConsole });
 
@@ -99,9 +99,9 @@ var levelsTest = function( test )
 
 //
 
-var chaining = function( test )
+function chaining( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1: l1 must get two messages';
   var got = [];
@@ -196,9 +196,9 @@ var chaining = function( test )
 
 //
 
-var chainingParallel = function( test )
+function chainingParallel( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1: 1 -> *';
   var got = [];
@@ -313,7 +313,7 @@ var chainingParallel = function( test )
 
 //
 
-var outputTo = function( test )
+function outputTo( test )
 {
 
   test.description = 'output already exist';
@@ -364,9 +364,9 @@ var outputTo = function( test )
 
 //
 
-var outputToUnchain = function( test )
+function outputToUnchain( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
@@ -429,7 +429,7 @@ var outputToUnchain = function( test )
 
 //
 
-var inputFrom = function( test )
+function inputFrom( test )
 {
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
@@ -495,7 +495,7 @@ var inputFrom = function( test )
 
 //
 
-var inputFromUnchain = function( test )
+function inputFromUnchain( test )
 {
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
@@ -567,15 +567,15 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-_.Testing.register( Self );
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );

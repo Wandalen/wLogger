@@ -29,7 +29,7 @@ var Self = {};
 
 //
 
-var simplest = function( test )
+function simplest( test )
 {
 
   test.description = 'simple1';
@@ -57,10 +57,10 @@ var _escaping = function ( str )
 
 //
 
-var colorConsole = function( test )
+function colorConsole( test )
 {
 
-  var log = function()
+  function log()
   {
     return arguments;
   }
@@ -123,15 +123,15 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-_.Testing.register( Self );
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );
