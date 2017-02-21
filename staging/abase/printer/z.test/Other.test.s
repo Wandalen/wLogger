@@ -345,7 +345,7 @@ _.timeReady( function()
   Self.logger = wLoggerToJstructure({ coloring : 0 });
 
   _.Testing.test( Self.name )
-  .thenDo( function()
+  .doThen( function()
   {
     debugger;
     logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );

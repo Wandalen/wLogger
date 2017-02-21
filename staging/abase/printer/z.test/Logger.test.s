@@ -601,7 +601,7 @@ _.timeReady( function()
   // Self.logger = wLoggerToJstructure();
 
   _.Testing.test( Self.name )
-  .thenDo( function()
+  .doThen( function()
   {
     debugger;
     logger.log( Self.logger.outputData );
