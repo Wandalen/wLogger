@@ -101,7 +101,7 @@ function levelsTest( test )
 
 function chaining( test )
 {
-  function _onWrite( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args ) };
 
   test.description = 'case1: l1 must get two messages';
   var got = [];
@@ -198,7 +198,7 @@ function chaining( test )
 
 function chainingParallel( test )
 {
-  function _onWrite( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args ) };
 
   test.description = 'case1: 1 -> *';
   var got = [];
@@ -366,7 +366,7 @@ function outputTo( test )
 
 function outputToUnchain( test )
 {
-  function _onWrite( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args ) };
 
   test.description = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
@@ -431,7 +431,7 @@ function outputToUnchain( test )
 
 function inputFrom( test )
 {
-  var onWrite = function ( args ){ got.push( args[ 0 ] ) };
+  var onWrite = function ( args ){ got.push( args ) };
 
   test.description = 'case1: input already exist';
   test.shouldThrowError( function()
@@ -497,7 +497,7 @@ function inputFrom( test )
 
 function inputFromUnchain( test )
 {
-  var onWrite = function ( args ){ got.push( args[ 0 ] ) };
+  var onWrite = function ( args ){ got.push( args ) };
 
   test.description = 'case1: input not exist in the list';
   var l = new wLogger();
