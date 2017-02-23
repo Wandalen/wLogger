@@ -22,7 +22,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 
   require( './Chaining.test.s' );
-  require( './Backend.test.s' );
+  require( './Backend.test.ss' );
   require( './Logger.test.s' );
   require( './Other.test.s' );
 
