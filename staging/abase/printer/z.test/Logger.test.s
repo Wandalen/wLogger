@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  require( '../../../abase/xTesting/Testing.debug.s' );
+  // require( '../../../abase/xTesting/Testing.debug.s' );
 
   _.include( 'wTesting' );
 
@@ -604,7 +604,7 @@ _.timeReady( function()
   .doThen( function()
   {
     debugger;
-    logger.log( Self.logger.outputData );
+    // logger.log( Self.logger.outputData );
     debugger;
   });
 
