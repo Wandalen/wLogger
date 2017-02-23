@@ -1,4 +1,4 @@
-( function _Backend_test_s_( ) {
+( function _Backend_test_ss_( ) {
 
 'use strict';
 
@@ -15,18 +15,11 @@ node ./staging/abase/z.test/Backend.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
-  require( '../object/printer/printer/Logger.s' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
+  require( '../printer/Logger.s' );
 
-  try
-  {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
-  }
-  catch ( err )
-  {
-    require ( 'wTesting' );
-  }
+  var _ = wTools;
+
+  _.include( 'wTesting' );
 
 }
 
@@ -36,7 +29,7 @@ var Self = {};
 
 //
 
-var simplest = function( test )
+function simplest( test )
 {
 
   test.description = 'simple1';
@@ -64,10 +57,10 @@ var _escaping = function ( str )
 
 //
 
-var colorConsole = function( test )
+function colorConsole( test )
 {
 
-  var log = function()
+  function log()
   {
     return arguments;
   }
@@ -130,15 +123,15 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-_.Testing.register( Self );
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );

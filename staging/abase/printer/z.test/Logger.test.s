@@ -1,4 +1,4 @@
-( function _PrinterBase_test_s_( ) {
+( function _Logger_test_s_( ) {
 
 'use strict';
 
@@ -15,28 +15,22 @@ node ./staging/abase/z.test/Logger.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
-  require( '../object/printer/printer/Logger.s' );
+  require( '../printer/Logger.s' );
 
-  try
-  {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
-  }
-  catch ( err )
-  {
-    require ( 'wTesting' );
-  }
+  var _ = wTools;
+
+  require( '../../../abase/xTesting/Testing.debug.s' );
+
+  _.include( 'wTesting' );
 
 }
 
 var _ = wTools;
 var Parent = wTools.Testing;
-var Self = {};
 
 //
 
-var outputTo = function( test )
+function outputTo( test )
 {
   test.description = '';
   var l = new wLogger({ output : null });
@@ -94,7 +88,6 @@ var outputTo = function( test )
  l.outputTo( logger, { combining : 'append' } );
  test.shouldThrowError(function ()
  {
-
    l.outputTo( logger, { combining : 'append' } );
  })
 
@@ -202,7 +195,7 @@ var outputTo = function( test )
 
 //
 
-var outputToUnchain = function( test )
+function outputToUnchain( test )
 {
   test.description = 'remove console from output';
   var l = new wLogger();
@@ -263,7 +256,7 @@ var outputToUnchain = function( test )
 
 //
 
-var inputFrom = function( test )
+function inputFrom( test )
 {
   test.description = 'try to add existing input';
   var l = new wLogger();
@@ -341,7 +334,7 @@ var inputFrom = function( test )
 
 //
 
-var inputFromUnchain = function( test )
+function inputFromUnchain( test )
 {
   test.description = 'remove existing input';
   var l = new wLogger({ output : null });
@@ -389,7 +382,7 @@ var inputFromUnchain = function( test )
 
 //
 
-var hasInput = function( test )
+function hasInput( test )
 {
   test.description = 'has console in inputs';
   var l = new wLogger({ output : null });
@@ -413,7 +406,7 @@ var hasInput = function( test )
 
 //
 
-var hasOutput = function( test )
+function hasOutput( test )
 {
   test.description = 'has logger in outputs';
   var l1 = new wLogger();
@@ -438,7 +431,7 @@ var hasOutput = function( test )
 
 //
 
-var _hasInput = function( test )
+function _hasInput( test )
 {
   test.description = 'l1->l2->l3, l3 has l1 in input chain';
   var l1 = new wLogger({ output : null });
@@ -466,7 +459,7 @@ var _hasInput = function( test )
 
 //
 
-var _hasOutput = function( test )
+function _hasOutput( test )
 {
   test.description = 'l1->l2->l3, l1 has l3 in output chain';
   var l1 = new wLogger({ output : null });
@@ -491,7 +484,7 @@ var _hasOutput = function( test )
 
 //
 
-var recursion = function( test )
+function recursion( test )
 {
   test.description = 'add own object to outputs';
   test.shouldThrowError( function()
@@ -569,18 +562,20 @@ var recursion = function( test )
 
 //
 
-var Proto =
+var Self =
 {
 
-  name : 'PrinterBase',
+  name : 'Logger',
 
   tests :
   {
 
     outputTo : outputTo,
     outputToUnchain : outputToUnchain,
+
     inputFrom : inputFrom,
     inputFromUnchain : inputFromUnchain,
+
     hasInput : hasInput,
     hasOutput : hasOutput,
     _hasInput : _hasInput,
@@ -589,15 +584,30 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  verbosity : 1,
 
 }
 
 //
 
-_.mapExtend( Self,Proto );
-_.Testing.register( Self );
+Self = wTestSuite( Self );
+
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.timeReady( function()
+{
+
+  // debugger
+  Self = wTestSuite( Self.name );
+  // Self.logger = wLoggerToJstructure();
+
+  _.Testing.test( Self.name )
+  .doThen( function()
+  {
+    debugger;
+    logger.log( Self.logger.outputData );
+    debugger;
+  });
+
+});
 
 } )( );

@@ -15,31 +15,23 @@ var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
   isBrowser = false;
-  require( 'wTools' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
-  require( '../object/printer/printer/Logger.s' );
 
-  try
-  {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
-  }
-  catch ( err )
-  {
-    require ( 'wTesting' );
-  }
+  require( '../printer/Logger.s' );
 
+  var _ = wTools;
+
+  _.include( 'wTesting' );
 
 }
 
 var _ = wTools;
 var Parent = wTools.Testing;
-var Self = {};
 
 //
 
-var currentColor = function( test )
+function currentColor( test )
 {
-  var fakelog = function()
+  function fakelog()
   {
     return arguments;
   }
@@ -245,7 +237,7 @@ var currentColor = function( test )
 
 //
 
-var colorsStack = function( test )
+function colorsStack( test )
 {
   var logger = new wLogger({ output : null });
 
@@ -321,10 +313,12 @@ var colorsStack = function( test )
 
 }
 
-var Proto =
+//
+
+var Self =
 {
 
-  name : 'Other test',
+  name : 'Logger other test',
 
   tests :
   {
@@ -334,15 +328,30 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
-_.mapExtend( Self,Proto );
-_.Testing.register( Self );
-if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+Self = wTestSuite( Self );
 
-} )( );
+if( typeof module !== 'undefined' && !module.parent )
+_.timeReady( function()
+{
+
+  // debugger;
+  Self = wTestSuite( Self.name );
+  Self.logger = wLoggerToJstructure({ coloring : 0 });
+
+  _.Testing.test( Self.name )
+  .doThen( function()
+  {
+    debugger;
+    logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+    debugger;
+  });
+
+});
+
+})();

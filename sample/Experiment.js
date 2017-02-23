@@ -1,9 +1,5 @@
 
-if( typeof module !== 'undefined' )
-{
-  require( '../staging/abase/object/printer/printer/Logger.s' );
-  require('../../wTools/staging/abase/component/StringTools.s')
-}
+require( '../staging/abase/printer/printer/Logger.s' );
 
 var _ = wTools;
 

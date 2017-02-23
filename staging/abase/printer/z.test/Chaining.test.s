@@ -15,18 +15,11 @@ node ./staging/abase/z.test/Chaining.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( 'wTools' );
-  require( '../object/printer/printer/Logger.s' );
-  require( '../../../../wTools/staging/abase/component/StringTools.s' );
+  require( '../printer/Logger.s' );
 
-  try
-  {
-    require( '../../../../wTesting/staging/abase/object/Testing.debug.s' );
-  }
-  catch ( err )
-  {
-    require ( 'wTesting' );
-  }
+  var _ = wTools;
+
+  _.include( 'wTesting' );
 
 }
 
@@ -41,7 +34,7 @@ var _escaping = function ( str )
   return _.toStr( str,{ escaping : 1 } );
 }
 
-var log = function()
+function log()
 {
   return arguments;
 }
@@ -54,7 +47,7 @@ var fakeConsole =
   warn : _.routineJoin( console,console.warn ),
 }
 
-var levelsTest = function( test )
+function levelsTest( test )
 {
   var logger = new wLogger( { output : fakeConsole });
 
@@ -66,13 +59,13 @@ var levelsTest = function( test )
   test.description = 'case1 : ';
   logger.up( 2 );
   var got = l.log( 'abc' );
-  var expected = [ '--abc' ]
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case2 : add 2 levels, first logger level must be  2';
   l.up( 2 );
   var got = logger.log( 'abc' );
-  var expected = [ '--abc' ]
+  var expected = logger;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3 : current levels of loggers must be equal';
@@ -83,16 +76,15 @@ var levelsTest = function( test )
   test.description = 'case4 : logger level - 2, l level - 4, text must have level 6 ';
   l.up( 2 );
   var got = l.log( 'abc' );
-  var expected = [ '------abc' ];
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5 : zero level';
   l.down( 4 );
   logger.down( 2 );
   var got = l.log( 'abc' );
-  var expected = [ "abc" ];
+  var expected = l;
   test.identical( _escaping( got ), _escaping( expected ) );
-
 
   if( Config.debug )
   {
@@ -107,9 +99,9 @@ var levelsTest = function( test )
 
 //
 
-var chaining = function( test )
+function chaining( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1: l1 must get two messages';
   var got = [];
@@ -204,9 +196,9 @@ var chaining = function( test )
 
 //
 
-var chainingParallel = function( test )
+function chainingParallel( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1: 1 -> *';
   var got = [];
@@ -321,7 +313,7 @@ var chainingParallel = function( test )
 
 //
 
-var outputTo = function( test )
+function outputTo( test )
 {
 
   test.description = 'output already exist';
@@ -372,9 +364,9 @@ var outputTo = function( test )
 
 //
 
-var outputToUnchain = function( test )
+function outputToUnchain( test )
 {
-  var _onWrite = function( args ) { got.push( args[ 0 ] ) };
+  function _onWrite( args ) { got.push( args[ 0 ] ) };
 
   test.description = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
@@ -437,7 +429,7 @@ var outputToUnchain = function( test )
 
 //
 
-var inputFrom = function( test )
+function inputFrom( test )
 {
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
@@ -503,7 +495,7 @@ var inputFrom = function( test )
 
 //
 
-var inputFromUnchain = function( test )
+function inputFromUnchain( test )
 {
   var onWrite = function ( args ){ got.push( args[ 0 ] ) };
 
@@ -575,15 +567,15 @@ var Proto =
 
   },
 
-  /* verbose : 1, */
+  /* verbosity : 1, */
 
 }
 
 //
 
 _.mapExtend( Self,Proto );
-_.Testing.register( Self );
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self );
+_.Testing.test( Self.name );
 
 } )( );
