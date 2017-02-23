@@ -20,7 +20,13 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  _.include( 'wColor' );
+  try
+  {
+    _.include( 'wColor' );
+  }
+  catch( err )
+  {
+  }
 
 }
 
