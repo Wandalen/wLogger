@@ -319,6 +319,64 @@ function colorsStack( test )
 
 //
 
+function logUp( test )
+{
+  var got;
+  function _onWrite( args ) { got = args };
+
+  var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
+
+  test.description = 'case1';
+  var msg = "Up";
+  logger.logUp( msg );
+  test.identical( got[ 0 ].length - msg.length, 2 )
+
+  test.description = 'case2';
+  var msg = "Up";
+  logger.logUp( msg );
+  logger.logUp( msg );
+  test.identical( got[ 0 ].length - msg.length, 6 );
+
+  test.description = 'case3';
+  test.shouldThrowError( function ()
+  {
+    logger.upAct();
+  })
+
+}
+
+//
+
+function logDown( test )
+{
+  var got;
+  function _onWrite( args ) { got = args };
+
+  var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
+
+  test.description = 'case1';
+  logger.up( 2 );
+  var msg = "Down";
+  logger.logDown( msg );
+  test.identical( got[ 0 ].length - msg.length, 4 );
+
+  test.description = 'case2';
+  test.shouldThrowError( function ()
+  {
+    logger.downAct();
+  })
+
+  test.description = 'cant go below zero level';
+  test.shouldThrowError( function ()
+  {
+    var logger = new wLogger();
+    logger.logDown();
+  })
+
+}
+
+//
+
 var Self =
 {
 
@@ -330,7 +388,9 @@ var Self =
   {
 
     currentColor : currentColor,
-    colorsStack : colorsStack
+    colorsStack : colorsStack,
+    logUp : logUp,
+    logDown : logDown,
 
   },
 

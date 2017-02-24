@@ -74,13 +74,7 @@ function write()
   _.assert( _.arrayIs( args ) );
 
   if( self.onWrite )
-  {
-    // what is that for???
-    if( isBrowser )
-    self.onWrite( args );
-    else
-    self.onWrite( args[ 0 ] );
-  }
+  self.onWrite( args );
 
   return args;
 }
@@ -146,9 +140,6 @@ function up( dLevel )
 {
   var self = this;
 
-  if( self.upAct )
-  self.upAct.call( self, dLevel )
-
   if( dLevel === undefined )
   dLevel = 1;
 
@@ -182,9 +173,6 @@ function up( dLevel )
 function down( dLevel )
 {
   var self = this;
-
-  if( self.downAct )
-  self.downAct.call( self, dLevel )
 
   if( dLevel === undefined )
   dLevel = 1;
