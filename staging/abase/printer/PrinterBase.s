@@ -75,6 +75,7 @@ function write()
 
   if( self.onWrite )
   {
+    // what is that for???
     if( isBrowser )
     self.onWrite( args );
     else
