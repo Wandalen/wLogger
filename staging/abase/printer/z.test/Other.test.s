@@ -377,6 +377,53 @@ function logDown( test )
 
 //
 
+
+var fg = _.strColor.fg;
+var bg = _.strColor.bg;
+
+function coloringNoColor( test )
+{
+  _.color = null;
+  var got;
+  function onWrite( args ){ got = args[ 0 ] };
+
+  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
+
+  test.description = "No wColor, coloring : 1";
+  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
+  test.identical( got, 'red text red background' );
+
+  test.description =  "No wColor, coloring : 0";
+  l.coloring = false;
+  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
+  test.identical( got, 'red text red background' );
+}
+
+//
+
+function coloring( test )
+{
+  var got;
+  function onWrite( args ){ got = args };
+
+  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
+
+  test.description = "wColor, coloring : 1";
+  l.log( _.strColor.fg( 'text', 'red') );
+  if( isBrowser )
+  test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
+  else
+  test.identical( got[ 0 ], '\u001b[31mtext\u001b[39m' );
+
+
+  test.description =  "wColor, coloring : 0";
+  l.coloring = false;
+  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
+  test.identical( got[ 0 ], 'red text red background' );
+}
+
+//
+
 var Self =
 {
 
@@ -386,11 +433,12 @@ var Self =
 
   tests :
   {
-
     currentColor : currentColor,
     colorsStack : colorsStack,
     logUp : logUp,
     logDown : logDown,
+    coloring : coloring,
+    coloringNoColor : coloringNoColor,
 
   },
 
