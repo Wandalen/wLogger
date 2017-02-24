@@ -594,6 +594,8 @@ var Self =
 //
 
 Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+_.Testing.test( Self.name );
 
 // if( typeof module !== 'undefined' && !module.parent )
 // _.timeReady( function()

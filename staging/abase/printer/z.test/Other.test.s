@@ -22,7 +22,6 @@ if( typeof module !== 'undefined' )
   var _ = wTools;
 
   _.include( 'wTesting' );
-  _.include( 'wLoggerToJstructure' );
 
 }
 
@@ -340,10 +339,15 @@ var Self =
 //
 
 Self = wTestSuite( Self );
+if( typeof module !== 'undefined' && !module.parent )
+_.Testing.test( Self.name );
 
 // if( typeof module !== 'undefined' && !module.parent )
 // _.timeReady( function()
 // {
+//
+//   if( typeof module !== 'undefined' )
+//   _.include( 'wLoggerToJstructure' );
 //
 //   // debugger;
 //   Self = wTestSuite( Self.name );
