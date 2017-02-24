@@ -57,6 +57,8 @@ function mixin( constructor )
     names :
     {
       format : 'format',
+      upAct : 'upAct',
+      downAct : 'downAct',
     }
   });
 
@@ -116,7 +118,7 @@ function __initChainingMixinWrite( name )
   function writeUp()
   {
 
-    this._writeToChannelUp( name,arguments );
+    this._writeToChannelUp( nameAct,arguments );
 
     // this.up();
     //
@@ -134,7 +136,7 @@ function __initChainingMixinWrite( name )
   function writeDown()
   {
 
-    this._writeToChannelDown( name,arguments );
+    this._writeToChannelDown( nameAct,arguments );
 
     // this.begin( 'tail' );
     //
@@ -313,7 +315,7 @@ function outputTo( output,o )
 
   _.assertNoDebugger( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
   // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
-  _.assertNoDebugger( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
+  // _.assertNoDebugger( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
 
@@ -425,44 +427,44 @@ function outputTo( output,o )
 
   /* change level */
 
-  for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
-  {
-
-    var name = self.outputChangeLevelMethods[ m ];
-    var nameAct = name + 'Act';
-
-    // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
-    // continue;
-
-    if( output === null )
-    {
-      //debugger;
-      self[ nameAct ] = function(){};
-      //self[ nameAct ] = null;
-      continue;
-    }
-
-    if( output[ name ] && o.leveling === 'delta' )
-    descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
-    else
-    descriptor.methods[ nameAct ] = function(){};
-    // descriptorInput.methods[ name ] = self[ name ];
-
-    if( self.outputs.length > 1 ) ( function()
-    {
-      var n = nameAct;
-      self[ n ] = function()
-      {
-        for( var d = 0 ; d < this.outputs.length ; d++ )
-        this.outputs[ d ].methods[ n ].apply( this,arguments );
-      }
-    })()
-    else
-    {
-      self[ nameAct ] = descriptor.methods[ nameAct ]
-    }
-
-  }
+  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+  // {
+  //
+  //   var name = self.outputChangeLevelMethods[ m ];
+  //   // var nameAct = name + 'Act';
+  //
+  //   // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
+  //   // continue;
+  //
+  //   if( output === null )
+  //   {
+  //     //debugger;
+  //     self[ nameAct ] = function(){};
+  //     //self[ nameAct ] = null;
+  //     continue;
+  //   }
+  //
+  //   if( output[ name ] && o.leveling === 'delta' )
+  //   descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
+  //   else
+  //   descriptor.methods[ nameAct ] = function(){};
+  //   // descriptorInput.methods[ name ] = self[ name ];
+  //
+  //   if( self.outputs.length > 1 ) ( function()
+  //   {
+  //     var n = nameAct;
+  //     self[ n ] = function()
+  //     {
+  //       for( var d = 0 ; d < this.outputs.length ; d++ )
+  //       this.outputs[ d ].methods[ n ].apply( this,arguments );
+  //     }
+  //   })()
+  //   else
+  //   {
+  //     self[ nameAct ] = descriptor.methods[ nameAct ]
+  //   }
+  //
+  // }
 
   return true;
 }
@@ -470,7 +472,7 @@ function outputTo( output,o )
 outputTo.defaults =
 {
   combining : 0,
-  leveling : 0,
+  // leveling : 0,
 }
 
 //
@@ -548,11 +550,11 @@ function outputToUnchain( output )
       self[ nameAct ] =  function(){};
     }
 
-    for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
-    {
-      var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
-      self[ nameAct ] =  function(){};
-    }
+    // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+    // {
+    //   var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
+    //   self[ nameAct ] =  function(){};
+    // }
 
     return true;
   }
