@@ -18,7 +18,7 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  _.include( 'wColor' );
+  // _.include( 'wColor' );
 
 }
 
@@ -47,6 +47,14 @@ Self.nameShort = 'PrinterTop';
 function init( o )
 {
   var self = this;
+
+  if( !o )
+  o = {};
+
+  if( !wTools.color )
+  {
+    o.coloring = false;
+  }
 
   Parent.prototype.init.call( self,o );
 

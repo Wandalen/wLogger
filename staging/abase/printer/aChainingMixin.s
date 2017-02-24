@@ -106,7 +106,7 @@ function __initChainingMixinWrite( name )
     // debugger;
     // this[ nameAct ].apply( this,args );
 
-    this._writeToChannel( name,args );
+    this._writeToChannel( nameAct,args );
 
     return this;
   }
@@ -167,7 +167,8 @@ function _writeToChannel( channelName,args )
 
   var args = this.write.apply( this,args );
 
-  console[ channelName ].apply( console,args );
+  // console[ channelName ].apply( console,args );
+  this[ channelName ].apply( this,args );
 
 }
 

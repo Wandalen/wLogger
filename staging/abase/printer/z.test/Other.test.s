@@ -21,6 +21,7 @@ if( typeof module !== 'undefined' )
   var _ = wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wLoggerToJstructure' );
 
 }
 
@@ -328,7 +329,7 @@ var Self =
 
   },
 
-  /* verbosity : 1, */
+  // verbosity : 1,
 
 }
 
