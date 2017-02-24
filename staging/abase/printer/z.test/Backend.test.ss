@@ -23,9 +23,11 @@ if( typeof module !== 'undefined' )
 
 }
 
+//
+
 var _ = wTools;
 var Parent = wTools.Testing;
-var Self = {};
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 //
 
@@ -114,10 +116,12 @@ function colorConsole( test )
 
 //
 
-var Proto =
+var Self =
 {
 
   name : 'Backend test',
+  sourceFilePath : sourceFilePath,
+  /* verbosity : 1, */
 
   tests :
   {
@@ -127,13 +131,10 @@ var Proto =
 
   },
 
-  /* verbosity : 1, */
-
 }
 
 //
 
-_.mapExtend( Self,Proto );
 Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self.name );

@@ -11,6 +11,7 @@ npm install
 node ./staging/abase/z.test/Other.test.s
 
 */
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -21,12 +22,14 @@ if( typeof module !== 'undefined' )
   var _ = wTools;
 
   _.include( 'wTesting' );
-  _.include( 'wLoggerToJstructure' );
 
 }
 
+//
+
 var _ = wTools;
 var Parent = wTools.Testing;
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 //
 
@@ -378,6 +381,8 @@ var Self =
 {
 
   name : 'Logger other test',
+  sourceFilePath : sourceFilePath,
+  /* verbosity : 1, */
 
   tests :
   {
@@ -389,30 +394,33 @@ var Self =
 
   },
 
-  // verbosity : 1,
-
 }
 
 //
 
 Self = wTestSuite( Self );
-
 if( typeof module !== 'undefined' && !module.parent )
-_.timeReady( function()
-{
+_.Testing.test( Self.name );
 
-  // debugger;
-  Self = wTestSuite( Self.name );
-  Self.logger = wLoggerToJstructure({ coloring : 0 });
-
-  _.Testing.test( Self.name )
-  .doThen( function()
-  {
-    debugger;
-    logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
-    debugger;
-  });
-
-});
+// if( typeof module !== 'undefined' && !module.parent )
+// _.timeReady( function()
+// {
+//
+//   if( typeof module !== 'undefined' )
+//   _.include( 'wLoggerToJstructure' );
+//
+//   // debugger;
+//   Self = wTestSuite( Self.name );
+//   Self.logger = wLoggerToJstructure({ coloring : 0 });
+//
+//   _.Testing.test( Self.name )
+//   .doThen( function()
+//   {
+//     debugger;
+//     logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
+//     debugger;
+//   });
+//
+// });
 
 })();
