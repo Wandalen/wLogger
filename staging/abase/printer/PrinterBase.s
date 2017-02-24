@@ -1,6 +1,6 @@
 (function _PrinterBase_s_() {
 
-'use strict';
+'use strict';xxx
 
 if( typeof module !== 'undefined' )
 {

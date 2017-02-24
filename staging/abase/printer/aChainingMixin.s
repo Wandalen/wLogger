@@ -1,6 +1,6 @@
 (function _aChainingMixin_s_() {
 
-'use strict';
+'use strict';xxx
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )

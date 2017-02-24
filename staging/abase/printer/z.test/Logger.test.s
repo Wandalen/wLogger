@@ -25,8 +25,11 @@ if( typeof module !== 'undefined' )
 
 }
 
+//
+
 var _ = wTools;
 var Parent = wTools.Testing;
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 //
 
@@ -566,6 +569,8 @@ var Self =
 {
 
   name : 'Logger',
+  sourceFilePath : sourceFilePath,
+  verbosity : 1,
 
   tests :
   {
@@ -584,30 +589,28 @@ var Self =
 
   },
 
-  verbosity : 1,
-
 }
 
 //
 
 Self = wTestSuite( Self );
 
-if( typeof module !== 'undefined' && !module.parent )
-_.timeReady( function()
-{
-
-  // debugger
-  Self = wTestSuite( Self.name );
-  // Self.logger = wLoggerToJstructure();
-
-  _.Testing.test( Self.name )
-  .doThen( function()
-  {
-    debugger;
-    logger.log( Self.logger.outputData );
-    debugger;
-  });
-
-});
+// if( typeof module !== 'undefined' && !module.parent )
+// _.timeReady( function()
+// {
+//
+//   // debugger
+//   Self = wTestSuite( Self.name );
+//   // Self.logger = wLoggerToJstructure();
+//
+//   _.Testing.test( Self.name )
+//   .doThen( function()
+//   {
+//     debugger;
+//     logger.log( Self.logger.outputData );
+//     debugger;
+//   });
+//
+// });
 
 } )( );

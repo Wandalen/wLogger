@@ -1,6 +1,6 @@
 (function _Logger_s_() {
 
-'use strict';
+'use strict';xxx
 
 // require
 

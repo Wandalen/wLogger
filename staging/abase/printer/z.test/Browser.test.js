@@ -2,23 +2,13 @@
 
 'use strict';
 
-/*
-
-to run this test
-from the project directory run
-
-npm install
-node ./staging/abase/z.test/Browser.test.s
-
-*/
-
 var _ = wTools;
 var Parent = wTools.Testing;
-var Self = {};
+var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 //
 
-var toStrEscaping = function ( str )
+function toStrEscaping( str )
 {
   return _.toStr( str,{ escaping : 1 } );
 }
@@ -108,15 +98,16 @@ function colorConsole( test )
   var expected = [ '%cmsg','color:rgba( 255, 0, 255, 1 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-
 }
 
 //
 
-var Proto =
+var Self =
 {
 
   name : 'Logger browser test',
+  sourceFilePath : sourceFilePath,
+  /* verbosity : 1, */
 
   tests :
   {
@@ -126,13 +117,10 @@ var Proto =
 
   },
 
-  /* verbosity : 1, */
-
 }
 
 //
 
-_.mapExtend( Self,Proto );
 Self = wTestSuite( Self );
 if( _.Testing && 0 )
 _.Testing.test( Self.name );
