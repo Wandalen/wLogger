@@ -51,8 +51,9 @@ function init( o )
   if( !o )
   o = {};
 
-  if( !wTools.color )
+  if( !wTools.color && o.coloring === undefined )
   {
+    debugger;
     o.coloring = false;
   }
 

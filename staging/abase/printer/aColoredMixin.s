@@ -367,10 +367,7 @@ function _writeBegin( original )
 
     _.assert( arguments.length === 1 );
 
-    // var result = self._strConcat( args );
-    // debugger;
     var result = original.call( self,args );
-    // debugger;
 
     _.assert( _.arrayIs( result ) );
     _.assert( result.length === 1 )
@@ -472,12 +469,6 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 var Composes =
 {
-
-  // _prefix : '',
-  // _postfix : '',
-  //
-  // _dprefix : '  ',
-  // _dpostfix : '',
 
   foregroundColor : null,
   backgroundColor : null,

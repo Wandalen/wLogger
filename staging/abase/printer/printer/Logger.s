@@ -98,7 +98,7 @@ if( typeof module !== 'undefined' && module !== null )
 
 _global_[ Self.name ] = wTools.Logger = Self;
 if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self();
+_global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
 
 return Self;
 
