@@ -335,6 +335,29 @@ function _writeBeginShell( str )
 
 //
 
+function _writeWithoutColors( str )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( str ) );
+
+  var result = '';
+
+  var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
+  for( var i = 0; i < splitted.length; i++ )
+  {
+    if( _.strIs( splitted[ i ] ) )
+    {
+      result += splitted[ i ];
+    }
+  }
+
+  return [ result ];
+}
+
+//
+
 function _writeBegin( original )
 {
 
@@ -368,6 +391,10 @@ function _writeBegin( original )
       else
       result = self._writeBeginBrowser( result[ 0 ] );
 
+    }
+    else
+    {
+      result = self._writeWithoutColors( result[ 0 ] );
     }
 
     _.assert( _.arrayIs( result ) );
@@ -504,6 +531,7 @@ var Extend =
 
   _writeBeginShell : _writeBeginShell,
   _writeBeginBrowser : _writeBeginBrowser,
+  _writeWithoutColors : _writeWithoutColors,
 
   topic : topic,
   topicUp : topicUp,
