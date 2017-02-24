@@ -1,6 +1,6 @@
 (function _aColoredMixin_s_() {
 
-'use strict';xxx
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -20,7 +20,13 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  _.include( 'wColor' );
+  try
+  {
+    _.include( 'wColor' );
+  }
+  catch( err )
+  {
+  }
 
 }
 

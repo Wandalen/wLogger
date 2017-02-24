@@ -1,10 +1,11 @@
 (function _PrinterBase_s_() {
 
-'use strict';xxx
+'use strict';
 
+var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-
+  isBrowser = false;
   if( typeof wPrinterBase !== 'undefined' )
   return;
 
@@ -73,7 +74,12 @@ function write()
   _.assert( _.arrayIs( args ) );
 
   if( self.onWrite )
-  self.onWrite( args[ 0 ] );
+  {
+    if( isBrowser )
+    self.onWrite( args );
+    else
+    self.onWrite( args[ 0 ] );
+  }
 
   return args;
 }
@@ -138,6 +144,10 @@ function _strConcat( args )
 function up( dLevel )
 {
   var self = this;
+
+  if( self.upAct )
+  self.upAct.call( self, dLevel )
+
   if( dLevel === undefined )
   dLevel = 1;
 
@@ -171,6 +181,10 @@ function up( dLevel )
 function down( dLevel )
 {
   var self = this;
+
+  if( self.downAct )
+  self.downAct.call( self, dLevel )
+
   if( dLevel === undefined )
   dLevel = 1;
 

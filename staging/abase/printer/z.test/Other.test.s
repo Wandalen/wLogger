@@ -22,6 +22,7 @@ if( typeof module !== 'undefined' )
   var _ = wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wLoggerToJstructure' );
 
 }
 
