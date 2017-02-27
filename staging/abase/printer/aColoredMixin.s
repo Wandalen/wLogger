@@ -372,7 +372,7 @@ function _writeBegin( original )
     _.assert( _.arrayIs( result ) );
     _.assert( result.length === 1 )
 
-    if( self.coloring )
+    if( _.color && self.coloring )
     {
 
       if( self.coloringHeadAndTail )
@@ -390,9 +390,7 @@ function _writeBegin( original )
 
     }
     else
-    {
-      result = self._writeWithoutColors( result[ 0 ] );
-    }
+    result = self._writeWithoutColors( result[ 0 ] );
 
     _.assert( _.arrayIs( result ) );
 
