@@ -475,7 +475,14 @@ function coloredToHtml( o )
   _.assert( _.routineIs( o.onStrip ) );
 
   if( _.arrayIs( o.src ) )
-  o.src = _.strConcat.apply( undefined,o.src );
+  {
+    var optionsForStr =
+    {
+      delimeter  : ''
+    }
+    o.src = _.strConcat.apply( optionsForStr ,o.src );
+
+  }
 
   var result = '';
   var spanCount = 0;
@@ -491,11 +498,11 @@ function coloredToHtml( o )
 
       if( style === 'foreground')
       {
-        self.foregroundColor = color;
+        self.foregroundColor = o.colorConvert( color );
       }
       else if( style === 'background')
       {
-        self.backgroundColor = color;
+        self.backgroundColor = o.colorConvert( color );
       }
 
       var fg = self.foregroundColor;
@@ -541,12 +548,14 @@ function coloredToHtml( o )
     }
     else
     {
+      var text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
+
       if( !o.compact && !spanCount )
       {
-        result += `<${o.tag}>${splitted[ i ]}</${o.tag}>`;
+        result += `<${o.tag}>${text}</${o.tag}>`;
       }
       else
-      result += splitted[ i ];
+      result += text;
     }
   }
 
@@ -561,6 +570,7 @@ coloredToHtml.defaults =
   tag : 'span',
   compact : true,
   onStrip : _onStrip,
+  colorConvert : _colorConvert,
 }
 
 
