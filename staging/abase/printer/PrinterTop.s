@@ -48,14 +48,14 @@ function init( o )
 {
   var self = this;
 
-  if( !o )
-  o = {};
-
-  if( !wTools.color && o.coloring === undefined )
-  {
-    debugger;
-    o.coloring = false;
-  }
+  // if( !o )
+  // o = {};
+  //
+  // if( !wTools.color && o.coloring === undefined )
+  // {
+  //   debugger;
+  //   o.coloring = false;
+  // }
 
   Parent.prototype.init.call( self,o );
 
