@@ -167,7 +167,7 @@ function hookConsoleToFile( fileName )
   require( 'include/Files.ss' );
 
   fileName = fileName || 'log.txt';
-  fileName = _.pathJoin( _.pathMainDir(),fileName );
+  fileName = _.pathJoin( _.pathRealMainDir(),fileName );
 
   console.log( 'hookConsoleToFile :',fileName );
 

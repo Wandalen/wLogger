@@ -74,6 +74,13 @@ function begin()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var tag = arguments[ a ];
+
+    if( _.objectIs( tag ) )
+    {
+      _.mapExtend( self.tags,tag );
+      continue;
+    }
+
     _.assert( _.strIs( tag ) );
     self.tags[ tag ] = 1;
   }
@@ -90,6 +97,13 @@ function end()
   for( var a = 0 ; a < arguments.length ; a++ )
   {
     var tag = arguments[ a ];
+
+    if( _.objectIs( tag ) )
+    {
+      _.mapDelete( self.tags,tag ); 
+      continue;
+    }
+
     _.assert( _.strIs( tag ) );
     delete self.tags[ tag ];
   }

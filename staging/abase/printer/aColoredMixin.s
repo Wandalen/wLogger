@@ -136,19 +136,19 @@ function _backgroundColorGet()
 function _foregroundColorSet( color )
 {
   var self = this;
-  var style = 'foreground';
+  var layer = 'foreground';
 
   if( !color || color === 'default' )
   {
-    if( self._stackIsNotEmpty( style ) )
-    self[ symbolForForeground ] = self._stackPop( style );
+    if( self._stackIsNotEmpty( layer ) )
+    self[ symbolForForeground ] = self._stackPop( layer );
     else
     self[ symbolForForeground ] = null;
   }
   else
   {
     if( self[ symbolForForeground ] )
-    self._stackPush( style, self[ symbolForForeground ] );
+    self._stackPush( layer, self[ symbolForForeground ] );
 
     self[ symbolForForeground ] = self._colorConvert( color );
   }
@@ -159,19 +159,19 @@ function _foregroundColorSet( color )
 function _backgroundColorSet( color )
 {
   var self = this;
-  var style = 'background';
+  var layer = 'background';
 
   if( !color || color === 'default' )
   {
-    if( self._stackIsNotEmpty( style ) )
-    self[ symbolForBackground ] = self._stackPop( style );
+    if( self._stackIsNotEmpty( layer ) )
+    self[ symbolForBackground ] = self._stackPop( layer );
     else
     self[ symbolForBackground ] = null;
   }
   else
   {
     if( self[ symbolForBackground ] )
-    self._stackPush( style, self[ symbolForBackground ] );
+    self._stackPush( layer, self[ symbolForBackground ] );
 
     self[ symbolForBackground ] = self._colorConvert( color );
   }
@@ -179,7 +179,7 @@ function _backgroundColorSet( color )
 
 //
 
-function _stackPush( style, color )
+function _stackPush( layer, color )
 {
   var self = this;
 
@@ -188,24 +188,24 @@ function _stackPush( style, color )
     self.colorsStack = { 'foreground' : [], 'background' : [] };
   }
 
-  self.colorsStack[ style ].push( color );
+  self.colorsStack[ layer ].push( color );
 }
 
 //
 
-function _stackPop( style )
+function _stackPop( layer )
 {
   var self = this;
 
-  return self.colorsStack[ style ].pop();
+  return self.colorsStack[ layer ].pop();
 }
 
 //
 
-function _stackIsNotEmpty( style )
+function _stackIsNotEmpty( layer )
 {
   var self = this;
-  if( self.colorsStack && self.colorsStack[ style ].length )
+  if( self.colorsStack && self.colorsStack[ layer ].length )
   return true;
 
   return false;
@@ -233,14 +233,14 @@ function _writeBeginBrowser( str )
   {
     if( _.arrayIs( splitted[ i ] ) )
     {
-      var style = splitted[ i ][ 0 ];
+      var layer = splitted[ i ][ 0 ];
       var color = splitted[ i ][ 1 ];
 
-      if( style === 'foreground')
+      if( layer === 'foreground')
       {
         self.foregroundColor = color;
       }
-      else if( style === 'background')
+      else if( layer === 'background')
       {
         self.backgroundColor = color;
       }
@@ -283,12 +283,12 @@ function _writeBeginShell( str )
   var result = '';
 
   var splitted = _.strExtractStrips( str, { onStrip : self._onStrip } );
-  var stylesOnly = true;
+  var layersOnly = true;
   for( var i = 0; i < splitted.length; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
     {
-      stylesOnly = false;
+      layersOnly = false;
 
       if( self._cursorSaved )
       {
@@ -300,10 +300,10 @@ function _writeBeginShell( str )
     }
     else
     {
-      var style = splitted[ i ][ 0 ];
+      var layer = splitted[ i ][ 0 ];
       var color = splitted[ i ][ 1 ];
 
-      if( style === 'foreground')
+      if( layer === 'foreground')
       {
         self.foregroundColor = color;
 
@@ -312,7 +312,7 @@ function _writeBeginShell( str )
         else
         result += `\x1b[39m`;
       }
-      else if( style === 'background' )
+      else if( layer === 'background' )
       {
         self.backgroundColor = color;
 
@@ -324,7 +324,7 @@ function _writeBeginShell( str )
     }
   }
 
-  if( stylesOnly )
+  if( layersOnly )
   { /*saves cursos position*/
     self._cursorSaved = 1;
     result += '\x1b[s';
