@@ -456,6 +456,123 @@ function topicDown()
   return result;
 }
 
+//
+
+function coloredToHtml( o )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  if( !_.objectIs( o ) )
+  {
+    o = { src : o }
+  }
+
+  _.routineOptions( coloredToHtml,o );
+
+  _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
+  _.assert( _.routineIs( o.onStrip ) );
+
+  if( _.arrayIs( o.src ) )
+  {
+    var optionsForStr =
+    {
+      delimeter  : ''
+    }
+    o.src = _.strConcat.apply( optionsForStr ,o.src );
+
+  }
+
+  var result = '';
+  var spanCount = 0;
+
+  var splitted = _.strExtractStrips( o.src, { onStrip : o.onStrip } );
+
+  for( var i = 0; i < splitted.length; i++ )
+  {
+    if( _.arrayIs( splitted[ i ] ) )
+    {
+      var style = splitted[ i ][ 0 ];
+      var color = splitted[ i ][ 1 ];
+
+      if( style === 'foreground')
+      {
+        self.foregroundColor = o.colorConvert( color );
+      }
+      else if( style === 'background')
+      {
+        self.backgroundColor = o.colorConvert( color );
+      }
+
+      var fg = self.foregroundColor;
+      var bg = self.backgroundColor;
+
+      if( !fg || fg === 'default' )
+      fg = null;
+
+      if( !bg || bg === 'default' )
+      bg = null;
+
+      if( color === 'default' && spanCount )
+      {
+        result += `</${o.tag}>`;
+        spanCount--;
+      }
+      else
+      {
+        var style = '';
+
+        if( o.compact )
+        {
+          if( fg )
+          style += `color:${ _.color.colorToRgbaHtml( fg ) };`;
+
+          if( bg )
+          style += `background:${ _.color.colorToRgbaHtml( bg ) };`;
+        }
+        else
+        {
+          fg = fg || 'none';
+          bg = bg || 'none';
+          style = `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };`;
+        }
+
+        if( style.length )
+        result += `<${o.tag} style='${style}'>`;
+        else
+        result += `<${o.tag}>`;
+
+        spanCount++;
+      }
+    }
+    else
+    {
+      var text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
+
+      if( !o.compact && !spanCount )
+      {
+        result += `<${o.tag}>${text}</${o.tag}>`;
+      }
+      else
+      result += text;
+    }
+  }
+
+  _.assert( spanCount === 0 );
+
+  return result;
+}
+
+coloredToHtml.defaults =
+{
+  src : null,
+  tag : 'span',
+  compact : true,
+  onStrip : _onStrip,
+  colorConvert : _colorConvert,
+}
+
 
 // --
 // relationships
@@ -488,6 +605,11 @@ var Aggregates =
 
 var Associates =
 {
+}
+
+var Statics =
+{
+  coloredToHtml : coloredToHtml
 }
 
 // --
@@ -532,6 +654,7 @@ var Extend =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Statics : Statics,
 
 }
 
