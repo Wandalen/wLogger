@@ -208,33 +208,36 @@ function logFrom( src )
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( src.toStr ) );
-  _.assert( _.routineIs( src.toStr.makeIterator ) );
-  _.assert( _.routineIs( src.toStr.makeIteration ) );
+  _.assert( _.routineIs( src.print ) );
+  _.assert( _.routineIs( src.print.makeIterator ) );
+  _.assert( _.routineIs( src.print.makeIteration ) );
 
-  var iterator = src.toStr.makeIterator();
-  var iteration = src.toStr.makeIteration();
+  var iterator = src.print.makeIterator({ printer : self });
+  var iteration = src.print.makeIteration();
 
-  var _toStr = iterator._toStr;
-  var level = iteration.level;
+  Object.preventExtensions( iterator );
+  Object.preventExtensions( iteration );
 
-  iterator._toStr = function _toStrFrom( iteration,iterator )
-  {
+  // var _toStr = iterator._toStr;
+  //var level = iteration.level;
 
-    if( level !== iteration.level )
-    self.levelSet( iteration.level );
+  // iterator._toStr = function _toStrFrom( iteration,iterator )
+  // {
+  //
+  //   if( level !== iteration.level )
+  //   self.levelSet( iteration.level );
+  //
+  //   level = iteration.level;
+  //
+  //   var result = this._toStr( iteration,iterator );
+  //
+  //   if( level === iteration.level )
+  //   self.log( result );
+  //
+  //   return result;
+  // }
 
-    level = iteration.level;
-
-    var result = this._toStr( iteration,iterator );
-
-    if( level === iteration.level )
-    self.log( result );
-
-    return result;
-  }
-
-  src._toStr( iteration,iterator );
+  src._print( iteration,iterator );
 
 }
 

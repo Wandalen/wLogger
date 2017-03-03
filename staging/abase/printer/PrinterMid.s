@@ -100,7 +100,7 @@ function end()
 
     if( _.objectIs( tag ) )
     {
-      _.mapDelete( self.tags,tag ); 
+      _.mapDelete( self.tags,tag );
       continue;
     }
 
