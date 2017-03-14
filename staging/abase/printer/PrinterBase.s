@@ -69,27 +69,59 @@ function write()
 {
   var self = this;
 
-  var args = self._writeBegin( arguments );
+  if( !self.verboseEnough( arguments ) )
+  return;
 
-  _.assert( _.arrayIs( args ) );
+  var o = Object.create( null );
+  o.input = arguments;
+
+  self._writeBegin( o );
+
+  o = self._writePrepare( o );
+
+  _.assert( _.mapIs( o ) );
+  _.assert( _.arrayLike( o.input ) );
+  _.assert( _.arrayLike( o.outputForTerminal ) );
+  _.assert( _.arrayLike( o.output ) );
 
   if( self.onWrite )
-  self.onWrite( args );
+  self.onWrite( o );
 
-  return args;
+  self._writeEnd( o );
+
+  return o;
 }
 
 //
 
 function _writeBegin( args )
 {
+  _.assert( arguments.length === 1 );
+}
+
+//
+
+function _writePrepare( o )
+{
   var self = this;
 
   _.assert( arguments.length === 1 );
+  _.assert( _.mapIs( o ) );
+  _.assert( _.arrayLike( o.input ) );
 
-  var result = [ self._strConcat( args ) ];
+  /*o.naked = _.strConcat.apply( _,args );*/
+  o.pure = self._strConcat( o.input );
+  o.output = [ o.pure ];
+  o.outputForTerminal = [ o.pure ]; 
 
-  return result;
+  return o;
+}
+
+//
+
+function _writeEnd( args )
+{
+  _.assert( arguments.length === 1 );
 }
 
 //
@@ -203,6 +235,15 @@ function levelSet( level )
 // etc
 // --
 
+function verboseEnough( args )
+{
+  var self = this;
+
+  return true;
+}
+
+//
+
 function logFrom( src )
 {
   var self = this;
@@ -279,6 +320,8 @@ var Proto =
 
   write : write,
   _writeBegin : _writeBegin,
+  _writePrepare : _writePrepare,
+  _writeEnd : _writeEnd,
   _strConcat : _strConcat,
 
 
@@ -291,6 +334,7 @@ var Proto =
 
   // etc
 
+  verboseEnough : verboseEnough,
   logFrom : logFrom,
 
 

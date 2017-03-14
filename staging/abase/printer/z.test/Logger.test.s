@@ -40,7 +40,7 @@ function outputTo( test )
   l.outputTo( console );
   var got = l.outputs[ 0 ].output;
   var expected = console;
-  l.outputToUnchain( console )
+  l.outputUnchain( console )
   test.identical( got, expected );
 
   test.description = '';
@@ -192,30 +192,30 @@ function outputTo( test )
      l1.inputFrom( console );
      l1.outputTo( l2, { combining : 'append' } )
    });
-   l1.inputFromUnchain( console );
+   l1.inputUnchain( console );
  }
 }
 
 //
 
-function outputToUnchain( test )
+function outputUnchain( test )
 {
   test.description = 'remove console from output';
   var l = new wLogger();
-  var got = l.outputToUnchain( console );
+  var got = l.outputUnchain( console );
   var expected = true;
   test.identical( got, expected );
 
   test.description = 'output not exists';
   var l = new wLogger();
-  var got = l.outputToUnchain( {} );
+  var got = l.outputUnchain( {} );
   var expected = false;
   test.identical( got, expected );
 
   test.description = 'remove from output';
   var l1 = new wLogger();
   var l2 = new wLogger({ output : l1 });
-  var got = [ l2.outputToUnchain( l1 ), l2.outputs.length, l1.inputs.length]
+  var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length]
   var expected = [ true, 0, 0 ];
   test.identical( got, expected );
 
@@ -223,7 +223,7 @@ function outputToUnchain( test )
   var l1 = new wLogger();
   var l2 = new wLogger();
   l2.outputTo( l1, { combining : 'append' } );
-  var got = [ l2.outputToUnchain( l1 ), l2.outputs.length, l1.inputs.length ]
+  var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length ]
   var expected = [ true, 1, 0 ];
   test.identical( got, expected );
 
@@ -231,28 +231,28 @@ function outputToUnchain( test )
   test.shouldThrowError( function()
   {
     var l = new wLogger();
-    l.outputToUnchain();
+    l.outputUnchain();
   });
 
   test.description = 'output is not a object';
   test.shouldThrowError( function()
   {
     var l = new wLogger();
-    l.outputToUnchain( 1 );
+    l.outputUnchain( 1 );
   });
 
   test.description = 'empty ouputs';
   test.shouldThrowError( function()
   {
     var l = new wLogger({ output : null });
-    l.outputToUnchain( console );
+    l.outputUnchain( console );
   });
 
   test.description = 'try to remove itself';
   test.shouldThrowError( function()
   {
     var l = new wLogger();
-    l.outputToUnchain( l );
+    l.outputUnchain( l );
   });
 
 }
@@ -280,7 +280,7 @@ function inputFrom( test )
   var l = new wLogger({ output : null });
   var got = [ l.inputFrom( console ), l.inputs.length ];
   var expected = [ true, 1 ];
-  l.inputFromUnchain( console );
+  l.inputUnchain( console );
   test.identical( got, expected );
 
   test.description = 'try to add other logger';
@@ -332,23 +332,23 @@ function inputFrom( test )
     l2.inputFrom( console );
     l1.inputFrom( l2 );
   });
-  l2.inputFromUnchain( console );
+  l2.inputUnchain( console );
 }
 
 //
 
-function inputFromUnchain( test )
+function inputUnchain( test )
 {
   test.description = 'remove existing input';
   var l = new wLogger({ output : null });
   l.inputFrom( console );
-  var got = [ l.inputFromUnchain( console ), console.outputs ];
+  var got = [ l.inputUnchain( console ), console.outputs ];
   var expected = [ true, undefined ];
   test.identical( got, expected );
 
   test.description = 'input not exists';
   var l = new wLogger();
-  var got = l.inputFromUnchain( console );
+  var got = l.inputUnchain( console );
   var expected = false;
   test.identical( got, expected );
 
@@ -356,7 +356,7 @@ function inputFromUnchain( test )
   var l1 = new wLogger();
   var l2 = new wLogger();
   l2.inputFrom( l1 );
-  var got = [ l2.inputFromUnchain( l1 ), l2.inputs.length, l1.outputs.length ];
+  var got = [ l2.inputUnchain( l1 ), l2.inputs.length, l1.outputs.length ];
   var expected = [ true, 0, 1 ];
   test.identical( got, expected );
 
@@ -366,20 +366,20 @@ function inputFromUnchain( test )
   var l3 = new wLogger();
   l3.inputFrom( l1 );
   l3.inputFrom( l2 );
-  var got = [ l3.inputFromUnchain( l1 ), l3.inputs.length, l1.outputs.length ];
+  var got = [ l3.inputUnchain( l1 ), l3.inputs.length, l1.outputs.length ];
   var expected = [ true, 1, 1 ];
   test.identical( got, expected );
 
   test.description = 'no args';
   test.shouldThrowError( function()
   {
-    logger.inputFromUnchain();
+    logger.inputUnchain();
   });
 
   test.description = 'try to remove itself';
   test.shouldThrowError( function()
   {
-    logger.inputFromUnchain( logger );
+    logger.inputUnchain( logger );
   });
 }
 
@@ -576,10 +576,10 @@ var Self =
   {
 
     outputTo : outputTo,
-    outputToUnchain : outputToUnchain,
+    outputUnchain : outputUnchain,
 
     inputFrom : inputFrom,
-    inputFromUnchain : inputFromUnchain,
+    inputUnchain : inputUnchain,
 
     hasInput : hasInput,
     hasOutput : hasOutput,
