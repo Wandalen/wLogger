@@ -825,7 +825,7 @@ function consoleBar( o )
     o.outputLoggerWasChainedToConsole = o.outputLogger.outputUnchain( console );
     o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
 
-    o.barLogger.permanentStyle = { bg : 'yellow' };
+    o.barLogger.permanentStyle = { bg : 'yellow', fg : 'black' };
     o.barLogger.inputFrom( console,{ barring : 1 } );
     o.barLogger.outputTo( o.outputLogger );
 
