@@ -792,9 +792,10 @@ function consoleBar( o )
 {
   var self = this;
 
-  // console.log( _.diagnosticStack() );
+  // console.log( 'Barring' );
   // console.log( 'this.consoleIsBarred( console )',this.consoleIsBarred( console ) );
   // console.log( 'o.bar',o.bar );
+  // console.log( _.diagnosticStack() );
 
   _.assert( arguments.length === 1 );
   _.routineOptions( consoleBar,o );

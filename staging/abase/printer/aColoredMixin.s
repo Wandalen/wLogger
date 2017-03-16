@@ -72,7 +72,9 @@ function _rgbToCode( rgb )
   var g = rgb[ 1 ];
   var b = rgb[ 2 ];
 
-  var ansi = 30 + ( ( Math.round( b ) << 2 ) | (Math.round( g ) << 1 ) | Math.round( r ) );
+  var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
+
+  // why 8 ???
 
   return ansi;
 }
