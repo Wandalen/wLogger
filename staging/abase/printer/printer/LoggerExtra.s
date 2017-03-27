@@ -164,7 +164,7 @@ function hookConsoleToFile( fileName )
   var self = this;
 
   require( 'include/abase/component/Path.s' );
-  require( 'include/Files.ss' );
+  require( 'include/FileMid.s' );
 
   fileName = fileName || 'log.txt';
   fileName = _.pathJoin( _.pathRealMainDir(),fileName );

@@ -291,7 +291,7 @@ function outputTo( output,o )
 
   _.routineOptions( self.outputTo,o );
   _.assertNoDebugger( arguments.length === 1 || arguments.length === 2 );
-  _.assertNoDebugger( _.objectIs( output ) || output === null );
+  _.assertNoDebugger( _.objectLike( output ) || output === null );
 
   _.assertNoDebugger( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
   // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
@@ -475,7 +475,7 @@ function outputUnchain( output )
   var self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( output === undefined || _.objectIs( output ) );
+  _.assert( output === undefined || _.objectLike( output ) );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
   _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
@@ -573,7 +573,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) );
+  _.assert( _.objectLike( input ) );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -897,7 +897,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) );
+  _.assert( _.objectLike( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )

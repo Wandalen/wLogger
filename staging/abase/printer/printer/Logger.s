@@ -2,6 +2,14 @@
 
 'use strict';
 
+/*
+
+ - problem !!!
+  logger.foregroundColor = 'blue';
+  logger.log( 'some\ntext' );
+
+*/
+
 // require
 
 if( typeof wLogger !== 'undefined' )
