@@ -1,6 +1,6 @@
 {
   "name": "wLogger",
-  "version": "0.3.20",
+  "version": "0.4.3",
   "description": "Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging",
   "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
   "contributors": [
@@ -24,7 +24,7 @@
     "main": "staging/abase/printer/printer/Logger.s"
   },
   "scripts": {
-    "test": "node ./staging/abase/printer/z.test/All.test.ss",
+    "test": "wtest staging",
     "make_doc": "./doc.sh"
   },
   "repository": {

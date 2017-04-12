@@ -16,6 +16,8 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
+  require( './PrinterMid.s' );
+
   isBrowser = false;
 
 }
@@ -76,13 +78,13 @@ function _initChainingMixin()
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
   for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  proto.__initChainingMixinWrite( outputWriteMethods[ m ] );
+  proto.__initChainingMixinChannel( outputWriteMethods[ m ] );
 
 }
 
 //
 
-function __initChainingMixinWrite( name )
+function __initChainingMixinChannel( name )
 {
   var proto = this;
 
@@ -93,7 +95,7 @@ function __initChainingMixinWrite( name )
   if( proto[ name ] )
   return;
 
-  var nameAct = name + 'Act';
+  // var nameAct = name + 'Act';
   var nameUp = name + 'Up';
   var nameDown = name + 'Down';
 
@@ -102,13 +104,7 @@ function __initChainingMixinWrite( name )
   function write()
   {
 
-    var args = arguments;
-    // var args = this.write.apply( this,arguments );
-
-    // debugger;
-    // this[ nameAct ].apply( this,args );
-
-    this._writeToChannel( nameAct,args );
+    this._writeToChannel( name,arguments );
 
     return this;
   }
@@ -118,15 +114,7 @@ function __initChainingMixinWrite( name )
   function writeUp()
   {
 
-    this._writeToChannelUp( nameAct,arguments );
-
-    // this.up();
-    //
-    // this.begin( 'head' );
-    //
-    // var result = this[ name ].apply( this,arguments );
-    //
-    // this.end( 'head' );
+    this._writeToChannelUp( name,arguments );
 
     return this;
   }
@@ -136,15 +124,7 @@ function __initChainingMixinWrite( name )
   function writeDown()
   {
 
-    this._writeToChannelDown( nameAct,arguments );
-
-    // this.begin( 'tail' );
-    //
-    // var result = this[ name ].apply( this,arguments );
-    //
-    // this.end( 'tail' );
-    //
-    // this.down();
+    this._writeToChannelDown( name,arguments );
 
     return this;
   }
@@ -167,10 +147,26 @@ function _writeToChannel( channelName,args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
-  var args = this.write.apply( this,args );
+  var o = this.write.apply( this,args );
 
-  // console[ channelName ].apply( console,args );
-  this[ channelName ].apply( this,args );
+  if( o )
+  {
+    for( var i = 0 ; i < self.outputs.length ; i++ )
+    {
+      var outputDescriptor = self.outputs[ i ];
+      var outputData = ( outputDescriptor.output.isTerminal === undefined || outputDescriptor.output.isTerminal ) ? o.outputForTerminal : o.output;
+
+      _.assert( _.arrayLike( outputData ) );
+
+      if( outputDescriptor.methods[ channelName ] )
+      outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
+      else
+      outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
+    }
+  }
+
+  // if( o )
+  // this[ channelName ].apply( this,o.output );
 
 }
 
@@ -213,22 +209,6 @@ function _writeToChannelDown( channelName,args )
 // --
 // write
 // --
-
-// function write()
-// {
-//   var self = this;
-//
-//   var args = self._writeBegin( arguments );
-//
-//   _.assert( _.arrayIs( args ) );
-//
-//   if( self.onWrite )
-//   self.onWrite( args[ 0 ] );
-//
-//   return args;
-// }
-
-//
 
 /**
  * Adds new logger( output ) to output list.
@@ -306,12 +286,12 @@ function _writeToChannelDown( channelName,args )
 function outputTo( output,o )
 {
   var self = this;
-  var o = o || {};
+  var o = o || Object.create( null );
   var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
   _.assertNoDebugger( arguments.length === 1 || arguments.length === 2 );
-  _.assertNoDebugger( _.objectIs( output ) || output === null );
+  _.assertNoDebugger( _.objectLike( output ) || output === null );
 
   _.assertNoDebugger( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
   // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
@@ -322,19 +302,20 @@ function outputTo( output,o )
   if( output )
   {
 
-    // if( self.outputs.indexOf( output ) !== -1 )
-    // return false;
-
-    _.assert( self !== output, 'outputTo: Adding of own object to output is not allowed' );
+    _.assert( self !== output, 'outputTo : Adding of itself to outputs is not allowed' );
 
     if( o.combining !== 'rewrite' )
-    if( self.hasOutput( output ) )
-    throw _.err( 'outputTo: This output already exists in outputs', output );
+    if( self.hasOutputNotDeep( output ) )
+    throw _.err( 'outputTo : This output already exists as immediate output', output );
 
+    /*
+      no need to check inputs if chaining is unbarring
+    */
 
+    if( !o.unbarring )
     if( self.inputs )
-    if( self._hasInput( output ) )
-    throw _.err( 'outputTo: This object already exists in inputs chain', output );
+    if( self.hasInputDeep( output ) )
+    throw _.err( 'outputTo : This object already exists in input chain', output );
 
     if( !output.inputs )
     output.inputs = [];
@@ -347,27 +328,52 @@ function outputTo( output,o )
       self.outputs.splice( 0,self.outputs.length );
     }
 
-    var descriptor = {};
-    descriptor.output = output;
-    descriptor.methods = {};
-
-    var descriptorInput = {};
-    descriptorInput.input = self;
-    descriptorInput.methods = {};
+    o.output = output;
+    o.input = self;
+    o.methods = Object.create( null );
+    Object.preventExtensions( o );
 
     if( !o.combining )
     _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
 
     if( o.combining === 'prepend' )
     {
-      self.outputs.unshift( descriptor );
-      output.inputs.unshift( descriptorInput );
+      self.outputs.unshift( o );
+      output.inputs.unshift( o );
     }
     else
     {
-      self.outputs.push( descriptor );
-      output.inputs.push( descriptorInput );
+      self.outputs.push( o );
+      output.inputs.push( o );
     }
+
+    if( o.unbarring )
+    _.assert( output.isTerminal === undefined || output.isTerminal,'unbarring chaining possible only into terminal logger' );
+
+    if( o.unbarring )
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+    {
+      var name = self.outputWriteMethods[ m ];
+      o.methods[ name ] = function()
+      {
+
+        /*
+          unbarred output data into terminal logger with help of original methods
+          without passing message forward in a chain
+        */
+
+        // if( arguments[ 0 ] && arguments[ 0 ].indexOf( 'Testing of test suite' ) !== -1 )
+        // debugger;
+        //
+        // if( arguments[ 0 ] && _.strSplit( arguments[ 0 ] ) === '%c' )
+        // debugger;
+
+        if( this[ symbolForChainDescriptor ] && this[ symbolForChainDescriptor ].originalMethods[ name ] )
+        return this[ symbolForChainDescriptor ].originalMethods[ name ].apply( this,arguments );
+        else
+        return this[ name ].apply( this,arguments );
+      }
+    })();
 
   }
   else
@@ -377,78 +383,32 @@ function outputTo( output,o )
       if( o.combining === 'rewrite' )
       {
         for( var d = 0; d < self.outputs.length ; d++ )
-        self.outputToUnchain( self.outputs[ d ].output );
-
+        self.outputUnchain( self.outputs[ d ].output );
         self.outputs.splice( 0,self.outputs.length );
       }
-      else return false;
+      else _.assert( 0,'outputTo can remove outputs only if ( o.combining ) is "rewrite"' );
+      // else return false;
     }
   }
 
   /* write */
 
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
-  {
-
-    var name = self.outputWriteMethods[ m ];
-    var nameAct = name + 'Act';
-
-    // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
-    // continue;
-
-    if( output === null )
-    {
-      //debugger;
-      self[ nameAct ] = function(){};
-      // self[ nameAct ] = null;
-      continue;
-    }
-
-    _.assertNoDebugger( output[ name ],'outputTo expects output has method',name );
-
-    descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
-    // descriptorInput.methods[ name ] = self[ name ];
-
-    if( self.outputs.length > 1 ) ( function()
-    {
-      var n = nameAct;
-      self[ n ] = function()
-      {
-        for( var d = 0 ; d < this.outputs.length ; d++ )
-        this.outputs[ d ].methods[ n ].apply( this,arguments );
-      }
-    })()
-    else
-    {
-      self[ nameAct ] = descriptor.methods[ nameAct ];
-    }
-
-  }
-
-  /* change level */
-
-  // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
+  // if( 0 )
+  // for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
   // {
   //
-  //   var name = self.outputChangeLevelMethods[ m ];
+  //   var name = self.outputWriteMethods[ m ];
   //   // var nameAct = name + 'Act';
-  //
-  //   // if( o.combining === 'supplement' && _.routineIs( self[ nameAct ] ) )
-  //   // continue;
   //
   //   if( output === null )
   //   {
-  //     //debugger;
   //     self[ nameAct ] = function(){};
-  //     //self[ nameAct ] = null;
   //     continue;
   //   }
   //
-  //   if( output[ name ] && o.leveling === 'delta' )
-  //   descriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
-  //   else
-  //   descriptor.methods[ nameAct ] = function(){};
-  //   // descriptorInput.methods[ name ] = self[ name ];
+  //   _.assertNoDebugger( output[ name ],'outputTo expects output has method',name );
+  //
+  //   outputDescriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
   //
   //   if( self.outputs.length > 1 ) ( function()
   //   {
@@ -461,7 +421,7 @@ function outputTo( output,o )
   //   })()
   //   else
   //   {
-  //     self[ nameAct ] = descriptor.methods[ nameAct ]
+  //     self[ nameAct ] = outputDescriptor.methods[ nameAct ];
   //   }
   //
   // }
@@ -472,7 +432,7 @@ function outputTo( output,o )
 outputTo.defaults =
 {
   combining : 0,
-  // leveling : 0,
+  unbarring : 0,
 }
 
 //
@@ -496,13 +456,13 @@ outputTo.defaults =
  * l2._prefix = '**';
  * l3._prefix = '***';
  *
- * logger.outputToUnchain( l1 ); //returns true
- * logger.outputToUnchain( l1 ); //returns false because l1 not exists in the list anymore
+ * logger.outputUnchain( l1 ); //returns true
+ * logger.outputUnchain( l1 ); //returns false because l1 not exists in the list anymore
  * logger.log( 'msg from logger' );
  * //l2 prints '**msg from logger'
  * //l3 prints '***msg from logger'
  *
- * @method outputToUnchain
+ * @method outputUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( output ) is not a Object.
  * @throws { Exception } If outputs list is empty.
@@ -510,56 +470,67 @@ outputTo.defaults =
  *
  */
 
-function outputToUnchain( output )
+function outputUnchain( output )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
-  _.assert( _.objectIs( output ) );
-  _.assert( self.outputs.length, 'outputToUnchain : outputs list is empty' );
-  _.assert( self !== output, 'outputToUnchain: Can not remove itself from outputs' );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( output === undefined || _.objectLike( output ) );
+  _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
+  _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
-  for( var i = 0; i < self.outputs.length; i++ )
+  if( output === undefined )
   {
-    if( self.outputs[ i ].output === output )
-    {
-      self.outputs.splice( i, 1 );
-      if( self.outputs.length && !output.inputs )
-      return true;
-      break;
-    }
+    var result = false;
+    for( var i = 0 ; i < self.outputs.length ; i++ )
+    result = self.outputUnchain( self.outputs[ i ].output ) || result;
+    return result;
   }
+
+  var result = _.arrayRemovedOnce( self.outputs,output,function( e ){ return e.output; } ) >= 0;
+
+  // for( var i = 0; i < self.outputs.length; i++ )
+  // {
+  //   if( self.outputs[ i ].output === output )
+  //   {
+  //     self.outputs.splice( i, 1 );
+  //     if( self.outputs.length )
+  //     return true;
+  //     break;
+  //   }
+  // }
 
   if( output.inputs )
-  for( var i = 0; i < output.inputs.length; i++ )
-  {
-    if( output.inputs[ i ].input === self )
-    {
-      output.inputs.splice( i, 1 );
-      if( self.outputs.length )
-      return true;
-      break;
-    }
-  }
+  _.arrayRemovedOnce( output.inputs,self,function( e ){ return e.input; } );
 
-  if( !self.outputs.length )
-  {
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
-    {
-      var nameAct = self.outputWriteMethods[ m ] + 'Act';
-      self[ nameAct ] =  function(){};
-    }
+  // var chainDescriptor = output[ symbolForChainDescriptor ];
+  // chainDescriptor = Object.create( null );
+  // chainDescriptor.barred = 0;
 
-    // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ )
-    // {
-    //   var nameAct = self.outputChangeLevelMethods[ m ] + 'Act';
-    //   self[ nameAct ] =  function(){};
-    // }
+  // if( output.inputs )
+  // for( var i = 0; i < output.inputs.length; i++ )
+  // {
+  //   if( output.inputs[ i ].input === self )
+  //   {
+  //     output.inputs.splice( i, 1 );
+  //     if( self.outputs.length )
+  //     return true;
+  //     break;
+  //   }
+  // }
 
-    return true;
-  }
+  // if( !self.outputs.length )
+  // {
+  //   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
+  //   {
+  //     var nameAct = self.outputWriteMethods[ m ] + 'Act';
+  //     self[ nameAct ] =  function(){};
+  //   }
+  //
+  //   return true;
+  // }
 
-  return false;
+  return result;
 }
 
 //
@@ -594,85 +565,125 @@ function outputToUnchain( output )
  *
  */
 
- function inputFrom( input,o )
- {
-   var self = this;
-   var o = o || {};
-   var combiningAllowed = [ 'rewrite','append','prepend' ];
+function inputFrom( input,o )
+{
+  var self = this;
+  var o = o || Object.create( null );
+  var combiningAllowed = [ 'rewrite','append','prepend' ];
 
-   _.routineOptions( self.inputFrom,o );
-   _.assert( arguments.length === 1 || arguments.length === 2 );
-   _.assert( _.objectIs( input ) );
+  _.routineOptions( self.inputFrom,o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.objectLike( input ) );
 
-  //  debugger;
+  if( _.routineIs( input.outputTo ) )
+  return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
 
-   if( _.routineIs( input.outputTo ) )
-   {
-     return input.outputTo( self,o );
-   }
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
-   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  /* input check */
 
-  //  debugger;
+  if( o.combining !== 'rewrite' )
+  if( self.hasInputNotDeep( input ) )
+  throw _.err( 'inputFrom : This input already exists as input in the chain', input );
 
-   /* input check */
-   if( o.combining !== 'rewrite' )
-   if( self.hasInput( input ) )
-   throw _.err( 'inputFrom: This input already exists in logger inputs', input );
+  /* recursive outputs check */
 
-   /*recursive outputs check*/
-   if( self._hasOutput( input ) )
-   throw _.err( 'inputFrom: This input already exists in chain', input );
+  if( self.hasOutputDeep( input ) )
+  throw _.err( 'inputFrom : This input already exists as output in the chain', input );
 
+  /* */
 
-   if( !input.outputs )
-   {
-     input.outputs = [];
-   }
+  if( !input.outputs )
+  {
+    input.outputs = [];
+  }
 
-   if( input.outputs.length )
-   {
-     if( o.combining === 'rewrite' )
-     input.outputs.splice( 0,input.outputs.length );
-   }
+  if( input.outputs.length )
+  {
+    if( o.combining === 'rewrite' )
+    input.outputs.splice( 0,input.outputs.length );
+  }
 
-   var descriptor = {};
-   descriptor.output = self;
-   descriptor.methods = {};
+  /* */
 
-   if( o.combining === 'prepend' )
-   input.outputs.unshift( descriptor );
-   else
-   input.outputs.push( descriptor );
+  o.output = self;
+  o.input = input;
 
-   if( !input._original )
-   input._original = {};
+  if( o.combining === 'prepend' )
+  input.outputs.unshift( o );
+  else
+  input.outputs.push( o );
 
-   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
-   {
-     var name = self.outputWriteMethods[ m ];
-     _.assert( input[ name ],'inputFrom expects input has method',name );
+  self.inputs.push( o );
 
-     descriptor.methods[ name ] = _.routineJoin( self, self[ name ] );
-     if( !input._original[ name ] )
-     input._original[ name ] = _.routineJoin( input, input[ name ]);
+  var chainDescriptor = input[ symbolForChainDescriptor ];
+  if( !chainDescriptor )
+  {
+    chainDescriptor = input[ symbolForChainDescriptor ] = Object.create( null );
+    chainDescriptor.bar = null;
+    // chainDescriptor.barringMethods = Object.create( null );
+    chainDescriptor.originalMethods = Object.create( null );
+  }
 
-     input[ name ] = function()
-     {
-       input._original[ name ].apply( input, arguments );
-       for( var d = 0 ; d < input.outputs.length ; d++ )
-       input.outputs[ d ].methods[ name ].apply( self, arguments );
-     }
-   })();
+  o.chainDescriptor = chainDescriptor;
 
-   self.inputs.push( { input : input, methods : input._original } );
+  /* */
 
-   return true;
- }
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+  {
+    var channel = self.outputWriteMethods[ m ];
+
+    _.assert( input[ channel ],'inputFrom expects input has method',channel );
+
+    if( !chainDescriptor.originalMethods[ channel ] )
+    {
+      _.assert( !chainDescriptor.bar );
+      chainDescriptor.originalMethods[ channel ] = input[ channel ];
+      // chainDescriptor.barringMethods[ channel ] = input[ channel ];
+      input[ channel ] = function()
+      {
+        if( chainDescriptor.bar )
+        return chainDescriptor.bar[ channel ].apply( self,arguments );
+        for( var d = 0 ; d < input.outputs.length ; d++ )
+        input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
+        return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
+      }
+    }
+
+  })();
+
+  /* */
+
+  if( o.barring )
+  chainDescriptor.bar = self;
+
+  // if( o.barring )
+  // {
+  //
+  //   _.assert( !chainDescriptor.barred,'input already barred!' );
+  //   chainDescriptor.barred = 1;
+  //
+  //   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+  //   {
+  //     var name = self.outputWriteMethods[ m ];
+  //     _.assert( input[ name ],'inputFrom expects input having method',name );
+  //
+  //     chainDescriptor.barringMethods[ name ] = function()
+  //     {
+  //       return self[ name ].apply( self,arguments );
+  //     }
+  //
+  //   })();
+  //
+  // }
+
+  return true;
+}
 
 inputFrom.defaults =
 {
   combining : 'append',
+  barring : 0,
 }
 
 inputFrom.defaults.__proto__ = outputTo.defaults;
@@ -689,7 +700,7 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * @param { Object } input - Object that will not be longer an input for current logger( self ).
  *
  * @example
- * logger.inputFromUnchain( console );
+ * logger.inputUnchain( console );
  * logger._prefix = '*';
  * console.log( 'msg for logger' ); //console prints 'msg for logger'
  *
@@ -698,141 +709,366 @@ inputFrom.defaults.__proto__ = outputTo.defaults;
  * logger.inputFrom( l, { combining : 'append' } );
  * logger._prefix = '*';
  * l.log( 'msg for logger' ) //logger prints '*msg for logger'
- * logger.inputFromUnchain( l );
+ * logger.inputUnchain( l );
  * l.log( 'msg for logger' ) //l prints 'msg for logger'
  *
- * @method inputFromUnchain
+ * @method inputUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
  * @memberof wPrinterMid
  *
  */
 
-function inputFromUnchain( input )
+function inputUnchain( input )
+{
+  var self = this;
+  var result = false;
+
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  _.assert( _.objectIs( input ) || input === undefined );
+
+  for( var i = self.inputs.length-1 ; i >= 0  ; i-- )
+  if( self.inputs[ i ].input === input || input === undefined )
+  {
+    var ainput = self.inputs[ i ].input;
+
+    if( _.routineIs( ainput.outputUnchain ) )
+    {
+      ainput.outputUnchain( self );
+      continue;
+    }
+
+    result = self._inputUnchainForeign( ainput ) || result;
+    self.inputs.splice( i, 1 );
+  }
+
+  return result;
+}
+
+//
+
+function _inputUnchainForeign( input )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.objectIs( input ) || input === null );
+  _.assert( _.objectIs( input ) && !( input instanceof wPrinterBase ) );
 
-  if( _.routineIs( input.outputToUnchain ) )
+  /* */
+
+  var result = _.arrayRemovedOnce( input.outputs,self,function( e ){ return e.output; } ) >= 0;
+
+  if( !input.outputs.length )
   {
-    return input.outputToUnchain( self );
-  }
-
-  for( var i = 0; i < self.inputs.length ; i++ )
-  if( self.inputs[ i ].input === input )
-  {
-    for( var d = 0; d < input.outputs.length ; d++ )
-    if( input.outputs[ d ].output === self )
-    input.outputs.splice( d, 1 );
-
-    if( !input.outputs.length )
+    var chainDescriptor = input[ symbolForChainDescriptor ];
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
     {
-      for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
-      {
-        var name = self.outputWriteMethods[ m ];
-
-        _.assert( input[ name ],'inputFromUnchain expects input has method',name );
-
-        input[ name ] = self.inputs[ i ].methods[ name ];
-      })();
-
-      delete input.outputs;
-      delete input._original;
+      var name = self.outputWriteMethods[ m ];
+      _.assert( input[ name ],'inputUnchain expects input has method',name,'something wrong' );
+      input[ name ] = chainDescriptor.originalMethods[ name ];
     }
 
-    // for( var m = 0 ; m < self.outputChangeLevelMethods.length ; m++ ) (function()
-    // {
-    //   var name = self.outputChangeLevelMethods[ m ];
-    //   input[ name ] = function(){};
-    // })();
-
-    self.inputs.splice( i, 1 );
-
-    return true;
+    delete input.outputs;
+    delete input[ symbolForChainDescriptor ];
   }
 
-  return false;
+  return result;
 }
 
 //
 
-function hasInput( input )
+function unchain()
 {
-  _.assert( _.objectIs( input ) );
-
   var self = this;
 
-  for( var d = 0; d < self.inputs.length ; d++ )
-  if( self.inputs[ d ].input === input )
-  return true;
+  self.inputUnchain();
+  self.outputUnchain();
 
-  return false;
 }
 
 //
 
-function _hasInput( input )
+function consoleBar( o )
 {
-  for( var d = 0 ; d < this.inputs.length ; d++ )
+  var self = this;
+
+  // console.log( 'Barring' );
+  // console.log( 'this.consoleIsBarred( console )',this.consoleIsBarred( console ) );
+  // console.log( 'o.bar',o.bar );
+  // console.log( _.diagnosticStack() );
+
+  _.assert( arguments.length === 1 );
+  _.routineOptions( consoleBar,o );
+  _.assert( this.consoleIsBarred( console ) !== !!o.bar );
+
+  if( !o.barLogger )
+  o.barLogger = new self.Self({ output : null, name : 'barLogger' });
+  if( !o.outputLogger && this.isInstance() )
+  o.outputLogger = this;
+  if( !o.outputLogger )
+  o.outputLogger = new self.Self();
+
+  /* */
+
+  if( o.bar )
   {
-    if( this.inputs[ d ].input === input )
+
+    if( o.verbose )
     {
+      o.outputLogger.begin({ verbosity : 4 });
+      o.outputLogger.log( 'Barring console' );
+      o.outputLogger.end({ verbosity : 4 });
+    }
+
+    _.assert( !o.barLogger.inputs.length );
+    _.assert( !o.barLogger.outputs.length );
+
+    o.outputLoggerWasChainedToConsole = o.outputLogger.outputUnchain( console );
+    o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
+
+    o.barLogger.permanentStyle = { bg : 'yellow', fg : 'black' };
+    o.barLogger.inputFrom( console,{ barring : 1 } );
+    o.barLogger.outputTo( o.outputLogger );
+
+    // o.barLogger.log( '_barLogger' );
+    // o.outputLogger.log( 'outputLogger' );
+
+  }
+  else
+  {
+
+    o.barLogger.unchain();
+
+    o.outputLogger.outputUnchain( console );
+    if( o.outputLoggerWasChainedToConsole )
+    o.outputLogger.outputTo( console );
+
+    // o.barLogger.log( '_barLogger' );
+    // o.outputLogger.log( 'outputLogger' );
+
+  }
+
+/*
+
+     barring       ordinary       unbarring
+ console -> barLogger -> outputLogger -> console
+   ^
+   |
+ others
+
+unbarring link is not transitive, but terminating
+so no cycle
+
+*/
+
+  return o;
+}
+
+consoleBar.defaults =
+{
+  outputLogger : null,
+  barLogger : null,
+  bar : 1,
+  verbose : 0,
+  outputLoggerWasChainedToConsole : null,
+}
+
+//
+
+function consoleIsBarred( output )
+{
+  _.assert( output === console );
+  _.assert( arguments.length === 1 );
+
+  var descriptor = output[ symbolForChainDescriptor ];
+  if( !descriptor )
+  return false;
+
+  return !!descriptor.bar;
+}
+
+// --
+// test
+// --
+
+function _hasInput( input,o )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.mapIs( o ) );
+  _.assert( _.objectLike( input ) );
+  _.routineOptions( _hasInput,o );
+
+  for( var d = 0 ; d < self.inputs.length ; d++ )
+  {
+    if( self.inputs[ d ].input === input )
+    {
+      if( o.ignoringUnbar && self.inputs[ d ].unbarring )
+      continue;
+      debugger;
       return true;
     }
   }
-  for( var d = 0 ; d < this.inputs.length ; d++ )
+
+  if( o.deep )
+  for( var d = 0 ; d < self.inputs.length ; d++ )
   {
-    var inputs = this.inputs[ d ].input.inputs;
+    var inputs = self.inputs[ d ].input.inputs;
+    if( o.ignoringUnbar && self.inputs[ d ].unbarring )
+    continue;
     if( inputs && inputs.length )
     {
-      if( _hasInput.call( this.inputs[ d ].input, input ) )
+      if( _hasInput.call( self.inputs[ d ].input, input, o ) )
       return true;
     }
   }
+
   return false;
+}
+
+_hasInput.defaults =
+{
+  deep : 1,
+  ignoringUnbar : 1,
 }
 
 //
 
-function hasOutput( output )
+function hasInputNotDeep( input )
 {
-  _.assert( _.objectIs( output ) );
-
   var self = this;
 
-  for( var d = 0; d < self.outputs.length ; d++ )
-  if( self.outputs[ d ].output === output )
-  return true;
+  _.assert( arguments.length === 1 );
 
-  return false;
+  return self._hasInput( input,{ deep : 0 } );
 }
 
 //
 
-function _hasOutput( output )
+function hasInputDeep( input )
 {
-  for( var d = 0 ; d < this.outputs.length ; d++ )
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  return self._hasInput( input,{ deep : 1 } );
+}
+
+//
+
+function _hasOutput( output,o )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.mapIs( o ) );
+  _.assert( _.objectIs( output ) );
+  _.routineOptions( _hasOutput,o );
+
+  for( var d = 0 ; d < self.outputs.length ; d++ )
   {
-    if( this.outputs[ d ].output === output )
+    if( self.outputs[ d ].output === output )
     {
+      if( o.ignoringUnbar && self.outputs[ d ].unbarring )
+      continue;
+      debugger;
       return true;
     }
   }
-  for( var d = 0 ; d < this.outputs.length ; d++ )
+
+  if( o.deep )
+  for( var d = 0 ; d < self.outputs.length ; d++ )
   {
-    var outputs = this.outputs[ d ].output.outputs;
+    var outputs = self.outputs[ d ].output.outputs;
+    if( o.ignoringUnbar && self.outputs[ d ].unbarring )
+    continue;
     if( outputs && outputs.length )
     {
-      if( _hasOutput.call( this.outputs[ d ].output, output ) )
+      if( _hasOutput.call( self.outputs[ d ].output, output, o ) )
       return true;
     }
   }
+
   return false;
 }
 
+_hasOutput.defaults =
+{
+  deep : 1,
+  ignoringUnbar : 1,
+}
+
 //
+
+function hasOutputNotDeep( output )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  return self._hasOutput( output,{ deep : 0 } );
+}
+
+//
+
+function hasOutputDeep( output )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+
+  return self._hasOutput( output,{ deep : 1 } );
+}
+
+//
+//
+// function hasOutput( output )
+// {
+//   _.assert( _.objectIs( output ) );
+//
+//   var self = this;
+//
+//   for( var d = 0; d < self.outputs.length ; d++ )
+//   if( self.outputs[ d ].output === output )
+//   return true;
+//
+//   return false;
+// }
+//
+// //
+//
+// function _hasOutput( output )
+// {
+//   var self = this;
+//
+//   for( var d = 0 ; d < self.outputs.length ; d++ )
+//   {
+//     if( self.outputs[ d ].output === output )
+//     {
+//       if( self.outputs[ d ].unbarring )
+//       continue;
+//       debugger;
+//       return true;
+//     }
+//   }
+//
+//   for( var d = 0 ; d < self.outputs.length ; d++ )
+//   {
+//     var outputs = self.outputs[ d ].output.outputs;
+//     if( outputs && outputs.length )
+//     {
+//       if( _hasOutput.call( self.outputs[ d ].output, output ) )
+//       return true;
+//     }
+//   }
+//
+//   return false;
+// }
+
+// --
+// etc
+// --
 
 function _outputSet( output )
 {
@@ -853,8 +1089,11 @@ function _outputGet( output )
 }
 
 // --
-// relationships
+// var
 // --
+
+var symbolForChainDescriptor = Symbol.for( 'chainDescriptor' );
+var symbolForLevel = Symbol.for( 'level' );
 
 var outputWriteMethods =
 [
@@ -870,13 +1109,17 @@ var outputChangeLevelMethods =
   'down',
 ];
 
-var symbolForLevel = Symbol.for( 'level' );
+// --
+// relationships
+// --
 
 var Composes =
 {
 
   outputs : [],
   inputs : [],
+
+  isTerminal : 0,
 
 }
 
@@ -893,6 +1136,10 @@ var Associates =
 
 var Statics =
 {
+
+  consoleBar : consoleBar,
+  consoleIsBarred : consoleIsBarred,
+
   // var
 
   outputWriteMethods : outputWriteMethods,
@@ -914,7 +1161,7 @@ var Supplement =
   // routine
 
   _initChainingMixin : _initChainingMixin,
-  __initChainingMixinWrite : __initChainingMixinWrite,
+  __initChainingMixinChannel : __initChainingMixinChannel,
 
 }
 
@@ -924,15 +1171,30 @@ var Extend =
   // chaining
 
   outputTo : outputTo,
-  outputToUnchain : outputToUnchain,
+  outputUnchain : outputUnchain,
 
   inputFrom : inputFrom,
-  inputFromUnchain : inputFromUnchain,
+  inputUnchain : inputUnchain,
+  _inputUnchainForeign : _inputUnchainForeign,
 
-  hasInput : hasInput,
+  unchain : unchain,
+
+  consoleBar : consoleBar,
+  consoleIsBarred : consoleIsBarred,
+
+
+  // test
+
   _hasInput : _hasInput,
-  hasOutput : hasOutput,
+  hasInputNotDeep : hasInputNotDeep,
+  hasInputDeep : hasInputDeep,
+
   _hasOutput : _hasOutput,
+  hasOutputNotDeep : hasOutputNotDeep,
+  hasOutputDeep : hasOutputDeep,
+
+
+  // etc
 
   _outputSet : _outputSet,
   _outputGet : _outputGet,

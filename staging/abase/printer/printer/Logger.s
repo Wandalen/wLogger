@@ -2,6 +2,14 @@
 
 'use strict';
 
+/*
+
+ - problem !!!
+  logger.foregroundColor = 'blue';
+  logger.log( 'some\ntext' );
+
+*/
+
 // require
 
 if( typeof wLogger !== 'undefined' )
@@ -23,7 +31,7 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wPrinterTop;
-var Self = function wLogger()
+var Self = function wLogger( o )
 {
   if( !( this instanceof Self ) )
   if( o instanceof Self )
@@ -39,6 +47,8 @@ function init( o )
 {
   var self = this;
 
+  _.assert( arguments.length === 0 | arguments.length === 1 );
+
   Parent.prototype.init.call( self,o );
 
 }
@@ -49,6 +59,7 @@ function init( o )
 
 var Composes =
 {
+  name : '',
 }
 
 var Aggregates =
