@@ -578,7 +578,7 @@ function topic()
 {
   var self = this;
 
-  debugger;
+  // debugger;
 
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
