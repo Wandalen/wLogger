@@ -77,7 +77,7 @@ function colorConsole( test )
 
   var got;
 
-  var onWrite = function ( args ){ got = args[ 0 ]  };
+  var onWrite = function ( args ){ got = args.outputForTerminal[ 0 ]; };
 
   var logger = new wLogger({ output : null, onWrite : onWrite });
 
