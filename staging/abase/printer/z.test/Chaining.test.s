@@ -103,7 +103,7 @@ function levelsTest( test )
 
 function chaining( test )
 {
-  function _onWrite( args ) { got.push( args[0] ) };
+  function _onWrite( args ) { got.push( args.output[ 0 ] ) };
 
   test.description = 'case1: l1 must get two messages';
   var got = [];
