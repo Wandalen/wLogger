@@ -46,7 +46,7 @@ var _escaping = function ( str )
 function colorConsole( test )
 {
   var got;
-  var onWrite = function ( args ){ got = args };
+  var onWrite = function ( args ){ console.log(args);got = args.outputForTerminal };
 
 
   var logger = new wLogger( { output : null, onWrite : onWrite });
