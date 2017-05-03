@@ -734,7 +734,7 @@ function inputUnchain( input )
 
     if( _.routineIs( ainput.outputUnchain ) )
     {
-      ainput.outputUnchain( self );
+      result = ainput.outputUnchain( self );
       continue;
     }
 
