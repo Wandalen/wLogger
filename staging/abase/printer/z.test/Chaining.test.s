@@ -558,6 +558,7 @@ var Self =
 
   name : 'Chaining test',
   sourceFilePath : sourceFilePath,
+  barringConsole : false,
   /* verbosity : 1, */
 
   tests :
