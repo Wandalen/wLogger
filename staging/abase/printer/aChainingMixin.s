@@ -158,6 +158,12 @@ function _writeToChannel( channelName,args )
 
       _.assert( _.arrayLike( outputData ) );
 
+      /* skip empty line output if logging directive without text, like: logger.log( '#foreground : red#' )
+       output is not skipped for logger.log()
+      */
+      if( !outputData.length )
+      continue;
+
       if( outputDescriptor.methods[ channelName ] )
       outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
       else
