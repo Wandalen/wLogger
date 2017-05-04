@@ -83,7 +83,7 @@ function _rgbToCode( rgb )
 
 function _handleStrip( strip )
 {
-  var allowedKeys = [ 'bg','background','fg','foreground' ];
+  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'colorTracking' ];
   var parts = strip.split( ' : ' );
   if( parts.length === 2 )
   {
@@ -353,6 +353,72 @@ function _writePrepareHtml( o )
 
 //
 
+// function _writePrepareShell( o )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 1 );
+//   _.assert( _.mapIs( o ) );
+//   _.assert( _.strIs( o.output[ 0 ] ) );
+//
+//   var result = '';
+//
+//   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
+//   var layersOnly = true;
+//   for( var i = 0; i < splitted.length; i++ )
+//   {
+//     if( _.strIs( splitted[ i ] ) )
+//     {
+//       layersOnly = false;
+//
+//       if( self._cursorSaved )
+//       {
+//         /*restores cursos position*/
+//         result +=  '\x1b[u';
+//         self._cursorSaved = 0;
+//       }
+//       result +=  splitted[ i ];
+//     }
+//     else
+//     {
+//       var layer = splitted[ i ][ 0 ];
+//       var color = splitted[ i ][ 1 ];
+//
+//       if( layer === 'foreground')
+//       {
+//         self.foregroundColor = color;
+//
+//         if( self.foregroundColor )
+//         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+//         else
+//         result += `\x1b[39m`;
+//       }
+//       else if( layer === 'background' )
+//       {
+//         self.backgroundColor = color;
+//
+//         if( self.backgroundColor )
+//         result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+//         else
+//         result += `\x1b[49m`;
+//       }
+//     }
+//   }
+//
+//   if( layersOnly )
+//   {
+//     /* saves cursos position */
+//     self._cursorSaved = 1;
+//     result += '\x1b[s';
+//   }
+//
+//   o.outputForTerminal = [ result ];
+//
+//   return o;
+// }
+
+//
+
 function _writePrepareShell( o )
 {
   var self = this;
@@ -365,53 +431,64 @@ function _writePrepareShell( o )
 
   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
   var layersOnly = true;
-  for( var i = 0; i < splitted.length; i++ )
+
+  splitted.forEach( function ( strip )
   {
-    if( _.strIs( splitted[ i ] ) )
+    if( _.arrayIs( strip ) )
+    {
+      var layer = strip[ 0 ];
+      var value = strip[ 1 ];
+
+      if( self.colorTracking )
+      {
+        if( layer === 'foreground' )
+        {
+          self.foregroundColor = value;
+        }
+        if( layer === 'background' )
+        {
+          self.backgroundColor = value;
+        }
+      }
+
+      if( layer === 'coloring' )
+      {
+        self.useColorFromStack = _.boolFrom( value );
+      }
+      if( layer === 'colorTracking' )
+      {
+        self.colorTracking = _.boolFrom( value );
+      }
+    }
+
+    if( _.strIs( strip ) )
     {
       layersOnly = false;
 
-      if( self._cursorSaved )
+      if( self.useColorFromStack )
       {
-        /*restores cursos position*/
-        result +=  '\x1b[u';
-        self._cursorSaved = 0;
-      }
-      result +=  splitted[ i ];
-    }
-    else
-    {
-      var layer = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ];
-
-      if( layer === 'foreground')
-      {
-        self.foregroundColor = color;
-
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-        else
-        result += `\x1b[39m`;
-      }
-      else if( layer === 'background' )
-      {
-        self.backgroundColor = color;
 
         if( self.backgroundColor )
         result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-        else
+      }
+
+      result += strip;
+
+      if( self.useColorFromStack )
+      {
+        if( self.foregroundColor )
+        result += `\x1b[39m`;
+        if( self.backgroundColor )
         result += `\x1b[49m`;
       }
     }
-  }
+  })
 
-  if( layersOnly )
-  {
-    /* saves cursos position */
-    self._cursorSaved = 1;
-    result += '\x1b[s';
-  }
-
+  if( layersOnly && splitted.length )
+  o.outputForTerminal = [];
+  else
   o.outputForTerminal = [ result ];
 
   return o;
@@ -652,6 +729,9 @@ var Composes =
 
   _isStyled : 0,
   _cursorSaved : 0,
+  useColorFromStack : 1,
+  colorTracking : 1,
+
 
   permanentStyle : null,
 
@@ -661,10 +741,12 @@ var Composes =
 
 var Aggregates =
 {
+
 }
 
 var Associates =
 {
+
 }
 
 var Statics =
