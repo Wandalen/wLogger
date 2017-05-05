@@ -197,8 +197,8 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 255, 0, 0 ],
-    [ 255, 255, 255 ]
+    [ 1, 0, 0 ],
+    [ 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
