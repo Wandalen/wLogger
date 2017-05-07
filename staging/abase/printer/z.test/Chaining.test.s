@@ -103,7 +103,7 @@ function levelsTest( test )
 
 function chaining( test )
 {
-  function _onWrite( args ) { got.push( args[0] ) };
+  function _onWrite( args ) { got.push( args.output[ 0 ] ) };
 
   test.description = 'case1: l1 must get two messages';
   var got = [];
@@ -200,7 +200,7 @@ function chaining( test )
 
 function chainingParallel( test )
 {
-  function _onWrite( args ) { got.push( args[0] ) };
+  function _onWrite( args ) { got.push( args.output[ 0 ] ) };
 
   test.description = 'case1: 1 -> *';
   var got = [];
@@ -368,7 +368,7 @@ function outputTo( test )
 
 function outputUnchain( test )
 {
-  function _onWrite( args ) { got.push( args[0] ) };
+  function _onWrite( args ) { got.push( args.output[ 0 ] ) };
 
   test.description = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
@@ -402,15 +402,14 @@ function outputUnchain( test )
   var expected = [ 'msg' ];
   test.identical( got, expected );
 
+  test.description = 'no args - remove all outputs';
+  var l1 = new wLogger();
+  test.identical( l1.outputs.length, 1 );
+  l1.outputUnchain();
+  test.identical( l1.outputs.length, 0 );
 
   if( Config.debug )
   {
-    test.description = 'no args';
-    test.shouldThrowError( function()
-    {
-      logger.outputUnchain();
-    });
-
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
@@ -433,7 +432,7 @@ function outputUnchain( test )
 
 function inputFrom( test )
 {
-  var onWrite = function ( args ){ got.push( args[0] ) };
+  var onWrite = function ( args ){ got.push( args.output[ 0 ] ) };
 
   test.description = 'case1: input already exist';
   test.shouldThrowError( function()
@@ -532,15 +531,18 @@ function inputUnchain( test )
   var expected = [];
   test.identical( got, expected );
 
+  test.description = 'no args - removes all inputs';
+  var l1 = new wLogger();
+  var l2 = new wLogger({ output : null });
+  l1.inputFrom( l2 );
+  test.identical( l1.inputs.length, 1 );
+  test.identical( l2.outputs.length, 1 );
+  l1.inputUnchain();
+  test.identical( l1.inputs.length, 0 );
+  test.identical( l2.outputs.length, 0 );
 
   if( Config.debug )
   {
-    test.description = 'no args';
-    test.shouldThrowError( function()
-    {
-      logger.inputUnchain();
-    });
-
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
@@ -556,6 +558,7 @@ var Self =
 
   name : 'Chaining test',
   sourceFilePath : sourceFilePath,
+  barringConsole : false,
   /* verbosity : 1, */
 
   tests :
