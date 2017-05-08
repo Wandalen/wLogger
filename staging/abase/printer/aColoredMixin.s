@@ -123,9 +123,6 @@ function _setColor( color, layer )
 {
   var self = this;
 
-  if( !_.color )
-  return;
-
   var symbol;
 
   if( layer === 'foreground' )
@@ -133,6 +130,13 @@ function _setColor( color, layer )
 
   if( layer === 'background' )
   symbol = symbolForBackground;
+
+  _.assert( _.symbolIs( symbol ) );
+
+  if( !_.color )
+  {
+    color = null;
+  }
 
   if( color && color !== 'default' )
   {
