@@ -93,16 +93,20 @@ l.log( _.strColor.fg( 'message','red' ) );
 l.log( _.strColor.bg( 'message','yellow' ) );
 ```
 
+##### Example #6
+```javascript
 
+/*  By default logger cant use console as input & output device in one time, by using consoleBar we can
+get all console output and print it through outputLogger without recursion.
+See ConsoleBar sample for details.
+*/
 
+var outputLogger = new wLogger();
+wLogger.consoleBar
+({
+  outputLogger : outputLogger,
+  bar : 1
+});
 
-
-
-
-
-
-
-
-
-
-
+console.log( 'Message from console' );
+```

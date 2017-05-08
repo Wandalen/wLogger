@@ -66,15 +66,23 @@ function mixin( constructor )
 // etc
 // --
 
-function _rgbToCode( rgb )
+function _rgbToCode( rgb, add )
 {
   var r = rgb[ 0 ];
   var g = rgb[ 1 ];
   var b = rgb[ 2 ];
 
+  var lightness = _.color.rgbToHsl( rgb )[ 2 ];
+
   var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
 
   // why 8 ???
+
+  if( add )
+  ansi = ansi + add;
+
+  if( lightness === .25  )
+  ansi = '1;' + ansi;
 
   return ansi;
 }
@@ -83,7 +91,7 @@ function _rgbToCode( rgb )
 
 function _handleStrip( strip )
 {
-  var allowedKeys = [ 'bg','background','fg','foreground' ];
+  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'colorTracking' ];
   var parts = strip.split( ' : ' );
   if( parts.length === 2 )
   {
@@ -91,33 +99,6 @@ function _handleStrip( strip )
     return;
     return parts;
   }
-}
-
-//
-
-/* !!! eliminate this routine, implement additional routine/routines in _.color if needed */
-function _colorConvert( color )
-{
-  if( !color )
-  return null;
-
-  try
-  {
-    if( !isBrowser )
-    color = _.color.rgbFrom( color );
-    else
-    color = _.color.rgbaFrom( color );
-  }
-  catch ( err )
-  {
-    var name = _.color.colorNameNearest( color );
-    if( name )
-    color = _.color.ColorMap[ name ];
-    else
-    return null;
-  }
-
-  return color;
 }
 
 //
@@ -155,7 +136,8 @@ function _foregroundColorSet( color )
     if( self[ symbolForForeground ] )
     self._stackPush( layer, self[ symbolForForeground ] );
 
-    self[ symbolForForeground ] = self._colorConvert( color );
+    self[ symbolForForeground ] = _.color.getColor( color,isBrowser );
+    self._isStyled = 1;
   }
 }
 
@@ -178,7 +160,8 @@ function _backgroundColorSet( color )
     if( self[ symbolForBackground ] )
     self._stackPush( layer, self[ symbolForBackground ] );
 
-    self[ symbolForBackground ] = self._colorConvert( color );
+    self[ symbolForBackground ] = _.color.getColor( color,isBrowser );
+    self._isStyled = 1;
   }
 }
 
@@ -261,11 +244,11 @@ function coloredToHtml( o )
 
       if( style === 'foreground')
       {
-        self.foregroundColor = o.colorConvert( color );
+        self.foregroundColor = _.color.getColor( color );
       }
       else if( style === 'background')
       {
-        self.backgroundColor = o.colorConvert( color );
+        self.backgroundColor = _.color.getColor( color );
       }
 
       var fg = self.foregroundColor;
@@ -333,7 +316,6 @@ coloredToHtml.defaults =
   tag : 'span',
   compact : true,
   onStrip : _handleStrip,
-  colorConvert : _colorConvert,
 }
 
 //
@@ -354,6 +336,103 @@ function _writePrepareHtml( o )
 
 //
 
+// function _writePrepareShell( o )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 1 );
+//   _.assert( _.mapIs( o ) );
+//   _.assert( _.strIs( o.output[ 0 ] ) );
+//
+//   var result = '';
+//
+//   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
+//   var layersOnly = true;
+//   for( var i = 0; i < splitted.length; i++ )
+//   {
+//     if( _.strIs( splitted[ i ] ) )
+//     {
+//       layersOnly = false;
+//
+//       if( self._cursorSaved )
+//       {
+//         /*restores cursos position*/
+//         result +=  '\x1b[u';
+//         self._cursorSaved = 0;
+//       }
+//       result +=  splitted[ i ];
+//     }
+//     else
+//     {
+//       var layer = splitted[ i ][ 0 ];
+//       var color = splitted[ i ][ 1 ];
+//
+//       if( layer === 'foreground')
+//       {
+//         self.foregroundColor = color;
+//
+//         if( self.foregroundColor )
+//         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+//         else
+//         result += `\x1b[39m`;
+//       }
+//       else if( layer === 'background' )
+//       {
+//         self.backgroundColor = color;
+//
+//         if( self.backgroundColor )
+//         result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
+//         else
+//         result += `\x1b[49m`;
+//       }
+//     }
+//   }
+//
+//   if( layersOnly )
+//   {
+//     /* saves cursos position */
+//     self._cursorSaved = 1;
+//     result += '\x1b[s';
+//   }
+//
+//   o.outputForTerminal = [ result ];
+//
+//   return o;
+// }
+
+//
+
+function _handleDirective( directive )
+{
+  var self = this;
+
+  var name = directive[ 0 ];
+  var value = directive[ 1 ];
+
+  if( self.colorTracking )
+  {
+    if( name === 'foreground' )
+    {
+      self.foregroundColor = value;
+    }
+    if( name === 'background' )
+    {
+      self.backgroundColor = value;
+    }
+  }
+
+  if( name === 'coloring' )
+  {
+    self.useColorFromStack = _.boolFrom( value );
+  }
+  if( name === 'colorTracking' )
+  {
+    self.colorTracking = _.boolFrom( value );
+  }
+}
+
+//
+
 function _writePrepareShell( o )
 {
   var self = this;
@@ -366,53 +445,42 @@ function _writePrepareShell( o )
 
   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
   var layersOnly = true;
-  for( var i = 0; i < splitted.length; i++ )
+
+  splitted.forEach( function ( strip )
   {
-    if( _.strIs( splitted[ i ] ) )
+    if( _.arrayIs( strip ) )
+    {
+      self._handleDirective( strip );
+    }
+
+    if( _.strIs( strip ) )
     {
       layersOnly = false;
 
-      if( self._cursorSaved )
+      if( self.useColorFromStack )
       {
-        /*restores cursos position*/
-        result +=  '\x1b[u';
-        self._cursorSaved = 0;
-      }
-      result +=  splitted[ i ];
-    }
-    else
-    {
-      var layer = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ];
-
-      if( layer === 'foreground')
-      {
-        self.foregroundColor = color;
-
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-        else
-        result += `\x1b[39m`;
-      }
-      else if( layer === 'background' )
-      {
-        self.backgroundColor = color;
 
         if( self.backgroundColor )
-        result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-        else
+        result += `\x1b[${ self._rgbToCode( self.backgroundColor, 10 ) }m`;
+      }
+
+      result += strip;
+
+      if( self.useColorFromStack )
+      {
+        if( self.foregroundColor )
+        result += `\x1b[39m`;
+        if( self.backgroundColor )
         result += `\x1b[49m`;
       }
     }
-  }
+  })
 
-  if( layersOnly )
-  {
-    /* saves cursos position */
-    self._cursorSaved = 1;
-    result += '\x1b[s';
-  }
-
+  if( layersOnly && splitted.length )
+  o.outputForTerminal = [];
+  else
   o.outputForTerminal = [ result ];
 
   return o;
@@ -441,17 +509,8 @@ function _writePrepareBrowser( o )
   {
     if( _.arrayIs( splitted[ i ] ) )
     {
-      var layer = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ];
+      self._handleDirective( splitted[ i ] );
 
-      if( layer === 'foreground')
-      {
-        self.foregroundColor = color;
-      }
-      else if( layer === 'background')
-      {
-        self.backgroundColor = color;
-      }
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
       else if( !!self.foregroundColor | !!self.backgroundColor )
@@ -459,7 +518,7 @@ function _writePrepareBrowser( o )
     }
     else
     {
-      if( !i && !self._isStyled )
+      if( ( !i && !self._isStyled ) || !self.useColorFromStack )
       {
         result[ 0 ] += splitted[ i ];
       }
@@ -653,6 +712,9 @@ var Composes =
 
   _isStyled : 0,
   _cursorSaved : 0,
+  useColorFromStack : 1,
+  colorTracking : 1,
+
 
   permanentStyle : null,
 
@@ -662,10 +724,12 @@ var Composes =
 
 var Aggregates =
 {
+
 }
 
 var Associates =
 {
+
 }
 
 var Statics =
@@ -690,7 +754,6 @@ var Extend =
   // etc
 
   _rgbToCode : _rgbToCode,
-  _colorConvert : _colorConvert,
   _handleStrip : _handleStrip,
 
   _foregroundColorGet : _foregroundColorGet,
@@ -699,6 +762,7 @@ var Extend =
   _foregroundColorSet : _foregroundColorSet,
   _backgroundColorSet : _backgroundColorSet,
 
+  _handleDirective : _handleDirective,
 
   // stack
 

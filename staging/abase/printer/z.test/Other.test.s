@@ -197,8 +197,8 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 255, 0, 0 ],
-    [ 255, 255, 255 ]
+    [ 1, 0, 0 ],
+    [ 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -322,20 +322,20 @@ function colorsStack( test )
 function logUp( test )
 {
   var got;
-  function _onWrite( args ) { got = args };
+  function _onWrite( args ) { got = args.output[ 0 ] };
 
   var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
 
   test.description = 'case1';
   var msg = "Up";
   logger.logUp( msg );
-  test.identical( got[ 0 ].length - msg.length, 2 )
+  test.identical( got.length - msg.length, 2 )
 
   test.description = 'case2';
   var msg = "Up";
   logger.logUp( msg );
   logger.logUp( msg );
-  test.identical( got[ 0 ].length - msg.length, 6 );
+  test.identical( got.length - msg.length, 6 );
 
   test.description = 'case3';
   test.shouldThrowError( function ()
@@ -350,7 +350,7 @@ function logUp( test )
 function logDown( test )
 {
   var got;
-  function _onWrite( args ) { got = args };
+  function _onWrite( args ) { got = args.output[ 0 ] };
 
   var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
 
@@ -358,7 +358,7 @@ function logDown( test )
   logger.up( 2 );
   var msg = "Down";
   logger.logDown( msg );
-  test.identical( got[ 0 ].length - msg.length, 4 );
+  test.identical( got.length - msg.length, 4 );
 
   test.description = 'case2';
   test.shouldThrowError( function ()
@@ -433,38 +433,18 @@ function coloredToHtml( test )
 
   var src = fg( 'red text', 'red' );
   var got = wLogger.coloredToHtml({ src : src, compact : false });
-  var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:none;'>red text</span>";
+  var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span>";
   test.identical( got, expected );
 
   var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
   var got = wLogger.coloredToHtml({ src : src, compact : false });
-  var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:none;'>red text</span><span style='color:none;background:rgba( 255, 0, 0, 1 );'>red background</span>";
+  var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
   var src = [ 'some text',_.strColor.fg( 'text','red' ),_.strColor.bg( 'text','yellow' ),'some text' ];
   var got = wLogger.coloredToHtml({ src : src, compact : false });
-  var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:none;'>text</span><span style='color:none;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
+  var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
   test.identical( got, expected );
-}
-
-//
-
-function coloringNoColor( test )
-{
-  _.color = null;
-  var got;
-  function onWrite( args ){ got = args[ 0 ] };
-
-  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
-
-  test.description = "No wColor, coloring : 1";
-  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
-  test.identical( got, 'red text red background' );
-
-  test.description =  "No wColor, coloring : 0";
-  l.coloring = false;
-  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
-  test.identical( got, 'red text red background' );
 }
 
 //
@@ -472,7 +452,7 @@ function coloringNoColor( test )
 function coloring( test )
 {
   var got;
-  function onWrite( args ){ got = args };
+  function onWrite( args ){ got = args.outputForTerminal };
 
   var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
 
@@ -488,6 +468,29 @@ function coloring( test )
   l.coloring = false;
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
   test.identical( got[ 0 ], 'red text red background' );
+
+}
+
+//
+
+function coloringNoColor( test )
+{
+  var color = _.color;
+  _.color = null;
+  var got;
+  function onWrite( args ){ got = args.outputForTerminal[ 0 ] };
+
+  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
+
+  test.description = "No wColor, coloring : 1";
+  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
+  test.identical( got, 'red text red background' );
+
+  test.description =  "No wColor, coloring : 0";
+  l.coloring = false;
+  l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
+  test.identical( got, 'red text red background' );
+  _.color = color;
 }
 
 //
