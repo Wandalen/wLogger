@@ -527,11 +527,11 @@ _.Testing.test( Self.name );
 // {
 //
 //   if( typeof module !== 'undefined' )
-//   _.include( 'wLoggerToJstructure' );
+//   _.include( 'wPrinterToJstructure' );
 //
 //   // debugger;
 //   Self = wTestSuite( Self.name );
-//   Self.logger = wLoggerToJstructure({ coloring : 0 });
+//   Self.logger = wPrinterToJstructure({ coloring : 0 });
 //
 //   _.Testing.test( Self.name )
 //   .doThen( function()

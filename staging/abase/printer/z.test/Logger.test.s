@@ -612,7 +612,7 @@ _.Testing.test( Self.name );
 //
 //   // debugger
 //   Self = wTestSuite( Self.name );
-//   // Self.logger = wLoggerToJstructure();
+//   // Self.logger = wPrinterToJstructure();
 //
 //   _.Testing.test( Self.name )
 //   .doThen( function()
