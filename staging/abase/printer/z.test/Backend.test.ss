@@ -271,12 +271,12 @@ function colorConsole( test )
   test.identical( 0, 1 );
   //coloring problem, logger of test suite cant override it value correctly, directive is inside of it output
 
-  test.description = 'colorTracking directive'
+  test.description = 'trackingColor directive'
 
   /**/
 
   var logger = new wLogger({ output : null, onWrite : onWrite });
-  logger.log( '#colorTracking : 0#' );
+  logger.log( '#trackingColor : 0#' );
   logger.log( '#foreground : red#' );
   logger.log( '#foreground : blue#' );
   logger.log( '#background : red#' );
@@ -287,16 +287,16 @@ function colorConsole( test )
   /**/
 
   var logger = new wLogger({ output : null, onWrite : onWrite });
-  logger.log( '#colorTracking : 0#' );
+  logger.log( '#trackingColor : 0#' );
   logger.log( '#foreground : red#' );
-  logger.log( '#colorTracking : 1#' );
+  logger.log( '#trackingColor : 1#' );
   logger.log( '#foreground : red#' );
   test.identical( logger.foregroundColor, [ 1, 0, 0 ] );
   logger.log( 'text' );
   var expected = '\u001b[31mtext\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
   test.identical( 0, 1 );
-  //colorTracking problem, logger of test suite cant override it value correctly, directive is inside of it output
+  //trackingColor problem, logger of test suite cant override it value correctly, directive is inside of it output
 
 
 }

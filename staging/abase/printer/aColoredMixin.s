@@ -91,7 +91,7 @@ function _rgbToCode( rgb, add )
 
 function _handleStrip( strip )
 {
-  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'colorTracking' ];
+  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'trackingColor' ];
   var parts = strip.split( ' : ' );
   if( parts.length === 2 )
   {
@@ -408,7 +408,7 @@ function _handleDirective( directive )
   var name = directive[ 0 ];
   var value = directive[ 1 ];
 
-  if( self.colorTracking )
+  if( self.trackingColor )
   {
     if( name === 'foreground' )
     {
@@ -422,11 +422,11 @@ function _handleDirective( directive )
 
   if( name === 'coloring' )
   {
-    self.useColorFromStack = _.boolFrom( value );
+    self.usingColorFromStack = _.boolFrom( value );
   }
-  if( name === 'colorTracking' )
+  if( name === 'trackingColor' )
   {
-    self.colorTracking = _.boolFrom( value );
+    self.trackingColor = _.boolFrom( value );
   }
 }
 
@@ -456,7 +456,7 @@ function _writePrepareShell( o )
     {
       layersOnly = false;
 
-      if( self.useColorFromStack )
+      if( self.usingColorFromStack )
       {
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
@@ -467,7 +467,7 @@ function _writePrepareShell( o )
 
       result += strip;
 
-      if( self.useColorFromStack )
+      if( self.usingColorFromStack )
       {
         if( self.foregroundColor )
         result += `\x1b[39m`;
@@ -517,7 +517,7 @@ function _writePrepareBrowser( o )
     }
     else
     {
-      if( ( !i && !self._isStyled ) || !self.useColorFromStack )
+      if( ( !i && !self._isStyled ) || !self.usingColorFromStack )
       {
         result[ 0 ] += splitted[ i ];
       }
@@ -711,8 +711,8 @@ var Composes =
 
   _isStyled : 0,
   _cursorSaved : 0,
-  useColorFromStack : 1,
-  colorTracking : 1,
+  usingColorFromStack : 1,
+  trackingColor : 1,
 
 
   permanentStyle : null,
