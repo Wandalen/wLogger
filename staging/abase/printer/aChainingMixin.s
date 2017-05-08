@@ -95,10 +95,6 @@ function __initChainingMixinChannel( name )
   if( proto[ name ] )
   return;
 
-  // var nameAct = name + 'Act';
-  var nameUp = name + 'Up';
-  var nameDown = name + 'Down';
-
   /* */
 
   function write()
@@ -131,9 +127,20 @@ function __initChainingMixinChannel( name )
 
   /* */
 
+  function writeIn()
+  {
+
+    this._writeToChannelIn( name,arguments );
+
+    return this;
+  }
+
+  /* */
+
   proto[ name ] = write;
-  proto[ nameUp ] = writeUp;
-  proto[ nameDown ] = writeDown;
+  proto[ name + 'Up' ] = writeUp;
+  proto[ name + 'Down' ] = writeDown;
+  proto[ name + 'In' ] = writeIn;
 
 }
 
@@ -147,26 +154,23 @@ function _writeToChannel( channelName,args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
-  var o = this.write.apply( this,args );
+  var o = self.write.apply( self,args );
 
-  if( o )
+  if( !o )
+  return;
+
+  for( var i = 0 ; i < self.outputs.length ; i++ )
   {
-    for( var i = 0 ; i < self.outputs.length ; i++ )
-    {
-      var outputDescriptor = self.outputs[ i ];
-      var outputData = ( outputDescriptor.output.isTerminal === undefined || outputDescriptor.output.isTerminal ) ? o.outputForTerminal : o.output;
+    var outputDescriptor = self.outputs[ i ];
+    var outputData = ( outputDescriptor.output.isTerminal === undefined || outputDescriptor.output.isTerminal ) ? o.outputForTerminal : o.output;
 
-      _.assert( _.arrayLike( outputData ) );
+    _.assert( _.arrayLike( outputData ) );
 
-      if( outputDescriptor.methods[ channelName ] )
-      outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
-      else
-      outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
-    }
+    if( outputDescriptor.methods[ channelName ] )
+    outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
+    else
+    outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
   }
-
-  // if( o )
-  // this[ channelName ].apply( this,o.output );
 
 }
 
@@ -180,11 +184,11 @@ function _writeToChannelUp( channelName,args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
-  this.up();
+  self.up();
 
-  this.begin( 'head' );
+  self.begin( 'head' );
   self._writeToChannel( channelName,args );
-  this.end( 'head' );
+  self.end( 'head' );
 
 }
 
@@ -198,11 +202,32 @@ function _writeToChannelDown( channelName,args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
-  this.begin( 'tail' );
+  self.begin( 'tail' );
   self._writeToChannel( channelName,args );
-  this.end( 'tail' );
+  self.end( 'tail' );
 
-  this.down();
+  self.down();
+
+}
+
+//
+
+function _writeToChannelIn( channelName,args )
+{
+  var self = this;
+
+  _.assert( arguments.length === 2 );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.arrayLike( args ) );
+  _.assert( args.length === 2 );
+  _.assert( _.strIs( args[ 0 ] ) );
+
+  var tag = Object.create( null );
+  tag[ args[ 0 ] ] = args[ 1 ];
+
+  self.begin( tag );
+  self._writeToChannel( channelName,[ args[ 1 ] ] );
+  self.end( tag );
 
 }
 
@@ -803,7 +828,7 @@ function consoleBar( o )
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
-  if( !o.outputLogger && this.isInstance() )
+  if( !o.outputLogger && this.instanceIs() )
   o.outputLogger = this;
   if( !o.outputLogger )
   o.outputLogger = new self.Self();
@@ -1157,6 +1182,7 @@ var Supplement =
   _writeToChannel : _writeToChannel,
   _writeToChannelUp : _writeToChannelUp,
   _writeToChannelDown : _writeToChannelDown,
+  _writeToChannelIn : _writeToChannelIn,
 
   // routine
 
@@ -1164,6 +1190,8 @@ var Supplement =
   __initChainingMixinChannel : __initChainingMixinChannel,
 
 }
+
+//
 
 var Extend =
 {
@@ -1209,6 +1237,8 @@ var Extend =
 
 }
 
+//
+
 var Self =
 {
 
@@ -1228,7 +1258,5 @@ if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 _global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
-
-return Self;
 
 })();

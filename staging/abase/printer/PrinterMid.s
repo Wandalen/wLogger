@@ -165,9 +165,10 @@ function _end( key,val )
   _.assert
   (
     val === self.attributes[ key ],
-    '( begin ) does not has complemented ( end )' +
+    '( begin ) does not have complemented ( end )' +
     '\nbegin : ' + _.toStr( self.attributes[ key ] ),
-    '\nend : ' + _.toStr( val )
+    '\nend : ' + _.toStr( val ),
+    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
   );
 
   if( self._attributesStacks[ key ] )

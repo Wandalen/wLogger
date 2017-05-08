@@ -345,6 +345,7 @@ function _writePrepareHtml( o )
   _.assert( arguments.length === 1 );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
+  _.assert( o.output.length === 1 );
 
   o.outputForTerminal = [ self.coloredToHtml( o.output[ 0 ] ) ];
 

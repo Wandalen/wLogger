@@ -72,6 +72,17 @@ function write()
   if( !self.verboseEnough( arguments ) )
   return;
 
+  /* */
+
+  // if( arguments.length === 1 )
+  // if( self.canPrintFrom( arguments[ 0 ] ) )
+  // {
+  //   self.printFrom( arguments[ 0 ] );
+  //   return;
+  // }
+
+  /* */
+
   var o = Object.create( null );
   o.input = arguments;
 
@@ -112,7 +123,7 @@ function _writePrepare( o )
   /*o.naked = _.strConcat.apply( _,args );*/
   o.pure = self._strConcat( o.input );
   o.output = [ o.pure ];
-  o.outputForTerminal = [ o.pure ]; 
+  o.outputForTerminal = [ o.pure ];
 
   return o;
 }
@@ -238,45 +249,43 @@ function levelSet( level )
 function verboseEnough( args )
 {
   var self = this;
-
   return true;
 }
 
 //
 
-function logFrom( src )
+function canPrintFrom( src )
+{
+  var self = this;
+
+  if( !_.objectIs( src ) )
+  return false;
+
+  if( _.routineIs( src._print ) && _.routineIs( src._print.makeIterator ) )
+  return true;
+
+  // if( _.routineIs( src.print ) )
+  // return true;
+
+  return false;
+}
+
+//
+
+function printFrom( src )
 {
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( src.print ) );
-  _.assert( _.routineIs( src.print.makeIterator ) );
-  _.assert( _.routineIs( src.print.makeIteration ) );
+  _.assert( _.routineIs( src._print ) );
+  _.assert( _.routineIs( src._print.makeIterator ) );
+  _.assert( src._print.length === 2 );
 
-  var iterator = src.print.makeIterator({ printer : self });
-  var iteration = src.print.makeIteration();
+  var iterator = src._print.makeIterator({ printer : self });
+  var iteration = iterator.newIteration();
 
   Object.preventExtensions( iterator );
   Object.preventExtensions( iteration );
-
-  // var _toStr = iterator._toStr;
-  //var level = iteration.level;
-
-  // iterator._toStr = function _toStrFrom( iteration,iterator )
-  // {
-  //
-  //   if( level !== iteration.level )
-  //   self.levelSet( iteration.level );
-  //
-  //   level = iteration.level;
-  //
-  //   var result = this._toStr( iteration,iterator );
-  //
-  //   if( level === iteration.level )
-  //   self.log( result );
-  //
-  //   return result;
-  // }
 
   src._print( iteration,iterator );
 
@@ -335,7 +344,8 @@ var Proto =
   // etc
 
   verboseEnough : verboseEnough,
-  logFrom : logFrom,
+  canPrintFrom : canPrintFrom,
+  printFrom : printFrom,
 
 
   // relationships
