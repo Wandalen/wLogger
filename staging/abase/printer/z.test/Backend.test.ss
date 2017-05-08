@@ -178,6 +178,7 @@ function colorConsole( test )
 
   /**/
 
+  var logger = new wLogger({ output : null, onWrite : onWrite });
   logger.foregroundColor = 'xxx';
   logger.backgroundColor = 'xxx';
   logger.log( 'text' );

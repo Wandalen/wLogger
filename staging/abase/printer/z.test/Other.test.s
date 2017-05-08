@@ -52,17 +52,11 @@ function currentColor( test )
 
   test.description = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );
-  if( isBrowser )
-  var expected = [ 1, 0, 0, 1 ];
-  else
   var expected = [ 1, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
   test.description = 'case2 : next line color must be red too';
   logger.log( 'line' );
-  if( isBrowser )
-  var expected = [1, 0, 0, 1 ];
-  else
   var expected = [ 1, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
@@ -73,13 +67,6 @@ function currentColor( test )
   test.description = 'case4 : setting two styles';
   logger.log( '#foreground : red##background : black#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 1, 0, 0, 1 ],
-    [ 0, 0, 0, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0  ],
@@ -91,13 +78,6 @@ function currentColor( test )
   test.description = 'case5 : setting foreground to default, bg still black';
   logger.log( '#foreground : default#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    null,
-    [ 0, 0, 0, 1 ]
-  ]
-  else
   var expected =
   [
     null,
@@ -141,13 +121,6 @@ function currentColor( test )
   logger.foregroundColor = 'red';
   logger.backgroundColor = 'white';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0 ],
@@ -159,13 +132,6 @@ function currentColor( test )
   logger.foregroundColor = 'ff0000';
   logger.backgroundColor = 'ffffff';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0 ],
@@ -174,6 +140,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.description = 'case11 : setting colors from setter, unknown';
+  var logger = new wLogger( { output : fakeConsole } );
   logger.foregroundColor = 'd';
   logger.backgroundColor = 'd';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -188,13 +155,6 @@ function currentColor( test )
   logger.foregroundColor = [ 255, 0 , 0 ];
   logger.backgroundColor = [ 255, 255, 255 ];
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 255, 0, 0, 1 ],
-    [ 255, 255, 255, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0 ],
@@ -206,13 +166,6 @@ function currentColor( test )
   logger.foregroundColor = [ 1, 0, 0 ];
   logger.backgroundColor = [ 1, 1, 1 ];
   var got = [ logger.foregroundColor, logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0 ],
@@ -224,13 +177,6 @@ function currentColor( test )
   logger.foregroundColor = 0xff0000;
   logger.backgroundColor = 0xffffff;
   var got = [ logger.foregroundColor, logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ 1, 0, 0 ],
@@ -249,13 +195,6 @@ function colorsStack( test )
   logger.foregroundColor = 0xff0000;
   logger.foregroundColor = 0xffffff;
   var got = [ logger.colorsStack[ 'foreground' ], logger.foregroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ [ 1, 0, 0, 1 ] ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ [ 1, 0, 0 ] ],
@@ -267,13 +206,6 @@ function colorsStack( test )
   logger.backgroundColor = 0xff0000;
   logger.backgroundColor = 0xffffff;
   var got = [ logger.colorsStack[ 'background' ], logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ [ 1, 0, 0, 1 ] ],
-    [ 1, 1, 1, 1 ]
-  ]
-  else
   var expected =
   [
     [ [ 1, 0, 0 ] ],
@@ -284,13 +216,6 @@ function colorsStack( test )
   test.description = 'pop foreground';
   logger.foregroundColor = null;
   var got = [ logger.colorsStack[ 'foreground' ], logger.foregroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ ],
-    [ 1, 0, 0, 1 ]
-  ]
-  else
   var expected =
   [
     [ ],
@@ -301,13 +226,6 @@ function colorsStack( test )
   test.description = 'pop background';
   logger.backgroundColor = null;
   var got = [ logger.colorsStack[ 'background' ], logger.backgroundColor ];
-  if( isBrowser )
-  var expected =
-  [
-    [ ],
-    [ 1, 0, 0, 1 ]
-  ]
-  else
   var expected =
   [
     [ ],
@@ -473,6 +391,43 @@ function coloring( test )
 
 //
 
+function emptyLines( test )
+{
+  test.description = 'logger is not skipping empty lines'
+
+  var got;
+  var onWrite = function ( args ){ got = args.outputForTerminal[ 0 ]; };
+
+  var logger = new wLogger({ output : null, onWrite : onWrite });
+
+
+  /* on directive#1 */
+
+  logger.log( '#coloring : 1#' );
+  var expected = '';
+  test.identical( got, expected );
+
+  /* on directive#2 */
+
+  logger.log( '#foreground : red##foreground : default#' );
+  var expected = '';
+  test.identical( got, expected );
+
+  /* on empty log */
+
+  logger.log();
+  var expected = '';
+  test.identical( got, expected );
+
+  /* on empty line */
+
+  logger.log( '' );
+  var expected = '';
+  test.identical( got, expected );
+}
+
+//
+
 function coloringNoColor( test )
 {
   var color = _.color;
@@ -510,6 +465,7 @@ var Self =
     logDown : logDown,
     coloredToHtml : coloredToHtml,
     coloring : coloring,
+    emptyLines : emptyLines,
     coloringNoColor : coloringNoColor,
 
   },
@@ -527,11 +483,11 @@ _.Testing.test( Self.name );
 // {
 //
 //   if( typeof module !== 'undefined' )
-//   _.include( 'wPrinterToJstructure' );
+//   _.include( 'wLoggerToJstructure' );
 //
 //   // debugger;
 //   Self = wTestSuite( Self.name );
-//   Self.logger = wPrinterToJstructure({ coloring : 0 });
+//   Self.logger = wLoggerToJstructure({ coloring : 0 });
 //
 //   _.Testing.test( Self.name )
 //   .doThen( function()

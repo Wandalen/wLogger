@@ -119,26 +119,58 @@ function _backgroundColorGet()
 
 //
 
+function _setColor( color, layer )
+{
+  var self = this;
+
+  if( !_.color )
+  return;
+
+  var symbol;
+
+  if( layer === 'foreground' )
+  symbol = symbolForForeground;
+
+  if( layer === 'background' )
+  symbol = symbolForBackground;
+
+  if( color && color !== 'default' )
+  {
+    color = _.color.rgbaFromTry( color, null );
+    if( color )
+    {
+      if( isBrowser )
+      color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
+      else
+      color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMapShell });
+    }
+  }
+
+  if( !color || color === 'default' )
+  {
+    if( self._stackIsNotEmpty( layer ) )
+    self[ symbol ] = self._stackPop( layer );
+    else
+    self[ symbol ] = null;
+  }
+  else
+  {
+    if( self[ symbol ] )
+    self._stackPush( layer, self[ symbol ] );
+
+    self[ symbol ] = color;
+    self._isStyled = 1;
+  }
+}
+
+//
+
 function _foregroundColorSet( color )
 {
   var self = this;
   var layer = 'foreground';
 
-  if( !color || color === 'default' )
-  {
-    if( self._stackIsNotEmpty( layer ) )
-    self[ symbolForForeground ] = self._stackPop( layer );
-    else
-    self[ symbolForForeground ] = null;
-  }
-  else
-  {
-    if( self[ symbolForForeground ] )
-    self._stackPush( layer, self[ symbolForForeground ] );
-
-    self[ symbolForForeground ] = _.color.getColor( color,isBrowser );
-    self._isStyled = 1;
-  }
+  self._setColor( color, layer );
 }
 
 //
@@ -148,21 +180,7 @@ function _backgroundColorSet( color )
   var self = this;
   var layer = 'background';
 
-  if( !color || color === 'default' )
-  {
-    if( self._stackIsNotEmpty( layer ) )
-    self[ symbolForBackground ] = self._stackPop( layer );
-    else
-    self[ symbolForBackground ] = null;
-  }
-  else
-  {
-    if( self[ symbolForBackground ] )
-    self._stackPush( layer, self[ symbolForBackground ] );
-
-    self[ symbolForBackground ] = _.color.getColor( color,isBrowser );
-    self._isStyled = 1;
-  }
+  self._setColor( color, layer );
 }
 
 // --
@@ -242,13 +260,20 @@ function coloredToHtml( o )
       var style = splitted[ i ][ 0 ];
       var color = splitted[ i ][ 1 ];
 
+      if( color && color !== 'default' )
+      {
+        var color = _.color.rgbaFromTry( color, null );
+        if( color )
+        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap })
+      }
+
       if( style === 'foreground')
       {
-        self.foregroundColor = _.color.getColor( color );
+        self.foregroundColor = color;
       }
       else if( style === 'background')
       {
-        self.backgroundColor = _.color.getColor( color );
+        self.backgroundColor = color;
       }
 
       var fg = self.foregroundColor;
@@ -478,9 +503,9 @@ function _writePrepareShell( o )
     }
   })
 
-  if( layersOnly && splitted.length )
-  o.outputForTerminal = [];
-  else
+  // if( layersOnly && splitted.length )
+  // o.outputForTerminal = [];
+  // else
   o.outputForTerminal = [ result ];
 
   return o;
@@ -759,6 +784,7 @@ var Extend =
   _foregroundColorGet : _foregroundColorGet,
   _backgroundColorGet : _backgroundColorGet,
 
+  _setColor : _setColor,
   _foregroundColorSet : _foregroundColorSet,
   _backgroundColorSet : _backgroundColorSet,
 
