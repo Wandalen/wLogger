@@ -168,9 +168,15 @@ function _setColor( color, layer )
 
   if( layer === 'foreground' )
   symbol = symbolForForeground;
-
-  if( layer === 'background' )
+  else if( layer === 'background' )
   symbol = symbolForBackground;
+  else _.assert( 0,'unexpectd' );
+
+  if( !_.color )
+  {
+    self[ symbol ] = null;
+    return;
+  }
 
   _.assert( _.symbolIs( symbol ) );
 
@@ -906,7 +912,5 @@ if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 _global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
-
-return Self;
 
 })();

@@ -29,7 +29,6 @@ if( typeof module !== 'undefined' )
 
 var _ = wTools;
 var Parent = wTools.Testing;
-var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
 
 //
 
@@ -341,7 +340,7 @@ function inputFrom( test )
 
 function inputUnchain( test )
 {
-  // !!! needs barringConsole = false  
+  // !!! needs barringConsole = false
   // test.description = 'remove existing input';
   // var l = new wLogger({ output : null });
   // l.inputFrom( console );
@@ -578,9 +577,8 @@ var Self =
 {
 
   name : 'Logger',
-  sourceFilePath : sourceFilePath,
-  verbosity : 1,
-  //barringConsole : false,
+  // verbosity : 1,
+  // barringConsole : false,
 
   tests :
   {
