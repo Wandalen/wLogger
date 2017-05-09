@@ -4,6 +4,10 @@
 
 var _ = wTools;
 var Parent = wTools.Testing;
+var isBrowser = true;
+
+if( typeof module !== 'undefined' )
+isBrowser = false;
 
 //
 
@@ -109,7 +113,9 @@ var Self =
 
 //
 
+if( isBrowser )
 Self = wTestSuite( Self );
+
 if( typeof module !== 'undefined' && !module.parent )
 _.Testing.test( Self.name );
 
