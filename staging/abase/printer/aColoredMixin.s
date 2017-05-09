@@ -101,16 +101,29 @@ function _rgbToCode( rgb, add )
   add = 0;
 
   var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+
+
+  if( process.platform !== 'win32' )
+  if( shellColorCodesUnix[ name ] )
+  return shellColorCodesUnix[ name ] + add;
+
   if( _.strBegins( name, 'light' ) )
   {
     name = name.split( ' ' )[ 1 ];
     isLight = true;
   }
 
-  ansi = 30 + shellColorCodes[ name ] + add;
+  ansi = 30 + shellColorCodesBase[ name ] + add;
 
   if( isLight )
-  ansi = '1;' + ansi;
+  {
+    if( process.platform === 'win32' )
+    ansi = '1;' + ansi;
+    else
+    ansi = ansi + 60;
+  }
+
+  // console.log(ansi);
 
   return ansi;
 }
@@ -754,7 +767,7 @@ var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
 
-var shellColorCodes =
+var shellColorCodesBase =
 {
   'black'           : 0,
   'red'             : 1,
@@ -764,6 +777,11 @@ var shellColorCodes =
   'magenta'         : 5,
   'cyan'            : 6,
   'white'           : 7
+}
+var shellColorCodesUnix =
+{
+  'white'           : 97,
+  'light white'     : 37,
 }
 
 var Composes =
