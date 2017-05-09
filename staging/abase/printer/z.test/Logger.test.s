@@ -340,12 +340,13 @@ function inputFrom( test )
 
 function inputUnchain( test )
 {
-  test.description = 'remove existing input';
-  var l = new wLogger({ output : null });
-  l.inputFrom( console );
-  var got = [ l.inputUnchain( console ), console.outputs ];
-  var expected = [ true, undefined ];
-  test.identical( got, expected );
+  // !!! needs barringConsole = false
+  // test.description = 'remove existing input';
+  // var l = new wLogger({ output : null });
+  // l.inputFrom( console );
+  // var got = [ l.inputUnchain( console ), console.outputs ];
+  // var expected = [ true, undefined ];
+  // test.identical( got, expected );
 
   test.description = 'input not exists';
   var l = new wLogger();
