@@ -28,6 +28,7 @@ if( typeof module !== 'undefined' )
 var _ = wTools;
 var Parent = wTools.Testing;
 var sourceFilePath = typeof module !== 'undefined' ? __filename : document.scripts[ document.scripts.length-1 ].src;
+var isUnix = process.platform !== 'win32' ? true : false;
 
 //
 
@@ -163,6 +164,9 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 1, 1, 1 ] );
+  if( isUnix )
+  var expected = '\u001b[34m\u001b[107mtext\u001b[39m\u001b[49m';
+  else
   var expected = '\u001b[34m\u001b[47mtext\u001b[39m\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
@@ -173,6 +177,9 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, [ 1, 1, 1 ] );
+  if( isUnix )
+  var expected = '\u001b[107mtext\u001b[49m';
+  else
   var expected = '\u001b[47mtext\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
@@ -316,6 +323,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light black';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0.5 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 90 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;30' );
 
   logger.foregroundColor = 'red';
@@ -324,6 +334,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light red';
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 91 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;31' );
 
   logger.foregroundColor = 'green';
@@ -332,6 +345,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light green';
   test.identical( logger.foregroundColor, [ 0, 0.5, 0 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 92 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;32' );
 
   logger.foregroundColor = 'yellow';
@@ -340,6 +356,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light yellow';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 93 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;33' );
 
   logger.foregroundColor = 'blue';
@@ -348,6 +367,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light blue';
   test.identical( logger.foregroundColor, [ 0, 0, 0.5 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 94 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;34' );
 
   logger.foregroundColor = 'magenta';
@@ -356,6 +378,9 @@ function shellColors( test )
 
   logger.foregroundColor = 'light magenta';
   test.identical( logger.foregroundColor, [ 0.5, 0, 0.5 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 95 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;35' );
 
   logger.foregroundColor = 'cyan';
@@ -364,14 +389,23 @@ function shellColors( test )
 
   logger.foregroundColor = 'light cyan';
   test.identical( logger.foregroundColor, [ 0, 0.5, 0.5 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 96 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;36' );
 
   logger.foregroundColor = 'white';
   test.identical( logger.foregroundColor, [ 1, 1, 1 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 97 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), 37 );
 
   logger.foregroundColor = 'light white';
   test.identical( logger.foregroundColor, [ 0.9, 0.9, 0.9 ] );
+  if( isUnix )
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 37 );
+  else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;37' );
 }
 
