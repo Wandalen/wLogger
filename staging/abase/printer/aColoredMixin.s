@@ -68,20 +68,48 @@ function mixin( constructor )
 
 function _rgbToCode( rgb, add )
 {
-  var r = rgb[ 0 ];
-  var g = rgb[ 1 ];
-  var b = rgb[ 2 ];
+  // var r = rgb[ 0 ];
+  // var g = rgb[ 1 ];
+  // var b = rgb[ 2 ];
 
-  var lightness = _.color.rgbToHsl( rgb )[ 2 ];
+  // var lightness = _.color.rgbToHsl( rgb )[ 2 ];
+  //
+  // var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
+  //
+  // // why 8 ???
+  //
+  // if( add )
+  // ansi = ansi + add;
+  //
+  // if( lightness === .25  )
+  // ansi = '1;' + ansi;
 
-  var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
+  // var name = Object.keys( _.color.ColorMapShell );
+  // for( var i = 0; i < name.length; i++ )
+  // {
+  //   if( _.color.ColorMapShell[ name[ i ] ] === rgb )
+  //   {
+  //     name = name[ i ];
+  //     break;
+  //   }
+  // }
 
-  // why 8 ???
+  var ansi = 0;
+  var isLight = false;
 
-  if( add )
-  ansi = ansi + add;
+  if( add === undefined )
+  add = 0;
 
-  if( lightness === .25  )
+  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  if( _.strBegins( name, 'light' ) )
+  {
+    name = name.split( ' ' )[ 1 ];
+    isLight = true;
+  }
+
+  ansi = 30 + shellColorCodes[ name ] + add;
+
+  if( isLight )
   ansi = '1;' + ansi;
 
   return ansi;
@@ -123,9 +151,6 @@ function _setColor( color, layer )
 {
   var self = this;
 
-  if( !_.color )
-  return;
-
   var symbol;
 
   if( layer === 'foreground' )
@@ -133,6 +158,13 @@ function _setColor( color, layer )
 
   if( layer === 'background' )
   symbol = symbolForBackground;
+
+  _.assert( _.symbolIs( symbol ) );
+
+  if( !_.color )
+  {
+    color = null;
+  }
 
   if( color && color !== 'default' )
   {
@@ -722,6 +754,18 @@ var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
 
+var shellColorCodes =
+{
+  'black'           : 0,
+  'red'             : 1,
+  'green'           : 2,
+  'yellow'          : 3,
+  'blue'            : 4,
+  'magenta'         : 5,
+  'cyan'            : 6,
+  'white'           : 7
+}
+
 var Composes =
 {
 
@@ -761,6 +805,7 @@ var Statics =
 {
   coloredToHtml : coloredToHtml
 }
+
 
 // --
 // proto
