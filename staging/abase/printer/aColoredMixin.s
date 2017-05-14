@@ -34,23 +34,23 @@ var _ = wTools;
 
 //
 
-function mixin( constructor )
+function _mixin( cls )
 {
 
-  var dst = constructor.prototype;
+  var dstProto = cls.prototype;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( constructor ) );
+  _.assert( _.routineIs( cls ) );
 
-  _.mixin
+  _.mixinApply
   ({
-    dst : dst,
-    mixin : Self,
+    dstProto : dstProto,
+    descriptor : Self,
   });
 
   _.accessor
   ({
-    object : dst,
+    object : dstProto,
     combining : 'rewrite',
     names :
     {
@@ -896,10 +896,10 @@ var Extend =
 var Self =
 {
 
-  Extend : Extend,
-  Functor : Functor,
+  extend : Extend,
+  functor : Functor,
 
-  mixin : mixin,
+  _mixin : _mixin,
 
   name : 'wPrinterColoredMixin',
   nameShort : 'PrinterColoredMixin',
@@ -910,7 +910,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+_global_[ Self.name ] = wTools[ Self.nameShort ] = _.mixinMake( Self );
 
 })();

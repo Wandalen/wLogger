@@ -135,7 +135,7 @@ function _hookConsoleToFileHandler( wasMethod, methodName, fileName )
   {
 
     var args = arguments;
-    //var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );
+    //var args = _.arrayAppendArray( [],arguments,_.diagnosticStack() );
 
     wasMethod.apply( console,args );
 
@@ -191,7 +191,7 @@ function _hookConsoleToAlertHandler( wasMethod, methodName )
   return function ()
   {
 
-    var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );
+    var args = _.arrayAppendArray( [],arguments,_.diagnosticStack() );
 
     wasMethod.apply( console,args );
     alert( args.join( '\n' ) );
@@ -228,7 +228,7 @@ function _hookConsoleToDomHandler( o, wasMethod, methodName )
   return function()
   {
 
-    /*var args = _.arrayAppendMerging( [],arguments,_.diagnosticStack() );*/
+    /*var args = _.arrayAppendArray( [],arguments,_.diagnosticStack() );*/
     wasMethod.apply( console,arguments );
     var text = [].join.call( arguments,' ' );
     o.consoleDom.prepend( '<p>' + text + '</p>' );

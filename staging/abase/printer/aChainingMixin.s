@@ -26,25 +26,25 @@ var _ = wTools;
 
 //
 
-function mixin( constructor )
+function _mixin( cls )
 {
 
-  var dst = constructor.prototype;
+  var dstProto = cls.prototype;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.routineIs( constructor ) );
+  _.assert( _.routineIs( cls ) );
 
-  _.mixin
+  _.mixinApply
   ({
-    dst : dst,
-    mixin : Self,
+    dstProto : dstProto,
+    descriptor : Self,
   });
 
   /* */
 
   _.accessor
   ({
-    object : dst,
+    object : dstProto,
     names :
     {
       output : 'output',
@@ -55,7 +55,7 @@ function mixin( constructor )
 
   _.accessorForbid
   ({
-    object : dst,
+    object : dstProto,
     names :
     {
       format : 'format',
@@ -66,7 +66,7 @@ function mixin( constructor )
 
   /* */
 
-  dst._initChainingMixin();
+  dstProto._initChainingMixin();
 
 }
 
@@ -322,12 +322,12 @@ function outputTo( output,o )
   var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
-  _.assertNoDebugger( arguments.length === 1 || arguments.length === 2 );
-  _.assertNoDebugger( _.objectLike( output ) || output === null );
+  _.assertWithoutBreakpoint( arguments.length === 1 || arguments.length === 2 );
+  _.assertWithoutBreakpoint( _.objectLike( output ) || output === null );
 
-  _.assertNoDebugger( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  _.assertWithoutBreakpoint( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
   // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
-  // _.assertNoDebugger( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
+  // _.assertWithoutBreakpoint( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
 
   /* output */
 
@@ -438,7 +438,7 @@ function outputTo( output,o )
   //     continue;
   //   }
   //
-  //   _.assertNoDebugger( output[ name ],'outputTo expects output has method',name );
+  //   _.assertWithoutBreakpoint( output[ name ],'outputTo expects output has method',name );
   //
   //   outputDescriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
   //
@@ -1249,10 +1249,10 @@ var Extend =
 var Self =
 {
 
-  Supplement : Supplement,
-  Extend : Extend,
+  supplement : Supplement,
+  extend : Extend,
 
-  mixin : mixin,
+  _mixin : _mixin,
 
   name : 'wPrinterChainingMixin',
   nameShort : 'PrinterChainingMixin',
@@ -1263,7 +1263,6 @@ var Self =
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+_global_[ Self.name ] = wTools[ Self.nameShort ] = _.mixinMake( Self );
 
 })();
