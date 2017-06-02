@@ -322,12 +322,10 @@ function outputTo( output,o )
   var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
 
   _.routineOptions( self.outputTo,o );
-  _.assertWithoutBreakpoint( arguments.length === 1 || arguments.length === 2 );
-  _.assertWithoutBreakpoint( _.objectLike( output ) || output === null );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  _.assertWithoutBreakpoint( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
-  // _.assert( !o.combining || o.combining === 'rewrite'|| o.combining === 'append' || o.combining === 'prepend','not implemented combining mode' );
-  // _.assertWithoutBreakpoint( !o.leveling || o.leveling === 'delta','not implemented leveling mode' );
+  _.assert( _.objectIs( output ) || output instanceof Object || output === null );
+  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
   /* output */
 
@@ -438,7 +436,7 @@ function outputTo( output,o )
   //     continue;
   //   }
   //
-  //   _.assertWithoutBreakpoint( output[ name ],'outputTo expects output has method',name );
+  //   _.assert( output[ name ],'outputTo expects output has method',name );
   //
   //   outputDescriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
   //
@@ -507,7 +505,7 @@ function outputUnchain( output )
   var self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( output === undefined || _.objectLike( output ) );
+  _.assert( _.objectIs( output ) || output instanceof Object || output === undefined );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
   _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
@@ -519,7 +517,7 @@ function outputUnchain( output )
     return result;
   }
 
-  var result = _.arrayRemovedOnce( self.outputs,output,function( e ){ return e.output; } ) >= 0;
+  var result = _.__arrayRemovedOnce( self.outputs,output,( e ) => e.output ) >= 0;
 
   // for( var i = 0; i < self.outputs.length; i++ )
   // {
@@ -533,7 +531,7 @@ function outputUnchain( output )
   // }
 
   if( output.inputs )
-  _.arrayRemovedOnce( output.inputs,self,function( e ){ return e.input; } );
+  _.__arrayRemovedOnce( output.inputs,self,( e ) => e.input );
 
   // var chainDescriptor = output[ symbolForChainDescriptor ];
   // chainDescriptor = Object.create( null );
@@ -605,7 +603,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectLike( input ) );
+  _.assert( _.objectIs( input ) || input instanceof Object || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -788,7 +786,7 @@ function _inputUnchainForeign( input )
 
   /* */
 
-  var result = _.arrayRemovedOnce( input.outputs,self,function( e ){ return e.output; } ) >= 0;
+  var result = _.__arrayRemovedOnce( input.outputs,self,( e ) => e.output ) >= 0;
 
   if( !input.outputs.length )
   {
@@ -929,7 +927,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectLike( input ) );
+  _.assert( _.objectIs( input ) || input instanceof Object );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
