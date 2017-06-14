@@ -109,8 +109,8 @@ function _begin( key,val )
     return self;
   }
 
-  if( key === 'verbosity' )
-  _.assert( val <= 0 );
+  // if( key === 'verbosity' )
+  // _.assert( val <= 0 );
 
   if( self.attributes[ key ] !== undefined )
   {
