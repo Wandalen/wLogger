@@ -504,6 +504,9 @@ function outputUnchain( output )
 {
   var self = this;
 
+  if( !self.outputs.length )
+  return true;
+
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.objectIs( output ) || output instanceof Object || output === undefined );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
