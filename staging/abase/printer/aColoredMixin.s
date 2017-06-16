@@ -683,6 +683,7 @@ function _writePrepare( original )
         o.output[ 0 ] = _.strColor.style( o.output[ 0 ],'tail' );
       }
 
+      if( !wLogger.rawOutput )
       if( !self.passingRawColor )
       {
         if( self.writingToHtml )
@@ -827,7 +828,8 @@ var Associates =
 
 var Statics =
 {
-  coloredToHtml : coloredToHtml
+  coloredToHtml : coloredToHtml,
+  rawOutput : false
 }
 
 
