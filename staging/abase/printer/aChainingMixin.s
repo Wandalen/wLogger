@@ -505,7 +505,7 @@ function outputUnchain( output )
   var self = this;
 
   if( !self.outputs.length )
-  return true;
+  return false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.objectIs( output ) || output instanceof Object || output === undefined );
