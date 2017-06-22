@@ -41,6 +41,8 @@ var Self = function wLogger( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
+Self.nameShort = 'Logger';
+
 //
 
 function init( o )
@@ -71,6 +73,14 @@ var Associates =
   output : console,
 }
 
+var Restricts =
+{
+}
+
+var Statics =
+{
+}
+
 // --
 // prototype
 // --
@@ -86,6 +96,8 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
+  Statics : Statics,
 
 }
 
@@ -103,11 +115,9 @@ _.protoMake
 // --
 
 if( typeof module !== 'undefined' && module !== null )
-{
-  module[ 'exports' ] = Self;
-}
+module[ 'exports' ] = Self;
+_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
 
-_global_[ Self.name ] = wTools.Logger = Self;
 if( !_global_.logger || _.mapIs( _global_.logger ) )
 _global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
 
