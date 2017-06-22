@@ -990,13 +990,21 @@ function hasInputDeep( input )
 
 //
 
+function firefoxConsoleIs( src )
+{
+  return Object.prototype.toString.call( src ) === '[object Console]';
+}
+
+//
+
 function _hasOutput( output,o )
 {
   var self = this;
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) );
+  _.assert( _.objectIs( output ) || firefoxConsoleIs( output ) );
+  //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
   for( var d = 0 ; d < self.outputs.length ; d++ )
