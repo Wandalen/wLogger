@@ -243,11 +243,9 @@ function outputUnchain( test )
   });
 
   test.description = 'empty ouputs';
-  test.shouldThrowError( function()
-  {
-    var l = new wLogger({ output : null });
-    l.outputUnchain( console );
-  });
+  var l = new wLogger({ output : null });
+  var got = l.outputUnchain( console );
+  test.identical( got, false )
 
   test.description = 'try to remove itself';
   test.shouldThrowError( function()
