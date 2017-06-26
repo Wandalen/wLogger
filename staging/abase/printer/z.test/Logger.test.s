@@ -50,7 +50,7 @@ function outputTo( test )
   test.description = 'empty output';
   var l = new wLogger();
   l.outputTo( { },{ combining : 'rewrite' } );
-  test.identical( l.outputs.length, 0 );
+  test.identical( l.outputs.length, 1 );
 
   /*rewrite*/
   test.description = 'rewrite with null';
