@@ -48,8 +48,9 @@ function outputTo( test )
   test.identical( l.outputs.length, 0 );
 
   test.description = 'empty output';
-  logger.outputTo( { },{ combining : 'rewrite' } );
-  test.identical( l.outputs.length, 0 );
+  var l = new wLogger();
+  l.outputTo( { },{ combining : 'rewrite' } );
+  test.identical( l.outputs.length, 1 );
 
   /*rewrite*/
   test.description = 'rewrite with null';
@@ -61,23 +62,26 @@ function outputTo( test )
 
   test.description = 'rewrite';
   var l = new wLogger();
-  l.outputTo( logger, { combining : 'rewrite' } );
-  var got = ( l.output === logger && l.outputs.length === 1 );
+  var l1 = new wLogger();
+  l.outputTo( l1, { combining : 'rewrite' } );
+  var got = ( l.output === l1 && l.outputs.length === 1 );
   var expected = true;
   test.identical( got, expected );
 
  /*append*/
  test.description = 'append';
  var l = new wLogger();
- l.outputTo( logger, { combining : 'append' } );
- var got = ( l.output === logger && l.outputs.length === 2 );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'append' } );
+ var got = ( l.output === l1 && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'append list is empty';
  var l = new wLogger({ output : null});
- l.outputTo( logger, { combining : 'append' } );
- var got = ( l.output === logger && l.outputs.length === 1 );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'append' } );
+ var got = ( l.output === l1 && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
@@ -91,32 +95,36 @@ function outputTo( test )
 
  test.description = 'append existing';
  var l = new wLogger();
- l.outputTo( logger, { combining : 'append' } );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'append' } );
  test.shouldThrowError(function ()
  {
-   l.outputTo( logger, { combining : 'append' } );
+   l.outputTo( l1, { combining : 'append' } );
  })
 
  /*prepend*/
  test.description = 'prepend';
  var l = new wLogger();
- l.outputTo( logger, { combining : 'prepend' } );
- var got = ( l.outputs[ 0 ].output === logger && l.outputs.length === 2 );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'prepend' } );
+ var got = ( l.outputs[ 0 ].output === l1 && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'prepend existing';
  var l = new wLogger();
- l.outputTo( logger, { combining : 'prepend' } );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'prepend' } );
  test.shouldThrowError(function ()
  {
 
-   l.outputTo( logger, { combining : 'prepend' } );
+   l.outputTo( l1, { combining : 'prepend' } );
  })
 
  test.description = 'prepend null';
  var l = new wLogger();
- l.outputTo( logger, { combining : 'prepend' } );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'prepend' } );
  test.shouldThrowErrorSync( function()
  {
    var got = l.outputTo( null, { combining : 'prepend' } );
@@ -126,13 +134,15 @@ function outputTo( test )
  /*supplement*/
  test.description = 'try supplement not empty list';
  var l = new wLogger();
- var got = l.outputTo( logger, { combining : 'supplement' } );
+ var l1 = new wLogger();
+ var got = l.outputTo( l1, { combining : 'supplement' } );
  var expected = false;
  test.identical( got, expected );
 
  test.description = 'supplement';
  var l = new wLogger({  output : null });
- l.outputTo( logger, { combining : 'supplement' } );
+ var l1 = new wLogger();
+ l.outputTo( l1, { combining : 'supplement' } );
  var got = ( l.output && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
@@ -148,41 +158,44 @@ function outputTo( test )
  /*combining off*/
  test.description = 'combining off';
  var l = new wLogger({  output : null });
- l.outputTo( logger );
+ var l1 = new wLogger();
+ l.outputTo( l1 );
  var got = ( l.output && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
  if( Config.debug )
  {
+   var l1 = new wLogger();
+
    test.description = 'empty call';
    test.shouldThrowError( function()
    {
-     logger.outputTo( )
+     l1.outputTo( )
    });
 
    test.description = 'invalid output type';
    test.shouldThrowError( function()
    {
-     logger.outputTo( '1' )
+     l1.outputTo( '1' )
    });
 
    test.description = 'invalid combining type';
    test.shouldThrowError( function()
    {
-     logger.outputTo( console, { combining : 'invalid' } );
+     l1.outputTo( console, { combining : 'invalid' } );
    });
 
    test.description = 'invalid leveling type';
    test.shouldThrowError( function()
    {
-     logger.outputTo( console, { leveling : 'invalid' } );
+     l1.outputTo( console, { leveling : 'invalid' } );
    });
 
    test.description = 'combining off, outputs not empty';
    test.shouldThrowError( function()
    {
-     logger.outputTo( console );
+     l1.outputTo( console );
    });
 
    test.description = ' ';
@@ -409,6 +422,7 @@ function hasInputDeep( test )
   test.description = 'no args';
   test.shouldThrowError( function()
   {
+    var logger = new wLogger();
     logger.hasInputDeep();
   });
 }
@@ -434,6 +448,7 @@ function hasOutputDeep( test )
   test.description = 'no args';
   test.shouldThrowError( function()
   {
+    var logger = new wLogger();
     logger.hasOutputDeep();
   });
 }
