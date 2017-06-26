@@ -407,6 +407,14 @@ function outputUnchain( test )
   l1.outputUnchain();
   test.identical( l1.outputs.length, 0 );
 
+  test.description = 'empty outputs list';
+  var l = new wLogger();
+  l.outputTo( logger, { combining : 'rewrite' } );
+  l.outputUnchain( logger );
+  test.identical( l.outputs.length, 0 );
+  var got = l.outputUnchain( logger );
+  test.identical( got, false );
+
   if( Config.debug )
   {
     test.description = 'incorrect type';
@@ -414,16 +422,6 @@ function outputUnchain( test )
     {
       logger.outputUnchain( '1' );
     });
-
-    test.description = 'empty outputs list';
-    test.shouldThrowError( function()
-    {
-      var l = new wLogger();
-      l.outputTo( logger, { combining : 'rewrite' } );
-      l.outputUnchain( logger );
-      l.outputUnchain( logger );
-    });
-
   }
 }
 
