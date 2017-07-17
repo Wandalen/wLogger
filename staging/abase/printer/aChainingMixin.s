@@ -99,9 +99,7 @@ function __initChainingMixinChannel( name )
 
   function write()
   {
-
-    this._writeToChannel( name,arguments );
-
+    this._writeToChannel( name,_.arraySlice( arguments ) );
     return this;
   }
 

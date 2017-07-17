@@ -303,6 +303,8 @@ var Composes =
   level : 0,
   onWrite : null,
 
+  name : 'xxx',
+
 }
 
 var Aggregates =
@@ -383,9 +385,10 @@ _.accessor
 
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
-
 _global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
 
-return Self;
+// debugger;
+// var x = new Self();
+// debugger;
 
 })();
