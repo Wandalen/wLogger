@@ -323,42 +323,46 @@ function outputTo( test )
   test.shouldThrowError( function()
   {
     var l = new wLogger();
-    l.outputTo( logger, { combining : 'append' } );
-    l.outputTo( logger, { combining : 'append' } );
+    var l1 = new wLogger();
+    l.outputTo( l1, { combining : 'append' } );
+    l.outputTo( l1, { combining : 'append' } );
   });
 
   test.description = 'output already exist, combining : rewrite';
   var l = new wLogger();
-  l.outputTo( logger, { combining : 'append' } );
-  var got = l.outputTo( logger, { combining : 'rewrite' } );
+  var l1 = new wLogger();
+  l.outputTo( l1, { combining : 'append' } );
+  var got = l.outputTo( l1, { combining : 'rewrite' } );
   var expected = true;
   test.identical( got, expected );
 
 
   if( Config.debug )
   {
+    var l = new wLogger();
+
     test.description = 'no args';
     test.shouldThrowError( function()
     {
-      logger.outputTo();
+      l.outputTo();
     });
 
     test.description = 'output is not a Object';
     test.shouldThrowError( function()
     {
-      logger.outputTo( 'output', { combining : 'rewrite' } );
+      l.outputTo( 'output', { combining : 'rewrite' } );
     });
 
     test.description = 'not allowed combining mode';
     test.shouldThrowError( function()
     {
-      logger.outputTo( console, { combining : 'mode' } );
+      l.outputTo( console, { combining : 'mode' } );
     });
 
     // test.description = 'not allowed leveling mode';
     // test.shouldThrowError( function()
     // {
-    //   logger.outputTo( console, { combining : 'rewrite', leveling : 'mode' } );
+    //   l.outputTo( console, { combining : 'rewrite', leveling : 'mode' } );
     // });
   }
 }
@@ -409,10 +413,11 @@ function outputUnchain( test )
 
   test.description = 'empty outputs list';
   var l = new wLogger();
-  l.outputTo( logger, { combining : 'rewrite' } );
-  l.outputUnchain( logger );
+  var l1 = new wLogger();
+  l.outputTo( l1, { combining : 'rewrite' } );
+  l.outputUnchain( l1 );
   test.identical( l.outputs.length, 0 );
-  var got = l.outputUnchain( logger );
+  var got = l.outputUnchain( l1 );
   test.identical( got, false );
 
   if( Config.debug )
@@ -420,7 +425,8 @@ function outputUnchain( test )
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
-      logger.outputUnchain( '1' );
+      var l = new wLogger();
+      l.outputUnchain( '1' );
     });
   }
 }
@@ -443,8 +449,9 @@ function inputFrom( test )
   test.shouldThrowError( function()
   {
     var l = new wLogger();
-    l.outputTo( logger, { combining : 'append' } )
-    logger.inputFrom( l );
+    var l1 = new wLogger();
+    l.outputTo( l1, { combining : 'append' } )
+    l1.inputFrom( l );
   });
 
   // !!! needs barringConsole = false
@@ -471,23 +478,24 @@ function inputFrom( test )
 
   if( Config.debug )
   {
+    var l = new wLogger();
+
     test.description = 'no args';
     test.shouldThrowError( function()
     {
-      logger.inputFrom();
+      l.inputFrom();
     });
 
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
-      logger.inputFrom( '1' );
+      l.inputFrom( '1' );
     });
 
     test.description = 'console exists as output';
     test.shouldThrowError( function()
     {
-      var logger = new wLogger();
-      logger.inputFrom( console );
+      l.inputFrom( console );
     });
   }
 }
@@ -506,7 +514,8 @@ function inputUnchain( test )
 
   test.description = 'case2: input not exist in the list';
   var l = new wLogger();
-  var got = l.inputUnchain( logger );
+  var l1 = new wLogger();
+  var got = l.inputUnchain( l1 );
   var expected = false;
   test.identical( got, expected );
 
@@ -544,6 +553,7 @@ function inputUnchain( test )
     test.description = 'incorrect type';
     test.shouldThrowError( function()
     {
+      var logger = new wLogger();
       logger.inputUnchain( '1' );
     });
   }

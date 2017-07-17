@@ -174,7 +174,10 @@ function _writeToChannel( channelName,args )
     if( outputDescriptor.methods[ channelName ] )
     outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
     else
-    outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
+    {
+      _.assert( _.routineIs( outputDescriptor.output[ channelName ] ) );
+      outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
+    }
   }
 
 }
