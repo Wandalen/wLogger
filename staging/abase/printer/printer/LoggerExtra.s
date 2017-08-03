@@ -473,7 +473,7 @@ var Proto =
 //
 
 //debugger;
-_.protoExtend( Self,Proto );
+_.prototypeExtend( Self,Proto );
 
 // --
 // export
