@@ -28,7 +28,7 @@ if( typeof module !== 'undefined' )
 //
 
 var _ = wTools;
-var Parent = wTools.Testing;
+var Parent = wTools.Tester;
 
 //
 
@@ -474,7 +474,7 @@ var Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self.name );
+_.Tester.test( Self.name );
 
 // if( typeof module !== 'undefined' && !module.parent )
 // _.timeReady( function()
@@ -487,7 +487,7 @@ _.Testing.test( Self.name );
 //   Self = wTestSuite( Self.name );
 //   Self.logger = wLoggerToJstructure({ coloring : 0 });
 //
-//   _.Testing.test( Self.name )
+//   _.Tester.test( Self.name )
 //   .doThen( function()
 //   {
 //     debugger;

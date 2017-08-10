@@ -3,7 +3,7 @@
 'use strict';
 
 var _ = wTools;
-var Parent = wTools.Testing;
+var Parent = wTools.Tester;
 var isBrowser = true;
 
 if( typeof module !== 'undefined' )
@@ -117,6 +117,6 @@ if( isBrowser )
 Self = wTestSuite( Self );
 
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self.name );
+_.Tester.test( Self.name );
 
 } )( );

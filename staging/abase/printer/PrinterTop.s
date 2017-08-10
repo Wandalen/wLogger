@@ -130,9 +130,4 @@ _.accessor
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 _global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
-
-// debugger;
-// var x = new Self();
-// debugger;
-
 })();

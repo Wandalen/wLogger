@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  // require( '../../../abase/xTesting/Testing.debug.s' );
+  // require( '../../../abase/xTesting/cTester.debug.s' );
 
   _.include( 'wTesting' );
 
@@ -28,7 +28,7 @@ if( typeof module !== 'undefined' )
 //
 
 var _ = wTools;
-var Parent = wTools.Testing;
+var Parent = wTools.Tester;
 
 //
 
@@ -616,7 +616,7 @@ var Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Testing.test( Self.name );
+_.Tester.test( Self.name );
 
 // if( typeof module !== 'undefined' && !module.parent )
 // _.timeReady( function()
@@ -626,7 +626,7 @@ _.Testing.test( Self.name );
 //   Self = wTestSuite( Self.name );
 //   // Self.logger = wPrinterToJstructure();
 //
-//   _.Testing.test( Self.name )
+//   _.Tester.test( Self.name )
 //   .doThen( function()
 //   {
 //     debugger;
