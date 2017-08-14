@@ -521,7 +521,7 @@ function outputUnchain( output )
     return result;
   }
 
-  var result = _.__arrayRemovedOnce( self.outputs,output,( e ) => e.output ) >= 0;
+  var result = _.arrayRemovedOnce( self.outputs,output,( e ) => e.output ) >= 0;
 
   // for( var i = 0; i < self.outputs.length; i++ )
   // {
@@ -535,7 +535,7 @@ function outputUnchain( output )
   // }
 
   if( output.inputs )
-  _.__arrayRemovedOnce( output.inputs,self,( e ) => e.input );
+  _.arrayRemovedOnce( output.inputs,self,( e ) => e.input );
 
   // var chainDescriptor = output[ symbolForChainDescriptor ];
   // chainDescriptor = Object.create( null );
@@ -790,7 +790,7 @@ function _inputUnchainForeign( input )
 
   /* */
 
-  var result = _.__arrayRemovedOnce( input.outputs,self,( e ) => e.output ) >= 0;
+  var result = _.arrayRemovedOnce( input.outputs,self,( e ) => e.output ) >= 0;
 
   if( !input.outputs.length )
   {

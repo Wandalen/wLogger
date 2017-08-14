@@ -190,7 +190,7 @@ function _hookConsoleToAlertHandler( wasMethod, methodName )
   return function ()
   {
 
-    var args = _.__arrayAppendArrays( [],[ arguments,_.diagnosticStack() ] );
+    var args = _.arrayAppendArrays( [],[ arguments,_.diagnosticStack() ] );
 
     wasMethod.apply( console,args );
     alert( args.join( '\n' ) );

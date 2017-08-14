@@ -785,6 +785,7 @@ var shellColorCodesBase =
   'cyan'            : 6,
   'white'           : 7
 }
+
 var shellColorCodesUnix =
 {
   'white'           : 97,
