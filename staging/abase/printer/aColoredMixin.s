@@ -780,6 +780,69 @@ function topicDown()
   return result;
 }
 
+//
+
+function _diagnosticColorCheck()
+{ 
+  var self = this;
+  if( wLogger.diagnosticColor )
+  { 
+    var fg = self.foregroundColor;
+    var bg = self.backgroundColor;
+    
+    var rgbFg = fg;
+    var rgbBg = bg;
+    
+    function findColor( c )
+    { 
+      var color;
+      
+      var names = _.mapOwnKeys( _.color.ColorMapShell );
+      for( var i = 0; i < names.length; i++ )
+      if( _.color.ColorMapShell[ names[ i ] ] === c )
+      {
+        color = names[ i ];
+        break;
+      }
+      
+      _.assert( _.strIs( color ) );
+      return color;
+    }
+    
+    if( fg )
+    fg = findColor( fg );
+    if( bg )
+    bg = findColor( bg )
+    
+    var bad = false;
+    
+    if( fg !== null && fg === bg )
+    bad = true;
+    else
+    {
+      for( var i = 0; i < shellBadCombinations.length; i++ )
+      if( shellBadCombinations[ i ][ 0 ] === fg && shellBadCombinations[ i ][ 1 ] === bg )
+      {
+        bad = true;
+        break;
+      }
+    }
+    
+    if( bad )
+    { 
+      logger.foregroundColor = 'red';
+      logger.backgroundColor = 'yellow';
+      logger.warn( 'Warning!. Bad colors combination: ' );
+      logger.warn( 'fg : ', fg, rgbFg );
+      logger.warn( 'bg : ', bg, rgbBg );
+      logger.foregroundColor = 'default';
+      logger.backgroundColor = 'default';
+      
+      wLogger.diagnosticColor = 0;
+    }
+  }
+}
+
 // --
 // relationships
 // --
@@ -804,6 +867,22 @@ var shellColorCodesUnix =
   'white'           : 97,
   'light white'     : 37,
 }
+var shellBadCombinations = 
+[
+  ['black' , 'light yellow'],
+  ['green' , 'light white'],
+  ['green' , 'cyan'],
+  ['red' , 'magenta'],
+  ['blue' , 'light blue'],
+  ['blue' , 'light black'],
+  ['cyan' , 'yellow'],
+  ['cyan' , 'green'],
+  ['magenta' , 'red'],
+  ['light black' , 'light yellow'],
+  ['light black' , 'yellow'],
+  ['light green' , 'light white'],
+  ['light green' , 'white']
+]
 
 var Composes =
 {
@@ -844,7 +923,8 @@ var Associates =
 var Statics =
 {
   coloredToHtml : coloredToHtml,
-  rawOutput : false
+  rawOutput : false,
+  diagnosticColor : 0
 }
 
 
@@ -875,6 +955,8 @@ var Extend =
   _backgroundColorSet : _backgroundColorSet,
 
   _handleDirective : _handleDirective,
+  
+  _diagnosticColorCheck : _diagnosticColorCheck,
 
   // stack
 

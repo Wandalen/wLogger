@@ -156,6 +156,9 @@ function _writeToChannel( channelName,args )
 
   if( !o )
   return;
+  
+  if( wLogger.diagnosticColor )
+  self._diagnosticColorCheck();
 
   for( var i = 0 ; i < self.outputs.length ; i++ )
   {
