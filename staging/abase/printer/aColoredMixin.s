@@ -132,7 +132,7 @@ function _rgbToCode( rgb, add )
 
 function _handleStrip( strip )
 {
-  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'trackingColor' ];
+  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'trackingColor', 'ignoreDirectives' ];
   var parts = strip.split( ' : ' );
   if( parts.length === 2 )
   {
@@ -485,6 +485,14 @@ function _handleDirective( directive )
   var name = directive[ 0 ];
   var value = directive[ 1 ];
 
+  if( name === 'ignoreDirectives' )
+  {
+    self.ignoreDirectives = _.boolFrom( value );
+  }
+
+  if( self.ignoreDirectives )
+  return;
+
   if( self.trackingColor )
   {
     if( name === 'foreground' )
@@ -527,6 +535,12 @@ function _writePrepareShell( o )
     if( _.arrayIs( strip ) )
     {
       self._handleDirective( strip );
+
+      if( self.ignoreDirectives )
+      {
+        if( strip[ 0 ] !== 'ignoreDirectives' )
+        strip = '#' + strip[ 0 ] + ' : ' + strip[ 1 ] + '#';
+      }
     }
 
     if( _.strIs( strip ) )
@@ -809,6 +823,7 @@ var Composes =
   _cursorSaved : 0,
   usingColorFromStack : 1,
   trackingColor : 1,
+  ignoreDirectives : 0,
 
 
   permanentStyle : null,
