@@ -3,7 +3,10 @@ require( 'wConsequence' );
 require( '../staging/abase/printer/printer/Logger.s' );
 
 var _ = wTools;
+
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
+colorNames = colorNames.slice( 0, colorNames.length / 2 );
+colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
 
 function shortColor( name )
 {
@@ -18,12 +21,18 @@ function prepareTableInfo()
 {
   function onWrite( data )
   {
-    row[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] )
+    if( c <= colorNames.length / 2 )
+    row1[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
+    else
+    row2[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
   }
 
-  var table = [];
+  var table1 = [];
+  var table2 = [];
   var fg,bg;
-  var row  = {};
+  var row1  = {};
+  var row2  = {};
+  var c = 0;
 
   var silencedLogger = new wLogger
   ({
@@ -33,24 +42,29 @@ function prepareTableInfo()
   for( var i = 0; i < colorNames.length; i++ )
   {
     fg = colorNames[ i ];
-    row[ shortColor( fg ) ] = [];
+    row1[ shortColor( fg ) ] = [];
+    row2[ shortColor( fg ) ] = [];
     for( var j = 0; j < colorNames.length; j++ )
     {
+      c++;
       bg = colorNames[ j ];
       var coloredLine = _.strColor.bg( _.strColor.fg( 'xYz', fg ), bg );
       silencedLogger.log( coloredLine );
     }
-    table.push( row );
-    row = {};
+    table1.push( row1 );
+    table2.push( row2 );
+    row1 = {};
+    row2 = {};
+    c = 0;
   }
 
-  return table;
+  return [ table1, table2 ];
 }
 
 function drawTable()
 {
   var Table = require( 'cli-table2' );
-  var info = prepareTableInfo();
+  var tables = prepareTableInfo();
   var o =
   {
     head : [ "fg/bg" ],
@@ -66,20 +80,25 @@ function drawTable()
   }
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
-  o.head.push.apply( o.head, colorNames );
-
-  o.colWidths.push.apply( o.colWidths, _.arrayFill({ times : colorNames.length / 2 , value : 5 }) )
-  o.colWidths.push.apply( o.colWidths, _.arrayFill({ times : colorNames.length / 2 , value : 7 }) )
-
+  o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
+  o.colWidths.push.apply( o.colWidths, _.arrayFill({ times : colorNames.length / 2 , value : 6 }) )
   o.rowAligns.push.apply( o.rowAligns, _.arrayFill({ times : colorNames.length , value : 'center' }) );
   o.colAligns = o.rowAligns;
 
-  var table = new Table( o );
-  table.push.apply( table, info );
+  /**/
 
+  var table = new Table( o );
+  table.push.apply( table, tables[ 0 ] );
+  logger.log( table.toString() );
+
+  /**/
+
+  o.head = [ o.head[ 0 ] ];
+  o.head.push.apply( o.head, colorNames.slice( colorNames.length / 2, colorNames.length) );
+  var table = new Table( o );
+  table.push.apply( table, tables[ 1 ] );
   logger.log( table.toString() );
 }
 
 _.shell( 'npm i cli-table2' )
 .doThen( () => drawTable() );
-
