@@ -783,20 +783,20 @@ function topicDown()
 //
 
 function _diagnosticColorCheck()
-{ 
+{
   var self = this;
   if( wLogger.diagnosticColor )
-  { 
+  {
     var fg = self.foregroundColor;
     var bg = self.backgroundColor;
-    
+
     var rgbFg = fg;
     var rgbBg = bg;
-    
+
     function findColor( c )
-    { 
+    {
       var color;
-      
+
       var names = _.mapOwnKeys( _.color.ColorMapShell );
       for( var i = 0; i < names.length; i++ )
       if( _.color.ColorMapShell[ names[ i ] ] === c )
@@ -804,16 +804,16 @@ function _diagnosticColorCheck()
         color = names[ i ];
         break;
       }
-      
+
       _.assert( _.strIs( color ) );
       return color;
     }
-    
+
     if( fg )
     fg = findColor( fg );
     if( bg )
     bg = findColor( bg )
-    
+
     var bad = false;
     var platform;
 
@@ -825,12 +825,11 @@ function _diagnosticColorCheck()
       {
         platform = illColorCombinations[ fg ][ bg ];
         bad = true;
-        break;
       }
     }
-    
+
     if( bad )
-    { 
+    {
       logger.foregroundColor = 'red';
       logger.backgroundColor = 'yellow';
       logger.warn( 'Warning!. Ill colors combination: ' );
@@ -839,7 +838,7 @@ function _diagnosticColorCheck()
       logger.warn( 'platform : ', platform ? platform : process.platform );
       logger.foregroundColor = 'default';
       logger.backgroundColor = 'default';
-      
+
       wLogger.diagnosticColor = 0;
     }
   }
@@ -1041,7 +1040,7 @@ var Extend =
   _backgroundColorSet : _backgroundColorSet,
 
   _handleDirective : _handleDirective,
-  
+
   _diagnosticColorCheck : _diagnosticColorCheck,
 
   // stack
