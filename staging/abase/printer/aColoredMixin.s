@@ -785,62 +785,62 @@ function topicDown()
 function _diagnosticColorCheck()
 {
   var self = this;
-  if( wLogger.diagnosticColor )
+
+  if( !wLogger.diagnosticColor )
+  return;
+
+  var fg = self.foregroundColor;
+  var bg = self.backgroundColor;
+
+  var rgbFg = fg;
+  var rgbBg = bg;
+
+  function findColor( c )
   {
-    var fg = self.foregroundColor;
-    var bg = self.backgroundColor;
+    var color;
 
-    var rgbFg = fg;
-    var rgbBg = bg;
-
-    function findColor( c )
+    var names = _.mapOwnKeys( _.color.ColorMapShell );
+    for( var i = 0; i < names.length; i++ )
+    if( _.color.ColorMapShell[ names[ i ] ] === c )
     {
-      var color;
-
-      var names = _.mapOwnKeys( _.color.ColorMapShell );
-      for( var i = 0; i < names.length; i++ )
-      if( _.color.ColorMapShell[ names[ i ] ] === c )
-      {
-        color = names[ i ];
-        break;
-      }
-
-      _.assert( _.strIs( color ) );
-      return color;
+      color = names[ i ];
+      break;
     }
 
-    if( fg )
-    fg = findColor( fg );
-    if( bg )
-    bg = findColor( bg )
+    _.assert( _.strIs( color ) );
+    return color;
+  }
 
-    var bad = false;
-    var platform;
+  if( fg )
+  fg = findColor( fg );
+  if( bg )
+  bg = findColor( bg )
 
-    if( fg !== null && fg === bg )
-    bad = true;
-    else
+  var ill = false;
+  var platform;
+
+  for( var i = 0; i < illColorCombinations.length; i++ )
+  {
+    var combination = illColorCombinations[ i ];
+    if( combination.fg === fg && combination.bg === bg )
     {
-      if( illColorCombinations[ fg ][ bg ] )
-      {
-        platform = illColorCombinations[ fg ][ bg ];
-        bad = true;
-      }
+      ill = true;
+      platform = combination.platform;
+      break;
     }
+  }
 
-    if( bad )
-    {
-      logger.foregroundColor = 'red';
-      logger.backgroundColor = 'yellow';
-      logger.warn( 'Warning!. Ill colors combination: ' );
-      logger.warn( 'fg : ', fg, rgbFg );
-      logger.warn( 'bg : ', bg, rgbBg );
-      logger.warn( 'platform : ', platform ? platform : process.platform );
-      logger.foregroundColor = 'default';
-      logger.backgroundColor = 'default';
-
-      wLogger.diagnosticColor = 0;
-    }
+  if( ill )
+  {
+    wLogger.diagnosticColor = 0;
+    logger.foregroundColor = 'red';
+    logger.backgroundColor = 'yellow';
+    logger.warn( 'Warning!. Ill colors combination: ' );
+    logger.warn( 'fg : ', fg, rgbFg );
+    logger.warn( 'bg : ', bg, rgbBg );
+    logger.warn( 'platform : ', platform ? platform : process.platform );
+    logger.foregroundColor = 'default';
+    logger.backgroundColor = 'default';
   }
 }
 
@@ -869,106 +869,58 @@ var shellColorCodesUnix =
   'white'           : 97,
   'light white'     : 37,
 }
+
 var illColorCombinations =
-/* foreground : { background : [ platform ] } */
-{
-  'white' :
-  {
-    'light yellow' : [ 'darwin' ]
-  },
-  'black' :
-  {
-    'light blue' : [ 'darwin' ],
-    'blue' : [ 'darwin' ],
-    'light yellow' : [ 'win' ]
-  },
-  'green' :
-  {
-    'light magenta' : [ 'darwin' ],
-    'light red' : [ 'darwin' ],
-    'cyan' : [ 'darwin', 'win' ],
-    'yellow' : [ 'darwin' ],
-    'light white' : [ 'win' ],
-  },
-  'red' :
-  {
-    'light black' : [ 'darwin' ],
-    'magenta' : [ 'darwin', 'win' ]
-  },
-  'yellow' :
-  {
-    'light green' : [ 'darwin' ],
-    'cyan' : [ 'darwin' ]
-  },
-  'blue' :
-  {
-    'light blue' : [ 'darwin', 'win' ],
-    'light black' : [ 'win' ],
-    'black' : [ 'darwin' ]
-  },
-  'cyan' :
-  {
-    'yellow' : [ 'darwin', 'win' ],
-    'green' : [ 'darwin', 'win' ]
-  },
-  'magenta' :
-  {
-    'light red' : [ 'darwin' ],
-    'light black' : [ 'darwin' ],
-    'cyan' : [ 'darwin' ],
-    'red' : [ 'darwin', 'win' ],
-    'green' : [ 'darwin' ]
-  },
-  'light black' :
-  {
-    'light blue' : [ 'darwin' ],
-    'light yellow' : [ 'win' ],
-    'light red' : [ 'darwin' ],
-    'magenta' : [ 'darwin' ],
-    'red' : [ 'darwin' ],
-    'yellow' : [ 'win' ]
-  },
-  'light yellow' :
-  {
-    'white' : [ 'darwin' ]
-  },
-  'light red' :
-  {
-    'light magenta' : [ 'darwin' ],
-    'magenta' : [ 'darwin' ],
-    'cyan' : [ 'darwin' ],
-    'green' : [ 'darwin' ]
-  },
-  'light magenta' :
-  {
-    'light red' : [ 'darwin' ],
-    'magenta' : [ 'darwin' ],
-    'yellow' : [ 'darwin' ],
-    'green' : [ 'darwin' ]
-  },
-  'light blue' :
-  {
-    'blue' : [ 'darwin' ],
-    'red' : [ 'darwin' ],
-    'black' : [ 'darwin' ]
-  },
-  'light cyan' :
-  {
-    'light white' : [ 'darwin' ],
-    'white' : [ 'darwin' ]
-  },
-  'light green' :
-  {
-    'light white' : [ 'darwin', 'win' ],
-    'light cyan' : [ 'darwin' ],
-    'white' : [ 'win' ]
-  },
-  'light white' :
-  {
-    'light green' : [ 'darwin' ],
-    'light cyan' : [ 'darwin' ]
-  }
-}
+[
+  { fg : 'white', bg : 'light yellow', platform : [ 'darwin' ] },
+  { fg : 'black', bg : 'light blue', platform : [ 'darwin' ] },
+  { fg : 'black', bg : 'blue', platform : [ 'darwin' ] },
+  { fg : 'black', bg : 'light yellow', platform : [ 'win' ] },
+  { fg : 'green', bg : 'light magenta', platform : [ 'darwin' ] },
+  { fg : 'green', bg : 'light red', platform : [ 'darwin' ] },
+  { fg : 'green', bg : 'cyan', platform : [ 'darwin', 'win' ] },
+  { fg : 'green', bg : 'yellow', platform : [ 'darwin' ] },
+  { fg : 'green', bg : 'light white', platform : [ 'win' ] },
+  { fg : 'red', bg : 'light black', platform : [ 'darwin' ] },
+  { fg : 'red', bg : 'magenta', platform : [ 'darwin', 'win' ] },
+  { fg : 'yellow', bg : 'light green', platform : [ 'darwin' ] },
+  { fg : 'yellow', bg : 'cyan', platform : [ 'darwin' ] },
+  { fg : 'blue', bg : 'light blue', platform : [ 'darwin', 'win' ] },
+  { fg : 'blue', bg : 'light black', platform : [ 'win' ] },
+  { fg : 'blue', bg : 'black', platform : [ 'darwin' ] },
+  { fg : 'cyan', bg : 'yellow', platform : [ 'darwin', 'win' ] },
+  { fg : 'cyan', bg : 'green', platform : [ 'darwin', 'win' ] },
+  { fg : 'magenta', bg : 'light red', platform : [ 'darwin' ] },
+  { fg : 'magenta', bg : 'light black', platform : [ 'darwin' ] },
+  { fg : 'magenta', bg : 'cyan', platform : [ 'darwin' ] },
+  { fg : 'magenta', bg : 'red', platform : [ 'darwin', 'win' ] },
+  { fg : 'magenta', bg : 'green', platform : [ 'darwin' ] },
+  { fg : 'light black', bg : 'light blue', platform : [ 'darwin' ] },
+  { fg : 'light black', bg : 'light yellow', platform : [ 'win' ] },
+  { fg : 'light black', bg : 'light red', platform : [ 'darwin' ] },
+  { fg : 'light black', bg : 'magenta', platform : [ 'darwin' ] },
+  { fg : 'light black', bg : 'red', platform : [ 'darwin' ] },
+  { fg : 'light black', bg : 'yellow', platform : [ 'win' ] },
+  { fg : 'light yellow', bg : 'white', platform : [ 'darwin' ] },
+  { fg : 'light red', bg : 'light magenta', platform : [ 'darwin' ] },
+  { fg : 'light red', bg : 'magenta', platform : [ 'darwin' ] },
+  { fg : 'light red', bg : 'cyan', platform : [ 'darwin' ] },
+  { fg : 'light red', bg : 'green', platform : [ 'darwin' ] },
+  { fg : 'light magenta', bg : 'light red', platform : [ 'darwin' ] },
+  { fg : 'light magenta', bg : 'magenta', platform : [ 'darwin' ] },
+  { fg : 'light magenta', bg : 'yellow', platform : [ 'darwin' ] },
+  { fg : 'light magenta', bg : 'green', platform : [ 'darwin' ] },
+  { fg : 'light blue', bg : 'blue', platform : [ 'darwin' ] },
+  { fg : 'light blue', bg : 'red', platform : [ 'darwin' ] },
+  { fg : 'light blue', bg : 'black', platform : [ 'darwin' ] },
+  { fg : 'light cyan', bg : 'light white', platform : [ 'darwin' ] },
+  { fg : 'light cyan', bg : 'white', platform : [ 'darwin' ] },
+  { fg : 'light green', bg : 'light white', platform : [ 'darwin', 'win' ] },
+  { fg : 'light green', bg : 'light cyan', platform : [ 'darwin' ] },
+  { fg : 'light green', bg : 'white', platform : [ 'win' ] },
+  { fg : 'light white', bg : 'light green', platform : [ 'darwin' ] },
+  { fg : 'light white', bg : 'light cyan', platform : [ 'darwin' ] }
+]
 
 var Composes =
 {
