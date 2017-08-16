@@ -298,7 +298,7 @@ function chainingParallel( test )
   // var expected = [ 2, 2, 2 ];
   // test.identical( got, expected );
 
-  // !!! needs barringConsole = false
+  // !!! needs silencing = false
   // test.description = 'case7: input from console twice ';
   // var l1 = new wLogger({ output : null,onWrite : _onWrite });
   // var l2 = new wLogger({ output : null,onWrite : _onWrite });
@@ -454,7 +454,7 @@ function inputFrom( test )
     l1.inputFrom( l );
   });
 
-  // !!! needs barringConsole = false
+  // !!! needs silencing = false
   //
   // test.description = 'case3: console as input';
   // var got = [];
@@ -566,7 +566,7 @@ var Self =
 
   name : 'Chaining test',
 
-  // barringConsole : false,
+  // silencing : false,
   /* verbosity : 1, */
 
   tests :

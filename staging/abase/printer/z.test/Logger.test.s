@@ -351,7 +351,7 @@ function inputFrom( test )
 
 function inputUnchain( test )
 {
-  // !!! needs barringConsole = false
+  // !!! needs silencing = false
   // test.description = 'remove existing input';
   // var l = new wLogger({ output : null });
   // l.inputFrom( console );
@@ -591,7 +591,7 @@ var Self =
 
   name : 'Logger',
   // verbosity : 1,
-  // barringConsole : false,
+  // silencing : false,
 
   tests :
   {

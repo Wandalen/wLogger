@@ -275,6 +275,8 @@ function colorConsole( test )
   logger.log( '#background : default#' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
+  // test.identical( 0, 1 );
+  //trackingColor problem, logger of test suite cant override it value correctly, directive is inside of it output
 
   test.description = 'trackingColor directive'
 
@@ -300,6 +302,8 @@ function colorConsole( test )
   logger.log( 'text' );
   var expected = '\u001b[31mtext\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
+  // test.identical( 0, 1 );
+  //trackingColor problem, logger of test suite cant override it value correctly, directive is inside of it output
 
 }
 
