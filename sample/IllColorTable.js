@@ -70,8 +70,10 @@ function prepareInfo()
 		for( var i = 0; i < result.length; i++ )
 		{
 		  var currentColors = splitCombinationKey( result[ i ] );
-			if( _.arraySetIdentical( srcColors, currentColors ) )
-			pos = i;
+			if( srcColors[ 0 ] === currentColors[ 0 ]  )
+			{
+				pos = i;
+			}
 		}
 
 		if( !pos )
@@ -97,7 +99,9 @@ function prepareInfo()
 	newRow[ fg + splitter + bg ] = row;
   addToTable( newRow );
 	row = _.arrayFill({ times : 3 , value : '-' });
-  })
+	})
+
+
   return result;
 }
 
