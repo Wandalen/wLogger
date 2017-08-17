@@ -1,7 +1,10 @@
 require( 'wTools' );
 require( 'wConsequence' );
 require( '../staging/abase/printer/printer/Logger.s' );
+
 var _ = wTools;
+
+// console.log( wLogger.illColorCombinations.length )
 
 function prepareInfo()
 {
@@ -56,7 +59,27 @@ function prepareInfo()
   	onWrite : onWrite
   })
 
-  var result = [];
+	var result = [];
+
+	var splitCombinationKey = ( src ) => _.mapOwnKeys( src )[ 0 ].split( splitter );
+
+	function addToTable( src )
+	{
+		var pos = 0;
+		var srcColors = splitCombinationKey( src );
+		for( var i = 0; i < result.length; i++ )
+		{
+		  var currentColors = splitCombinationKey( result[ i ] );
+			if( _.arraySetIdentical( srcColors, currentColors ) )
+			pos = i;
+		}
+
+		if( !pos )
+		result.push( src )
+		else
+		result.splice( pos, 0, src );
+	}
+
   list.forEach( function( c )
   {
   	var key = _.mapOwnKeys( c )[ 0 ];
@@ -72,7 +95,7 @@ function prepareInfo()
 	var fg = shortColor( combination[ 0 ] );
 	var bg = shortColor( combination[ 1 ] );
 	newRow[ fg + splitter + bg ] = row;
-  	result.push( newRow )
+  addToTable( newRow );
 	row = _.arrayFill({ times : 3 , value : '-' });
   })
   return result;
