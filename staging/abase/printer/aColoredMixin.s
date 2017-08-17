@@ -912,7 +912,6 @@ var illColorCombinations =
   { fg : 'green', bg : 'light white', platform : 'win32' },
   { fg : 'red', bg : 'magenta', platform : 'win32' },
   { fg : 'blue', bg : 'light blue', platform : 'win32' },
-  { fg : 'blue', bg : 'light black', platform : 'win32' },
   { fg : 'cyan', bg : 'yellow', platform : 'win32' },
   { fg : 'cyan', bg : 'green', platform : 'win32' },
   { fg : 'magenta', bg : 'red', platform : 'win32' },
@@ -920,6 +919,7 @@ var illColorCombinations =
   { fg : 'light black', bg : 'yellow', platform : 'win32' },
   { fg : 'light green', bg : 'light white', platform : 'win32' },
   { fg : 'light green', bg : 'white', platform : 'win32' },
+  { fg : 'light blue', bg : 'blue', platform : 'win32' },
 
   /* */
 
