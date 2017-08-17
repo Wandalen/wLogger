@@ -1002,7 +1002,8 @@ var Statics =
   coloredToHtml : coloredToHtml,
   rawOutput : false,
   diagnosticColor : 0,
-  diagnosticCollorCollapse : 1
+  diagnosticCollorCollapse : 1,
+  illColorCombinations : illColorCombinations
 }
 
 
