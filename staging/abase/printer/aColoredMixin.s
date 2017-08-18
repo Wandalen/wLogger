@@ -922,18 +922,18 @@ var illColorCombinations =
 
   /* */
 
-  { fg : 'white', bg : 'light yellow', platform : 'darwin' },
+  // { fg : 'white', bg : 'light yellow', platform : 'darwin' },
   { fg : 'green', bg : 'cyan', platform : 'darwin' },
   { fg : 'yellow', bg : 'cyan', platform : 'darwin' },
   { fg : 'blue', bg : 'light blue', platform : 'darwin' },
   { fg : 'blue', bg : 'black', platform : 'darwin' },
   { fg : 'cyan', bg : 'yellow', platform : 'darwin' },
   { fg : 'cyan', bg : 'green', platform : 'darwin' },
-  { fg : 'light yellow', bg : 'white', platform : 'darwin' },
+  // { fg : 'light yellow', bg : 'white', platform : 'darwin' },
   { fg : 'light red', bg : 'light magenta', platform : 'darwin' },
   { fg : 'light magenta', bg : 'light red', platform : 'darwin' },
   { fg : 'light blue', bg : 'blue', platform : 'darwin' },
-  { fg : 'light white', bg : 'light cyan', platform : 'darwin' },
+  // { fg : 'light white', bg : 'light cyan', platform : 'darwin' },
   { fg : 'light green', bg : 'light cyan', platform : 'darwin' },
   { fg : 'light cyan', bg : 'light green', platform : 'darwin' },
 
