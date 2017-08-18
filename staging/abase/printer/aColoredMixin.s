@@ -956,7 +956,7 @@ var illColorCombinations =
   { fg : 'white', bg : 'light yellow', platform : 'linux' },
   { fg : 'red', bg : 'light red', platform : 'linux' },
   { fg : 'yellow', bg : 'light green', platform : 'linux' },
-  { fg : 'light white', bg : 'light cyan', platform : 'linux' },
+  // { fg : 'light white', bg : 'light cyan', platform : 'linux' },
   { fg : 'light magenta', bg : 'light red', platform : 'linux' },
 
 ]
