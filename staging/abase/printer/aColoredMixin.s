@@ -901,8 +901,8 @@ var shellColorCodesBase =
 
 var shellColorCodesUnix =
 {
-  'white'           : 97,
-  'light white'     : 37,
+  'white'           : 37,
+  'light white'     : 97,
 }
 
 var illColorCombinations =
