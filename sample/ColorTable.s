@@ -19,6 +19,8 @@ var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );
 colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
 
+//
+
 function shortColor( name )
 {
   var parts = _.strSplit( name );
@@ -27,6 +29,8 @@ function shortColor( name )
 
   return name;
 }
+
+//
 
 function prepareTableInfo()
 {
@@ -71,6 +75,8 @@ function prepareTableInfo()
 
   return [ table1, table2 ];
 }
+
+//
 
 function drawTable()
 {
