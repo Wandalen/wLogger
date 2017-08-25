@@ -901,44 +901,41 @@ var shellColorCodesBase =
 
 var shellColorCodesUnix =
 {
-  'white'           : 97,
-  'light white'     : 37,
+  'white'           : 37,
+  'light white'     : 97,
 }
 
 var illColorCombinations =
 [
   { fg : 'black', bg : 'light yellow', platform : 'win32' },
+  { fg : 'black', bg : 'yellow', platform : 'win32' },
+  { fg : 'black', bg : 'blue', platform : 'win32' },
   { fg : 'green', bg : 'cyan', platform : 'win32' },
-  { fg : 'green', bg : 'light white', platform : 'win32' },
   { fg : 'red', bg : 'magenta', platform : 'win32' },
-  { fg : 'blue', bg : 'light blue', platform : 'win32' },
+  { fg : 'blue', bg : 'black', platform : 'win32' },
+  { fg : 'yellow', bg : 'cyan', platform : 'win32' },
   { fg : 'cyan', bg : 'yellow', platform : 'win32' },
   { fg : 'cyan', bg : 'green', platform : 'win32' },
   { fg : 'magenta', bg : 'red', platform : 'win32' },
   { fg : 'light black', bg : 'light yellow', platform : 'win32' },
   { fg : 'light black', bg : 'yellow', platform : 'win32' },
-  { fg : 'light green', bg : 'light white', platform : 'win32' },
-  { fg : 'light green', bg : 'white', platform : 'win32' },
-  { fg : 'light blue', bg : 'blue', platform : 'win32' },
 
   /* */
 
-  { fg : 'white', bg : 'light yellow', platform : 'darwin' },
-  { fg : 'black', bg : 'light blue', platform : 'darwin' },
-  { fg : 'black', bg : 'blue', platform : 'darwin' },
+  // { fg : 'white', bg : 'light yellow', platform : 'darwin' },
   { fg : 'green', bg : 'cyan', platform : 'darwin' },
-  { fg : 'red', bg : 'light black', platform : 'darwin' },
   { fg : 'yellow', bg : 'cyan', platform : 'darwin' },
   { fg : 'blue', bg : 'light blue', platform : 'darwin' },
   { fg : 'blue', bg : 'black', platform : 'darwin' },
   { fg : 'cyan', bg : 'yellow', platform : 'darwin' },
   { fg : 'cyan', bg : 'green', platform : 'darwin' },
-  { fg : 'light black', bg : 'red', platform : 'darwin' },
-  { fg : 'light yellow', bg : 'white', platform : 'darwin' },
+  // { fg : 'light yellow', bg : 'white', platform : 'darwin' },
   { fg : 'light red', bg : 'light magenta', platform : 'darwin' },
   { fg : 'light magenta', bg : 'light red', platform : 'darwin' },
   { fg : 'light blue', bg : 'blue', platform : 'darwin' },
-  { fg : 'light white', bg : 'light cyan', platform : 'darwin' },
+  // { fg : 'light white', bg : 'light cyan', platform : 'darwin' },
+  { fg : 'light green', bg : 'light cyan', platform : 'darwin' },
+  { fg : 'light cyan', bg : 'light green', platform : 'darwin' },
 
   /* */
 
@@ -959,6 +956,9 @@ var illColorCombinations =
   { fg : 'white', bg : 'light yellow', platform : 'linux' },
   { fg : 'red', bg : 'light red', platform : 'linux' },
   { fg : 'yellow', bg : 'light green', platform : 'linux' },
+  // { fg : 'light white', bg : 'light cyan', platform : 'linux' },
+  { fg : 'light magenta', bg : 'light red', platform : 'linux' },
+
 ]
 
 var Composes =
