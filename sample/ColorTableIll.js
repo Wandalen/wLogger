@@ -49,7 +49,7 @@ function prepareInfo()
   }
   })
 
-  var row = _.arrayFill({ times : 3 , value : '-' });
+  var row = _.arrayFillTimes( [] , 3 , '-' );
   var currentPlatform;
 
   function onWrite( data )
@@ -107,7 +107,7 @@ function prepareInfo()
   var bg = shortColor( combination[ 1 ] );
   newRow[ fg + splitter + bg ] = row;
   addToTable( newRow );
-  row = _.arrayFill({ times : 3 , value : '-' });
+  row = _.arrayFillTimes( [] , 3 , '-' );
   })
 
 
