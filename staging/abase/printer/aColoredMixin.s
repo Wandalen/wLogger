@@ -763,7 +763,7 @@ function topic()
   var result = _.strConcat.apply( undefined,arguments );
 
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'red' ), 'yellow' ); debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.log( result );
@@ -782,7 +782,7 @@ function topicUp()
   var result = _.strConcat.apply( undefined,arguments );
 
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'red' ), 'yellow' ); debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logUp( result );
@@ -801,7 +801,7 @@ function topicDown()
   var result = _.strConcat.apply( undefined,arguments );
 
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'red' ), 'yellow' ); debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logDown( result );
