@@ -414,6 +414,7 @@ var Self =
 
   name : 'Backend test',
   /* verbosity : 1, */
+  silencing : 1,
 
   tests :
   {

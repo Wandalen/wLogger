@@ -1,12 +1,25 @@
-require( 'wTools' );
-require( 'wConsequence' );
-require( '../staging/abase/printer/printer/Logger.s' );
 
-var _ = wTools;
+try
+{
+  require( '../wTools.s' );
+}
+catch( err )
+{
+  require( 'wTools' );
+}
+
+var _ = wTools
+
+_.include( 'wConsequence' );
+_.include( 'wLogger' );
+
+// require( '../staging/abase/printer/printer/Logger.s' );
 
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );
 colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
+
+//
 
 function shortColor( name )
 {
@@ -16,6 +29,8 @@ function shortColor( name )
 
   return name;
 }
+
+//
 
 function prepareTableInfo()
 {
@@ -61,6 +76,8 @@ function prepareTableInfo()
   return [ table1, table2 ];
 }
 
+//
+
 function drawTable()
 {
   var Table = require( 'cli-table2' );
@@ -81,8 +98,8 @@ function drawTable()
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-  o.colWidths.push.apply( o.colWidths, _.arrayFill({ times : colorNames.length / 2 , value : 6 }) )
-  o.rowAligns.push.apply( o.rowAligns, _.arrayFill({ times : colorNames.length , value : 'center' }) );
+  o.colWidths.push.apply( o.colWidths, _.arrayFillTimes( [] , colorNames.length / 2 , 6 ) )
+  o.rowAligns.push.apply( o.rowAligns, _.arrayFillTimes( [] , colorNames.length , 'center' ) );
   o.colAligns = o.rowAligns;
 
   /**/

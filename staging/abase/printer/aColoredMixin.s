@@ -762,7 +762,8 @@ function topic()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  result = _.strColor.bg( result,'white' );
+  debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.log( result );
@@ -780,7 +781,8 @@ function topicUp()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  result = _.strColor.bg( result,'white' );
+  debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logUp( result );
@@ -798,8 +800,8 @@ function topicDown()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  result = _.strColor.bg( result,'white' );
-
+  debugger;
+  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logDown( result );
@@ -827,7 +829,7 @@ function _diagnosticColorCheck()
     if( combination.platform === process.platform )
     {
       wLogger.diagnosticColor = 0;
-      logger.foregroundColor = 'black';
+      logger.foregroundColor = 'blue';
       logger.backgroundColor = 'yellow';
       logger.warn( 'Warning!. Ill colors combination: ' );
       logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
@@ -838,6 +840,7 @@ function _diagnosticColorCheck()
       break;
     }
   }
+
 }
 
 //
@@ -867,7 +870,7 @@ function _diagnosticColorCollapse()
 
   if( collapse )
   {
-    logger.foregroundColor = 'black';
+    logger.foregroundColor = 'blue';
     logger.backgroundColor = 'yellow';
     logger.warn( 'Warning: Color collapse in native terminal.' );
     logger.warn( 'fg passed : ', fg.originName, fg.originValue );
@@ -877,6 +880,7 @@ function _diagnosticColorCollapse()
     logger.foregroundColor = 'default';
     logger.backgroundColor = 'default';
   }
+
 }
 
 // --
@@ -980,7 +984,6 @@ var Composes =
   trackingColor : 1,
   ignoreDirectives : 0,
 
-
   permanentStyle : null,
 
   // attributes : {},
@@ -1005,7 +1008,6 @@ var Statics =
   diagnosticCollorCollapse : 1,
   illColorCombinations : illColorCombinations
 }
-
 
 // --
 // proto

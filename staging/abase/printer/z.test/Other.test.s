@@ -453,6 +453,7 @@ var Self =
 {
 
   name : 'Logger other test',
+  silencing : 1,
   /* verbosity : 1, */
 
   tests :

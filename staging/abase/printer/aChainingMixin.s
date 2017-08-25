@@ -157,6 +157,7 @@ function _writeToChannel( channelName,args )
   if( !o )
   return;
 
+  // debugger;
   if( wLogger.diagnosticColor )
   self._diagnosticColorCheck();
 
@@ -866,7 +867,7 @@ function consoleBar( o )
     o.outputLoggerWasChainedToConsole = o.outputLogger.outputUnchain( console );
     o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
 
-    o.barLogger.permanentStyle = { bg : 'yellow', fg : 'black' };
+    o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' };
     o.barLogger.inputFrom( console,{ barring : 1 } );
     o.barLogger.outputTo( o.outputLogger );
 

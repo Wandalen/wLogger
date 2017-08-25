@@ -566,7 +566,7 @@ var Self =
 
   name : 'Chaining test',
 
-  // silencing : false,
+  silencing : 1,
   /* verbosity : 1, */
 
   tests :
