@@ -1,8 +1,19 @@
-require( 'wTools' );
-require( 'wConsequence' );
-require( '../staging/abase/printer/printer/Logger.s' );
 
-var _ = wTools;
+try
+{
+  require( '../wTools.s' );
+}
+catch( err )
+{
+  require( 'wTools' );
+}
+
+var _ = wTools
+
+_.include( 'wConsequence' );
+_.include( 'wLogger' );
+
+// require( '../staging/abase/printer/printer/Logger.s' );
 
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );

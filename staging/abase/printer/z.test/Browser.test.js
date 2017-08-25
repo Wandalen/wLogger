@@ -100,6 +100,7 @@ var Self =
 
   name : 'Logger browser test',
   /* verbosity : 1, */
+  silencing : 1,
 
   tests :
   {

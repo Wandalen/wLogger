@@ -590,6 +590,7 @@ var Self =
 {
 
   name : 'Logger',
+  silencing : 1,
   // verbosity : 1,
   // silencing : false,
 
