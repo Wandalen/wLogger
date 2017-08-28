@@ -1049,7 +1049,6 @@ var Extend =
   _handleDirective : _handleDirective,
 
   _diagnosticColorCheck : _diagnosticColorCheck,
-  // _diagnosticColorCollapse : _diagnosticColorCollapse,
 
   // stack
 
