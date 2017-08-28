@@ -163,9 +163,9 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 1, 1, 1 ] );
-  if( isUnix )
-  var expected = '\u001b[34m\u001b[107mtext\u001b[39m\u001b[49m';
-  else
+  // if( isUnix )
+  // var expected = '\u001b[34m\u001b[107mtext\u001b[39m\u001b[49m';
+  // else
   var expected = '\u001b[34m\u001b[47mtext\u001b[39m\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
@@ -176,9 +176,9 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, [ 1, 1, 1 ] );
-  if( isUnix )
-  var expected = '\u001b[107mtext\u001b[49m';
-  else
+  // if( isUnix )
+  // var expected = '\u001b[107mtext\u001b[49m';
+  // else
   var expected = '\u001b[47mtext\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
@@ -394,15 +394,15 @@ function shellColors( test )
 
   logger.foregroundColor = 'white';
   test.identical( logger.foregroundColor, [ 1, 1, 1 ] );
-  if( isUnix )
-  test.identical( logger._rgbToCode( logger.foregroundColor ), 97 );
-  else
+  // if( isUnix )
+  // test.identical( logger._rgbToCode( logger.foregroundColor ), 97 );
+  // else
   test.identical( logger._rgbToCode( logger.foregroundColor ), 37 );
 
   logger.foregroundColor = 'light white';
   test.identical( logger.foregroundColor, [ 0.9, 0.9, 0.9 ] );
   if( isUnix )
-  test.identical( logger._rgbToCode( logger.foregroundColor ), 37 );
+  test.identical( logger._rgbToCode( logger.foregroundColor ), 97 );
   else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '1;37' );
 }

@@ -165,6 +165,7 @@ function _setColor( color, layer )
   var self = this;
 
   var symbol;
+  var diagnosticInfo;
 
   if( layer === 'foreground' )
   symbol = symbolForForeground;
@@ -213,7 +214,7 @@ function _setColor( color, layer )
         currentName = _getColorName( _.color.ColorMapShell, color );
       }
 
-      color[ symbol ] =
+      diagnosticInfo =
       {
         originValue : originValue,
         originName : originName,
@@ -231,6 +232,9 @@ function _setColor( color, layer )
     }
     else
     self[ symbol ] = null;
+
+    if( self.diagnosticColorsStack  )
+    self.diagnosticColorsStack[ layer ].pop();
   }
   else
   {
@@ -239,6 +243,11 @@ function _setColor( color, layer )
 
     self[ symbol ] = color;
     self._isStyled = 1;
+
+    if( !self.diagnosticColorsStack  )
+    self.diagnosticColorsStack = { 'foreground' : [], 'background' : [] };
+
+    self.diagnosticColorsStack[ layer ].push( diagnosticInfo );
   }
 }
 
@@ -271,9 +280,7 @@ function _stackPush( layer, color )
   var self = this;
 
   if( !self.colorsStack )
-  {
-    self.colorsStack = { 'foreground' : [], 'background' : [] };
-  }
+  self.colorsStack = { 'foreground' : [], 'background' : [] };
 
   self.colorsStack[ layer ].push( color );
 }
@@ -577,6 +584,9 @@ function _writePrepareShell( o )
 
       if( self.usingColorFromStack )
       {
+        if( self.foregroundColor && self.backgroundColor )
+        self._diagnosticColorCheck();
+
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
 
@@ -816,71 +826,70 @@ function _diagnosticColorCheck()
 {
   var self = this;
 
-  if( !wLogger.diagnosticColor || isBrowser )
+  if( !wLogger.diagnosticColor && !wLogger.diagnosticCollorCollapse && isBrowser )
   return;
 
-  var fg = self.foregroundColor[ symbolForForeground ];
-  var bg = self.backgroundColor[ symbolForBackground ];
+  if( !self.foregroundColor || !self.backgroundColor )
+  return;
 
-  for( var i = 0; i < illColorCombinations.length; i++ )
+  var stackFg = self.diagnosticColorsStack[ 'foreground' ];
+  var stackBg = self.diagnosticColorsStack[ 'background' ];
+
+  var fg = stackFg[ stackFg.length - 1 ];
+  var bg = stackBg[ stackBg.length - 1 ];
+
+  if( wLogger.diagnosticColor )
   {
-    var combination = illColorCombinations[ i ];
-    if( combination.fg === fg.originName && combination.bg === bg.originName )
-    if( combination.platform === process.platform )
+    for( var i = 0; i < illColorCombinations.length; i++ )
     {
-      wLogger.diagnosticColor = 0;
+      var combination = illColorCombinations[ i ];
+      if( combination.fg === fg.originName && combination.bg === bg.originName )
+      if( combination.platform === process.platform )
+      {
+        wLogger.diagnosticColor = 0;
+        logger.foregroundColor = 'blue';
+        logger.backgroundColor = 'yellow';
+        logger.warn( 'Warning!. Ill colors combination: ' );
+        logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
+        logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
+        logger.warn( 'platform : ', process.platform );
+        logger.foregroundColor = 'default';
+        logger.backgroundColor = 'default';
+        break;
+      }
+    }
+  }
+
+  /* */
+
+  if( wLogger.diagnosticCollorCollapse )
+  {
+    var collapse = false;
+
+    if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
+    {
+      if( fg.originName !== bg.originName )
+      {
+        var diff = _.color._colorDistance( fg.originValue, bg.originValue );
+        _.assert( diff > 0 );
+        if( diff <= 0.5 )
+        collapse = true;
+      }
+    }
+
+    if( collapse )
+    {
       logger.foregroundColor = 'blue';
       logger.backgroundColor = 'yellow';
-      logger.warn( 'Warning!. Ill colors combination: ' );
-      logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
-      logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
-      logger.warn( 'platform : ', process.platform );
+      logger.warn( 'Warning: Color collapse in native terminal.' );
+      logger.warn( 'fg passed : ', fg.originName, fg.originValue );
+      logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
+      logger.warn( 'bg passed: ', bg.originName, bg.originValue );
+      logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
       logger.foregroundColor = 'default';
       logger.backgroundColor = 'default';
-      break;
     }
   }
-
-}
-
-//
-
-function _diagnosticColorCollapse()
-{
-  var self = this;
-
-  if( !wLogger.diagnosticCollorCollapse )
-  return;
-
-  var collapse = false;
-
-  var fg = self.foregroundColor[ symbolForForeground ];
-  var bg = self.backgroundColor[ symbolForBackground ];
-
-  if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
-  {
-    if( fg.originName !== bg.originName )
-    {
-      var diff = _.color._colorDistance( fg.originValue, bg.originValue );
-      _.assert( diff > 0 );
-      if( diff <= 0.5 )
-      collapse = true;
-    }
-  }
-
-  if( collapse )
-  {
-    logger.foregroundColor = 'blue';
-    logger.backgroundColor = 'yellow';
-    logger.warn( 'Warning: Color collapse in native terminal.' );
-    logger.warn( 'fg passed : ', fg.originName, fg.originValue );
-    logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
-    logger.warn( 'bg passed: ', bg.originName, bg.originValue );
-    logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
-    logger.foregroundColor = 'default';
-    logger.backgroundColor = 'default';
-  }
-
 }
 
 // --
@@ -986,6 +995,8 @@ var Composes =
 
   permanentStyle : null,
 
+  diagnosticColorsStack : null
+
   // attributes : {},
 
 }
@@ -1038,7 +1049,7 @@ var Extend =
   _handleDirective : _handleDirective,
 
   _diagnosticColorCheck : _diagnosticColorCheck,
-  _diagnosticColorCollapse : _diagnosticColorCollapse,
+  // _diagnosticColorCollapse : _diagnosticColorCollapse,
 
   // stack
 
