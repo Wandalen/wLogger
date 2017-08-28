@@ -21,8 +21,11 @@ function prepareTableInfo()
 {
   function onWrite( data )
   {
-    row[ i ] =  data.outputForTerminal[ 0 ];
-	}
+    if( i < colorNames.length / 2 )
+    row1[ i ] =  data.outputForTerminal[ 0 ];
+    else
+		row2[ i - colorNames.length / 2 ] =  data.outputForTerminal[ 0 ];
+  }
 
   var combinations = [];
   var silencedLogger = new wLogger
@@ -77,7 +80,10 @@ function prepareTableInfo()
 		map[ c.fg ].push( c.bg );
 	});
 
-	var t = [];
+	var t1 = [];
+	var t2 = [];
+	var row1  = {};
+  var row2  = {};
 	var row;
 	var i;
 
@@ -85,26 +91,33 @@ function prepareTableInfo()
 	keys.forEach( ( fg ) =>
 	{
 		var c = map[ fg ];
-		var obj = {};
-		obj[ fg ] = _.arrayFill({ times : colorNames.length, value : '-' });
-		row = obj[ fg ];
+		var obj1 = {};
+		obj1[ fg ] = _.arrayFillTimes( [], colorNames.length / 2, '-' );
+		row1 = obj1[ fg ];
+
+		var obj2 = {};
+		obj2[ fg ] = obj1[ fg ].slice();
+		row2 = obj2[ fg ];
+
 		c.forEach( ( bg ) =>
 		{
 			i = colorNames.indexOf( bg );
 			var coloredLine = _.strColor.bg( _.strColor.fg( 'xYz', fg ), bg );
 			silencedLogger.log( coloredLine );
 		});
-		t.push( obj );
+
+		t1.push( obj1 );
+		t2.push( obj2 );
 	})
 
-	return t;
+	return [ t1, t2 ];
 }
 
 
 function drawTable()
 {
   var Table = require( 'cli-table2' );
-  var t = prepareTableInfo();
+  var tables = prepareTableInfo();
   var o =
   {
     head : [ "fg/bg" ],
@@ -120,24 +133,24 @@ function drawTable()
   }
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
-  o.head.push.apply( o.head, colorNames );
-  o.colWidths.push.apply( o.colWidths, _.arrayFill({ times : colorNames.length, value : 6 }) )
-  o.rowAligns.push.apply( o.rowAligns, _.arrayFill({ times : colorNames.length, value : 'center' }) );
+  o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
+  o.colWidths.push.apply( o.colWidths, _.arrayFillTimes( [], colorNames.length / 2,  6 ) );
+  o.rowAligns.push.apply( o.rowAligns, _.arrayFillTimes( [], colorNames.length / 2, 'center' ) );
   o.colAligns = o.rowAligns;
 
   /**/
 
   var table = new Table( o );
-  table.push.apply( table, t );
+  table.push.apply( table, tables[ 0 ] );
   logger.log( table.toString() );
 
   /**/
 
-  // o.head = [ o.head[ 0 ] ];
-  // o.head.push.apply( o.head, colorNames.slice( colorNames.length / 2, colorNames.length) );
-  // var table = new Table( o );
-  // table.push.apply( table, tables[ 1 ] );
-  // logger.log( table.toString() );
+  o.head = [ o.head[ 0 ] ];
+  o.head.push.apply( o.head, colorNames.slice( colorNames.length / 2, colorNames.length) );
+  var table = new Table( o );
+  table.push.apply( table, tables[ 1 ] );
+  logger.log( table.toString() );
 }
 
 _.shell( 'npm i cli-table2' )
