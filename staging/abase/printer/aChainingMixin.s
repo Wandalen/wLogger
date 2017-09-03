@@ -157,13 +157,6 @@ function _writeToChannel( channelName,args )
   if( !o )
   return;
 
-  // debugger;
-  if( wLogger.diagnosticColor )
-  self._diagnosticColorCheck();
-
-  if( wLogger.diagnosticColorCollapse )
-  self._diagnosticColorCollapse();
-
   for( var i = 0 ; i < self.outputs.length ; i++ )
   {
     var outputDescriptor = self.outputs[ i ];
