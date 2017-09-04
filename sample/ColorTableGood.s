@@ -8,6 +8,8 @@ var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );
 colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
 
+//
+
 function shortColor( name )
 {
   var parts = _.strSplit( name );
@@ -17,14 +19,17 @@ function shortColor( name )
   return name;
 }
 
+//
+
 function prepareTableInfo()
 {
+
   function onWrite( data )
   {
     if( i < colorNames.length / 2 )
     row1[ i ] =  data.outputForTerminal[ 0 ];
     else
-		row2[ i - colorNames.length / 2 ] =  data.outputForTerminal[ 0 ];
+    row2[ i - colorNames.length / 2 ] =  data.outputForTerminal[ 0 ];
   }
 
   var combinations = [];
@@ -32,87 +37,88 @@ function prepareTableInfo()
   ({
     output : null,
     onWrite : onWrite
-	})
+  })
 
-	var c = 0;
+  var c = 0;
 
-	colorNames.forEach( ( fg ) =>
-	{
-		colorNames.forEach( ( bg ) =>
-		{
-			combinations.push({ fg : fg, bg : bg });
-		})
-	})
+  colorNames.forEach( ( fg ) =>
+  {
+    colorNames.forEach( ( bg ) =>
+    {
+      combinations.push({ fg : fg, bg : bg });
+    })
+  })
 
-	function remove( fg, bg )
-	{
-		for( var i = 0; i < combinations.length; i++ )
-		{
-			var c = combinations[ i ];
-			if( c.fg === fg && c.bg === bg )
-			return combinations.splice( i, 1 );
-		}
-	}
+  function remove( fg, bg )
+  {
+    for( var i = 0; i < combinations.length; i++ )
+    {
+      var c = combinations[ i ];
+      if( c.fg === fg && c.bg === bg )
+      return combinations.splice( i, 1 );
+    }
+  }
 
-	function addLight( c )
-	{
-		if( !_.strBegins( c, 'light' ) )
-		return 'light ' + c;
-		return c;
-	}
+  function addLight( c )
+  {
+    if( !_.strBegins( c, 'light' ) )
+    return 'light ' + c;
+    return c;
+  }
 
-	wLogger.illColorCombinations.forEach( ( c ) =>
-	{
-		remove( c.fg, c.bg );
-		remove( c.bg, c.fg );
-		remove( addLight( c.fg ), addLight( c.bg ) );
-		remove( addLight( c.bg ), addLight( c.fg ) );
-	})
+  wLogger.illColorCombinations.forEach( ( c ) =>
+  {
+    remove( c.fg, c.bg );
+    remove( c.bg, c.fg );
+    remove( addLight( c.fg ), addLight( c.bg ) );
+    remove( addLight( c.bg ), addLight( c.fg ) );
+  })
 
-	var map = {};
+  var map = {};
 
-	combinations.forEach( ( c ) =>
-	{
-		if( !map[ c.fg ] )
-		map[ c.fg ] = [];
+  combinations.forEach( ( c ) =>
+  {
+    if( !map[ c.fg ] )
+    map[ c.fg ] = [];
 
-		if( c.fg !== c.bg )
-		map[ c.fg ].push( c.bg );
-	});
+    if( c.fg !== c.bg )
+    map[ c.fg ].push( c.bg );
+  });
 
-	var t1 = [];
-	var t2 = [];
-	var row1  = {};
+  var t1 = [];
+  var t2 = [];
+  var row1  = {};
   var row2  = {};
-	var row;
-	var i;
+  var row;
+  var i;
 
-	var keys = _.mapOwnKeys( map );
-	keys.forEach( ( fg ) =>
-	{
-		var c = map[ fg ];
-		var obj1 = {};
-		obj1[ fg ] = _.arrayFillTimes( [], colorNames.length / 2, '-' );
-		row1 = obj1[ fg ];
+  var keys = _.mapOwnKeys( map );
+  keys.forEach( ( fg ) =>
+  {
+    var c = map[ fg ];
+    var obj1 = {};
+    obj1[ fg ] = _.arrayFillTimes( [], colorNames.length / 2, '-' );
+    row1 = obj1[ fg ];
 
-		var obj2 = {};
-		obj2[ fg ] = obj1[ fg ].slice();
-		row2 = obj2[ fg ];
+    var obj2 = {};
+    obj2[ fg ] = obj1[ fg ].slice();
+    row2 = obj2[ fg ];
 
-		c.forEach( ( bg ) =>
-		{
-			i = colorNames.indexOf( bg );
-			var coloredLine = _.strColor.bg( _.strColor.fg( 'xYz', fg ), bg );
-			silencedLogger.log( coloredLine );
-		});
+    c.forEach( ( bg ) =>
+    {
+      i = colorNames.indexOf( bg );
+      var coloredLine = _.strColor.bg( _.strColor.fg( 'xYz', fg ), bg );
+      silencedLogger.log( coloredLine );
+    });
 
-		t1.push( obj1 );
-		t2.push( obj2 );
-	})
+    t1.push( obj1 );
+    t2.push( obj2 );
+  })
 
-	return [ t1, t2 ];
+  return [ t1, t2 ];
 }
 
+//
 
 function drawTable()
 {
@@ -124,7 +130,7 @@ function drawTable()
     colWidths : [ 10 ],
     rowAligns : [ 'left' ],
     colAligns : null,
-    style:
+    style :
     {
        compact : true,
       'padding-left': 0,
@@ -155,4 +161,3 @@ function drawTable()
 
 _.shell( 'npm i cli-table2' )
 .doThen( () => drawTable() )
-
