@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  // require( '../../../abase/xTesting/cTester.debug.s' );
+  // require( '../../../abase/xtester/cTester.debug.s' );
 
   _.include( 'wTesting' );
 

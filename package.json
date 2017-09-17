@@ -42,7 +42,8 @@
     "wFiles": ""
   },
   "devDependencies": {
-    "wTesting": ""
+    "wTesting": "",
+    "wLogger": "."
   },
   "keywords": [
     "wTools",
