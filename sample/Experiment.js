@@ -1,7 +1,6 @@
 
 if( typeof module !== 'undefined' )
-require( '../staging/dwtools/abase/printer/top/Logger.s' );
-
+require( 'wLogger' );
 
 var _ = wTools;
 
