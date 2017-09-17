@@ -15,14 +15,14 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/abase/printer/printer/Logger.s",
+  "main": "staging/dwtools/abase/printer/printer/Logger.s",
   "files": [
-    "staging/abase",
+    "staging/dwtools/abase",
     "production"
   ],
   "directories": {
     "doc": "doc",
-    "main": "staging/abase/printer/printer/Logger.s"
+    "main": "staging/dwtools/abase/printer/printer/Logger.s"
   },
   "scripts": {
     "test": "wtest staging",

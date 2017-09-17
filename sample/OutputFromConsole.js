@@ -6,7 +6,7 @@ try
 }
 catch( err )
 {
-  require( '../staging/abase/printer/printer/Logger.s' );
+  require( '../staging/dwtools/abase/printer/printer/Logger.s' );
 }
 
 var _ = wTools;

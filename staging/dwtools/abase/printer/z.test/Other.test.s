@@ -8,7 +8,7 @@ to run this test
 from the project directory run
 
 npm install
-node ./staging/abase/z.test/Other.test.s
+node ./staging/dwtools/abase/z.test/Other.test.s
 
 */
 
