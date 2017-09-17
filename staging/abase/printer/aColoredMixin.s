@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
   if( typeof wBase === 'undefined' )
   try
   {
-    require( '../wTools.s' );
+    require( '../../../Base.s' );
   }
   catch( err )
   {
@@ -565,7 +565,7 @@ function _writePrepareShell( o )
   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
   var layersOnly = true;
 
-  splitted.forEach( function ( strip )
+  splitted.forEach( function( strip )
   {
     if( _.arrayIs( strip ) )
     {

@@ -1,7 +1,7 @@
 
 try
 {
-  require( '../wTools.s' );
+  require( '../../../Base.s' );
 }
 catch( err )
 {
@@ -13,7 +13,7 @@ var _ = wTools
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
 
-// require( '../staging/abase/printer/printer/Logger.s' );
+// require( '../staging/abase/oclass/printer/top/Logger.s' );
 
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );

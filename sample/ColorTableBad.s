@@ -1,7 +1,7 @@
 
 try
 {
-  require( '../wTools.s' );
+  require( '../../../Base.s' );
 }
 catch( err )
 {

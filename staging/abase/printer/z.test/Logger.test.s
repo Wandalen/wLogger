@@ -15,7 +15,7 @@ node ./staging/abase/z.test/Logger.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/Logger.s' );
+  require( '../top/Logger.s' );
 
   var _ = wTools;
 
@@ -97,7 +97,7 @@ function outputTo( test )
  var l = new wLogger();
  var l1 = new wLogger();
  l.outputTo( l1, { combining : 'append' } );
- test.shouldThrowError(function ()
+ test.shouldThrowError(function()
  {
    l.outputTo( l1, { combining : 'append' } );
  })
@@ -115,7 +115,7 @@ function outputTo( test )
  var l = new wLogger();
  var l1 = new wLogger();
  l.outputTo( l1, { combining : 'prepend' } );
- test.shouldThrowError(function ()
+ test.shouldThrowError(function()
  {
 
    l.outputTo( l1, { combining : 'prepend' } );
@@ -276,14 +276,14 @@ function inputFrom( test )
   test.description = 'try to add existing input';
   var l = new wLogger();
   var l1 = new wLogger({ output : l });
-  test.shouldThrowError( function ()
+  test.shouldThrowError( function()
   {
     l.inputFrom( l1 );
   });
 
   test.description = 'try to add console that exists in output';
   var l = new wLogger();
-  test.shouldThrowError( function ()
+  test.shouldThrowError( function()
   {
     l.inputFrom( console );
   });

@@ -131,7 +131,7 @@ function unwrapProto( proto )
 function _hookConsoleToFileHandler( wasMethod, methodName, fileName )
 {
 
-  return function ()
+  return function()
   {
 
     var args = arguments;
@@ -162,8 +162,8 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/abase/component/Path.s' );
-  require( 'include/FileMid.s' );
+  require( 'include/dwtools/abase/layer3/PathTools.s' );
+  require( 'include/dwtools/FileMid.s' );
 
   fileName = fileName || 'log.txt';
   fileName = _.pathJoin( _.pathRealMainDir(),fileName );
@@ -187,7 +187,7 @@ function hookConsoleToFile( fileName )
 function _hookConsoleToAlertHandler( wasMethod, methodName )
 {
 
-  return function ()
+  return function()
   {
 
     var args = _.arrayAppendArrays( [],[ arguments,_.diagnosticStack() ] );

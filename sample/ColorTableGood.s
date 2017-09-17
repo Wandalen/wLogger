@@ -1,6 +1,6 @@
 require( 'wTools' );
 require( 'wConsequence' );
-require( '../staging/abase/printer/printer/Logger.s' );
+require( '../staging/abase/oclass/printer/top/Logger.s' );
 
 var _ = wTools;
 

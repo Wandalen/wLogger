@@ -15,7 +15,7 @@ node ./staging/abase/z.test/Chaining.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/Logger.s' );
+  require( '../top/Logger.s' );
 
   var _ = wTools;
 
@@ -30,7 +30,7 @@ var Parent = wTools.Tester;
 
 //
 
-var _escaping = function ( str )
+var _escaping = function( str )
 {
   return _.toStr( str,{ escaping : 1 } );
 }
@@ -435,7 +435,7 @@ function outputUnchain( test )
 
 function inputFrom( test )
 {
-  var onWrite = function ( args ){ got.push( args.output[ 0 ] ) };
+  var onWrite = function( args ){ got.push( args.output[ 0 ] ) };
 
   test.description = 'case1: input already exist';
   test.shouldThrowError( function()
@@ -504,7 +504,7 @@ function inputFrom( test )
 
 function inputUnchain( test )
 {
-  var onWrite = function ( args ){ got.push( args[0] ) };
+  var onWrite = function( args ){ got.push( args[0] ) };
 
   test.description = 'case1: input not exist in the list';
   var l = new wLogger();

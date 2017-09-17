@@ -8,7 +8,7 @@ if( typeof module !== 'undefined' )
   // if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../wTools.s' );
+    require( '../../../../Base.s' );
   }
   catch( err )
   {

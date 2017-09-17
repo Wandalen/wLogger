@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
-  require( '../printer/Logger.s' );
+  require( '../top/Logger.s' );
 
   var _ = wTools;
 
@@ -255,7 +255,7 @@ function logUp( test )
   test.identical( got.length - msg.length, 6 );
 
   test.description = 'case3';
-  test.shouldThrowError( function ()
+  test.shouldThrowError( function()
   {
     logger.upAct();
   })
@@ -278,13 +278,13 @@ function logDown( test )
   test.identical( got.length - msg.length, 4 );
 
   test.description = 'case2';
-  test.shouldThrowError( function ()
+  test.shouldThrowError( function()
   {
     logger.downAct();
   })
 
   test.description = 'cant go below zero level';
-  test.shouldThrowError( function ()
+  test.shouldThrowError( function()
   {
     var logger = new wLogger();
     logger.logDown();
@@ -395,7 +395,7 @@ function emptyLines( test )
   test.description = 'logger is not skipping empty lines'
 
   var got;
-  var onWrite = function ( args ){ got = args.outputForTerminal[ 0 ]; };
+  var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
 
   var logger = new wLogger({ output : null, onWrite : onWrite });
 
