@@ -1,5 +1,5 @@
 # wLogger [![Build Status](https://travis-ci.org/Wandalen/wLogger.svg?branch=master)](https://travis-ci.org/Wandalen/wLogger)
-Module in JavaScript providing convenient, layered, cross-platform means for multilevel, colorful logging.
+The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging.
 Logger writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
 Supports colorful output in browser and shell, multilevel output, chaining with other console-like objects to perform message transfering between multiple inputs/outputs.
 
