@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>
+wTools unit test
+</title>
+
+<!--need to replace some sources with files from node_modules later-->
+
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/aFundamental.s"></script>
+<script src="../../../../node_modules/wTools/staging/Base.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/akernelWithComponents.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/cFieldFilter.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/cFieldMapper.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/fNameTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/fExecTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/fStringTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/fIncludeTools.s"></script>
+<script src="../../../../node_modules/wPath/staging/dwtools/abase/layer3/PathTools.s"></script>
+<script src="../../../../node_modules/wProto/staging/dwtools/abase/layer3/Proto.s"></script>
+<script src="../../../../node_modules/winstancing/staging/dwtools/abase/mixin/Instancing.s"></script>
+<script src="../../../../node_modules/wcloner/staging/dwtools/abase/layer3/Cloner.s"></script>
+<script src="../../../../node_modules/wCopyable/staging/dwtools/abase/mixin/Copyable.s"></script>
+<script src="../../../../node_modules/wConsequence/staging/dwtools/abase/oclass/Consequence.s"></script>
+<script src="../../../../node_modules/wColor/staging/dwtools/amid/color/Color.s"></script>
+
+<script src="../aChainingMixin.s">
+</script>
+<script src="../aColoredMixin.s">
+</script>
+<script src="../PrinterBase.s">
+</script>
+<script src="../PrinterMid.s">
+</script>
+<script src="../PrinterTop.s">
+</script>
+<script src="../top/Logger.s">
+</script>
+
+
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/aTestSuite.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/bTestRoutine.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/cTester.debug.s"></script>
+
+
+
+<script src="./Browser.test.js">
+</script>
+
+<script src="./Other.test.s">
+</script>
+<script src="./Chaining.test.s">
+</script>
+<script src="./Logger.test.s">
+</script>
+
+<script>
+wTools.Tester.testAll();
+</script>
+
+</head>
+<body>
+</body>
+</html>
