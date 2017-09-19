@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   // if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../wTools.s' );
+    require( '../../../../Base.s' );
   }
   catch( err )
   {
@@ -216,7 +216,7 @@ function levelSet( level )
 function toJson()
 {
   var self = this;
-  return _.toStr( self.outputData, { json : 1 } );
+  return _.toStr( self.outputData, { jsonLike : 1 } );
 }
 
 // --

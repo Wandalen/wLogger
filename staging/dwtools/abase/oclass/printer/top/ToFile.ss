@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
   // if( typeof wBase === 'undefined' )
   try
   {
-    require( '../../wTools.s' );
+    require( '../../../../Base.s' );
   }
   catch( err )
   {
@@ -29,7 +29,7 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Logger based on [wLogger]{@link wLogger} that writes messages( incoming & outgoing ) to file specified by path( outputPath ).
  *
- * Writes each message to the end of file. Creates new file( outputPath ) if it doesn't exists.
+ * Writes each message to the end of file. Creates new file( outputPath ) if it doesn't exist.
  *
  * <br><b>Methods:</b><br><br>
  * Output:

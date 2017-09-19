@@ -8,14 +8,14 @@ to run this test
 from the project directory run
 
 npm install
-node ./staging/abase/z.test/Backend.test.s
+node ./staging/dwtools/abase/z.test/Backend.test.s
 
 */
 
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/Logger.s' );
+  require( '../top/Logger.s' );
 
   var _ = wTools;
 
@@ -52,7 +52,7 @@ function simplest( test )
 
 //
 
-var _escaping = function ( str )
+var _escaping = function( str )
 {
   return _.toStr( str,{ escaping : 1 } );
 }
@@ -64,7 +64,7 @@ function colorConsole( test )
 
   var got;
 
-  var onWrite = function ( args ){ got = args.outputForTerminal[ 0 ]; };
+  var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
 
   var logger = new wLogger({ output : null, onWrite : onWrite });
 

@@ -1,13 +1,6 @@
 
 if( typeof module !== 'undefined' )
-try
-{
-  require( 'wLogger' );
-}
-catch( err )
-{
-  require( '../staging/abase/printer/printer/Logger.s' );
-}
+require( 'wLogger' );
 
 var _ = wTools;
 var l1 = new wLogger();

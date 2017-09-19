@@ -39,7 +39,7 @@ function simplest( test )
 
 //
 
-var _escaping = function ( str )
+var _escaping = function( str )
 {
   return _.toStr( str,{ escaping : 1 } );
 }
@@ -49,7 +49,7 @@ var _escaping = function ( str )
 function colorConsole( test )
 {
   var got;
-  var onWrite = function ( args ){ console.log(args);got = args.outputForTerminal };
+  var onWrite = function( args ){ console.log(args);got = args.outputForTerminal };
 
 
   var logger = new wLogger( { output : null, onWrite : onWrite });

@@ -1,7 +1,6 @@
 
 if( typeof module !== 'undefined' )
-require( '../staging/abase/printer/printer/Logger.s' );
-
+require( 'wLogger' );
 
 var _ = wTools;
 var fg = _.strColor.fg;
