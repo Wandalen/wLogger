@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
-  require( '../top/Logger.s' );
+  require( '../printer/top/Logger.s' );
 
   var _ = wTools;
 
