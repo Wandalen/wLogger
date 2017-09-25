@@ -15,7 +15,7 @@ node ./staging/dwtools/abase/z.test/Chaining.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( '../top/Logger.s' );
+  require( '../printer/top/Logger.s' );
 
   var _ = wTools;
 

@@ -15,11 +15,9 @@ node ./staging/dwtools/abase/z.test/Logger.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( '../top/Logger.s' );
+  require( '../printer/top/Logger.s' );
 
   var _ = wTools;
-
-  // require( '../../../abase/xtester/cTester.debug.s' );
 
   _.include( 'wTesting' );
 
