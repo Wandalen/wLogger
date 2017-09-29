@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
     require( 'wTools' );
   }
 
-  require( './PrinterMid.s' );
+  // require( './PrinterMid.s' );
 
   isBrowser = false;
 
