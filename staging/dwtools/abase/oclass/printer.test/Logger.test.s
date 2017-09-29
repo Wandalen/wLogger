@@ -19,8 +19,6 @@ if( typeof module !== 'undefined' )
 
   var _ = wTools;
 
-  // require( '../../../abase/xtester/cTester.debug.s' );
-
   _.include( 'wTesting' );
 
 }
