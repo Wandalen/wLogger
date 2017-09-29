@@ -740,7 +740,7 @@ function _writePrepare( original )
       {
         if( self.writingToHtml )
         self._writePrepareHtml( o );
-        else if( !isBrowser )
+        else if( !isBrowser && !module.isBrowser )
         self._writePrepareShell( o );
         else
         self._writePrepareBrowser( o );
