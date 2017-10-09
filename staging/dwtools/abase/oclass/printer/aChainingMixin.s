@@ -325,7 +325,7 @@ function outputTo( output,o )
   _.routineOptions( self.outputTo,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  _.assert( _.objectIs( output ) || output instanceof Object || output === null );
+  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || output === null );
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
   /* output */
@@ -509,7 +509,7 @@ function outputUnchain( output )
   return false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( output ) || output instanceof Object || output === undefined );
+  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || output === undefined );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
   _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
@@ -607,7 +607,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || input instanceof Object || input === null );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( output ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -759,7 +759,7 @@ function inputUnchain( input )
   var result = false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( input ) || input === undefined );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || input === undefined );
 
   for( var i = self.inputs.length-1 ; i >= 0  ; i-- )
   if( self.inputs[ i ].input === input || input === undefined )
@@ -786,7 +786,7 @@ function _inputUnchainForeign( input )
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.objectIs( input ) && !( input instanceof wPrinterBase ) );
+  _.assert( ( _.objectIs( input ) || wLogger.consoleIs( input ) ) && !( input instanceof wPrinterBase ) );
 
   /* */
 
@@ -921,6 +921,22 @@ function consoleIsBarred( output )
   return !!descriptor.bar;
 }
 
+//
+
+function consoleIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  if( src !== console )
+  return false;
+
+  var result = Object.prototype.toString.call( src );
+  if( result === '[object Console]' || result === '[object Object]' )
+  return true;
+
+  return false;
+}
+
 // --
 // test
 // --
@@ -931,7 +947,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || input instanceof Object );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
@@ -991,20 +1007,13 @@ function hasInputDeep( input )
 
 //
 
-function firefoxConsoleIs( src )
-{
-  return Object.prototype.toString.call( src ) === '[object Console]';
-}
-
-//
-
 function _hasOutput( output,o )
 {
   var self = this;
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || firefoxConsoleIs( output ) );
+  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) );
   //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
@@ -1182,6 +1191,8 @@ var Statics =
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
+
+  consoleIs : consoleIs,
 
   // var
 
