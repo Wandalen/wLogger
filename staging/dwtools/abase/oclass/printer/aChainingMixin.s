@@ -1143,6 +1143,7 @@ var outputWriteMethods =
   'error',
   'info',
   'warn',
+  'debug'
 ];
 
 var outputChangeLevelMethods =
