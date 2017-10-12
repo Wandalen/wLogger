@@ -561,6 +561,21 @@ function inputUnchain( test )
 
 //
 
+function consoleIs( test )
+{
+  test.description = 'consoleIs';
+
+  test.shouldBe( wLogger.consoleIs( console ) );
+  test.shouldBe( !wLogger.consoleIs( [] ) );
+
+  if( !Config.debug )
+  return;
+
+  test.shouldThrowError( () => wLogger.consoleIs() );
+}
+
+//
+
 var Self =
 {
 
@@ -579,6 +594,7 @@ var Self =
     outputUnchain : outputUnchain,
     inputFrom : inputFrom,
     inputUnchain : inputUnchain,
+    consoleIs : consoleIs
 
   },
 
