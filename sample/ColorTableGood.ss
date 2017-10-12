@@ -107,7 +107,7 @@ function prepareTableInfo()
     c.forEach( ( bg ) =>
     {
       i = colorNames.indexOf( bg );
-      var coloredLine = _.strColor.bg( _.strColor.fg( 'xYz', fg ), bg );
+      var coloredLine = _.color.strFormatBackground( _.color.strFormatForeground( 'xYz', fg ), bg );
       silencedLogger.log( coloredLine );
     });
 

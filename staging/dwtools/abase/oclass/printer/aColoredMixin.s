@@ -52,12 +52,7 @@ function _mixin( cls )
   ({
     object : dstProto,
     combining : 'rewrite',
-    names :
-    {
-      // level : 'level',
-      foregroundColor : 'foregroundColor',
-      backgroundColor : 'backgroundColor',
-    }
+    names : Accessors,
   });
 
 }
@@ -130,20 +125,6 @@ function _rgbToCode( rgb, add )
 
 //
 
-function _handleStrip( strip )
-{
-  var allowedKeys = [ 'bg','background','fg','foreground', 'coloring', 'trackingColor', 'ignoreDirectives' ];
-  var parts = strip.split( ' : ' );
-  if( parts.length === 2 )
-  {
-    if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
-    return;
-    return parts;
-  }
-}
-
-//
-
 function _foregroundColorGet()
 {
   var self = this;
@@ -160,7 +141,27 @@ function _backgroundColorGet()
 
 //
 
-function _setColor( color, layer )
+function _foregroundColorSet( color )
+{
+  var self = this;
+  var layer = 'foreground';
+
+  self._colorSet( layer, color );
+}
+
+//
+
+function _backgroundColorSet( color )
+{
+  var self = this;
+  var layer = 'background';
+
+  self._colorSet( layer, color );
+}
+
+//
+
+function _colorSet( layer, color )
 {
   var self = this;
 
@@ -194,11 +195,13 @@ function _setColor( color, layer )
     return keys[ i ];
   }
 
+  /* */
+
   if( color && color !== 'default' )
   {
-    var originName = color;
+    var originalName = color;
     color = _.color.rgbaFromTry( color, null );
-    var originValue = color;
+    var originalValue = color;
     var currentName;
 
     if( color )
@@ -216,20 +219,22 @@ function _setColor( color, layer )
 
       diagnosticInfo =
       {
-        originValue : originValue,
-        originName : originName,
+        originalValue : originalValue,
+        originalName : originalName,
         currentName : currentName,
-        nearestIs : !!_.color._colorDistance( color, originValue )
+        exact : !!_.color._colorDistance( color, originalValue )
       };
+
     }
+
   }
+
+  /* */
 
   if( !color || color === 'default' )
   {
     if( self._stackIsNotEmpty( layer ) )
-    {
-      self[ symbol ] = self._stackPop( layer );
-    }
+    self[ symbol ] = self._stackPop( layer );
     else
     self[ symbol ] = null;
 
@@ -249,26 +254,7 @@ function _setColor( color, layer )
 
     self.diagnosticColorsStack[ layer ].push( diagnosticInfo );
   }
-}
 
-//
-
-function _foregroundColorSet( color )
-{
-  var self = this;
-  var layer = 'foreground';
-
-  self._setColor( color, layer );
-}
-
-//
-
-function _backgroundColorSet( color )
-{
-  var self = this;
-  var layer = 'background';
-
-  self._setColor( color, layer );
 }
 
 // --
@@ -299,6 +285,7 @@ function _stackPop( layer )
 function _stackIsNotEmpty( layer )
 {
   var self = this;
+
   if( self.colorsStack && self.colorsStack[ layer ].length )
   return true;
 
@@ -320,6 +307,9 @@ function coloredToHtml( o )
   if( !_.objectIs( o ) )
   o = { src : o }
 
+  if( !o.onStrip )
+  o.onStrip = self._handleStrip;
+
   _.routineOptions( coloredToHtml,o );
   _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
   _.assert( _.routineIs( o.onStrip ) );
@@ -331,7 +321,6 @@ function coloredToHtml( o )
       delimeter  : ''
     }
     o.src = _.strConcat.apply( optionsForStr ,o.src );
-
   }
 
   var result = '';
@@ -426,7 +415,7 @@ coloredToHtml.defaults =
   src : null,
   tag : 'span',
   compact : true,
-  onStrip : _handleStrip,
+  onStrip : null,
 }
 
 //
@@ -447,111 +436,6 @@ function _writePrepareHtml( o )
 
 //
 
-// function _writePrepareShell( o )
-// {
-//   var self = this;
-//
-//   _.assert( arguments.length === 1 );
-//   _.assert( _.mapIs( o ) );
-//   _.assert( _.strIs( o.output[ 0 ] ) );
-//
-//   var result = '';
-//
-//   var splitted = _.strExtractStrips( o.output[ 0 ], { onStrip : self._handleStrip } );
-//   var layersOnly = true;
-//   for( var i = 0; i < splitted.length; i++ )
-//   {
-//     if( _.strIs( splitted[ i ] ) )
-//     {
-//       layersOnly = false;
-//
-//       if( self._cursorSaved )
-//       {
-//         /*restores cursos position*/
-//         result +=  '\x1b[u';
-//         self._cursorSaved = 0;
-//       }
-//       result +=  splitted[ i ];
-//     }
-//     else
-//     {
-//       var layer = splitted[ i ][ 0 ];
-//       var color = splitted[ i ][ 1 ];
-//
-//       if( layer === 'foreground')
-//       {
-//         self.foregroundColor = color;
-//
-//         if( self.foregroundColor )
-//         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
-//         else
-//         result += `\x1b[39m`;
-//       }
-//       else if( layer === 'background' )
-//       {
-//         self.backgroundColor = color;
-//
-//         if( self.backgroundColor )
-//         result += `\x1b[${ self._rgbToCode( self.backgroundColor ) + 10 }m`;
-//         else
-//         result += `\x1b[49m`;
-//       }
-//     }
-//   }
-//
-//   if( layersOnly )
-//   {
-//     /* saves cursos position */
-//     self._cursorSaved = 1;
-//     result += '\x1b[s';
-//   }
-//
-//   o.outputForTerminal = [ result ];
-//
-//   return o;
-// }
-
-//
-
-function _handleDirective( directive )
-{
-  var self = this;
-
-  var name = directive[ 0 ];
-  var value = directive[ 1 ];
-
-  if( name === 'ignoreDirectives' )
-  {
-    self.ignoreDirectives = _.boolFrom( value );
-  }
-
-  if( self.ignoreDirectives )
-  return;
-
-  if( self.trackingColor )
-  {
-    if( name === 'foreground' )
-    {
-      self.foregroundColor = value;
-    }
-    if( name === 'background' )
-    {
-      self.backgroundColor = value;
-    }
-  }
-
-  if( name === 'coloring' )
-  {
-    self.usingColorFromStack = _.boolFrom( value );
-  }
-  if( name === 'trackingColor' )
-  {
-    self.trackingColor = _.boolFrom( value );
-  }
-}
-
-//
-
 function _writePrepareShell( o )
 {
   var self = this;
@@ -567,6 +451,7 @@ function _writePrepareShell( o )
 
   splitted.forEach( function( strip )
   {
+
     if( _.arrayIs( strip ) )
     {
       self._handleDirective( strip );
@@ -598,13 +483,14 @@ function _writePrepareShell( o )
 
       if( self.usingColorFromStack )
       {
-        if( self.foregroundColor )
-        result += `\x1b[39m`;
         if( self.backgroundColor )
         result += `\x1b[49m`;
+        if( self.foregroundColor )
+        result += `\x1b[39m`;
       }
     }
-  })
+
+  });
 
   // if( layersOnly && splitted.length )
   // o.outputForTerminal = [];
@@ -691,6 +577,59 @@ function _writePrepareWithoutColors( o )
 
 //
 
+function _handleStrip( strip )
+{
+  var allowedKeys = [ 'bg', 'background', 'fg', 'foreground', 'coloring', 'trackingColor', 'ignoreDirectives' ];
+  var parts = strip.split( ' : ' );
+  if( parts.length === 2 )
+  {
+    if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
+    return;
+    return parts;
+  }
+}
+
+//
+
+function _handleDirective( directive )
+{
+  var self = this;
+
+  var name = directive[ 0 ];
+  var value = directive[ 1 ];
+
+  if( name === 'ignoreDirectives' )
+  {
+    self.ignoreDirectives = _.boolFrom( value );
+  }
+
+  if( self.ignoreDirectives )
+  return;
+
+  if( self.trackingColor )
+  {
+    if( name === 'foreground' )
+    {
+      self.foregroundColor = value;
+    }
+    if( name === 'background' )
+    {
+      self.backgroundColor = value;
+    }
+  }
+
+  if( name === 'coloring' )
+  {
+    self.usingColorFromStack = _.boolFrom( value );
+  }
+  if( name === 'trackingColor' )
+  {
+    self.trackingColor = _.boolFrom( value );
+  }
+}
+
+//
+
 function _writePrepare( original )
 {
 
@@ -713,15 +652,15 @@ function _writePrepare( original )
 
       if( self.permanentStyle )
       {
-        o.output[ 0 ] = _.strColor.style( o.output[ 0 ],self.permanentStyle );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],self.permanentStyle );
       }
 
       if( self.coloringConnotation )
       {
         if( self.attributes.connotation === 'positive' )
-        o.output[ 0 ] = _.strColor.style( o.output[ 0 ],'positive' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'positive' );
         else if( self.attributes.connotation === 'negative' )
-        o.output[ 0 ] = _.strColor.style( o.output[ 0 ],'negative' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'negative' );
       }
 
       if( self.coloringHeadAndTail )
@@ -730,9 +669,9 @@ function _writePrepare( original )
       {
         var reserve = self.verbosityReserve();
         if( self.attributes.head && reserve > 1 )
-        o.output[ 0 ] = _.strColor.style( o.output[ 0 ],'head' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'head' );
         else if( self.attributes.tail && reserve > 1 )
-        o.output[ 0 ] = _.strColor.style( o.output[ 0 ],'tail' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'tail' );
       }
 
       if( !wLogger.rawOutput )
@@ -773,7 +712,7 @@ function topic()
   var result = _.strConcat.apply( undefined,arguments );
 
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.log( result );
@@ -791,8 +730,9 @@ function topicUp()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
+  xxx
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logUp( result );
@@ -810,14 +750,44 @@ function topicDown()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
+  xxx
   debugger;
-  result = _.strColor.fg( _.strColor.bg( result,'white' ), 'black' ); debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
 
   this.log();
   this.logDown( result );
   this.log();
 
   return result;
+}
+
+//
+
+function styleSet( style )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.strIs( style ) );
+
+  if( style === 'default' )
+  {
+    self.foregroundColor = 'default';
+    self.backgroundColor = 'default';
+    return;
+  }
+
+  var style = _.color.strColorStyle( style );
+
+  if( !style )
+  return;
+
+  if( style.fg )
+  self.foregroundColor = style.fg;
+
+  if( style.bg )
+  self.backgroundColor = style.bg;
+
 }
 
 //
@@ -843,19 +813,21 @@ function _diagnosticColorCheck()
     for( var i = 0; i < illColorCombinations.length; i++ )
     {
       var combination = illColorCombinations[ i ];
-      if( combination.fg === fg.originName && combination.bg === bg.originName )
-      if( combination.platform === process.platform )
+      if( combination.fg === fg.originalName && combination.bg === bg.originalName )
+      // if( combination.platform === process.platform )
       {
         wLogger.diagnosticColor = 0;
-        logger.foregroundColor = 'blue';
-        logger.backgroundColor = 'yellow';
+        // logger.foregroundColor = 'blue';
+        // logger.backgroundColor = 'yellow';
+        logger.styleSet( 'info.negative' );
         logger.warn( 'Warning!. Ill colors combination: ' );
         logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
         logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
-        logger.warn( 'platform : ', process.platform );
-        logger.foregroundColor = 'default';
-        logger.backgroundColor = 'default';
-        break;
+        logger.warn( 'platform : ', combination.platform );
+        logger.styleSet( 'default' );
+        // logger.foregroundColor = 'default';
+        // logger.backgroundColor = 'default';
+        // break;
       }
     }
   }
@@ -868,32 +840,36 @@ function _diagnosticColorCheck()
 
     if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
     {
-      if( fg.originName !== bg.originName )
+      if( fg.originalName !== bg.originalName )
       {
-        var diff = _.color._colorDistance( fg.originValue, bg.originValue );
+        var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
         _.assert( diff > 0 );
-        if( diff <= 0.5 )
+        if( diff <= 0.25 )
         collapse = true;
       }
     }
 
     if( collapse )
     {
-      logger.foregroundColor = 'blue';
-      logger.backgroundColor = 'yellow';
+      // logger.foregroundColor = 'blue';
+      // logger.backgroundColor = 'yellow';
+      logger.styleSet( 'info.negative' );
       logger.warn( 'Warning: Color collapse in native terminal.' );
-      logger.warn( 'fg passed : ', fg.originName, fg.originValue );
+      logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
       logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
-      logger.warn( 'bg passed: ', bg.originName, bg.originValue );
+      logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
       logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
-      logger.foregroundColor = 'default';
-      logger.backgroundColor = 'default';
+      logger.styleSet( 'default' );
+      // logger.foregroundColor = 'default';
+      // logger.backgroundColor = 'default';
     }
+
   }
+
 }
 
 // --
-// relationships
+// type
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -974,6 +950,10 @@ var illColorCombinations =
 
 ]
 
+// --
+// relationships
+// --
+
 var Composes =
 {
 
@@ -997,8 +977,6 @@ var Composes =
 
   diagnosticColorsStack : null
 
-  // attributes : {},
-
 }
 
 var Aggregates =
@@ -1015,9 +993,15 @@ var Statics =
 {
   coloredToHtml : coloredToHtml,
   rawOutput : false,
-  diagnosticColor : 0,
+  diagnosticColor : 1,
   diagnosticCollorCollapse : 1,
   illColorCombinations : illColorCombinations
+}
+
+var Accessors =
+{
+  foregroundColor : 'foregroundColor',
+  backgroundColor : 'backgroundColor',
 }
 
 // --
@@ -1034,22 +1018,6 @@ var Functor =
 var Extend =
 {
 
-  // etc
-
-  _rgbToCode : _rgbToCode,
-  _handleStrip : _handleStrip,
-
-  _foregroundColorGet : _foregroundColorGet,
-  _backgroundColorGet : _backgroundColorGet,
-
-  _setColor : _setColor,
-  _foregroundColorSet : _foregroundColorSet,
-  _backgroundColorSet : _backgroundColorSet,
-
-  _handleDirective : _handleDirective,
-
-  _diagnosticColorCheck : _diagnosticColorCheck,
-
   // stack
 
   _stackPush : _stackPush,
@@ -1065,6 +1033,18 @@ var Extend =
   _writePrepareBrowser : _writePrepareBrowser,
   _writePrepareWithoutColors : _writePrepareWithoutColors,
 
+  _handleStrip : _handleStrip,
+  _handleDirective : _handleDirective,
+
+  _foregroundColorGet : _foregroundColorGet,
+  _backgroundColorGet : _backgroundColorGet,
+  _foregroundColorSet : _foregroundColorSet,
+  _backgroundColorSet : _backgroundColorSet,
+  _colorSet : _colorSet,
+
+  _rgbToCode : _rgbToCode,
+  _diagnosticColorCheck : _diagnosticColorCheck,
+
 
   // topic
 
@@ -1072,6 +1052,7 @@ var Extend =
   topicUp : topicUp,
   topicDown : topicDown,
 
+  styleSet : styleSet,
 
   // relationships
 

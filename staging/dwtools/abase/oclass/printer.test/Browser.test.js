@@ -56,37 +56,37 @@ function colorConsole( test )
 
 
   test.description = 'case1';
-  var msg = _.strColor.fg( 'msg', 'black' );
+  var msg = _.color.strFormatForeground( 'msg', 'black' );
   logger.log( msg );
   var expected = [ '%cmsg','color:rgba( 0, 0, 0, 1 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case2';
-  var msg = _.strColor.bg( 'msg', 'black' );
+  var msg = _.color.strFormatBackground( 'msg', 'black' );
   logger.log( msg );
   var expected = [ '%cmsg','color:none;background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3';
-  var msg = _.strColor.bg( _.strColor.fg( 'red text', 'red' ), 'black' );
+  var msg = _.color.strFormatBackground( _.color.strFormatForeground( 'red text', 'red' ), 'black' );
   logger.log( msg );
   var expected = [ '%cred text','color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case4';
-  var msg = _.strColor.fg( 'yellow text' + _.strColor.bg( _.strColor.fg( 'red text', 'red' ), 'black' ), 'yellow')
+  var msg = _.color.strFormatForeground( 'yellow text' + _.color.strFormatBackground( _.color.strFormatForeground( 'red text', 'red' ), 'black' ), 'yellow')
   logger.log( msg );
   var expected = [ '%cyellow text%cred text','color:rgba( 255, 255, 0, 1 );background:none;', 'color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5: unknown color';
-  var msg = _.strColor.fg( 'msg', 'unknown')
+  var msg = _.color.strFormatForeground( 'msg', 'unknown')
   logger.log( msg );
   var expected = [ '%cmsg','color:none;background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case6: hex color';
-  var msg = _.strColor.fg( 'msg', 'ff00ff' )
+  var msg = _.color.strFormatForeground( 'msg', 'ff00ff' )
   logger.log( msg );
   var expected = [ '%cmsg','color:rgba( 255, 0, 255, 1 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );

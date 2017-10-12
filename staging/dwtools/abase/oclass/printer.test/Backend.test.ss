@@ -69,33 +69,33 @@ function colorConsole( test )
   var logger = new wLogger({ output : null, onWrite : onWrite });
 
   test.description = 'case1: red text';
-  logger.log( _.strColor.fg( 'text', 'red') );
+  logger.log( _.color.strFormatForeground( 'text', 'red') );
   var expected = '\u001b[31mtext\u001b[39m';
   test.identical( logger.foregroundColor, null );
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case2: yellow background';
-  logger.log( _.strColor.bg( 'text', 'yellow') );
+  logger.log( _.color.strFormatBackground( 'text', 'yellow') );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[43mtext\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3: red text on yellow background';
-  logger.log( _.strColor.bg( _.strColor.fg( 'text', 'red'), 'yellow') );
+  logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[31m\u001b[43mtext\u001b[39m\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case4: yellow text on red background  + not styled text';
-  logger.log( 'text' + _.strColor.fg( _.strColor.bg( 'text', 'red'), 'yellow') + 'text' );
+  logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'red'), 'yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[39m\u001b[49mtext';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5: unknown color ';
-  logger.log( _.strColor.fg( 'text', 'xxx') );
+  logger.log( _.color.strFormatForeground( 'text', 'xxx') );
   test.identical( logger.foregroundColor, null );
   var expected = 'text';
   test.identical( _escaping( got ), _escaping( expected ) );

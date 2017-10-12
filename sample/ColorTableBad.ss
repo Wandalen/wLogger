@@ -100,7 +100,7 @@ function prepareInfo()
     for( var i = 0; i < c[ key ].length; i++ )
     {
       currentPlatform = c[ key ][ i ];
-      silencedLogger.log( _.strColor.bg( _.strColor.fg( 'Ill combination', fg ) ,bg ));
+      silencedLogger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'Ill combination', fg ) ,bg ));
   }
   var newRow = {};
   var fg = shortColor( combination[ 0 ] );
