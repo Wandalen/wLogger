@@ -421,6 +421,127 @@ function emptyLines( test )
 
 //
 
+function diagnostic( test )
+{
+  if( isBrowser )
+  {
+    test.identical( 1, 1 );
+    return;
+  }
+
+  var l = new wLogger();
+
+  //
+
+  wLogger.diagnosticColor = 0;
+  wLogger.diagnosticColorCollapse = 0;
+  var got = l._diagnosticColorCheck();
+  test.identical( got, undefined );
+
+  //
+
+  wLogger.diagnosticColor = 1;
+  wLogger.diagnosticColorCollapse = 1;
+
+  /**/
+
+  var got = l._diagnosticColorCheck();
+  test.identical( got, undefined );
+
+  /**/
+
+  l.foregroundColor = 'red';
+  l.backgroundColor = 'default';
+  var got = l._diagnosticColorCheck();
+  test.identical( got, undefined );
+
+  /**/
+
+  l.foregroundColor = 'default';
+  l.backgroundColor = 'red';
+  var got = l._diagnosticColorCheck();
+  test.identical( got, undefined );
+
+  //
+
+  test.description = 'ill color combinations test';
+
+  /* IllColorCombination diagnostic off */
+
+  wLogger.diagnosticColor = 0;
+
+  l.foregroundColor = 'black';
+  l.backgroundColor = 'yellow';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.ill, undefined  );
+
+  /* IllColorCombination diagnostic on */
+
+  wLogger.diagnosticColor = 1;
+
+  l.foregroundColor = 'black';
+  l.backgroundColor = 'yellow';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.ill, true );
+
+  /* after warning diagnostic is disabled */
+
+  test.identical( wLogger.diagnosticColor, 0 );
+  l.foregroundColor = 'black';
+  l.backgroundColor = 'yellow';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.ill, undefined );
+
+  wLogger.diagnosticColor = 1;
+
+  l.foregroundColor = 'yellow';
+  l.backgroundColor = 'blue';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.ill, false );
+
+  //
+
+  test.description = 'color collapse test';
+
+  /* ColorCollapse off */
+
+  wLogger.diagnosticColorCollapse = 0;
+
+  l.foregroundColor = 'yellowish pink';
+  l.backgroundColor = 'magenta';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.collapse, undefined  );
+
+  /* ColorCollapse on */
+
+  wLogger.diagnosticColorCollapse = 1;
+
+  l.foregroundColor = 'greenish yellow';
+  l.backgroundColor = 'yellow';
+  debugger
+  var got = l._diagnosticColorCheck();
+  test.identical( got.collapse, true  );
+
+  /* ColorCollapse off after first warning */
+
+  test.identical( wLogger.diagnosticColorCollapse, 0 );
+  l.foregroundColor = 'greenish yellow';
+  l.backgroundColor = 'yellow';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.collapse, undefined  );
+
+  /* ColorCollapse on */
+
+  wLogger.diagnosticColorCollapse = 1;
+
+  l.foregroundColor = 'red';
+  l.backgroundColor = 'yellow';
+  var got = l._diagnosticColorCheck();
+  test.identical( got.collapse, false  );
+}
+
+//
+
 function coloringNoColor( test )
 {
   var color = _.color;
@@ -463,6 +584,7 @@ var Self =
     coloredToHtml : coloredToHtml,
     coloring : coloring,
     emptyLines : emptyLines,
+    diagnostic : diagnostic,
     coloringNoColor : coloringNoColor,
 
   },
