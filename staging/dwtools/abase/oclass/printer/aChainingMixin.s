@@ -607,7 +607,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( output ) || input === null );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -662,6 +662,32 @@ function inputFrom( input,o )
   o.chainDescriptor = chainDescriptor;
 
   /* */
+
+  if( wLogger.processIs( input ) )
+  {
+    var inputChannel = 'send';
+    var outputChannel = 'log';
+
+    _.assert( input.stdout );
+
+    if( !input.onMessageHandler )
+    {
+      input.stdout.on( 'data', function( data )
+      {
+        if( _.bufferAnyIs( data ) )
+        data = _.bufferToStr( data );
+
+        if( _.strEnds( data,'\n' ) )
+        data = _.strRemoveEnd( data,'\n' );
+
+        for( var d = 0 ; d < input.outputs.length ; d++ )
+        input.outputs[ d ].output[ outputChannel ].call( input.outputs[ d ].output, data );
+      })
+      input.onMessageHandler = 1;
+    }
+
+    return true;
+  }
 
   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
   {
@@ -937,6 +963,19 @@ function consoleIs( src )
   return false;
 }
 
+//
+
+function processIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  var typeOf = _.strTypeOf( src );
+  if( typeOf === 'ChildProcess' || typeOf === 'process' )
+  return true;
+
+  return false;
+}
+
 // --
 // test
 // --
@@ -947,7 +986,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
@@ -1013,7 +1052,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) );
+  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || wLogger.processIs( output ));
   //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
@@ -1193,6 +1232,7 @@ var Statics =
   consoleIsBarred : consoleIsBarred,
 
   consoleIs : consoleIs,
+  processIs : processIs,
 
   // var
 
