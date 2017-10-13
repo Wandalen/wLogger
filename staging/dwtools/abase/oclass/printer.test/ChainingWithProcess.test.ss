@@ -1,4 +1,4 @@
-( function _Backend2_test_s_( ) {
+( function _ChainingWithProcess_test_ss( ) {
 
 'use strict';
 
@@ -102,7 +102,7 @@ trivial.timeOut = 30000;
 var Self =
 {
 
-  name : 'Backend2',
+  name : 'ChainingWithProcess',
   silencing : 1,
   onRoutineEnd : onRoutineEnd,
   context :

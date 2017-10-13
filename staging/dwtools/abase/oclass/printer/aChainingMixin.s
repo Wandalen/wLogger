@@ -663,54 +663,35 @@ function inputFrom( input,o )
 
   /* */
 
-  if( wLogger.processIs( input ) )
+  if( wLogger.streamIs( input ) )
   {
-    var inputChannel = 'send';
-    var outputChannel = 'log';
-
-    _.assert( input.stdout );
-
-    if( !input.onMessageHandler )
-    {
-      input.stdout.on( 'data', function( data )
-      {
-        if( _.bufferAnyIs( data ) )
-        data = _.bufferToStr( data );
-
-        if( _.strEnds( data,'\n' ) )
-        data = _.strRemoveEnd( data,'\n' );
-
-        for( var d = 0 ; d < input.outputs.length ; d++ )
-        input.outputs[ d ].output[ outputChannel ].call( input.outputs[ d ].output, data );
-      })
-      input.onMessageHandler = 1;
-    }
-
-    return true;
+    self._inputFromStream( input );
   }
-
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+  else
   {
-    var channel = self.outputWriteMethods[ m ];
-
-    _.assert( input[ channel ],'inputFrom expects input has method',channel );
-
-    if( !chainDescriptor.originalMethods[ channel ] )
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
     {
-      _.assert( !chainDescriptor.bar );
-      chainDescriptor.originalMethods[ channel ] = input[ channel ];
-      // chainDescriptor.barringMethods[ channel ] = input[ channel ];
-      input[ channel ] = function()
-      {
-        if( chainDescriptor.bar )
-        return chainDescriptor.bar[ channel ].apply( self,arguments );
-        for( var d = 0 ; d < input.outputs.length ; d++ )
-        input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
-        return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
-      }
-    }
+      var channel = self.outputWriteMethods[ m ];
 
-  })();
+      _.assert( input[ channel ],'inputFrom expects input has method',channel );
+
+      if( !chainDescriptor.originalMethods[ channel ] )
+      {
+        _.assert( !chainDescriptor.bar );
+        chainDescriptor.originalMethods[ channel ] = input[ channel ];
+        // chainDescriptor.barringMethods[ channel ] = input[ channel ];
+        input[ channel ] = function()
+        {
+          if( chainDescriptor.bar )
+          return chainDescriptor.bar[ channel ].apply( self,arguments );
+          for( var d = 0 ; d < input.outputs.length ; d++ )
+          input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
+          return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
+        }
+      }
+
+    })();
+  }
 
   /* */
 
@@ -747,6 +728,31 @@ inputFrom.defaults =
 }
 
 inputFrom.defaults.__proto__ = outputTo.defaults;
+
+//
+
+function _inputFromStream( stream )
+{
+  var self = this;
+
+  _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
+
+  if( !stream.onDataHandler )
+  {
+    stream.on( 'data', function( data )
+    {
+      if( _.bufferAnyIs( data ) )
+      data = _.bufferToStr( data );
+
+      if( _.strEnds( data,'\n' ) )
+      data = _.strRemoveEnd( data,'\n' );
+
+      for( var d = 0 ; d < stream.outputs.length ; d++ )
+      stream.outputs[ d ].output[ outputChannel ].call( stream.outputs[ d ].output, data );
+    })
+    stream.onDataHandler = 1;
+  }
+}
 
 //
 
@@ -974,6 +980,15 @@ function processIs( src )
   return true;
 
   return false;
+}
+
+//
+
+function streamIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  return _.objectIs( src ) && _.routineIs( src.pipe )
 }
 
 // --
@@ -1233,6 +1248,7 @@ var Statics =
 
   consoleIs : consoleIs,
   processIs : processIs,
+  streamIs : streamIs,
 
   // var
 
@@ -1273,6 +1289,7 @@ var Extend =
   inputFrom : inputFrom,
   inputUnchain : inputUnchain,
   _inputUnchainForeign : _inputUnchainForeign,
+  _inputFromStream : _inputFromStream,
 
   unchain : unchain,
 
