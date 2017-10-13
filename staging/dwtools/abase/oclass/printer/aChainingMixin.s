@@ -378,6 +378,12 @@ function outputTo( output,o )
       output.inputs.push( o );
     }
 
+    if( wLogger.streamIs( output ) )
+    {
+      self._outputToStream( o );
+      return true;
+    }
+
     if( o.unbarring )
     _.assert( output.isTerminal === undefined || output.isTerminal,'unbarring chaining possible only into terminal logger' );
 
@@ -735,6 +741,8 @@ function _inputFromStream( stream )
 {
   var self = this;
 
+  var outputChannel = 'log';
+
   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
 
   if( !stream.onDataHandler )
@@ -752,6 +760,27 @@ function _inputFromStream( stream )
     })
     stream.onDataHandler = 1;
   }
+}
+
+//
+
+function _outputToStream( o )
+{
+  var self = this;
+
+  var stream = o.output;
+
+  _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  {
+    var name = self.outputWriteMethods[ m ];
+    o.methods[ name ] = function()
+    {
+      stream.write.apply( stream, arguments );
+    }
+  })();
+
 }
 
 //
@@ -1285,6 +1314,7 @@ var Extend =
 
   outputTo : outputTo,
   outputUnchain : outputUnchain,
+  _outputToStream : _outputToStream,
 
   inputFrom : inputFrom,
   inputUnchain : inputUnchain,
