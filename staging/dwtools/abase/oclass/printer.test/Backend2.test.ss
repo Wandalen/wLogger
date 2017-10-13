@@ -9,11 +9,11 @@ if( typeof module !== 'undefined' )
 {
   try
   {
-  	require( '../../Base.s' );
+   require( '../../Base.s' );
   }
   catch( err )
   {
-  	require( 'wTools' );
+   require( 'wTools' );
   }
   var _ = wTools;
   _.include( 'wTesting' );
@@ -58,36 +58,36 @@ function onRoutineEnd( test )
 
 function trivial( test )
 {
- var self = this;
- var c = onRoutineBegin.call( this,test,testFile );
- function onWrite( o )
- {
- 	got.push( o.input[ 0 ] );
- }
- var l = new wLogger({ onWrite : onWrite, output : null });
- var shell =
- {
- 	path : c.testFilePath,
- 	stdio : 'pipe',
- 	outputColoring : 0,
- 	outputPrefixing : 0,
- 	ipc : 1,
- }
- var expected =
- [
- 	'slave : starting',
- ];
- var got  = [];
- var result = _.shellNode( shell )
- .doThen( function( err )
- {
- 	console.log( 'shellNode : done' );
- 	if( err )
- 	_.errLogOnce( err );
- 	test.description = 'no error from child process throwen';
- 	test.shouldBe( !err );
- 	test.shouldBe( _.arraySetIdentical( got, expected ) );
- });
+  var self = this;
+  var c = onRoutineBegin.call( this,test,testFile );
+  function onWrite( o )
+  {
+    got.push( o.input[ 0 ] );
+  }
+  var l = new wLogger({ onWrite : onWrite, output : null });
+  var shell =
+  {
+    path : c.testFilePath,
+    stdio : 'pipe',
+    outputColoring : 0,
+    outputPrefixing : 0,
+    ipc : 1,
+  }
+  var expected =
+  [
+    'slave : starting',
+  ];
+  var got  = [];
+  var result = _.shellNode( shell )
+  .doThen( function( err )
+  {
+    console.log( 'shellNode : done' );
+    if( err )
+    _.errLogOnce( err );
+    test.description = 'no error from child process throwen';
+    test.shouldBe( !err );
+    test.shouldBe( _.arraySetIdentical( got, expected ) );
+  });
 
   l.inputFrom( shell.process );
   return result;
@@ -107,11 +107,11 @@ var Self =
   onRoutineEnd : onRoutineEnd,
   context :
   {
-  	tempDirPath : null,
+    tempDirPath : null,
   },
   tests :
   {
-  	trivial : trivial,
+    trivial : trivial,
   },
 
 };
