@@ -378,6 +378,12 @@ function outputTo( output,o )
       output.inputs.push( o );
     }
 
+    if( wLogger.streamIs( output ) )
+    {
+      self._outputToStream( o );
+      return true;
+    }
+
     if( o.unbarring )
     _.assert( output.isTerminal === undefined || output.isTerminal,'unbarring chaining possible only into terminal logger' );
 
@@ -607,7 +613,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( output ) || input === null );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -663,28 +669,35 @@ function inputFrom( input,o )
 
   /* */
 
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+  if( wLogger.streamIs( input ) )
   {
-    var channel = self.outputWriteMethods[ m ];
-
-    _.assert( input[ channel ],'inputFrom expects input has method',channel );
-
-    if( !chainDescriptor.originalMethods[ channel ] )
+    self._inputFromStream( input );
+  }
+  else
+  {
+    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
     {
-      _.assert( !chainDescriptor.bar );
-      chainDescriptor.originalMethods[ channel ] = input[ channel ];
-      // chainDescriptor.barringMethods[ channel ] = input[ channel ];
-      input[ channel ] = function()
-      {
-        if( chainDescriptor.bar )
-        return chainDescriptor.bar[ channel ].apply( self,arguments );
-        for( var d = 0 ; d < input.outputs.length ; d++ )
-        input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
-        return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
-      }
-    }
+      var channel = self.outputWriteMethods[ m ];
 
-  })();
+      _.assert( input[ channel ],'inputFrom expects input has method',channel );
+
+      if( !chainDescriptor.originalMethods[ channel ] )
+      {
+        _.assert( !chainDescriptor.bar );
+        chainDescriptor.originalMethods[ channel ] = input[ channel ];
+        // chainDescriptor.barringMethods[ channel ] = input[ channel ];
+        input[ channel ] = function()
+        {
+          if( chainDescriptor.bar )
+          return chainDescriptor.bar[ channel ].apply( self,arguments );
+          for( var d = 0 ; d < input.outputs.length ; d++ )
+          input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
+          return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
+        }
+      }
+
+    })();
+  }
 
   /* */
 
@@ -721,6 +734,54 @@ inputFrom.defaults =
 }
 
 inputFrom.defaults.__proto__ = outputTo.defaults;
+
+//
+
+function _inputFromStream( stream )
+{
+  var self = this;
+
+  var outputChannel = 'log';
+
+  _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
+
+  if( !stream.onDataHandler )
+  {
+    stream.on( 'data', function( data )
+    {
+      if( _.bufferAnyIs( data ) )
+      data = _.bufferToStr( data );
+
+      if( _.strEnds( data,'\n' ) )
+      data = _.strRemoveEnd( data,'\n' );
+
+      for( var d = 0 ; d < stream.outputs.length ; d++ )
+      stream.outputs[ d ].output[ outputChannel ].call( stream.outputs[ d ].output, data );
+    })
+    stream.onDataHandler = 1;
+  }
+}
+
+//
+
+function _outputToStream( o )
+{
+  var self = this;
+
+  var stream = o.output;
+
+  _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
+
+  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  {
+    var name = self.outputWriteMethods[ m ];
+    o.methods[ name ] = function()
+    {
+      stream.write.apply( stream, arguments );
+    }
+  })();
+
+}
 
 //
 
@@ -937,6 +998,28 @@ function consoleIs( src )
   return false;
 }
 
+//
+
+function processIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  var typeOf = _.strTypeOf( src );
+  if( typeOf === 'ChildProcess' || typeOf === 'process' )
+  return true;
+
+  return false;
+}
+
+//
+
+function streamIs( src )
+{
+  _.assert( arguments.length === 1 );
+
+  return _.objectIs( src ) && _.routineIs( src.pipe )
+}
+
 // --
 // test
 // --
@@ -947,7 +1030,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) );
+  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
@@ -1013,7 +1096,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) );
+  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || wLogger.processIs( output ));
   //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
@@ -1193,6 +1276,8 @@ var Statics =
   consoleIsBarred : consoleIsBarred,
 
   consoleIs : consoleIs,
+  processIs : processIs,
+  streamIs : streamIs,
 
   // var
 
@@ -1229,10 +1314,12 @@ var Extend =
 
   outputTo : outputTo,
   outputUnchain : outputUnchain,
+  _outputToStream : _outputToStream,
 
   inputFrom : inputFrom,
   inputUnchain : inputUnchain,
   _inputUnchainForeign : _inputUnchainForeign,
+  _inputFromStream : _inputFromStream,
 
   unchain : unchain,
 

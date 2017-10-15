@@ -469,7 +469,7 @@ function _writePrepareShell( o )
 
       if( self.usingColorFromStack )
       {
-        if( self.foregroundColor && self.backgroundColor )
+        // if( self.foregroundColor && self.backgroundColor )
         self._diagnosticColorCheck();
 
         if( self.foregroundColor )
@@ -796,7 +796,7 @@ function _diagnosticColorCheck()
 {
   var self = this;
 
-  if( !wLogger.diagnosticColor && !wLogger.diagnosticCollorCollapse && isBrowser )
+  if( isBrowser )
   return;
 
   if( !self.foregroundColor || !self.backgroundColor )
@@ -808,64 +808,86 @@ function _diagnosticColorCheck()
   var fg = stackFg[ stackFg.length - 1 ];
   var bg = stackBg[ stackBg.length - 1 ];
 
-  if( wLogger.diagnosticColor )
-  {
-    for( var i = 0; i < illColorCombinations.length; i++ )
-    {
-      var combination = illColorCombinations[ i ];
-      if( combination.fg === fg.originalName && combination.bg === bg.originalName )
-      // if( combination.platform === process.platform )
-      {
-        wLogger.diagnosticColor = 0;
-        // logger.foregroundColor = 'blue';
-        // logger.backgroundColor = 'yellow';
-        logger.styleSet( 'info.negative' );
-        logger.warn( 'Warning!. Ill colors combination: ' );
-        logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
-        logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
-        logger.warn( 'platform : ', combination.platform );
-        logger.styleSet( 'default' );
-        // logger.foregroundColor = 'default';
-        // logger.backgroundColor = 'default';
-        // break;
-      }
-    }
-  }
-
   /* */
 
-  if( wLogger.diagnosticCollorCollapse )
+  var result = {};
+
+  if( wLogger.diagnosticColor )
+  result.ill = self._diagnosticColor( fg, bg );
+
+  if( wLogger.diagnosticColorCollapse )
+  result.collapse = self._diagnosticColorCollapse( fg, bg );
+
+  return result;
+
+}
+
+//
+
+function _diagnosticColor( fg, bg )
+{
+  var self = this;
+  var ill = false;
+
+  for( var i = 0; i < illColorCombinations.length; i++ )
   {
-    var collapse = false;
-
-    if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
+    var combination = illColorCombinations[ i ];
+    if( combination.fg === fg.originalName && combination.bg === bg.originalName )
+    // if( combination.platform === process.platform )
     {
-      if( fg.originalName !== bg.originalName )
-      {
-        var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
-        _.assert( diff > 0 );
-        if( diff <= 0.25 )
-        collapse = true;
-      }
-    }
-
-    if( collapse )
-    {
+      wLogger.diagnosticColor = 0;
+      ill = true;
       // logger.foregroundColor = 'blue';
       // logger.backgroundColor = 'yellow';
       logger.styleSet( 'info.negative' );
-      logger.warn( 'Warning: Color collapse in native terminal.' );
-      logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
-      logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
-      logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
-      logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
+      logger.warn( 'Warning!. Ill colors combination: ' );
+      logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
+      logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
+      logger.warn( 'platform : ', combination.platform );
       logger.styleSet( 'default' );
       // logger.foregroundColor = 'default';
       // logger.backgroundColor = 'default';
+      // break;
     }
-
   }
 
+  return ill;
+}
+
+//
+
+function _diagnosticColorCollapse( fg, bg )
+{
+  var self = this;
+  var collapse = false;
+
+  if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
+  {
+    if( fg.originalName !== bg.originalName )
+    {
+      var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
+      if( diff <= 0.25 )
+      collapse = true;
+    }
+  }
+
+  if( collapse )
+  {
+    // logger.foregroundColor = 'blue';
+    // logger.backgroundColor = 'yellow';
+    wLogger.diagnosticColorCollapse = 0;
+    logger.styleSet( 'info.negative' );
+    logger.warn( 'Warning: Color collapse in native terminal.' );
+    logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
+    logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
+    logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
+    logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
+    logger.styleSet( 'default' );
+    // logger.foregroundColor = 'default';
+    // logger.backgroundColor = 'default';
+  }
+
+  return collapse;
 }
 
 // --
@@ -994,7 +1016,7 @@ var Statics =
   coloredToHtml : coloredToHtml,
   rawOutput : false,
   diagnosticColor : 1,
-  diagnosticCollorCollapse : 1,
+  diagnosticColorCollapse : 1,
   illColorCombinations : illColorCombinations
 }
 
@@ -1044,6 +1066,8 @@ var Extend =
 
   _rgbToCode : _rgbToCode,
   _diagnosticColorCheck : _diagnosticColorCheck,
+  _diagnosticColor : _diagnosticColor,
+  _diagnosticColorCollapse : _diagnosticColorCollapse,
 
 
   // topic

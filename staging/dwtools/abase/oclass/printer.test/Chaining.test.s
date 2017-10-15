@@ -567,6 +567,7 @@ function consoleIs( test )
 
   test.shouldBe( wLogger.consoleIs( console ) );
   test.shouldBe( !wLogger.consoleIs( [] ) );
+  test.shouldBe( !wLogger.consoleIs( Object.create( null ) ) );
 
   if( !Config.debug )
   return;
