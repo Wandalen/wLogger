@@ -47,7 +47,7 @@ function readFromFile( test )
   var expected = [ data ];
 
   _.fileProvider.fileWrite( filePath, data );
-  var readStream = _.fileProvider.createReadStreamAct( filePath );
+  var readStream = _.fileProvider.fileReadStreamAct( filePath );
 
   function onWrite( o )
   {
@@ -77,7 +77,7 @@ function writeToFile( test )
 
   var filePath = _.pathJoin( self.testDirPath, 'file.txt' )
 
-  var writeStream = _.fileProvider.createWriteStreamAct( filePath );
+  var writeStream = _.fileProvider.fileWriteStream( filePath );
 
   var data = _.strDup( '1', 10 );
   var expected = [];

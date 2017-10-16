@@ -84,14 +84,14 @@ function colorConsole( test )
   logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[31m\u001b[43mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case4: yellow text on red background  + not styled text';
   logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'red'), 'yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = 'text\u001b[33m\u001b[41mtext\u001b[39m\u001b[49mtext';
+  var expected = 'text\u001b[33m\u001b[41mtext\u001b[49m\u001b[39mtext';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case5: unknown color ';
@@ -137,7 +137,7 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 1, 0 ,0 ] );
   test.identical( logger.backgroundColor, [ 1, 1 ,0 ] );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[31m\u001b[43mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   /**/
@@ -166,7 +166,7 @@ function colorConsole( test )
   // if( isUnix )
   // var expected = '\u001b[34m\u001b[107mtext\u001b[39m\u001b[49m';
   // else
-  var expected = '\u001b[34m\u001b[47mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[34m\u001b[47mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   /**/
@@ -212,7 +212,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 0, 0, 1 ] )
   test.identical( logger.backgroundColor, [ 0, 1, 0 ] )
   logger.log( 'text' );
-  var expected = '\u001b[34m\u001b[42mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[34m\u001b[42mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   //setting to default to get stacked color
@@ -223,7 +223,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 1, 0, 0 ] );
   test.identical( logger.backgroundColor, [ 1, 1, 0 ] );
   logger.log( 'text' );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[31m\u001b[43mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   //setting to default, no stacked colors, must be null
@@ -254,7 +254,7 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
   logger.log( '#coloring : 1#' );
   logger.log( 'text' );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[39m\u001b[49m';
+  var expected = '\u001b[31m\u001b[43mtext\u001b[49m\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
   /* stacking colors even if coloring is disabled */

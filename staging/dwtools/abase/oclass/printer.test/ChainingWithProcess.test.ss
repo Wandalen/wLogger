@@ -104,6 +104,7 @@ var Self =
 
   name : 'ChainingWithProcess',
   silencing : 1,
+  enabled : 0,
   onRoutineEnd : onRoutineEnd,
   context :
   {
