@@ -545,11 +545,11 @@ function diagnostic( test )
 function coloringNoColor( test )
 {
   var color = _.color;
+  var fg = _.color.strFormatForeground;
+  var bg = _.color.strFormatBackground;
   _.color = null;
 
   var got;
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
 
   function onWrite( args ){ got = args.outputForTerminal[ 0 ] };
 

@@ -308,7 +308,7 @@ function coloredToHtml( o )
   o = { src : o }
 
   if( !o.onStrip )
-  o.onStrip = self._handleStrip;
+  o.onStrip = self._handleStrip || _handleStrip;
 
   _.routineOptions( coloredToHtml,o );
   _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
