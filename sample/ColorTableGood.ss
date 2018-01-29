@@ -2,7 +2,7 @@ require( 'wTools' );
 require( 'wConsequence' );
 require( 'wLogger' );
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 colorNames = colorNames.slice( 0, colorNames.length / 2 );
@@ -33,7 +33,7 @@ function prepareTableInfo()
   }
 
   var combinations = [];
-  var silencedLogger = new wLogger
+  var silencedLogger = new _.Logger
   ({
     output : null,
     onWrite : onWrite
@@ -66,7 +66,7 @@ function prepareTableInfo()
     return c;
   }
 
-  wLogger.illColorCombinations.forEach( ( c ) =>
+  _.Logger.illColorCombinations.forEach( ( c ) =>
   {
     remove( c.fg, c.bg );
     remove( c.bg, c.fg );

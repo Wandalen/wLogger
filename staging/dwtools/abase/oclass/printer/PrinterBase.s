@@ -6,20 +6,30 @@ var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
   isBrowser = false;
-  if( typeof wPrinterBase !== 'undefined' )
-  return;
 
-  if( typeof wBase === 'undefined' )
-  try
+  // if( typeof _.PrinterBase !== 'undefined' )
+  // debugger;
+  // if( typeof _.PrinterBase !== 'undefined' )
+  // return;
+
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../../../dwtools/Base.s';
+    let _externalTools = 0;
+    try
+    {
+      require.resolve( toolsPath )/*fff*/;
+    }
+    catch( err )
+    {
+      _externalTools = 1;
+      require( 'wTools' );
+    }
+    if( !_externalTools )
+    require( toolsPath )/*fff*/;
   }
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
 
@@ -31,7 +41,7 @@ if( typeof module !== 'undefined' )
  * @class wPrinterBase
  */
 
-var _ = wTools;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wPrinterBase( o )
 {
@@ -169,7 +179,7 @@ function _strConcat( args )
  * If argument( dLevel ) is not specified, increases by one.
  *
  * @example
- * var l = new wLogger();
+ * var l = new _.Logger();
  * l.up( 2 );
  * console.log( l.level )
  * //returns 2
@@ -202,7 +212,7 @@ function up( dLevel )
  * If argument( dLevel ) is not specified, decreases by one.
  *
  * @example
- * var l = new wLogger();
+ * var l = new _.Logger();
  * l.up( 2 );
  * l.down( 2 );
  * console.log( l.level )
@@ -368,7 +378,7 @@ _.classMake
   extend : Proto,
 });
 
-wCopyable.mixin( Self );
+_.Copyable.mixin( Self );
 
 //
 
@@ -381,14 +391,19 @@ _.accessor
   }
 });
 
+//
+
+_[ Self.nameShort ] = Self;
+
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
-// debugger;
-// var x = new Self();
-// debugger;
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();

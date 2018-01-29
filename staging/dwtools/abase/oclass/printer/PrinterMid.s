@@ -5,15 +5,17 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterMid !== 'undefined' )
-  return;
+  // if( typeof wPrinterMid !== 'undefined' )
+  // debugger;
+  // if( typeof wPrinterMid !== 'undefined' )
+  // return;
 
-  if( typeof wPrinterBase === 'undefined' )
+  // if( !_global_.wPrinterBase )
   require( './PrinterBase.s' );
 
   require( './aChainingMixin.s' )
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
 
@@ -25,8 +27,8 @@ if( typeof module !== 'undefined' )
  * @class wPrinterMid
  */
 
-var _ = wTools;
-var Parent = wPrinterBase;
+var _ = _global_.wTools;
+var Parent = _.PrinterBase;
 var Self = function wPrinterMid( o )
 {
   if( !( this instanceof Self ) )
@@ -506,14 +508,19 @@ _.accessorForbid
   }
 });
 
+//
+
+_[ Self.nameShort ] = Self;
+
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
-module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
-// debugger;
-// var x = new Self();
-// debugger;
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();

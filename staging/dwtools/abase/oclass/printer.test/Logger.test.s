@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -25,15 +25,15 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = wTools;
-var Parent = wTools.Tester;
+var _ = _global_.wTools;
+var Parent = _.Tester;
 
 //
 
 function outputTo( test )
 {
   test.description = '';
-  var l = new wLogger({ output : null });
+  var l = new _.Logger({ output : null });
   l.outputTo( console );
   var got = l.outputs[ 0 ].output;
   var expected = console;
@@ -41,26 +41,26 @@ function outputTo( test )
   test.identical( got, expected );
 
   test.description = 'empty output';
-  var l = new wLogger();
+  var l = new _.Logger();
   l.outputTo( null, { combining : 'rewrite' } );
   test.identical( l.outputs.length, 0 );
 
   test.description = 'empty output';
-  var l = new wLogger();
+  var l = new _.Logger();
   l.outputTo( { },{ combining : 'rewrite' } );
   test.identical( l.outputs.length, 1 );
 
   /*rewrite*/
   test.description = 'rewrite with null';
-  var l = new wLogger();
+  var l = new _.Logger();
   l.outputTo( null, { combining : 'rewrite' } );
   var got = [ l.output, l.outputs ];
   var expected = [ null, [] ];
   test.identical( got, expected );
 
   test.description = 'rewrite';
-  var l = new wLogger();
-  var l1 = new wLogger();
+  var l = new _.Logger();
+  var l1 = new _.Logger();
   l.outputTo( l1, { combining : 'rewrite' } );
   var got = ( l.output === l1 && l.outputs.length === 1 );
   var expected = true;
@@ -68,23 +68,23 @@ function outputTo( test )
 
  /*append*/
  test.description = 'append';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'append' } );
  var got = ( l.output === l1 && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'append list is empty';
- var l = new wLogger({ output : null});
- var l1 = new wLogger();
+ var l = new _.Logger({ output : null});
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'append' } );
  var got = ( l.output === l1 && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'append null';
- var l = new wLogger();
+ var l = new _.Logger();
  test.shouldThrowErrorSync( function()
  {
    l.outputTo( null, { combining : 'append' } );
@@ -92,8 +92,8 @@ function outputTo( test )
 
 
  test.description = 'append existing';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'append' } );
  test.shouldThrowError(function()
  {
@@ -102,16 +102,16 @@ function outputTo( test )
 
  /*prepend*/
  test.description = 'prepend';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'prepend' } );
  var got = ( l.outputs[ 0 ].output === l1 && l.outputs.length === 2 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'prepend existing';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'prepend' } );
  test.shouldThrowError(function()
  {
@@ -120,8 +120,8 @@ function outputTo( test )
  })
 
  test.description = 'prepend null';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'prepend' } );
  test.shouldThrowErrorSync( function()
  {
@@ -131,22 +131,22 @@ function outputTo( test )
 
  /*supplement*/
  test.description = 'try supplement not empty list';
- var l = new wLogger();
- var l1 = new wLogger();
+ var l = new _.Logger();
+ var l1 = new _.Logger();
  var got = l.outputTo( l1, { combining : 'supplement' } );
  var expected = false;
  test.identical( got, expected );
 
  test.description = 'supplement';
- var l = new wLogger({  output : null });
- var l1 = new wLogger();
+ var l = new _.Logger({  output : null });
+ var l1 = new _.Logger();
  l.outputTo( l1, { combining : 'supplement' } );
  var got = ( l.output && l.outputs.length === 1 );
  var expected = true;
  test.identical( got, expected );
 
  test.description = 'supplement null';
- var l = new wLogger();
+ var l = new _.Logger();
  test.shouldThrowErrorSync( function()
  {
    var got = l.outputTo( null, { combining : 'supplement' } );
@@ -155,8 +155,8 @@ function outputTo( test )
 
  /*combining off*/
  test.description = 'combining off';
- var l = new wLogger({  output : null });
- var l1 = new wLogger();
+ var l = new _.Logger({  output : null });
+ var l1 = new _.Logger();
  l.outputTo( l1 );
  var got = ( l.output && l.outputs.length === 1 );
  var expected = true;
@@ -164,7 +164,7 @@ function outputTo( test )
 
  if( Config.debug )
  {
-   var l1 = new wLogger();
+   var l1 = new _.Logger();
 
    test.description = 'empty call';
    test.shouldThrowError( function()
@@ -197,8 +197,8 @@ function outputTo( test )
    });
 
    test.description = ' ';
-   var l1 = new wLogger({ output : null });
-   var l2 = new wLogger();
+   var l1 = new _.Logger({ output : null });
+   var l2 = new _.Logger();
    test.shouldThrowError( function()
    {
      l1.inputFrom( console );
@@ -213,34 +213,34 @@ function outputTo( test )
 function outputUnchain( test )
 {
   test.description = 'remove console from output';
-  var l = new wLogger();
+  var l = new _.Logger();
   var got = l.outputUnchain( console );
   var expected = true;
   test.identical( got, expected );
 
   test.description = 'output not exists';
-  var l = new wLogger();
+  var l = new _.Logger();
   var got = l.outputUnchain( {} );
   var expected = false;
   test.identical( got, expected );
 
   test.description = 'remove from output';
-  var l1 = new wLogger();
-  var l2 = new wLogger({ output : l1 });
+  var l1 = new _.Logger();
+  var l2 = new _.Logger({ output : l1 });
   var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length]
   var expected = [ true, 0, 0 ];
   test.identical( got, expected );
 
   test.description = 'remove from output';
-  var l1 = new wLogger();
-  var l2 = new wLogger();
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
   l2.outputTo( l1, { combining : 'append' } );
   var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length ]
   var expected = [ true, 1, 0 ];
   test.identical( got, expected );
 
   test.description = 'no args';
-  var l = new wLogger();
+  var l = new _.Logger();
   test.identical( l.outputs.length, 1 );
   l.outputUnchain();
   test.identical( l.outputs.length, 0 );
@@ -249,19 +249,19 @@ function outputUnchain( test )
   test.description = 'output is not a object';
   test.shouldThrowError( function()
   {
-    var l = new wLogger();
+    var l = new _.Logger();
     l.outputUnchain( 1 );
   });
 
   test.description = 'empty ouputs';
-  var l = new wLogger({ output : null });
+  var l = new _.Logger({ output : null });
   var got = l.outputUnchain( console );
   test.identical( got, false )
 
   test.description = 'try to remove itself';
   test.shouldThrowError( function()
   {
-    var l = new wLogger();
+    var l = new _.Logger();
     l.outputUnchain( l );
   });
 
@@ -272,30 +272,30 @@ function outputUnchain( test )
 function inputFrom( test )
 {
   test.description = 'try to add existing input';
-  var l = new wLogger();
-  var l1 = new wLogger({ output : l });
+  var l = new _.Logger();
+  var l1 = new _.Logger({ output : l });
   test.shouldThrowError( function()
   {
     l.inputFrom( l1 );
   });
 
   test.description = 'try to add console that exists in output';
-  var l = new wLogger();
+  var l = new _.Logger();
   test.shouldThrowError( function()
   {
     l.inputFrom( console );
   });
 
   test.description = 'try to add console';
-  var l = new wLogger({ output : null });
+  var l = new _.Logger({ output : null });
   var got = [ l.inputFrom( console ), l.inputs.length ];
   var expected = [ true, 1 ];
   l.inputUnchain( console );
   test.identical( got, expected );
 
   test.description = 'try to add other logger';
-  var l = new wLogger();
-  var l1 = new wLogger();
+  var l = new _.Logger();
+  var l1 = new _.Logger();
   var got = [ l.inputFrom( l1 ), l.inputs.length,l1.outputs.length ];
   var expected = [ true, 1, 2 ];
   test.identical( got, expected );
@@ -303,22 +303,22 @@ function inputFrom( test )
   test.description = 'try to add itself';
   test.shouldThrowError( function()
   {
-    var l = new wLogger();
+    var l = new _.Logger();
     l.inputFrom( l );
   });
 
   test.description = 'try to add null';
   test.shouldThrowError( function()
   {
-    var l = new wLogger();
+    var l = new _.Logger();
     l.inputFrom( null );
   });
 
   test.description = 'simple recursion';
   test.shouldThrowError( function()
   {
-    var l = new wLogger();
-    var l1 = new wLogger();
+    var l = new _.Logger();
+    var l1 = new _.Logger();
     l1.inputFrom( l );
     l1.inputFrom( l1 );
   });
@@ -326,17 +326,17 @@ function inputFrom( test )
   test.description = 'l1->l2,l2->l3,l3->l1';
   test.shouldThrowError( function()
   {
-    var l1 = new wLogger();
-    var l2 = new wLogger();
-    var l3 = new wLogger();
+    var l1 = new _.Logger();
+    var l2 = new _.Logger();
+    var l3 = new _.Logger();
     l1.inputFrom( l3 );
     l2.inputFrom( l1 );
     l3.inputFrom( l2 );
   });
 
   test.description = 'console->l1->l2->console';
-  var l1 = new wLogger();
-  var l2 = new wLogger({ output : null });
+  var l1 = new _.Logger();
+  var l2 = new _.Logger({ output : null });
   test.shouldThrowError( function()
   {
     l2.inputFrom( console );
@@ -351,21 +351,21 @@ function inputUnchain( test )
 {
   // !!! needs silencing = false
   // test.description = 'remove existing input';
-  // var l = new wLogger({ output : null });
+  // var l = new _.Logger({ output : null });
   // l.inputFrom( console );
   // var got = [ l.inputUnchain( console ), console.outputs ];
   // var expected = [ true, undefined ];
   // test.identical( got, expected );
 
   test.description = 'input not exists';
-  var l = new wLogger();
+  var l = new _.Logger();
   var got = l.inputUnchain( console );
   var expected = false;
   test.identical( got, expected );
 
   test.description = 'remove logger from input';
-  var l1 = new wLogger();
-  var l2 = new wLogger();
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
   l2.inputFrom( l1 );
   var got = [ l2.inputs.length, l1.outputs.length ];
   var expected = [ 1, 2 ];
@@ -375,9 +375,9 @@ function inputUnchain( test )
   test.identical( got, expected );
 
   test.description = 'remove logger from input#2';
-  var l1 = new wLogger();
-  var l2 = new wLogger();
-  var l3 = new wLogger();
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
   l3.inputFrom( l1 );
   l3.inputFrom( l2 );
   var got = [ l3.inputUnchain( l1 ), l3.inputs.length, l1.outputs.length ];
@@ -385,15 +385,15 @@ function inputUnchain( test )
   test.identical( got, expected );
 
   test.description = 'no args';
-  var l = new wLogger();
-  var l1 = new wLogger();
+  var l = new _.Logger();
+  var l1 = new _.Logger();
   l.inputFrom( l1 );
   test.identical( l.inputs.length, 1 )
   l.inputUnchain();
   test.identical( l.inputs.length, 0 )
 
   test.description = 'try to remove itself, false because no inputs';
-  var l = new wLogger();
+  var l = new _.Logger();
   var got = l.inputUnchain( l );
   test.identical( l.inputs.length, 0 );
   test.identical( got, false );
@@ -405,14 +405,14 @@ function inputUnchain( test )
 function hasInputDeep( test )
 {
   test.description = 'has console in inputs';
-  var l = new wLogger({ output : null });
+  var l = new _.Logger({ output : null });
   l.inputFrom( console );
   var got = l.hasInputDeep( console );
   var expected = true;
   test.identical( got, expected );
 
   test.description = 'has logger in inputs';
-  var l = new wLogger({ output : null });
+  var l = new _.Logger({ output : null });
   var got = l.hasInputDeep( logger );
   var expected = false;
   test.identical( got, expected );
@@ -420,7 +420,7 @@ function hasInputDeep( test )
   test.description = 'no args';
   test.shouldThrowError( function()
   {
-    var logger = new wLogger();
+    var logger = new _.Logger();
     logger.hasInputDeep();
   });
 }
@@ -430,15 +430,15 @@ function hasInputDeep( test )
 function hasOutputDeep( test )
 {
   test.description = 'has logger in outputs';
-  var l1 = new wLogger();
-  var l2 = new wLogger();
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
   l1.outputTo( l2,{ combining : 'rewrite' } );
   var got = l1.hasOutputDeep( l2 );
   var expected = true;
   test.identical( got, expected );
 
   test.description = 'object not exists in outputs';
-  var l1 = new wLogger();
+  var l1 = new _.Logger();
   var got = l1.hasOutputDeep( {} );
   var expected = false;
   test.identical( got, expected );
@@ -446,7 +446,7 @@ function hasOutputDeep( test )
   test.description = 'no args';
   test.shouldThrowError( function()
   {
-    var logger = new wLogger();
+    var logger = new _.Logger();
     logger.hasOutputDeep();
   });
 }
@@ -456,9 +456,9 @@ function hasOutputDeep( test )
 function _hasInput( test )
 {
   test.description = 'l1->l2->l3, l3 has l1 in input chain';
-  var l1 = new wLogger({ output : null });
-  var l2 = new wLogger({ output : null });
-  var l3 = new wLogger({ output : null });
+  var l1 = new _.Logger({ output : null });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
   l1.outputTo( l2 )
   l2.outputTo( l3 );
   var got = l3._hasInput( l1, {} );
@@ -466,9 +466,9 @@ function _hasInput( test )
   test.identical( got, expected );
 
   test.description = 'console->l1,l2,l3, l1->l2->l3, l3 has l1 in input chain';
-  var l1 = new wLogger({ output : null });
-  var l2 = new wLogger({ output : null });
-  var l3 = new wLogger({ output : null });
+  var l1 = new _.Logger({ output : null });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
   l1.inputFrom( console );
   l2.inputFrom( console );
   l3.inputFrom( console );
@@ -484,9 +484,9 @@ function _hasInput( test )
 function _hasOutput( test )
 {
   test.description = 'l1->l2->l3, l1 has l3 in output chain';
-  var l1 = new wLogger({ output : null });
-  var l2 = new wLogger({ output : null });
-  var l3 = new wLogger({ output : null });
+  var l1 = new _.Logger({ output : null });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
   l1.outputTo( l2 )
   l2.outputTo( l3 );
   var got = l1._hasOutput( l3, {} );
@@ -494,9 +494,9 @@ function _hasOutput( test )
   test.identical( got, expected );
 
   test.description = 'two outputs for l1,l2, l1 has l3 in output chain';
-  var l1 = new wLogger();
-  var l2 = new wLogger();
-  var l3 = new wLogger();
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
   l1.outputTo( l2, { combining : 'append' } );
   l2.outputTo( l3, { combining : 'append' } );
   var got = l1._hasOutput( l3, {} );
@@ -511,15 +511,15 @@ function recursion( test )
   test.description = 'add own object to outputs';
   test.shouldThrowError( function()
   {
-    var l = new wLogger({ output : null });
+    var l = new _.Logger({ output : null });
     l.outputTo( l );
   });
 
   test.description = 'l1->l2->l1';
   test.shouldThrowError( function()
   {
-    var l1 = new wLogger({ output : null });
-    var l2 = new wLogger({ output : null });
+    var l1 = new _.Logger({ output : null });
+    var l2 = new _.Logger({ output : null });
     l1.outputTo( l2 );
     l2.outputTo( l1 );
   });
@@ -527,8 +527,8 @@ function recursion( test )
   test.description = 'l1->l2->l1';
   test.shouldThrowError( function()
   {
-    var l1 = new wLogger();
-    var l2 = new wLogger();
+    var l1 = new _.Logger();
+    var l2 = new _.Logger();
     l1.outputTo( l2, { combining : 'rewrite' } );
     l2.outputTo( l1, { combining : 'rewrite' } );
   });
@@ -536,10 +536,10 @@ function recursion( test )
   test.description = 'multiple inputs, try to add existing input to output';
   test.shouldThrowError( function()
   {
-    var l1 = new wLogger();
-    var l2 = new wLogger();
-    var l3 = new wLogger();
-    var l4 = new wLogger();
+    var l1 = new _.Logger();
+    var l2 = new _.Logger();
+    var l3 = new _.Logger();
+    var l4 = new _.Logger();
     l1.outputTo( l4, { combining : 'rewrite' } );
     l2.outputTo( l4, { combining : 'rewrite' } );
     l3.outputTo( l4, { combining : 'rewrite' } );
@@ -549,9 +549,9 @@ function recursion( test )
   test.description = 'l3->l2,l2->l1,l1->l3';
   test.shouldThrowError( function()
   {
-    var l1 = new wLogger();
-    var l2 = new wLogger();
-    var l3 = new wLogger();
+    var l1 = new _.Logger();
+    var l2 = new _.Logger();
+    var l3 = new _.Logger();
     l1.inputFrom( l2, { combining : 'rewrite' } );
     l3.inputFrom( l1, { combining : 'rewrite' } );
     l2.inputFrom( l3, { combining : 'rewrite' } );
@@ -560,8 +560,8 @@ function recursion( test )
   test.description = 'console->a->b->console';
   test.shouldThrowError( function()
   {
-    var a = new wLogger({ output : null });
-    var b = new wLogger({ output : null });
+    var a = new _.Logger({ output : null });
+    var b = new _.Logger({ output : null });
     a.inputFrom( console );
     b.inputFrom( a );
     b.outputTo( console );
@@ -570,14 +570,14 @@ function recursion( test )
   test.description = 'input from existing output';
   test.shouldThrowError( function()
   {
-    var a = new wLogger();
+    var a = new _.Logger();
     a.inputFrom( console );
   });
 
   test.description = 'add existing output';
   test.shouldThrowError( function()
   {
-    var a = new wLogger();
+    var a = new _.Logger();
     a.outputTo( console, { combining : 'append' } );
   });
 }
@@ -623,7 +623,7 @@ _.Tester.test( Self.name );
 //
 //   // debugger
 //   Self = wTestSuite( Self.name );
-//   // Self.logger = wPrinterToJstructure();
+//   // Self.logger = wPrinterToJs();
 //
 //   _.Tester.test( Self.name )
 //   .doThen( function()

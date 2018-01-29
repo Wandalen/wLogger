@@ -11,9 +11,8 @@
 */
 
 // require
-
-if( typeof wLogger !== 'undefined' )
-return;
+// if( typeof wLogger !== 'undefined' )
+// return;
 
 if( typeof module !== 'undefined' )
 {
@@ -29,8 +28,8 @@ if( typeof module !== 'undefined' )
  * @class wLogger
  */
 
-var _ = wTools;
-var Parent = wPrinterTop;
+var _ = _global_.wTools;
+var Parent = _.PrinterTop;
 var Self = function wLogger( o )
 {
   if( !( this instanceof Self ) )
@@ -110,15 +109,22 @@ _.classMake
   extend : Proto,
 });
 
+//
+
+_[ Self.nameShort ] = Self;
+
+if( !_global_.logger || _.mapIs( _global_.logger ) )
+_global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
+
 // --
 // export
 // --
 
+if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
+
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
-
-if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
 
 })();

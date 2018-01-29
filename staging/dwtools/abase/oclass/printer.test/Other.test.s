@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -17,8 +17,8 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = wTools;
-var Parent = wTools.Tester;
+var _ = _global_.wTools;
+var Parent = _.Tester;
 
 //
 
@@ -37,7 +37,7 @@ function currentColor( test )
     warn : _.routineJoin( console,console.warn ),
   }
 
-  var logger = new wLogger( { output : fakeConsole } );
+  var logger = new _.Logger( { output : fakeConsole } );
 
   test.description = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );
@@ -129,7 +129,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.description = 'case11 : setting colors from setter, unknown';
-  var logger = new wLogger( { output : fakeConsole } );
+  var logger = new _.Logger( { output : fakeConsole } );
   logger.foregroundColor = 'd';
   logger.backgroundColor = 'd';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -178,7 +178,7 @@ function currentColor( test )
 
 function colorsStack( test )
 {
-  var logger = new wLogger({ output : null });
+  var logger = new _.Logger({ output : null });
 
   test.description = 'push foreground';
   logger.foregroundColor = 0xff0000;
@@ -231,7 +231,7 @@ function logUp( test )
   var got;
   function _onWrite( args ) { got = args.output[ 0 ] };
 
-  var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
+  var logger = new _.Logger({ output : null, onWrite : _onWrite,coloring : 0 });
 
   test.description = 'case1';
   var msg = "Up";
@@ -259,7 +259,7 @@ function logDown( test )
   var got;
   function _onWrite( args ) { got = args.output[ 0 ] };
 
-  var logger = new wLogger({ output : null, onWrite : _onWrite,coloring : 0 });
+  var logger = new _.Logger({ output : null, onWrite : _onWrite,coloring : 0 });
 
   test.description = 'case1';
   logger.up( 2 );
@@ -276,7 +276,7 @@ function logDown( test )
   test.description = 'cant go below zero level';
   test.shouldThrowError( function()
   {
-    var logger = new wLogger();
+    var logger = new _.Logger();
     logger.logDown();
   })
 
@@ -293,64 +293,64 @@ function coloredToHtml( test )
   test.description = 'default settings';
 
   var src = 'simple text';
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = 'simple text';
   test.identical( got, expected );
 
   var src = fg( 'red text', 'red' );
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span>";
   test.identical( got, expected );
 
   var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
   var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text";
   test.identical( got, expected );
 
   var src = fg( '\nred text' + fg( 'yellow text', 'yellow' ) + 'red text', 'red' );
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );'><br>red text<span style='color:rgba( 255, 255, 0, 1 );'>yellow text</span>red text</span>";
   test.identical( got, expected );
 
   var src = bg( '\nred background' + bg( 'yellow background', 'yellow' ) + 'red background', 'red' );
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'><br>red background<span style='background:rgba( 255, 255, 0, 1 );'>yellow background</span>red background</span>";
   test.identical( got, expected );
 
   var src = '#background : red#red#background : blue#blue#background : default#red#background : default#';
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
   var src = _.color.strFormatBackground( 'red' + _.color.strFormatBackground( 'blue','blue' ) + 'red','red' );
-  var got = wLogger.coloredToHtml( src );
+  var got = _.Logger.coloredToHtml( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
   test.description = 'compact mode disabled';
 
   var src = 'simple text';
-  var got = wLogger.coloredToHtml({ src : src, compact : false });
+  var got = _.Logger.coloredToHtml({ src : src, compact : false });
   var expected = '<span>simple text</span>';
   test.identical( got, expected );
 
   var src = fg( 'red text', 'red' );
-  var got = wLogger.coloredToHtml({ src : src, compact : false });
+  var got = _.Logger.coloredToHtml({ src : src, compact : false });
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span>";
   test.identical( got, expected );
 
   var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
-  var got = wLogger.coloredToHtml({ src : src, compact : false });
+  var got = _.Logger.coloredToHtml({ src : src, compact : false });
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
   var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
-  var got = wLogger.coloredToHtml({ src : src, compact : false });
+  var got = _.Logger.coloredToHtml({ src : src, compact : false });
   var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
   test.identical( got, expected );
 }
@@ -365,7 +365,7 @@ function coloring( test )
 
   function onWrite( args ){ got = args.outputForTerminal };
 
-  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
+  var l = new _.Logger({ output : null, coloring : true, onWrite : onWrite });
 
   test.description = "wColor, coloring : 1";
   l.log( _.color.strFormatForeground( 'text', 'red') );
@@ -391,7 +391,7 @@ function emptyLines( test )
   var got;
   var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
 
 
   /* on directive#1 */
@@ -429,19 +429,19 @@ function diagnostic( test )
     return;
   }
 
-  var l = new wLogger();
+  var l = new _.Logger();
 
   //
 
-  wLogger.diagnosticColor = 0;
-  wLogger.diagnosticColorCollapse = 0;
+  _.Logger.diagnosticColor = 0;
+  _.Logger.diagnosticColorCollapse = 0;
   var got = l._diagnosticColorCheck();
   test.identical( got, undefined );
 
   //
 
-  wLogger.diagnosticColor = 1;
-  wLogger.diagnosticColorCollapse = 1;
+  _.Logger.diagnosticColor = 1;
+  _.Logger.diagnosticColorCollapse = 1;
 
   /**/
 
@@ -468,7 +468,7 @@ function diagnostic( test )
 
   /* IllColorCombination diagnostic off */
 
-  wLogger.diagnosticColor = 0;
+  _.Logger.diagnosticColor = 0;
 
   l.foregroundColor = 'black';
   l.backgroundColor = 'yellow';
@@ -477,7 +477,7 @@ function diagnostic( test )
 
   /* IllColorCombination diagnostic on */
 
-  wLogger.diagnosticColor = 1;
+  _.Logger.diagnosticColor = 1;
 
   l.foregroundColor = 'black';
   l.backgroundColor = 'yellow';
@@ -486,13 +486,13 @@ function diagnostic( test )
 
   /* after warning diagnostic is disabled */
 
-  test.identical( wLogger.diagnosticColor, 0 );
+  test.identical( _.Logger.diagnosticColor, 0 );
   l.foregroundColor = 'black';
   l.backgroundColor = 'yellow';
   var got = l._diagnosticColorCheck();
   test.identical( got.ill, undefined );
 
-  wLogger.diagnosticColor = 1;
+  _.Logger.diagnosticColor = 1;
 
   l.foregroundColor = 'yellow';
   l.backgroundColor = 'blue';
@@ -505,7 +505,7 @@ function diagnostic( test )
 
   /* ColorCollapse off */
 
-  wLogger.diagnosticColorCollapse = 0;
+  _.Logger.diagnosticColorCollapse = 0;
 
   l.foregroundColor = 'yellowish pink';
   l.backgroundColor = 'magenta';
@@ -514,7 +514,7 @@ function diagnostic( test )
 
   /* ColorCollapse on */
 
-  wLogger.diagnosticColorCollapse = 1;
+  _.Logger.diagnosticColorCollapse = 1;
 
   l.foregroundColor = 'greenish yellow';
   l.backgroundColor = 'yellow';
@@ -524,7 +524,7 @@ function diagnostic( test )
 
   /* ColorCollapse off after first warning */
 
-  test.identical( wLogger.diagnosticColorCollapse, 0 );
+  test.identical( _.Logger.diagnosticColorCollapse, 0 );
   l.foregroundColor = 'greenish yellow';
   l.backgroundColor = 'yellow';
   var got = l._diagnosticColorCheck();
@@ -532,7 +532,7 @@ function diagnostic( test )
 
   /* ColorCollapse on */
 
-  wLogger.diagnosticColorCollapse = 1;
+  _.Logger.diagnosticColorCollapse = 1;
 
   l.foregroundColor = 'red';
   l.backgroundColor = 'yellow';
@@ -553,7 +553,7 @@ function coloringNoColor( test )
 
   function onWrite( args ){ got = args.outputForTerminal[ 0 ] };
 
-  var l = new wLogger({ output : null, coloring : true, onWrite : onWrite });
+  var l = new _.Logger({ output : null, coloring : true, onWrite : onWrite });
 
   test.description = "No wColor, coloring : 1";
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
@@ -596,26 +596,5 @@ var Self =
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
-
-// if( typeof module !== 'undefined' && !module.parent )
-// _.timeReady( function()
-// {
-//
-//   if( typeof module !== 'undefined' )
-//   _.include( 'wLoggerToJstructure' );
-//
-//   // debugger;
-//   Self = wTestSuite( Self.name );
-//   Self.logger = wLoggerToJstructure({ coloring : 0 });
-//
-//   _.Tester.test( Self.name )
-//   .doThen( function()
-//   {
-//     debugger;
-//     logger.log( _.toStr( Self.logger.outputData,{ levels : 5 } ) );
-//     debugger;
-//   });
-//
-// });
 
 })();

@@ -2,8 +2,8 @@
 
 'use strict';
 
-var _ = wTools;
-var Parent = wTools.Tester;
+var _ = _global_.wTools;
+var Parent = _.Tester;
 var isBrowser = true;
 
 if( typeof module !== 'undefined' )
@@ -23,7 +23,7 @@ function simplest( test )
 
   test.description = 'simple1';
 
-  var logger = new wLogger();
+  var logger = new _.Logger();
 
   logger.logUp( 'up' );
   logger.log( 'log' );
@@ -52,7 +52,7 @@ function colorConsole( test )
   var onWrite = function( args ){ console.log(args);got = args.outputForTerminal };
 
 
-  var logger = new wLogger( { output : null, onWrite : onWrite });
+  var logger = new _.Logger( { output : null, onWrite : onWrite });
 
 
   test.description = 'case1';

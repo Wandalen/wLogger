@@ -6,23 +6,30 @@ var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wBase === 'undefined' )
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
-  // require( './PrinterMid.s' );
+// require( './PrinterMid.s' );
 
   isBrowser = false;
 
 }
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 //
 
@@ -264,14 +271,14 @@ function _writeToChannelIn( channelName,args )
  * 'supplement' - adds output if list is empty.
  *
  * @example
- * var l = new wLogger();
+ * var l = new _.Logger();
  * l.outputTo( logger, { combining : 'rewrite' } ); //returns true
  * logger._prefix = '--';
  * l.log( 'abc' );//logger prints '--abc'
  *
  * @example
- * var l1 = new wLogger();
- * var l2 = new wLogger();
+ * var l1 = new _.Logger();
+ * var l2 = new _.Logger();
  * l1.outputTo( logger, { combining : 'rewrite' } );
  * l2.outputTo( l1, { combining : 'rewrite' } );
  * logger._prefix = '*';
@@ -279,9 +286,9 @@ function _writeToChannelIn( channelName,args )
  * l2.log( 'msg from l2' );//logger prints '*msg from l2*'
  *
  * @example
- * var l1 = new wLogger();
- * var l2 = new wLogger();
- * var l3 = new wLogger();
+ * var l1 = new _.Logger();
+ * var l2 = new _.Logger();
+ * var l3 = new _.Logger();
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -294,7 +301,7 @@ function _writeToChannelIn( channelName,args )
  * //l3 prints '***msg from logger'
  *
  * @example
- * var l1 = new wLogger();
+ * var l1 = new _.Logger();
  * l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
  * logger.up( 2 );
  * l.up( 1 );
@@ -325,7 +332,7 @@ function outputTo( output,o )
   _.routineOptions( self.outputTo,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || output === null );
+  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || output === null );
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
   /* output */
@@ -378,7 +385,7 @@ function outputTo( output,o )
       output.inputs.push( o );
     }
 
-    if( wLogger.streamIs( output ) )
+    if( _.Logger.streamIs( output ) ) // ???
     {
       self._outputToStream( o );
       return true;
@@ -483,9 +490,9 @@ outputTo.defaults =
  * @param { Object } output - Logger that must be deleted from output list.
  *
  * @example
- * var l1 = new wLogger();
- * var l2 = new wLogger();
- * var l3 = new wLogger();
+ * var l1 = new _.Logger();
+ * var l2 = new _.Logger();
+ * var l3 = new _.Logger();
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -515,7 +522,7 @@ function outputUnchain( output )
   return false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || output === undefined );
+  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || output === undefined );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
   _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
@@ -593,7 +600,7 @@ function outputUnchain( output )
  * console.log( 'msg for logger' ); //logger prints '*msg for logger'
  *
  * @example
- * var l = new wLogger();
+ * var l = new _.Logger();
  * logger.inputFrom( l );
  * logger._prefix = '*';
  * l.log( 'msg from logger' ); //logger prints '*msg from logger'
@@ -613,7 +620,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) || input === null );
+  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || _.Logger.processIs( input ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -669,7 +676,7 @@ function inputFrom( input,o )
 
   /* */
 
-  if( wLogger.streamIs( input ) )
+  if( _.Logger.streamIs( input ) )
   {
     self._inputFromStream( input );
   }
@@ -800,7 +807,7 @@ function _outputToStream( o )
  * console.log( 'msg for logger' ); //console prints 'msg for logger'
  *
  * @example
- * var l = new wLogger();
+ * var l = new _.Logger();
  * logger.inputFrom( l, { combining : 'append' } );
  * logger._prefix = '*';
  * l.log( 'msg for logger' ) //logger prints '*msg for logger'
@@ -820,7 +827,7 @@ function inputUnchain( input )
   var result = false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || input === undefined );
+  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || input === undefined );
 
   for( var i = self.inputs.length-1 ; i >= 0  ; i-- )
   if( self.inputs[ i ].input === input || input === undefined )
@@ -847,7 +854,7 @@ function _inputUnchainForeign( input )
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( ( _.objectIs( input ) || wLogger.consoleIs( input ) ) && !( input instanceof wPrinterBase ) );
+  _.assert( ( _.objectIs( input ) || _.Logger.consoleIs( input ) ) && !( input instanceof _.PrinterBase ) );
 
   /* */
 
@@ -1030,7 +1037,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || wLogger.consoleIs( input ) || wLogger.processIs( input ) );
+  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || _.Logger.processIs( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
@@ -1096,7 +1103,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || wLogger.consoleIs( output ) || wLogger.processIs( output ));
+  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || _.Logger.processIs( output ));
   //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
@@ -1368,10 +1375,17 @@ var Self =
 
 }
 
+Self = _[ Self.nameShort ] = _.mixinMake( Self );
+
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
+
+if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = _.mixinMake( Self );
 
 })();

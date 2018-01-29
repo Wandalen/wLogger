@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
 
   require( './aColoredMixin.s' )
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   // _.include( 'wColor' );
 
@@ -28,8 +28,8 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 //
 
-var _ = wTools;
-var Parent = wPrinterMid;
+var _ = _global_.wTools;
+var Parent = _.PrinterMid;
 var Self = function wPrinterTop( o )
 {
   if( !( this instanceof Self ) )
@@ -51,7 +51,7 @@ function init( o )
   // if( !o )
   // o = {};
   //
-  // if( !wTools.color && o.coloring === undefined )
+  // if( !_global_.wTools.color && o.coloring === undefined )
   // {
   //   debugger;
   //   o.coloring = false;
@@ -108,8 +108,8 @@ _.classMake
   extend : Proto,
 });
 
-wPrinterChainingMixin.mixin( Self );
-wPrinterColoredMixin.mixin( Self );
+_.PrinterChainingMixin.mixin( Self );
+_.PrinterColoredMixin.mixin( Self );
 
 //
 
@@ -125,9 +125,19 @@ _.accessor
   }
 });
 
+//
+
+_[ Self.nameShort ] = Self;
+
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
+
+if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+
 })();

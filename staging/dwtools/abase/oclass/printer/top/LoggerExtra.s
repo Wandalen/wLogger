@@ -15,9 +15,9 @@ if( typeof module !== 'undefined' )
 //
 
 
-var _ = wTools;
-var Parent = wPrinterTop;
-var Self = wLogger;
+var _ = _global_.wTools;
+var Parent = _.PrinterTop;
+var Self = _.Logger;
 
 //
 
@@ -479,11 +479,11 @@ _.classExtend( Self,Proto );
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
-{
-  module[ 'exports' ] = Self;
-}
+if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
-return Self;
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();

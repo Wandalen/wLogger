@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -25,8 +25,8 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = wTools;
-var Parent = wTools.Tester;
+var _ = _global_.wTools;
+var Parent = _.Tester;
 var isUnix = process.platform !== 'win32' ? true : false;
 
 //
@@ -36,7 +36,7 @@ function simplest( test )
 
   test.description = 'simple1';
 
-  var logger = new wLogger();
+  var logger = new _.Logger();
 
   logger.logUp( 'up' );
   logger.log( 'log' );
@@ -66,7 +66,7 @@ function colorConsole( test )
 
   var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
 
   test.description = 'case1: red text';
   logger.log( _.color.strFormatForeground( 'text', 'red') );
@@ -184,7 +184,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.foregroundColor = 'xxx';
   logger.backgroundColor = 'xxx';
   logger.log( 'text' );
@@ -196,7 +196,7 @@ function colorConsole( test )
   //
 
   test.description = 'stacking colors';
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
 
   /**/
 
@@ -243,7 +243,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#coloring : 0#' );
   logger.log( '#foreground : red#' );
   logger.log( '#background : yellow#' );
@@ -259,7 +259,7 @@ function colorConsole( test )
 
   /* stacking colors even if coloring is disabled */
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#coloring : 0#' );
   logger.log( '#foreground : red#' );
   logger.log( '#foreground : blue#' );
@@ -282,7 +282,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#trackingColor : 0#' );
   logger.log( '#foreground : red#' );
   logger.log( '#foreground : blue#' );
@@ -293,7 +293,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new wLogger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#trackingColor : 0#' );
   logger.log( '#foreground : red#' );
   logger.log( '#trackingColor : 1#' );
@@ -313,7 +313,7 @@ function shellColors( test )
 {
   test.description = 'shell colors codes test';
 
-  var logger = new wLogger();
+  var logger = new _.Logger();
 
   logger.foregroundColor = 'black';
   test.identical( logger.foregroundColor, [ 0, 0, 0 ] );

@@ -5,17 +5,25 @@
 if( typeof module !== 'undefined' )
 {
 
-  // if( typeof wBase === 'undefined' )
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
-  var _ = wTools;
+
+  var _ = _global_.wTools;
 
   _.include( 'wLogger' );
 
@@ -27,8 +35,8 @@ return;
 //
 
 var $ = jQuery;
-var _ = wTools;
-var Parent = wPrinterTop;
+var _ = _global_.wTools;
+var Parent = _.PrinterTop;
 var Self = function wPrinterToLayeredHtml( o )
 {
   if( !( this instanceof Self ) )
@@ -80,7 +88,7 @@ function write()
 
   /* */
 
-  var o = wPrinterBase.prototype.write.apply( self,arguments );
+  var o = _.PrinterBase.prototype.write.apply( self,arguments );
 
   if( !o )
   return;
@@ -260,15 +268,17 @@ _.classMake
   extend : Proto,
 });
 
+_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+
 // --
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
-{
-  module[ 'exports' ] = Self;
-}
+if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
 
-_global_[ Self.name ] = wTools[ Self.nameShort ] = Self;
+if( typeof module !== 'undefined' && module !== null )
+module[ 'exports' ] = Self;
 
 })();

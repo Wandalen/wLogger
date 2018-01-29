@@ -6,19 +6,26 @@ var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wBase === 'undefined' )
-  try
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    require( '../../../Base.s' );
-  }
-  catch( err )
-  {
-    require( 'wTools' );
+    let toolsPath = '../../../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
   }
 
-  isBrowser = false;
+isBrowser = false;
 
-  var _ = wTools;
+  var _ = _global_.wTools;
 
   try
   {
@@ -30,7 +37,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 //
 
@@ -674,7 +681,7 @@ function _writePrepare( original )
         o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'tail' );
       }
 
-      if( !wLogger.rawOutput )
+      if( !_.Logger.rawOutput )
       if( !self.passingRawColor )
       {
         if( self.writingToHtml )
@@ -812,10 +819,10 @@ function _diagnosticColorCheck()
 
   var result = {};
 
-  if( wLogger.diagnosticColor )
+  if( _.Logger.diagnosticColor )
   result.ill = self._diagnosticColor( fg, bg );
 
-  if( wLogger.diagnosticColorCollapse )
+  if( _.Logger.diagnosticColorCollapse )
   result.collapse = self._diagnosticColorCollapse( fg, bg );
 
   return result;
@@ -835,7 +842,7 @@ function _diagnosticColor( fg, bg )
     if( combination.fg === fg.originalName && combination.bg === bg.originalName )
     // if( combination.platform === process.platform )
     {
-      wLogger.diagnosticColor = 0;
+      _.Logger.diagnosticColor = 0;
       ill = true;
       // logger.foregroundColor = 'blue';
       // logger.backgroundColor = 'yellow';
@@ -875,7 +882,7 @@ function _diagnosticColorCollapse( fg, bg )
   {
     // logger.foregroundColor = 'blue';
     // logger.backgroundColor = 'yellow';
-    wLogger.diagnosticColorCollapse = 0;
+    _.Logger.diagnosticColorCollapse = 0;
     logger.styleSet( 'info.negative' );
     logger.warn( 'Warning: Color collapse in native terminal.' );
     logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
@@ -1102,10 +1109,17 @@ var Self =
 
 }
 
+Self = _[ Self.nameShort ] = _.mixinMake( Self );
+
+// --
 // export
+// --
 
 if( typeof module !== 'undefined' )
+if( _global_._UsingWtoolsPrivately_ )
+delete require.cache[ module.id ];
+
+if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = wTools[ Self.nameShort ] = _.mixinMake( Self );
 
 })();

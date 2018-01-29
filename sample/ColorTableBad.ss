@@ -1,14 +1,23 @@
 
-try
-{
-  require( '../../../Base.s' );
-}
-catch( err )
-{
-  require( 'wTools' );
-}
 
-var _ = wTools
+  if( typeof _global_ === 'undefined' || !_global_.wBase )
+  {
+    let toolsPath = '../../../../../dwtools/Base.s';
+    let toolsExternal = 0;
+    try
+    {
+      require.resolve( toolsPath )/*hhh*/;
+    }
+    catch( err )
+    {
+      toolsExternal = 1;
+      require( 'wTools' );
+    }
+    if( !toolsExternal )
+    require( toolsPath )/*hhh*/;
+  }
+
+var _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
@@ -36,7 +45,7 @@ function prepareInfo()
     return list[ i ][ src.fg + splitter + src.bg ];
   }
 
-  wLogger.illColorCombinations.forEach( function( c )
+  _.Logger.illColorCombinations.forEach( function( c )
   {
   var res = searchInList( c );
   if( res )
@@ -62,7 +71,7 @@ function prepareInfo()
     }
     row[ rowMap[ currentPlatform ] ]= data.outputForTerminal[ 0 ];
   }
-  var silencedLogger = new wLogger
+  var silencedLogger = new _.Logger
   ({
     output : null,
     onWrite : onWrite
