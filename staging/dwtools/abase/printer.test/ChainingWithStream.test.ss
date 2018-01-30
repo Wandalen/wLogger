@@ -117,8 +117,8 @@ var Self =
   name : 'ChainingWithStream',
   silencing : 1,
 
-  onSuiteBegin : testDirMake,
-  onSuiteEnd : testDirClean,
+  onSuitBegin : testDirMake,
+  onSuitEnd : testDirClean,
 
   context :
   {
@@ -132,7 +132,7 @@ var Self =
 
 };
 
-Self = wTestSuite( Self );
+Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 
