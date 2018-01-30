@@ -53,8 +53,8 @@ function init( o )
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
   if( Config.debug )
-  if( o.suiteFileLocation === undefined )
-  o.suiteFileLocation = _.diagnosticStack( 2 );
+  if( o.suitFileLocation === undefined )
+  o.suitFileLocation = _.diagnosticStack( 2 );
 
   Parent.prototype.init.call( self,o );
 
@@ -421,7 +421,7 @@ var Composes =
 }
 
 if( Config.debug )
-Composes.suiteFileLocation = null;
+Composes.suitFileLocation = null;
 
 var Aggregates =
 {

@@ -613,7 +613,7 @@ var Self =
 
 //
 
-Self = wTestSuite( Self );
+Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 
@@ -622,7 +622,7 @@ _.Tester.test( Self.name );
 // {
 //
 //   // debugger
-//   Self = wTestSuite( Self.name );
+//   Self = wTestSuit( Self.name );
 //   // Self.logger = wPrinterToJs();
 //
 //   _.Tester.test( Self.name )

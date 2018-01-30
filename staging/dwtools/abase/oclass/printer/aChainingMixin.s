@@ -406,7 +406,7 @@ function outputTo( output,o )
           without passing message forward in a chain
         */
 
-        // if( arguments[ 0 ] && arguments[ 0 ].indexOf( 'Tester of test suite' ) !== -1 )
+        // if( arguments[ 0 ] && arguments[ 0 ].indexOf( 'Tester of test suit' ) !== -1 )
         // debugger;
         //
         // if( arguments[ 0 ] && _.strSplit( arguments[ 0 ] ) === '%c' )

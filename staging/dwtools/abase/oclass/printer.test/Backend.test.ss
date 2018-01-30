@@ -276,7 +276,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   // test.identical( 0, 1 );
-  //trackingColor problem, logger of test suite cant override it value correctly, directive is inside of it output
+  //trackingColor problem, logger of test suit cant override it value correctly, directive is inside of it output
 
   test.description = 'trackingColor directive'
 
@@ -303,7 +303,7 @@ function colorConsole( test )
   var expected = '\u001b[31mtext\u001b[39m';
   test.identical( _escaping( got ), _escaping( expected ) );
   // test.identical( 0, 1 );
-  //trackingColor problem, logger of test suite cant override it value correctly, directive is inside of it output
+  //trackingColor problem, logger of test suit cant override it value correctly, directive is inside of it output
 
 }
 
@@ -428,7 +428,7 @@ var Self =
 
 //
 
-Self = wTestSuite( Self )
+Self = wTestSuit( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 
