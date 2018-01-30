@@ -336,6 +336,25 @@ function outputTo( test )
   var expected = true;
   test.identical( got, expected );
 
+  //
+
+  test.description = 'few logger are writting into console'
+  var l = new _.Logger({ output : null });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
+
+  l.outputTo( console );
+  l2.outputTo( console );
+  l3.outputTo( console );
+
+  var got = [];
+  var temp = console.outputs[ 0 ].output.onWrite;
+  console.outputs[ 0 ].output.onWrite = ( o ) => got.push( o.input[ 0 ] );
+  l.log( 1 );
+  l2.log( 2 );
+  l3.log( 3 );
+  console.outputs[ 0 ].output.onWrite = temp;
+  test.identical( got, [ '1', '2', '3' ] );
 
   if( Config.debug )
   {
