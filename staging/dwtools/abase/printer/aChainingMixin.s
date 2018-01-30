@@ -696,7 +696,7 @@ function inputFrom( input,o )
         input[ channel ] = function()
         {
           if( chainDescriptor.bar )
-          return chainDescriptor.bar[ channel ].apply( self,arguments );
+          return chainDescriptor.bar[ channel ].apply( chainDescriptor.bar,arguments );
           for( var d = 0 ; d < input.outputs.length ; d++ )
           input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
           return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
@@ -872,6 +872,12 @@ function _inputUnchainForeign( input )
 
     delete input.outputs;
     delete input[ symbolForChainDescriptor ];
+  }
+  else
+  {
+    var chainDescriptor = input[ symbolForChainDescriptor ]
+    if( chainDescriptor.bar === self )
+    chainDescriptor.bar = null;
   }
 
   return result;
