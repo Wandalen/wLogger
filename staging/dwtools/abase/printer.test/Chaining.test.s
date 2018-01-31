@@ -200,11 +200,11 @@ function chaining( test )
 function consoleChaining( test )
 {
 
-  var wasBarred = false;
+  var consoleWasBarred = false;
 
   if( _.Logger.consoleIsBarred( console ) )
   {
-    wasBarred = true;
+    consoleWasBarred = true;
     _.Tester._bar.bar = 0;
     _.Logger.consoleBar( _.Tester._bar );
   }
@@ -296,8 +296,32 @@ function consoleChaining( test )
   test.shouldBe( !l.hasOutputNotDeep( console ) && !l.outputs.length );
   test.shouldBe( !_.Logger.consoleIsBarred( console ) );
 
-  if( wasBarred )
-  _.Tester._bar = _.Logger.consoleBar({ outputLogger : _.Tester.logger, bar : 1 });
+  //
+
+  if( consoleWasBarred )
+  {
+    _.Tester._bar = _.Logger.consoleBar({ outputLogger : _.Tester.logger, bar : 1 });
+    test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  }
+
+  //
+
+  test.description = 'if console is barred, other console outputs must be omitted';
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var l = new _.Logger
+  ({
+    output : null,
+    onWrite : ( o ) => received.push( o.input[ 0 ] )
+  })
+  l.inputFrom( console );
+  test.shouldBe( l.hasInputNotDeep( console ) );
+  console.log( 'message' );
+  l.inputUnchain( console );
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.identical( received, [] )
+
+  //
 }
 
 //
