@@ -197,6 +197,111 @@ function chaining( test )
 
 //
 
+function consoleChaining( test )
+{
+
+  var wasBarred = false;
+
+  if( _.Logger.consoleIsBarred( console ) )
+  {
+    wasBarred = true;
+    _.Tester._bar.bar = 0;
+    _.Logger.consoleBar( _.Tester._bar );
+  }
+
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'inputFrom console that exists in outputs';
+  var l = new _.Logger();
+  test.shouldThrowError( () => l.inputFrom( console ) );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'inputFrom console that not exists in outputs';
+  var l = new _.Logger({ output : null });
+  var chained = l.inputFrom( console );
+  test.shouldBe( chained );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  l.inputUnchain( console );
+  test.shouldBe( !l.hasInputNotDeep( console ) );
+
+  //
+
+  test.description = 'inputFrom console that exists in outputs, barring on';
+  var l = new _.Logger();
+  test.shouldThrowError( () => l.inputFrom( console, { barring : 1  } ) )
+
+  //
+
+  test.description = 'inputFrom console that not exists in outputs, barring on';
+  var l = new _.Logger({ output : null });
+  var chained = l.inputFrom( console, { barring : 1 } );
+  test.shouldBe( chained );
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  l.inputUnchain( console );
+  test.shouldBe( !l.hasInputNotDeep( console ) );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'console is barred, try to chain again';
+  var l = new _.Logger({ output : null });
+  var chained = l.inputFrom( console, { barring : 1 } );
+  test.shouldBe( chained );
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.shouldThrowError( () => l.inputFrom( console, { barring : 1 } ) );
+  l.inputUnchain( console );
+  test.shouldBe( !l.hasInputNotDeep( console ) );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'outputTo console that exists in outputs';
+  var l = new _.Logger();
+  test.shouldThrowError( () => l.outputTo( console ) );
+  test.shouldBe( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'outputTo console that exists in outputs, unbarring on';
+  var l = new _.Logger();
+  test.shouldThrowError( () => l.outputTo( console, { unbarring : 1 } ) );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'outputTo console that exists in inputs, unbarring off';
+  var l = new _.Logger({ output : null });
+  l.inputFrom( console );
+  test.shouldThrowError( () => l.outputTo( console, { unbarring : 0 } ) );
+  test.shouldBe( !l.hasOutputNotDeep( console ) );
+  l.inputUnchain( console );
+  test.shouldBe( !l.hasInputNotDeep( console ) );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'outputTo console that exists in inputs, unbarring on';
+  var l = new _.Logger({ output : null });
+  l.inputFrom( console );
+  l.outputTo( console, { unbarring : 1 } );
+  test.shouldBe( l.outputs[ l.outputs.length - 1 ] === console.inputs[ console.inputs.length - 1 ] );
+  l.inputUnchain( console );
+  l.outputUnchain( console );
+  test.shouldBe( !l.hasInputNotDeep( console ) && !l.inputs.length );
+  test.shouldBe( !l.hasOutputNotDeep( console ) && !l.outputs.length );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  if( wasBarred )
+  _.Tester._bar = _.Logger.consoleBar({ outputLogger : _.Tester.logger, bar : 1 });
+}
+
+//
+
 function chainingParallel( test )
 {
   function _onWrite( args ) { got.push( args.output[ 0 ] ) };
@@ -609,6 +714,7 @@ var Self =
 
     levelsTest : levelsTest,
     chaining : chaining,
+    consoleChaining : consoleChaining,
     chainingParallel : chainingParallel,
     outputTo : outputTo,
     outputUnchain : outputUnchain,
