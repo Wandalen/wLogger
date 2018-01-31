@@ -709,6 +709,85 @@ function inputUnchain( test )
 
 //
 
+function consoleBar( test )
+{
+  var consoleWasBarred = false;
+
+  if( _.Logger.consoleIsBarred( console ) )
+  {
+    consoleWasBarred = true;
+    _.Tester._bar.bar = 0;
+    _.Logger.consoleBar( _.Tester._bar );
+  }
+
+  //
+
+  test.description = 'bar/unbar console'
+  var barDescriptor = _.Logger.consoleBar
+  ({
+    outputLogger : _.Tester.logger,
+    barLogger : null,
+    bar : 1,
+  });
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  if( Config.debug )
+  test.shouldThrowError( () => _.Logger.consoleBar() );
+  barDescriptor.bar = 0;
+  _.Logger.consoleBar( barDescriptor );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  test.description = 'barred console forwards message only to bar logger';
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  var barDescriptor = _.Logger.consoleBar
+  ({
+    outputLogger : _.Tester.logger,
+    barLogger : null,
+    bar : 1,
+  });
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var l = new _.Logger
+  ({
+    output : null,
+    onWrite : ( o ) => received.push( o.input[ 0 ] )
+  });
+  l.inputFrom( console, { barring : 0 } );
+  console.log( 'message' );
+  l.inputUnchain( console );
+  barDescriptor.bar = 0;
+  _.Logger.consoleBar( barDescriptor );
+  test.identical( received, [] );
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+
+  //
+
+  if( Config.debug )
+  {
+    test.description = 'error if provider barLogger has inputs/outputs'
+    test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+    var o =
+    {
+      outputLogger : _.Tester.logger,
+      barLogger : new _.Logger,
+      bar : 1,
+    }
+    test.shouldThrowError( () => _.Logger.consoleBar( o ) );
+    test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  }
+
+  //
+
+  if( consoleWasBarred )
+  {
+    _.Tester._bar = _.Logger.consoleBar({ outputLogger : _.Tester.logger, bar : 1 });
+    test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  }
+}
+
+//
+
 function consoleIs( test )
 {
   test.description = 'consoleIs';
@@ -744,8 +823,8 @@ var Self =
     outputUnchain : outputUnchain,
     inputFrom : inputFrom,
     inputUnchain : inputUnchain,
-    consoleIs : consoleIs
-
+    consoleBar : consoleBar,
+    consoleIs : consoleIs,
   },
 
 }
