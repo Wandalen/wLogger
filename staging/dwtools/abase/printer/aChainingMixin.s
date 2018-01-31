@@ -627,6 +627,22 @@ function inputFrom( input,o )
 
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
+  /* input is barred check */
+
+  if( Config.debug )
+  {
+    if( o.barring && self.consoleIs( input ) && self.consoleIsBarred( input )  )
+    {
+      if( _.Logger.unbarringConsoleOnError )
+      {
+        var chainDescriptor = input[ symbolForChainDescriptor ];
+        _.assert( chainDescriptor && chainDescriptor.bar );
+        chainDescriptor.bar.unchain();
+      }
+      throw _.err( 'inputFrom : This input is already barred', input );
+    }
+  }
+
   /* input check */
 
   if( o.combining !== 'rewrite' )
@@ -907,7 +923,7 @@ function consoleBar( o )
 
   _.assert( arguments.length === 1 );
   _.routineOptions( consoleBar,o );
-  _.assert( this.consoleIsBarred( console ) !== !!o.bar );
+  // _.assert( this.consoleIsBarred( console ) !== !!o.bar );
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
@@ -1296,6 +1312,8 @@ var Statics =
 
   outputWriteMethods : outputWriteMethods,
   outputChangeLevelMethods : outputChangeLevelMethods,
+
+  unbarringConsoleOnError : 1
 
 }
 
