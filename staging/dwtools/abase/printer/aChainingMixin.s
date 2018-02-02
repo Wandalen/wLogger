@@ -631,7 +631,7 @@ function inputFrom( input,o )
 
   if( Config.debug )
   {
-    if( o.barring && _.consoleIs( input ) && _.consoleIsBarred( input )  )
+    if( o.barring && _.consoleIs( input ) && self.consoleIsBarred( input )  )
     {
       if( self.unbarringConsoleOnError )
       {
@@ -912,18 +912,32 @@ function unchain()
 
 //
 
+function consoleIsBarred( output )
+{
+  _.assert( output === console );
+  _.assert( arguments.length === 1 );
+
+  var descriptor = output[ symbolForChainDescriptor ];
+  if( !descriptor )
+  return false;
+
+  return !!descriptor.bar;
+}
+
+//
+
 function consoleBar( o )
 {
   var self = this;
 
   // console.log( 'Barring' );
-  // console.log( '_.consoleIsBarred( console )',_.consoleIsBarred( console ) );
+  // console.log( 'self.consoleIsBarred( console )',self.consoleIsBarred( console ) );
   // console.log( 'o.bar',o.bar );
   // console.log( _.diagnosticStack() );
 
   _.assert( arguments.length === 1 );
   _.routineOptions( consoleBar,o );
-  // _.assert( _.consoleIsBarred( console ) !== !!o.bar );
+  // _.assert( self.consoleIsBarred( console ) !== !!o.bar );
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
@@ -1250,6 +1264,8 @@ var Statics =
 {
 
   consoleBar : consoleBar,
+  consoleIsBarred : consoleIsBarred,
+
 
   // var
 
@@ -1298,6 +1314,7 @@ var Extend =
   unchain : unchain,
 
   consoleBar : consoleBar,
+  consoleIsBarred : consoleIsBarred,
 
   // test
 
