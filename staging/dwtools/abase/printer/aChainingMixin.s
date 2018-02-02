@@ -332,7 +332,7 @@ function outputTo( output,o )
   _.routineOptions( self.outputTo,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || output === null );
+  _.assert( _.objectIs( output ) || _.consoleIs( output ) || output === null );
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
   /* output */
@@ -385,7 +385,7 @@ function outputTo( output,o )
       output.inputs.push( o );
     }
 
-    if( _.Logger.streamIs( output ) ) // ???
+    if( _.streamIs( output ) ) // ???
     {
       self._outputToStream( o );
       return true;
@@ -522,7 +522,7 @@ function outputUnchain( output )
   return false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || output === undefined );
+  _.assert( _.objectIs( output ) || _.consoleIs( output ) || output === undefined );
   _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
   _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
 
@@ -620,7 +620,7 @@ function inputFrom( input,o )
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || _.Logger.processIs( input ) || input === null );
+  _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
@@ -631,9 +631,9 @@ function inputFrom( input,o )
 
   if( Config.debug )
   {
-    if( o.barring && self.consoleIs( input ) && self.consoleIsBarred( input )  )
+    if( o.barring && _.consoleIs( input ) && _.consoleIsBarred( input )  )
     {
-      if( _.Logger.unbarringConsoleOnError )
+      if( self.unbarringConsoleOnError )
       {
         var chainDescriptor = input[ symbolForChainDescriptor ];
         _.assert( chainDescriptor && chainDescriptor.bar );
@@ -692,7 +692,7 @@ function inputFrom( input,o )
 
   /* */
 
-  if( _.Logger.streamIs( input ) )
+  if( _.streamIs( input ) )
   {
     self._inputFromStream( input );
   }
@@ -843,7 +843,7 @@ function inputUnchain( input )
   var result = false;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || input === undefined );
+  _.assert( _.objectIs( input ) || _.consoleIs( input ) || input === undefined );
 
   for( var i = self.inputs.length-1 ; i >= 0  ; i-- )
   if( self.inputs[ i ].input === input || input === undefined )
@@ -870,7 +870,7 @@ function _inputUnchainForeign( input )
   var self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( ( _.objectIs( input ) || _.Logger.consoleIs( input ) ) && !( input instanceof _.PrinterBase ) );
+  _.assert( ( _.objectIs( input ) || _.consoleIs( input ) ) && !( input instanceof _.PrinterBase ) );
 
   /* */
 
@@ -917,13 +917,13 @@ function consoleBar( o )
   var self = this;
 
   // console.log( 'Barring' );
-  // console.log( 'this.consoleIsBarred( console )',this.consoleIsBarred( console ) );
+  // console.log( '_.consoleIsBarred( console )',_.consoleIsBarred( console ) );
   // console.log( 'o.bar',o.bar );
   // console.log( _.diagnosticStack() );
 
   _.assert( arguments.length === 1 );
   _.routineOptions( consoleBar,o );
-  // _.assert( this.consoleIsBarred( console ) !== !!o.bar );
+  // _.assert( _.consoleIsBarred( console ) !== !!o.bar );
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
@@ -997,58 +997,6 @@ consoleBar.defaults =
   outputLoggerWasChainedToConsole : null,
 }
 
-//
-
-function consoleIsBarred( output )
-{
-  _.assert( output === console );
-  _.assert( arguments.length === 1 );
-
-  var descriptor = output[ symbolForChainDescriptor ];
-  if( !descriptor )
-  return false;
-
-  return !!descriptor.bar;
-}
-
-//
-
-function consoleIs( src )
-{
-  _.assert( arguments.length === 1 );
-
-  if( src !== console )
-  return false;
-
-  var result = Object.prototype.toString.call( src );
-  if( result === '[object Console]' || result === '[object Object]' )
-  return true;
-
-  return false;
-}
-
-//
-
-function processIs( src )
-{
-  _.assert( arguments.length === 1 );
-
-  var typeOf = _.strTypeOf( src );
-  if( typeOf === 'ChildProcess' || typeOf === 'process' )
-  return true;
-
-  return false;
-}
-
-//
-
-function streamIs( src )
-{
-  _.assert( arguments.length === 1 );
-
-  return _.objectIs( src ) && _.routineIs( src.pipe )
-}
-
 // --
 // test
 // --
@@ -1059,7 +1007,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || _.Logger.consoleIs( input ) || _.Logger.processIs( input ) );
+  _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) );
   _.routineOptions( _hasInput,o );
 
   for( var d = 0 ; d < self.inputs.length ; d++ )
@@ -1125,7 +1073,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2 );
   _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || _.Logger.consoleIs( output ) || _.Logger.processIs( output ));
+  _.assert( _.objectIs( output ) || _.consoleIs( output ) || _.processIs( output ));
   //_.assert( _.objectIs( output ) );
   _.routineOptions( _hasOutput,o );
 
@@ -1302,11 +1250,6 @@ var Statics =
 {
 
   consoleBar : consoleBar,
-  consoleIsBarred : consoleIsBarred,
-
-  consoleIs : consoleIs,
-  processIs : processIs,
-  streamIs : streamIs,
 
   // var
 
@@ -1355,8 +1298,6 @@ var Extend =
   unchain : unchain,
 
   consoleBar : consoleBar,
-  consoleIsBarred : consoleIsBarred,
-
 
   // test
 
