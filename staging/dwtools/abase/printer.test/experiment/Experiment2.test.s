@@ -15,7 +15,7 @@ node ./staging/dwtools/abase/z.test/Logger.test.s
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/top/Logger.s' );
+  require( '../../printer/top/Logger.s' );
 
   var _ = _global_.wTools;
 
@@ -30,16 +30,29 @@ var Parent = _.Tester;
 
 //
 
+function experiment( test )
+{
+  debugger
+  test.identical( 2, 2 );
+}
+
+//
+
+
+
+//
+
 var Self =
 {
 
-  name : 'Logger',
+  name : 'experiment2',
   silencing : 1,
   // verbosity : 1,
   // silencing : false,
 
   tests :
   {
+    experiment : experiment,
   },
 
 }
@@ -49,23 +62,5 @@ var Self =
 Self = wTestSuit( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
-
-// if( typeof module !== 'undefined' && !module.parent )
-// _.timeReady( function()
-// {
-//
-//   // debugger
-//   Self = wTestSuit( Self.name );
-//   // Self.logger = wPrinterToJs();
-//
-//   _.Tester.test( Self.name )
-//   .doThen( function()
-//   {
-//     debugger;
-//     logger.log( Self.logger.outputData );
-//     debugger;
-//   });
-//
-// });
 
 } )( );

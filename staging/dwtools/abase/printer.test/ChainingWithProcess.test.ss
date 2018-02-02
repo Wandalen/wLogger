@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ = wTools;
+var _ = _global_.wTools;
 
 // --
 // resource
@@ -38,8 +38,8 @@ function onRoutineBegin( test,testFile )
 {
   var self = this;
   var c = Object.create( null );
-  c.tempDirPath = self.tempDirPath = _.pathRegularize( _.dirTempMake() );
-  c.testFilePath = _.pathRegularize( _.pathJoin( c.tempDirPath,testFile.name + '.s' ) );
+  c.tempDirPath = self.tempDirPath = _.pathNormalize( _.dirTempMake() );
+  c.testFilePath = _.pathNormalize( _.pathJoin( c.tempDirPath,testFile.name + '.s' ) );
   _.fileProvider.fileWrite( c.testFilePath,_.routineSourceGet({ routine : testFile, withWrap : 0 }) );
   return c;
 }
@@ -49,7 +49,7 @@ function onRoutineBegin( test,testFile )
 function onRoutineEnd( test )
 {
   var self = this;
-  _.fileProvider.filesDelete( self.tempDirPath );
+  // _.fileProvider.filesDelete( self.tempDirPath );
 }
 
 // --
@@ -59,16 +59,18 @@ function onRoutineEnd( test )
 function trivial( test )
 {
   var self = this;
+  debugger
   var c = onRoutineBegin.call( this,test,testFile );
   function onWrite( o )
   {
     got.push( o.input[ 0 ] );
   }
-  var l = new wLogger({ onWrite : onWrite, output : null });
+  var l = _.Logger({ onWrite : onWrite, output : null });
   var shell =
   {
     path : c.testFilePath,
     stdio : 'pipe',
+    mode : 'spawn',
     outputColoring : 0,
     outputPrefixing : 0,
     ipc : 1,
@@ -117,7 +119,7 @@ var Self =
 
 };
 
-Self = wTestSuit( Self );
+Self = wTestSuit( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

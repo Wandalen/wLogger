@@ -681,7 +681,7 @@ function _writePrepare( original )
         o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'tail' );
       }
 
-      if( !_.Logger.rawOutput )
+      if( !self.rawOutput )
       if( !self.passingRawColor )
       {
         if( self.writingToHtml )
@@ -819,10 +819,10 @@ function _diagnosticColorCheck()
 
   var result = {};
 
-  if( _.Logger.diagnosticColor )
+  if( self.diagnosticColor )
   result.ill = self._diagnosticColor( fg, bg );
 
-  if( _.Logger.diagnosticColorCollapse )
+  if( self.diagnosticColorCollapse )
   result.collapse = self._diagnosticColorCollapse( fg, bg );
 
   return result;
@@ -842,7 +842,7 @@ function _diagnosticColor( fg, bg )
     if( combination.fg === fg.originalName && combination.bg === bg.originalName )
     // if( combination.platform === process.platform )
     {
-      _.Logger.diagnosticColor = 0;
+      self.diagnosticColor = 0;
       ill = true;
       // logger.foregroundColor = 'blue';
       // logger.backgroundColor = 'yellow';
@@ -882,7 +882,7 @@ function _diagnosticColorCollapse( fg, bg )
   {
     // logger.foregroundColor = 'blue';
     // logger.backgroundColor = 'yellow';
-    _.Logger.diagnosticColorCollapse = 0;
+    self.diagnosticColorCollapse = 0;
     logger.styleSet( 'info.negative' );
     logger.warn( 'Warning: Color collapse in native terminal.' );
     logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );

@@ -24,14 +24,14 @@ var _ = wTools;
 
 function testDirMake()
 {
-  this.testDirPath = _.pathRegularize( _.dirTempMake() );
+  this.testDirPath = _.dirTempMake();
 }
 
 //
 
 function testDirClean()
 {
-  _.fileProvider.fileDelete( this.testDirPath );
+  _.fileProvider.filesDelete( this.testDirPath );
 }
 
 //
@@ -47,14 +47,14 @@ function readFromFile( test )
   var expected = [ data ];
 
   _.fileProvider.fileWrite( filePath, data );
-  var readStream = _.fileProvider.fileReadStreamAct( filePath );
+  var readStream = _.fileProvider.fileReadStream( filePath );
 
   function onWrite( o )
   {
     got.push( o.input[ 0 ] );
   }
 
-  var l = new wLogger
+  var l = new _.Logger
   ({
     output : null,
     onWrite : onWrite
@@ -87,7 +87,7 @@ function writeToFile( test )
     expected.push( o.input[ 0 ] );
   }
 
-  var l = new wLogger
+  var l = new _.Logger
   ({
     output : null,
     onWrite : onWrite
