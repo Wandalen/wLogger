@@ -104,7 +104,7 @@ function chaining( test )
 {
   function _onWrite( args ) { got.push( args.output[ 0 ] ) };
 
-  test.description = 'case1: l1 must get two messages';
+  test.description = 'case1: l2 -> l1';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
   var l2 = new _.Logger( { output : l1 } );
@@ -113,7 +113,7 @@ function chaining( test )
   var expected = [ '1', '2' ];
   test.identical( got, expected );
 
-  test.description = 'case2: multiple loggers';
+  test.description = 'case2: l3 -> l2 -> l1';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
   var l2 = new _.Logger( { output : l1, onWrite : _onWrite } );
@@ -123,7 +123,7 @@ function chaining( test )
   var expected = [ 'l2', 'l2', 'l3', 'l3' ];
   test.identical( got, expected );
 
-  test.description = 'case3: multiple loggers';
+  test.description = 'case3: l4->l3->l2->l1';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
   var l2 = new _.Logger( { output : l1, onWrite : _onWrite } );
@@ -140,7 +140,7 @@ function chaining( test )
   ];
   test.identical( got, expected );
 
-  test.description = 'case4: input test ';
+  test.description = 'case4: l1 <- l2 <- l3 <- l4 ';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
   var l2 = new _.Logger( { onWrite : _onWrite } );
@@ -301,11 +301,157 @@ function consoleChaining( test )
 
   //
 
+  test.description = 'console is not barred, several inputs for console';
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
+  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  l4.inputFrom( console, { combining : 'append' } );
+  l1.log( 'l1' );
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+  l4.inputUnchain( console );
+  test.identical( received, [ 'l1', 'l2', 'l3' ] );
+
+  //
+
+  test.description = 'console is not barred, several outputs from console';
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger({ output : null, onWrite : onWrite });
+  var l2 = new _.Logger({ output : null, onWrite : onWrite });
+  var l3 = new _.Logger({ output : null, onWrite : onWrite });
+
+  l1.inputFrom( console, { combining : 'append' } );
+  l2.inputFrom( console, { combining : 'append' } );
+  l3.inputFrom( console, { combining : 'append' } );
+  console.log( 'msg' );
+  l1.inputUnchain( console );
+  l2.inputUnchain( console );
+  l3.inputUnchain( console );
+  test.identical( received, [ 'msg', 'msg', 'msg' ] );
+
+  //
+
+  test.description = 'console is not barred, several outputs/inputs';
+  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+
+  /*inputs*/
+
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
+
+  /*outputs*/
+
+  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  var l5 = new _.Logger({ output : null, onWrite : onWrite });
+  var l6 = new _.Logger({ output : null, onWrite : onWrite });
+
+  l4.inputFrom( console, { combining : 'append' } );
+  l5.inputFrom( console, { combining : 'append' } );
+  l6.inputFrom( console, { combining : 'append' } );
+
+  l1.log( 'l1' );
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+
+  l1.outputUnchain( console );
+  l2.outputUnchain( console );
+  l3.outputUnchain( console );
+  l4.inputUnchain( console );
+  l5.inputUnchain( console );
+  l6.inputUnchain( console );
+
+  test.identical( received, [ 'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3' ] );
+
+  //
+
   if( consoleWasBarred )
   {
     _.Tester._bar = _.Logger.consoleBar({ outputLogger : _.Tester.logger, bar : 1 });
     test.shouldBe( _.Logger.consoleIsBarred( console ) );
   }
+
+  //
+
+  test.description = 'console is barred, several inputs for console';
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
+  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  l4.inputFrom( console, { combining : 'append' } );
+  l1.log( 'l1' );
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+  l4.inputUnchain( console );
+  test.identical( received, [] );
+
+  //
+
+  test.description = 'console is barred, several outputs from console';
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger({ output : null, onWrite : onWrite });
+  var l2 = new _.Logger({ output : null, onWrite : onWrite });
+  var l3 = new _.Logger({ output : null, onWrite : onWrite });
+
+  l1.inputFrom( console, { combining : 'append' } );
+  l2.inputFrom( console, { combining : 'append' } );
+  l3.inputFrom( console, { combining : 'append' } );
+  console.log( 'msg' );
+  l1.inputUnchain( console );
+  l2.inputUnchain( console );
+  l3.inputUnchain( console );
+  test.identical( received, [] );
+
+  //
+
+  //
+
+  test.description = 'console is barred, several outputs/inputs';
+  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  var received = [];
+  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+
+  /*inputs*/
+
+  var l1 = new _.Logger();
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
+
+  /*outputs*/
+
+  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  var l5 = new _.Logger({ output : null, onWrite : onWrite });
+  var l6 = new _.Logger({ output : null, onWrite : onWrite });
+
+  l4.inputFrom( console, { combining : 'append' } );
+  l5.inputFrom( console, { combining : 'append' } );
+  l6.inputFrom( console, { combining : 'append' } );
+
+  l1.log( 'l1' );
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+
+  l1.outputUnchain( console );
+  l2.outputUnchain( console );
+  l3.outputUnchain( console );
+  l4.inputUnchain( console );
+  l5.inputUnchain( console );
+  l6.inputUnchain( console );
+
+  test.identical( received, [] );
 
   //
 
@@ -347,7 +493,7 @@ function chainingParallel( test )
   var expected = [ 'msg','msg','msg' ];
   test.identical( got, expected );
 
-  test.description = 'case2: * -> 1';
+  test.description = 'case2: many inputs to 1 logger';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
   var l2 = new _.Logger();
@@ -363,7 +509,7 @@ function chainingParallel( test )
   var expected = [ 'l2','l3','l4' ];
   test.identical( got, expected );
 
-  test.description = 'case3: *inputs -> 1';
+  test.description = 'case3: many inputs to 1 logger';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
   var l2 = new _.Logger();
@@ -378,6 +524,63 @@ function chainingParallel( test )
   l4.log( 'l4' );
   var expected = [ 'l2','l3','l4' ];
   test.identical( got, expected );
+
+  test.description = 'case3: 1 logger to many loggers';
+  var got = [];
+  var l1 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l2 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l3 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l4 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  l1.outputTo( l2, { combining : 'append' } );
+  l1.outputTo( l3, { combining : 'append' } );
+  l1.outputTo( l4, { combining : 'append' } );
+
+  l1.log( 'msg' );
+  var expected = [ 'msg', 'msg', 'msg', 'msg' ]
+  test.identical( got, expected );
+
+  test.description = 'case3: many loggers from 1 logger';
+  var got = [];
+  var l1 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l2 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l3 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l4 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  l2.inputFrom( l1, { combining : 'append' } );
+  l3.inputFrom( l1, { combining : 'append' } );
+  l4.inputFrom( l1, { combining : 'append' } );
+
+  l1.log( 'msg' );
+  var expected = [ 'msg', 'msg', 'msg', 'msg' ]
+  test.identical( got, expected );
+
+  test.description = 'case3:  *inputs ->  1 -> *outputs ';
+  var got = [];
+  var l1 = new _.Logger( { output : null  } );
+
+  /* input */
+  var l2 = new _.Logger();
+  var l3 = new _.Logger();
+  var l4 = new _.Logger();
+  l1.inputFrom( l2, { combining : 'append' } );
+  l1.inputFrom( l3, { combining : 'append' } );
+  l1.inputFrom( l4, { combining : 'append' } );
+
+  /* output */
+  var l5 = new _.Logger({ output : null, onWrite : _onWrite });
+  var l6 = new _.Logger({ output : null, onWrite : _onWrite });
+  var l7 = new _.Logger({ output : null, onWrite : _onWrite });
+
+  l1.outputTo( l5, { combining : 'append' } );
+  l1.outputTo( l6, { combining : 'append' } );
+  l1.outputTo( l7, { combining : 'append' } );
+
+  l2.log( 'l2' );
+  l3.log( 'l3' );
+  l4.log( 'l4' );
+  var expected = [ 'l2','l2','l2','l3','l3','l3','l4','l4','l4' ];
+  test.identical( got, expected );
+
+  //
 
   test.description = 'case4: outputTo/inputFrom, remove some outputs ';
   var got = [];
