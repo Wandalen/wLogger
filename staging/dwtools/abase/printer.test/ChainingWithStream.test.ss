@@ -7,31 +7,34 @@ return;
 
 if( typeof module !== 'undefined' )
 {
-  try
-  {
-   require( '../../Base.s' );
-  }
-  catch( err )
-  {
-   require( 'wTools' );
-  }
-  var _ = wTools;
+
+  require( '../printer/top/Logger.s' );
+
+  var _ = _global_.wTools;
+
   _.include( 'wTesting' );
+  _.include( 'wFiles' );
+  _.include( 'wPath' );
 
 }
 
-var _ = wTools;
+//
+
+var _ = _global_.wTools;
+var Parent = _.Tester;
 
 function testDirMake()
 {
-  this.testDirPath = _.dirTempMake();
+  var self = this;
+  self.testDirPath = _.dirTempMake();
 }
 
 //
 
 function testDirClean()
 {
-  _.fileProvider.filesDelete( this.testDirPath );
+  var self = this;
+  _.fileProvider.filesDelete( self.testDirPath );
 }
 
 //
@@ -132,7 +135,7 @@ var Self =
 
 };
 
-Self = wTestSuit( Self );
+Self = wTestSuit( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

@@ -35,6 +35,7 @@ var Self =
 
   name : 'Logger',
   silencing : 1,
+  enabled : 0,
   // verbosity : 1,
   // silencing : false,
 
