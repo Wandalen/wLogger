@@ -292,7 +292,7 @@ function printFrom( src )
   _.assert( src._print.length === 2 );
 
   var iterator = src._print.makeIterator({ printer : self });
-  var iteration = iterator.newIteration();
+  var iteration = iterator.iterationNew();
 
   Object.preventExtensions( iterator );
   Object.preventExtensions( iteration );

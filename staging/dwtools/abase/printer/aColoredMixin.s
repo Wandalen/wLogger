@@ -718,8 +718,8 @@ function topic()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
+  // debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
 
   this.log();
   this.log( result );
@@ -737,9 +737,8 @@ function topicUp()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  xxx
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
 
   this.log();
   this.logUp( result );
@@ -757,9 +756,8 @@ function topicDown()
   // var result = self._strConcat( arguments );
   var result = _.strConcat.apply( undefined,arguments );
 
-  xxx
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' ); debugger;
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
 
   this.log();
   this.logDown( result );
