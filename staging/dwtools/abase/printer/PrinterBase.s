@@ -7,18 +7,13 @@ if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
-  // if( typeof _.PrinterBase !== 'undefined' )
-  // debugger;
-  // if( typeof _.PrinterBase !== 'undefined' )
-  // return;
-
   if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
     let toolsPath = '../../../dwtools/Base.s';
     let _externalTools = 0;
     try
     {
-      require.resolve( toolsPath )/*fff*/;
+      require.resolve( toolsPath );
     }
     catch( err )
     {
@@ -26,7 +21,7 @@ if( typeof module !== 'undefined' )
       require( 'wTools' );
     }
     if( !_externalTools )
-    require( toolsPath )/*fff*/;
+    require( toolsPath );
   }
 
   var _ = _global_.wTools;
