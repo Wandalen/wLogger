@@ -34,8 +34,7 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
-    "wColor": "",
-    "wFiles": ""
+    "wstringer": ""
   },
   "optionalDependencies": {
     "wColor": ""
