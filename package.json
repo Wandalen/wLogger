@@ -34,7 +34,8 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
-    "wstringer": ""
+    "wstringer": "",
+    "wstringsextra": ""
   },
   "optionalDependencies": {
     "wColor": ""
@@ -49,8 +50,6 @@
     "logging",
     "log",
     "colorful log",
-    "multilevel log",
-    "colors",
-    "color"
+    "multilevel log"
   ]
 }
