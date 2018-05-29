@@ -34,9 +34,19 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
+    "wstringer": "",
+    "wstringsextra": ""
+  },
+  "optionalDependencies" : {
+    "wColor": ""
+  },
+  "dependencies": {
+    "wTools": "",
+    "wCopyable": "",
     "wColor": "",
     "wFiles": ""
   },
+
   "devDependencies": {
     "wTesting": "",
     "wLogger": "."

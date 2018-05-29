@@ -27,6 +27,8 @@ if( typeof module !== 'undefined' )
   var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
+  _.include( 'wStringer' );
+  _.include( 'wStringsExtra' );
 
 }
 
