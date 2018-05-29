@@ -1,10 +1,10 @@
 
 if( typeof module !== 'undefined' )
-require( 'wLogger' );
+require( '..' );
 
 var _ = wTools;
 
-var logger = new wLogger();
+var logger = new _.Logger();
 
 logger.logUp( 'up' );
 logger.log( 'log' );

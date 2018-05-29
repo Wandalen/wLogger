@@ -23,7 +23,7 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-isBrowser = false;
+  isBrowser = false;
 
   var _ = _global_.wTools;
 
