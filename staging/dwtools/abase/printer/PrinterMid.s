@@ -74,8 +74,8 @@ function levelSet( level )
 
   var level = self[ symbolForLevel ];
 
-  self._prefix = _.strTimes( self._dprefix || '',level );
-  self._postfix = _.strTimes( self._dpostfix|| '',level );
+  self._prefix = _.strDup( self._dprefix || '',level );
+  self._postfix = _.strDup( self._dpostfix|| '',level );
 
 }
 
