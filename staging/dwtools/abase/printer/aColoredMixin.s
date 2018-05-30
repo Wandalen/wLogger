@@ -38,6 +38,7 @@ if( typeof module !== 'undefined' )
 }
 
 var _ = _global_.wTools;
+_.assert( _.strExtractStrips );
 
 //
 
