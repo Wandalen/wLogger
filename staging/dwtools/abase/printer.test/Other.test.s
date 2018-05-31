@@ -1,6 +1,6 @@
 ( function _Other_test_s_( ) {
 
-'use strict';
+'use strict'; /*aaa*/
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
