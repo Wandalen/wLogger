@@ -1,6 +1,6 @@
 (function _aChainingMixin_s_() {
 
-'use strict';
+'use strict'; /*aaa*/
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
     let toolsExternal = 0;
     try
     {
-      require.resolve( toolsPath )/*hhh*/;
+      require.resolve( toolsPath );
     }
     catch( err )
     {
@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
       require( 'wTools' );
     }
     if( !toolsExternal )
-    require( toolsPath )/*hhh*/;
+    require( toolsPath );
   }
 
 // require( './PrinterMid.s' );
@@ -305,13 +305,13 @@ function _writeToChannelIn( channelName,args )
  * l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
  * logger.up( 2 );
  * l.up( 1 );
- * logger.log( 'aaa\nbbb' );
- * l.log( 'ccc\nddd' );
+ * logger.log( 'aa\nb' );
+ * l.log( 'c\nd' );
  * //logger prints
- * // ---aaa
- * // ---bbb
- * // ----ccc
- * // -----ddd
+ * // ---aa
+ * // ---b
+ * // ----c
+ * // -----d
  *
  * @method outputTo
  * @throws { Exception } If no arguments provided.
