@@ -2,16 +2,6 @@
 
 'use strict';/*aaa*/
 
-/*
-
-to run this test
-from the project directory run
-
-npm install
-node ./staging/dwtools/abase/z.test/Chaining.test.s
-
-*/
-
 if( typeof module !== 'undefined' )
 {
 

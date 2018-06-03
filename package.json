@@ -34,6 +34,7 @@
   "dependencies": {
     "wTools": "",
     "wCopyable": "",
+    "wFiles": "",
     "wstringer": "",
     "wstringsextra": ""
   },
@@ -42,6 +43,7 @@
   },
   "devDependencies": {
     "wTesting": "",
+    "wFiles": "",
     "wLogger": "."
   },
   "keywords": [

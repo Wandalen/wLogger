@@ -1,72 +1,72 @@
-( function _Logger_test_s_( ) {
-
-'use strict'; /*aaa*/
-
-/*
-
-to run this test
-from the project directory run
-
-npm install
-node ./staging/dwtools/abase/z.test/Logger.test.s
-
-*/
-
-if( typeof module !== 'undefined' )
-{
-
-  require( '../printer/top/Logger.s' );
-
-  var _ = _global_.wTools;
-
-  _.include( 'wTesting' );
-
-}
-
+// ( function _Logger_test_s_( ) {
 //
-
-var _ = _global_.wTools;
-var Parent = _.Tester;
-
+// 'use strict'; /*aaa*/
 //
-
-var Self =
-{
-
-  name : 'Logger',
-  silencing : 1,
-  enabled : 0,
-  // verbosity : 1,
-  // silencing : false,
-
-  tests :
-  {
-  },
-
-}
-
+// /*
 //
-
-Self = wTestSuit( Self );
-if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
-
-// if( typeof module !== 'undefined' && !module.parent )
-// _.timeReady( function()
+// to run this test
+// from the project directory run
+//
+// npm install
+// node ./staging/dwtools/abase/z.test/Logger.test.s
+//
+// */
+//
+// if( typeof module !== 'undefined' )
 // {
 //
-//   // debugger
-//   Self = wTestSuit( Self.name );
-//   // Self.logger = wPrinterToJs();
+//   require( '../printer/top/Logger.s' );
 //
-//   _.Tester.test( Self.name )
-//   .doThen( function()
+//   var _ = _global_.wTools;
+//
+//   _.include( 'wTesting' );
+//
+// }
+//
+// //
+//
+// var _ = _global_.wTools;
+// var Parent = _.Tester;
+//
+// //
+//
+// var Self =
+// {
+//
+//   name : 'Logger',
+//   silencing : 1,
+//   enabled : 0,
+//   // verbosity : 1,
+//   // silencing : false,
+//
+//   tests :
 //   {
-//     debugger;
-//     logger.log( Self.logger.outputData );
-//     debugger;
-//   });
+//   },
 //
-// });
-
-} )( );
+// }
+//
+// //
+//
+// Self = wTestSuit( Self );
+// if( typeof module !== 'undefined' && !module.parent )
+// _.Tester.test( Self.name );
+//
+// // if( typeof module !== 'undefined' && !module.parent )
+// // _.timeReady( function()
+// // {
+// //
+// //   // debugger
+// //   Self = wTestSuit( Self.name );
+// //   // Self.logger = wPrinterToJs();
+// //
+// //   _.Tester.test( Self.name )
+// //   .doThen( function()
+// //   {
+// //     debugger;
+// //     logger.log( Self.logger.outputData );
+// //     debugger;
+// //   });
+// //
+// // });
+//
+// } )( );
