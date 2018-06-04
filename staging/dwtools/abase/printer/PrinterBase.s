@@ -1,6 +1,6 @@
 (function _PrinterBase_s_() {
 
-'use strict'; /*aaa*/
+'use strict'; 
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )

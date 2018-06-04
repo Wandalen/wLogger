@@ -1,5 +1,5 @@
 
-/*aaa*/
+
 
 if( typeof _global_ === 'undefined' || !_global_.wBase )
 {

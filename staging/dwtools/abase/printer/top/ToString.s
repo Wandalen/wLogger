@@ -1,6 +1,6 @@
 (function _PrinterToString_s_() {
 
-'use strict'; /*aaa*/
+'use strict'; 
 
 // require
 
