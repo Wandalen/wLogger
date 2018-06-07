@@ -15,7 +15,7 @@ if( typeof module !== 'undefined' )
 
   require( './aChainingMixin.s' )
 
-  var _ = _global_.wTools;
+  var _global = _global_; var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
 
@@ -27,7 +27,7 @@ if( typeof module !== 'undefined' )
  * @class wPrinterMid
  */
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = _.PrinterBase;
 var Self = function wPrinterMid( o )
 {
@@ -517,7 +517,7 @@ _[ Self.nameShort ] = Self;
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )

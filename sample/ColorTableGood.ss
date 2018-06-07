@@ -7,7 +7,7 @@ if( typeof _global_ === 'undefined' || !_global_.wBase )
   let toolsExternal = 0;
   try
   {
-    require.resolve( toolsPath );
+    toolsPath = require.resolve( toolsPath );/*hhh*/
   }
   catch( err )
   {
@@ -18,7 +18,7 @@ if( typeof _global_ === 'undefined' || !_global_.wBase )
   require( toolsPath );
 }
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 
 require( 'wConsequence' );
 require( 'wLogger' );

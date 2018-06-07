@@ -1,6 +1,6 @@
 (function _aChainingMixin_s_() {
 
-'use strict'; 
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
     let toolsExternal = 0;
     try
     {
-      require.resolve( toolsPath );
+      toolsPath = require.resolve( toolsPath );/*hhh*/
     }
     catch( err )
     {
@@ -29,7 +29,7 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 
 //
 
@@ -1097,7 +1097,7 @@ function _hasOutput( output,o )
     {
       if( o.ignoringUnbar && self.outputs[ d ].unbarring )
       continue;
-      debugger;
+      // debugger;
       return true;
     }
   }
@@ -1364,7 +1364,7 @@ Self = _[ Self.nameShort ] = _.mixinMake( Self );
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )

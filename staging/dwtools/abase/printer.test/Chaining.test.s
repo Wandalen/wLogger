@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _ = _global_.wTools;
+  var _global = _global_; var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -15,7 +15,7 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = _.Tester;
 
 //

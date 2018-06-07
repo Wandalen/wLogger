@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
     let _externalTools = 0;
     try
     {
-      require.resolve( toolsPath );
+      toolsPath = require.resolve( toolsPath );/*hhh*/
     }
     catch( err )
     {
@@ -24,7 +24,7 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _ = _global_.wTools;
+  var _global = _global_; var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
   _.include( 'wStringer' );
@@ -38,7 +38,7 @@ if( typeof module !== 'undefined' )
  * @class wPrinterBase
  */
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = null;
 var Self = function wPrinterBase( o )
 {
@@ -397,7 +397,7 @@ _[ Self.nameShort ] = Self;
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )

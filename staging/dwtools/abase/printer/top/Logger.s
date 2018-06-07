@@ -28,7 +28,7 @@ if( typeof module !== 'undefined' )
  * @class wLogger
  */
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = _.PrinterTop;
 var Self = function wLogger( o )
 {
@@ -121,7 +121,7 @@ _global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )

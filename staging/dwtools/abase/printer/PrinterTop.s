@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
 
   require( './aColoredMixin.s' )
 
-  var _ = _global_.wTools;
+  var _global = _global_; var _ = _global_.wTools;
 
   // _.include( 'wColor' );
 
@@ -28,7 +28,7 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 //
 
-var _ = _global_.wTools;
+var _global = _global_; var _ = _global_.wTools;
 var Parent = _.PrinterMid;
 var Self = function wPrinterTop( o )
 {
@@ -134,7 +134,7 @@ _[ Self.nameShort ] = Self;
 // --
 
 if( typeof module !== 'undefined' )
-if( _global_._UsingWtoolsPrivately_ )
+if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )
