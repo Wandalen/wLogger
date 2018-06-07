@@ -7,7 +7,7 @@ if( typeof _global_ === 'undefined' || !_global_.wBase )
   let toolsExternal = 0;
   try
   {
-    toolsPath = require.resolve( toolsPath );/*hhh*/
+    toolsPath = require.resolve( toolsPath );
   }
   catch( err )
   {
