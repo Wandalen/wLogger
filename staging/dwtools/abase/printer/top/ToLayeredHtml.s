@@ -1,17 +1,17 @@
 (function _PrinterToLayeredHtml_s_() {
 
-'use strict'; 
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
   if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
-    let toolsPath = '../../../../dwtools/Base.s';
+    let toolsPath = '../../../dwtools/Base.s';
     let toolsExternal = 0;
     try
     {
-      toolsPath = require.resolve( toolsPath );/*hhh*/
+      toolsPath = require.resolve( toolsPath );
     }
     catch( err )
     {
