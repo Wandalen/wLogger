@@ -1033,7 +1033,7 @@ var Accessors =
 }
 
 // --
-// proto
+// define class
 // --
 
 var Functor =

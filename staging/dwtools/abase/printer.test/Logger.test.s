@@ -47,7 +47,7 @@
 //
 // //
 //
-// Self = wTestSuit( Self );
+// Self = wTestSuite( Self );
 // if( typeof module !== 'undefined' && !module.parent )
 // _.Tester.test( Self.name );
 //
@@ -56,7 +56,7 @@
 // // {
 // //
 // //   // debugger
-// //   Self = wTestSuit( Self.name );
+// //   Self = wTestSuite( Self.name );
 // //   // Self.logger = wPrinterToJs();
 // //
 // //   _.Tester.test( Self.name )

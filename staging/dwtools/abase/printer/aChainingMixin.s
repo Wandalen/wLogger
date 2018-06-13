@@ -1277,7 +1277,7 @@ var Statics =
 }
 
 // --
-// proto
+// define class
 // --
 
 var Supplement =
