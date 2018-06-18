@@ -406,12 +406,6 @@ function outputTo( output,o )
           without passing message forward in a chain
         */
 
-        // if( arguments[ 0 ] && arguments[ 0 ].indexOf( 'Tester of test suit' ) !== -1 )
-        // debugger;
-        //
-        // if( arguments[ 0 ] && _.strSplit( arguments[ 0 ] ) === '%c' )
-        // debugger;
-
         if( this[ symbolForChainDescriptor ] && this[ symbolForChainDescriptor ].originalMethods[ name ] )
         return this[ symbolForChainDescriptor ].originalMethods[ name ].apply( this,arguments );
         else
@@ -431,7 +425,6 @@ function outputTo( output,o )
         self.outputs.splice( 0,self.outputs.length );
       }
       else _.assert( 0,'outputTo can remove outputs only if ( o.combining ) is "rewrite"' );
-      // else return false;
     }
   }
 

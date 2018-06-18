@@ -1,6 +1,6 @@
 (function _Logger_s_() {
 
-'use strict'; 
+'use strict';
 
 // require
 
@@ -243,7 +243,7 @@ function hookConsoleToDom( o )
   var o = o || {};
   var $ = jQuery;
 
-  $( document ).ready( function( )
+  _.timeReady( function()
   {
 
     if( !o.dom )

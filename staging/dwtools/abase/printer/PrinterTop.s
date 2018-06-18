@@ -1,6 +1,6 @@
 (function _PrinterTop_s_() {
 
-'use strict'; 
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -16,9 +16,8 @@ if( typeof module !== 'undefined' )
 
   require( './aColoredMixin.s' )
 
-  var _global = _global_; var _ = _global_.wTools;
-
-  // _.include( 'wColor' );
+  var _global = _global_;
+  var _ = _global_.wTools;
 
 }
 
@@ -47,15 +46,6 @@ Self.nameShort = 'PrinterTop';
 function init( o )
 {
   var self = this;
-
-  // if( !o )
-  // o = {};
-  //
-  // if( !_global_.wTools.color && o.coloring === undefined )
-  // {
-  //   debugger;
-  //   o.coloring = false;
-  // }
 
   Parent.prototype.init.call( self,o );
 
@@ -120,8 +110,6 @@ _.accessor
   names :
   {
     level : 'level',
-    // foregroundColor : 'foregroundColor',
-    // backgroundColor : 'backgroundColor',
   }
 });
 
