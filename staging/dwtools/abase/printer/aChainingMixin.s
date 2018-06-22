@@ -23,8 +23,6 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-// require( './PrinterMid.s' );
-
   isBrowser = false;
 
 }
@@ -428,41 +426,6 @@ function outputTo( output,o )
     }
   }
 
-  /* write */
-
-  // if( 0 )
-  // for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
-  // {
-  //
-  //   var name = self.outputWriteMethods[ m ];
-  //   // var nameAct = name + 'Act';
-  //
-  //   if( output === null )
-  //   {
-  //     self[ nameAct ] = function(){};
-  //     continue;
-  //   }
-  //
-  //   _.assert( output[ name ],'outputTo expects output has method',name );
-  //
-  //   outputDescriptor.methods[ nameAct ] = _.routineJoin( output,output[ name ] );
-  //
-  //   if( self.outputs.length > 1 ) ( function()
-  //   {
-  //     var n = nameAct;
-  //     self[ n ] = function()
-  //     {
-  //       for( var d = 0 ; d < this.outputs.length ; d++ )
-  //       this.outputs[ d ].methods[ n ].apply( this,arguments );
-  //     }
-  //   })()
-  //   else
-  //   {
-  //     self[ nameAct ] = outputDescriptor.methods[ nameAct ];
-  //   }
-  //
-  // }
-
   return true;
 }
 
@@ -527,48 +490,10 @@ function outputUnchain( output )
     return result;
   }
 
-  var result = _.arrayRemovedOnce( self.outputs,output,( e ) => e.output ) >= 0;
-
-  // for( var i = 0; i < self.outputs.length; i++ )
-  // {
-  //   if( self.outputs[ i ].output === output )
-  //   {
-  //     self.outputs.splice( i, 1 );
-  //     if( self.outputs.length )
-  //     return true;
-  //     break;
-  //   }
-  // }
+  var result = _.arrayRemovedOnce( self.outputs, output, ( e ) => e.output, ( e ) => e ) >= 0;
 
   if( output.inputs )
-  _.arrayRemovedOnce( output.inputs,self,( e ) => e.input );
-
-  // var chainDescriptor = output[ symbolForChainDescriptor ];
-  // chainDescriptor = Object.create( null );
-  // chainDescriptor.barred = 0;
-
-  // if( output.inputs )
-  // for( var i = 0; i < output.inputs.length; i++ )
-  // {
-  //   if( output.inputs[ i ].input === self )
-  //   {
-  //     output.inputs.splice( i, 1 );
-  //     if( self.outputs.length )
-  //     return true;
-  //     break;
-  //   }
-  // }
-
-  // if( !self.outputs.length )
-  // {
-  //   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
-  //   {
-  //     var nameAct = self.outputWriteMethods[ m ] + 'Act';
-  //     self[ nameAct ] =  function(){};
-  //   }
-  //
-  //   return true;
-  // }
+  _.arrayRemovedOnce( output.inputs, self, ( e ) => e.input, ( e ) => e );
 
   return result;
 }
@@ -720,26 +645,6 @@ function inputFrom( input,o )
   if( o.barring )
   chainDescriptor.bar = self;
 
-  // if( o.barring )
-  // {
-  //
-  //   _.assert( !chainDescriptor.barred,'input already barred!' );
-  //   chainDescriptor.barred = 1;
-  //
-  //   for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
-  //   {
-  //     var name = self.outputWriteMethods[ m ];
-  //     _.assert( input[ name ],'inputFrom expects input having method',name );
-  //
-  //     chainDescriptor.barringMethods[ name ] = function()
-  //     {
-  //       return self[ name ].apply( self,arguments );
-  //     }
-  //
-  //   })();
-  //
-  // }
-
   return true;
 }
 
@@ -867,7 +772,7 @@ function _inputUnchainForeign( input )
 
   /* */
 
-  var result = _.arrayRemovedOnce( input.outputs,self,( e ) => e.output ) >= 0;
+  var result = _.arrayRemovedOnce( input.outputs, self, ( e ) => e.output, ( e ) => e ) >= 0;
 
   if( !input.outputs.length )
   {
@@ -1138,51 +1043,6 @@ function hasOutputDeep( output )
 
   return self._hasOutput( output,{ deep : 1 } );
 }
-
-//
-//
-// function hasOutput( output )
-// {
-//   _.assert( _.objectIs( output ) );
-//
-//   var self = this;
-//
-//   for( var d = 0; d < self.outputs.length ; d++ )
-//   if( self.outputs[ d ].output === output )
-//   return true;
-//
-//   return false;
-// }
-//
-// //
-//
-// function _hasOutput( output )
-// {
-//   var self = this;
-//
-//   for( var d = 0 ; d < self.outputs.length ; d++ )
-//   {
-//     if( self.outputs[ d ].output === output )
-//     {
-//       if( self.outputs[ d ].unbarring )
-//       continue;
-//       debugger;
-//       return true;
-//     }
-//   }
-//
-//   for( var d = 0 ; d < self.outputs.length ; d++ )
-//   {
-//     var outputs = self.outputs[ d ].output.outputs;
-//     if( outputs && outputs.length )
-//     {
-//       if( _hasOutput.call( self.outputs[ d ].output, output ) )
-//       return true;
-//     }
-//   }
-//
-//   return false;
-// }
 
 // --
 // etc
