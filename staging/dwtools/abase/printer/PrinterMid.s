@@ -101,7 +101,7 @@ function _begin( key,val )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( key ),'expects string ( key ), got',_.strTypeOf( key ) );
 
   if( val === undefined )

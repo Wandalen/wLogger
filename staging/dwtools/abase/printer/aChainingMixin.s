@@ -155,7 +155,7 @@ function _writeToChannel( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -195,7 +195,7 @@ function _writeToChannelUp( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -213,7 +213,7 @@ function _writeToChannelDown( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -231,7 +231,7 @@ function _writeToChannelIn( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
   _.assert( args.length === 2 );
@@ -919,7 +919,7 @@ function _hasInput( input,o )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
   _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) );
   _.routineOptions( _hasInput,o );
@@ -985,7 +985,7 @@ function _hasOutput( output,o )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
   _.assert( _.objectIs( output ) || _.consoleIs( output ) || _.processIs( output ));
   //_.assert( _.objectIs( output ) );
