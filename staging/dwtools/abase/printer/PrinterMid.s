@@ -85,7 +85,7 @@ function _writeBegin( args )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   Parent.prototype._writeBegin.call( self,args );
 
@@ -101,7 +101,7 @@ function _begin( key,val )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( key ),'expects string ( key ), got',_.strTypeOf( key ) );
 
   if( val === undefined )
@@ -221,7 +221,7 @@ function verbosityPush( src )
   if( !_.numberIs( src ) )
   src = src ? 1 : 0;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   self._verbosityStack.push( self.verbosity );
 
@@ -314,7 +314,7 @@ function mine( name )
   var self = this;
   var mine = Object.create( null );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
 
   mine.name = name;
@@ -359,7 +359,7 @@ function mineDetonate( mine )
   if( _.strIs( mine ) )
   mine = self._mines[ mine ];
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( mine ) );
 
   mine.detonated = 1;
@@ -385,7 +385,7 @@ function mineFinit( mine )
   if( _.strIs( mine ) )
   mine = self._mines[ mine ];
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( mine ) );
   _.assert( self._mines[ mine.name ] === mine );
 

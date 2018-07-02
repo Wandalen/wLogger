@@ -1,6 +1,6 @@
 ( function _Backend_test_ss_( ) {
 
-'use strict'; 
+'use strict';
 
 /*
 
@@ -412,7 +412,7 @@ function shellColors( test )
 var Self =
 {
 
-  name : 'Backend test',
+  name : 'Tools/base/printer/Backend',
   /* verbosity : 1, */
   silencing : 1,
 

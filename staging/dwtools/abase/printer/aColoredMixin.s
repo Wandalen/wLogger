@@ -47,7 +47,7 @@ function _mixin( cls )
 
   var dstProto = cls.prototype;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.routineIs( cls ) );
 
   _.mixinApply
@@ -310,7 +310,7 @@ function coloredToHtml( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( !_.objectIs( o ) )
   o = { src : o }
@@ -432,7 +432,7 @@ function _writePrepareHtml( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
   _.assert( o.output.length === 1 );
@@ -448,7 +448,7 @@ function _writePrepareShell( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
 
@@ -514,7 +514,7 @@ function _writePrepareBrowser( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
 
@@ -567,7 +567,7 @@ function _writePrepareWithoutColors( o )
   var self = this;
   var result = '';
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
 
@@ -645,7 +645,7 @@ function _writePrepare( original )
   {
     var self = this;
 
-    _.assert( arguments.length === 1 );
+    _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.mapIs( o ) );
 
     o = original.call( self,o );
@@ -773,7 +773,7 @@ function styleSet( style )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( style ) );
 
   if( style === 'default' )

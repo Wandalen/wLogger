@@ -1,6 +1,6 @@
 // ( function _Logger_test_s_( ) {
 //
-// 'use strict'; 
+// 'use strict';
 //
 // /*
 //

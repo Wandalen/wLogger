@@ -116,7 +116,7 @@ function write()
 
 function _writeBegin( args )
 {
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 }
 
 //
@@ -125,7 +125,7 @@ function _writePrepare( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.arrayLike( o.input ) );
 
@@ -141,7 +141,7 @@ function _writePrepare( o )
 
 function _writeEnd( args )
 {
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 }
 
 //
@@ -150,7 +150,7 @@ function _strConcat( args )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   if( !_.strConcat )
   return _.str.apply( _,args );
@@ -285,7 +285,7 @@ function printFrom( src )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.routineIs( src._print ) );
   _.assert( _.routineIs( src._print.makeIterator ) );
   _.assert( src._print.length === 2 );

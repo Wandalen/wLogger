@@ -2,7 +2,6 @@
 
 'use strict';
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
@@ -23,11 +22,14 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  isBrowser = false;
+  var _ = _global_.wTools;
+
+  _.include( 'wProto' );
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 //
 
@@ -36,7 +38,7 @@ function _mixin( cls )
 
   var dstProto = cls.prototype;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.routineIs( cls ) );
 
   _.mixinApply
@@ -94,7 +96,7 @@ function __initChainingMixinChannel( name )
   var proto = this;
 
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
 
   if( proto[ name ] )
@@ -153,7 +155,7 @@ function _writeToChannel( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -193,7 +195,7 @@ function _writeToChannelUp( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -211,7 +213,7 @@ function _writeToChannelDown( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
 
@@ -229,7 +231,7 @@ function _writeToChannelIn( channelName,args )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.arrayLike( args ) );
   _.assert( args.length === 2 );
@@ -767,7 +769,7 @@ function _inputUnchainForeign( input )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( ( _.objectIs( input ) || _.consoleIs( input ) ) && !( input instanceof _.PrinterBase ) );
 
   /* */
@@ -813,7 +815,7 @@ function unchain()
 function consoleIsBarred( output )
 {
   _.assert( output === console );
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   var descriptor = output[ symbolForChainDescriptor ];
   if( !descriptor )
@@ -833,7 +835,7 @@ function consoleBar( o )
   // console.log( 'o.bar',o.bar );
   // console.log( _.diagnosticStack() );
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
   _.routineOptions( consoleBar,o );
   // _.assert( self.consoleIsBarred( console ) !== !!o.bar );
 
@@ -917,7 +919,7 @@ function _hasInput( input,o )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) );
   _.routineOptions( _hasInput,o );
@@ -961,7 +963,7 @@ function hasInputNotDeep( input )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return self._hasInput( input,{ deep : 0 } );
 }
@@ -972,7 +974,7 @@ function hasInputDeep( input )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return self._hasInput( input,{ deep : 1 } );
 }
@@ -983,7 +985,7 @@ function _hasOutput( output,o )
 {
   var self = this;
 
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.objectIs( output ) || _.consoleIs( output ) || _.processIs( output ));
   //_.assert( _.objectIs( output ) );
@@ -1028,7 +1030,7 @@ function hasOutputNotDeep( output )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return self._hasOutput( output,{ deep : 0 } );
 }
@@ -1039,7 +1041,7 @@ function hasOutputDeep( output )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   return self._hasOutput( output,{ deep : 1 } );
 }
@@ -1052,7 +1054,7 @@ function _outputSet( output )
 {
   var self = this;
 
-  _.assert( arguments.length === 1 );
+  _.assert( arguments.length === 1, 'expects single argument' );
 
   self.outputTo( output,{ combining : 'rewrite' } );
 
@@ -1063,6 +1065,7 @@ function _outputSet( output )
 function _outputGet( output )
 {
   var self = this;
+  _.assert( self.outputs );
   return self.outputs.length ? self.outputs[ self.outputs.length-1 ].output : null;
 }
 

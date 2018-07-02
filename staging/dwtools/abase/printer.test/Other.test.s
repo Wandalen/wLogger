@@ -1,6 +1,6 @@
 ( function _Other_test_s_( ) {
 
-'use strict'; 
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -571,7 +571,7 @@ function coloringNoColor( test )
 var Self =
 {
 
-  name : 'Logger other test',
+  name : 'Tools/base/printer/Other',
   silencing : 1,
   /* verbosity : 1, */
 

@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -15,7 +15,8 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 
 //
@@ -200,24 +201,24 @@ function consoleChaining( test )
     _.Logger.consoleBar( _global_.wTester._bar );
   }
 
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   test.description = 'inputFrom console that exists in outputs';
   var l = new _.Logger();
   test.shouldThrowError( () => l.inputFrom( console ) );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   test.description = 'inputFrom console that not exists in outputs';
   var l = new _.Logger({ output : null });
   var chained = l.inputFrom( console );
-  test.shouldBe( chained );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( chained );
+  test.is( !_.Logger.consoleIsBarred( console ) );
   l.inputUnchain( console );
-  test.shouldBe( !l.hasInputNotDeep( console ) );
+  test.is( !l.hasInputNotDeep( console ) );
 
   //
 
@@ -230,11 +231,11 @@ function consoleChaining( test )
   test.description = 'inputFrom console that not exists in outputs, barring on';
   var l = new _.Logger({ output : null });
   var chained = l.inputFrom( console, { barring : 1 } );
-  test.shouldBe( chained );
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( chained );
+  test.is( _.Logger.consoleIsBarred( console ) );
   l.inputUnchain( console );
-  test.shouldBe( !l.hasInputNotDeep( console ) );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !l.hasInputNotDeep( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
@@ -243,12 +244,12 @@ function consoleChaining( test )
     test.description = 'console is barred, try to chain again';
     var l = new _.Logger({ output : null });
     var chained = l.inputFrom( console, { barring : 1 } );
-    test.shouldBe( chained );
-    test.shouldBe( _.Logger.consoleIsBarred( console ) );
+    test.is( chained );
+    test.is( _.Logger.consoleIsBarred( console ) );
     test.shouldThrowError( () => l.inputFrom( console, { barring : 1 } ) );
     l.inputUnchain( console );
-    test.shouldBe( !l.hasInputNotDeep( console ) );
-    test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+    test.is( !l.hasInputNotDeep( console ) );
+    test.is( !_.Logger.consoleIsBarred( console ) );
   }
 
   //
@@ -256,15 +257,15 @@ function consoleChaining( test )
   test.description = 'outputTo console that exists in outputs';
   var l = new _.Logger();
   test.shouldThrowError( () => l.outputTo( console ) );
-  test.shouldBe( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   test.description = 'outputTo console that exists in outputs, unbarring on';
   var l = new _.Logger();
   test.shouldThrowError( () => l.outputTo( console, { unbarring : 1 } ) );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
@@ -272,10 +273,10 @@ function consoleChaining( test )
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
   test.shouldThrowError( () => l.outputTo( console, { unbarring : 0 } ) );
-  test.shouldBe( !l.hasOutputNotDeep( console ) );
+  test.is( !l.hasOutputNotDeep( console ) );
   l.inputUnchain( console );
-  test.shouldBe( !l.hasInputNotDeep( console ) );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !l.hasInputNotDeep( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
@@ -283,17 +284,17 @@ function consoleChaining( test )
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
   l.outputTo( console, { unbarring : 1 } );
-  test.shouldBe( l.outputs[ l.outputs.length - 1 ] === console.inputs[ console.inputs.length - 1 ] );
+  test.is( l.outputs[ l.outputs.length - 1 ] === console.inputs[ console.inputs.length - 1 ] );
   l.inputUnchain( console );
   l.outputUnchain( console );
-  test.shouldBe( !l.hasInputNotDeep( console ) && !l.inputs.length );
-  test.shouldBe( !l.hasOutputNotDeep( console ) && !l.outputs.length );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !l.hasInputNotDeep( console ) && !l.inputs.length );
+  test.is( !l.hasOutputNotDeep( console ) && !l.outputs.length );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   test.description = 'console is not barred, several inputs for console';
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger();
@@ -310,7 +311,7 @@ function consoleChaining( test )
   //
 
   test.description = 'console is not barred, several outputs from console';
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : null, onWrite : onWrite });
@@ -329,7 +330,7 @@ function consoleChaining( test )
   //
 
   test.description = 'console is not barred, several outputs/inputs';
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
 
@@ -367,13 +368,13 @@ function consoleChaining( test )
   if( consoleWasBarred )
   {
     _global_.wTester._bar = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
-    test.shouldBe( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.consoleIsBarred( console ) );
   }
 
   //
 
   test.description = 'console is barred, several inputs for console';
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger();
@@ -390,7 +391,7 @@ function consoleChaining( test )
   //
 
   test.description = 'console is barred, several outputs from console';
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : null, onWrite : onWrite });
@@ -411,7 +412,7 @@ function consoleChaining( test )
   //
 
   test.description = 'console is barred, several outputs/inputs';
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
 
@@ -447,7 +448,7 @@ function consoleChaining( test )
   //
 
   test.description = 'if console is barred, other console outputs must be omitted';
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
@@ -455,10 +456,10 @@ function consoleChaining( test )
     onWrite : ( o ) => received.push( o.input[ 0 ] )
   })
   l.inputFrom( console );
-  test.shouldBe( l.hasInputNotDeep( console ) );
+  test.is( l.hasInputNotDeep( console ) );
   console.log( 'message' );
   l.inputUnchain( console );
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   test.identical( received, [] )
 
   //
@@ -1487,7 +1488,7 @@ function consoleBar( test )
     barLogger : null,
     bar : 1,
   });
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
 
   if( Config.debug )
   {
@@ -1505,26 +1506,26 @@ function consoleBar( test )
     var consoleIsBarred = _.Logger.consoleIsBarred( console );
 
     if( _.Logger.unbarringConsoleOnError )
-    test.shouldBe( !consoleIsBarred );
+    test.is( !consoleIsBarred );
     else
-    test.shouldBe( consoleIsBarred );
+    test.is( consoleIsBarred );
   }
 
   barDescriptor.bar = 0;
   _.Logger.consoleBar( barDescriptor );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   test.description = 'barred console forwards message only to bar logger';
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
   var barDescriptor = _.Logger.consoleBar
   ({
     outputLogger : _.Tester.logger,
     barLogger : null,
     bar : 1,
   });
-  test.shouldBe( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
@@ -1537,14 +1538,14 @@ function consoleBar( test )
   barDescriptor.bar = 0;
   _.Logger.consoleBar( barDescriptor );
   test.identical( received, [] );
-  test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   if( Config.debug )
   {
     test.description = 'error if provider barLogger has inputs/outputs'
-    test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+    test.is( !_.Logger.consoleIsBarred( console ) );
     var o =
     {
       outputLogger : _.Tester.logger,
@@ -1552,7 +1553,7 @@ function consoleBar( test )
       bar : 1,
     }
     test.shouldThrowError( () => _.Logger.consoleBar( o ) );
-    test.shouldBe( !_.Logger.consoleIsBarred( console ) );
+    test.is( !_.Logger.consoleIsBarred( console ) );
   }
 
   //
@@ -1560,7 +1561,7 @@ function consoleBar( test )
   if( consoleWasBarred )
   {
     _global_.wTester._bar = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
-    test.shouldBe( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.consoleIsBarred( console ) );
   }
 }
 
@@ -1570,9 +1571,9 @@ function consoleIs( test )
 {
   test.description = 'consoleIs';
 
-  test.shouldBe( _.consoleIs( console ) );
-  test.shouldBe( !_.consoleIs( [] ) );
-  test.shouldBe( !_.consoleIs( Object.create( null ) ) );
+  test.is( _.consoleIs( console ) );
+  test.is( !_.consoleIs( [] ) );
+  test.is( !_.consoleIs( Object.create( null ) ) );
 
   if( !Config.debug )
   return;
@@ -1585,7 +1586,7 @@ function consoleIs( test )
 var Self =
 {
 
-  name : 'Chaining test',
+  name : 'Tools/base/printer/Chaining',
 
   silencing : 1,
   /* verbosity : 1, */

@@ -109,7 +109,7 @@ function colorConsole( test )
 var Self =
 {
 
-  name : 'Logger browser test',
+  name : 'Tools/base/printer/Browser',
   /* verbosity : 1, */
   silencing : 1,
 
