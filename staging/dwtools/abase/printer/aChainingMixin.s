@@ -543,7 +543,7 @@ function inputFrom( input,o )
   _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) || input === null );
 
   if( _.routineIs( input.outputTo ) )
-  return input.outputTo( self,_.mapScreen( input.outputTo.defaults,o ) );
+  return input.outputTo( self,_.mapOnly( o, input.outputTo.defaults ) );
 
   _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
