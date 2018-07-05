@@ -345,7 +345,7 @@ function hookConsoleToServer( o )
 
   throw _.err( 'not tested' );
 
-  _.assertMapHasOnly( o,optionsDefault,_.urlStr.components,undefined );
+  _.assertMapHasOnly( o,optionsDefault,_.urlStr.components );
   _.mapSupplement( o,optionsDefault );
 
   if( !o.url )
