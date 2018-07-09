@@ -25,7 +25,7 @@ if( typeof module !== 'undefined' )
 
   isBrowser = false;
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
   try
   {
@@ -37,8 +37,10 @@ if( typeof module !== 'undefined' )
 
 }
 
-var _global = _global_; var _ = _global_.wTools;
-_.assert( _.strExtractStrips );
+var _global = _global_;
+var _ = _global_.wTools;
+
+_.assert( _.strExtractInlined );
 
 //
 
@@ -304,8 +306,6 @@ function _stackIsNotEmpty( layer )
 // colored text
 // --
 
-/* !!! find a new home for the function */
-
 function coloredToHtml( o )
 {
   var self = this;
@@ -315,12 +315,12 @@ function coloredToHtml( o )
   if( !_.objectIs( o ) )
   o = { src : o }
 
-  if( !o.onStrip )
-  o.onStrip = self._handleStrip || _handleStrip;
+  if( !o.onInlined )
+  o.onInlined = self._handleStrip || _handleStrip;
 
   _.routineOptions( coloredToHtml,o );
   _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
-  _.assert( _.routineIs( o.onStrip ) );
+  _.assert( _.routineIs( o.onInlined ) );
 
   if( _.arrayIs( o.src ) )
   {
@@ -334,7 +334,7 @@ function coloredToHtml( o )
   var result = '';
   var spanCount = 0;
 
-  var splitted = _.strExtractStrips({ src : o.src, onStrip : o.onStrip } );
+  var splitted = _.strExtractInlined({ src : o.src, onInlined : o.onInlined } );
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -423,7 +423,7 @@ coloredToHtml.defaults =
   src : null,
   tag : 'span',
   compact : true,
-  onStrip : null,
+  onInlined : null,
 }
 
 //
@@ -454,7 +454,7 @@ function _writePrepareShell( o )
 
   var result = '';
 
-  var splitted = _.strExtractStrips({ src : o.output[ 0 ], onStrip : self._handleStrip } );
+  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip } );
   var layersOnly = true;
 
   splitted.forEach( function( strip )
@@ -520,7 +520,7 @@ function _writePrepareBrowser( o )
 
   var result = [ '' ];
 
-  var splitted = _.strExtractStrips({ src : o.output[ 0 ], onStrip : self._handleStrip } );
+  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip } );
   if( splitted.length === 1 && !self._isStyled )
   {
     if( !_.arrayIs( splitted[ 0 ] ) )
@@ -571,7 +571,7 @@ function _writePrepareWithoutColors( o )
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
 
-  var splitted = _.strExtractStrips({ src : o.output[ 0 ], onStrip : self._handleStrip } );
+  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip } );
   for( var i = 0 ; i < splitted.length ; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
@@ -591,8 +591,9 @@ function _handleStrip( strip )
   var parts = strip.split( ' : ' );
   if( parts.length === 2 )
   {
-    if( allowedKeys.indexOf( parts[ 0 ] ) === -1 )
+    if( !_.arrayHas( allowedKeys, parts[ 0 ] ) )
     return;
+    // return;
     return parts;
   }
 }
