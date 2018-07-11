@@ -63,9 +63,11 @@ function colorConsole( test )
 {
 
   var got;
-
-  var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
-
+  var onWrite = function( args )
+  {
+    debugger;
+    got = args.outputForTerminal[ 0 ];
+  };
   var logger = new _.Logger({ output : null, onWrite : onWrite });
 
   test.description = 'case1: red text';
@@ -81,11 +83,14 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.description = 'case3: red text on yellow background';
+  debugger;
   logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49m\u001b[39m';
+  debugger;
   test.identical( _escaping( got ), _escaping( expected ) );
+  debugger;
 
   test.description = 'case4: yellow text on red background  + not styled text';
   logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'red'), 'yellow') + 'text' );
