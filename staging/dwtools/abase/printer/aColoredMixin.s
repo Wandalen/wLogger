@@ -118,7 +118,7 @@ function _rgbToCode( rgb, add )
     isLight = true;
   }
 
-  ansi = 30 + shellColorCodesBase[ name ] + add;
+  ansi = ( 30 + shellColorCodesForWindowsBase[ name ] + add );
 
   if( isLight )
   {
@@ -128,7 +128,9 @@ function _rgbToCode( rgb, add )
     ansi = ansi + 60;
   }
 
-  // console.log(ansi);
+  ansi += '';
+
+  // console.log( '_rgbToCode', _.strEscape( ansi ) );
 
   return ansi;
 }
@@ -199,6 +201,8 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
+    // if( color === 'light green' )
+    // debugger;
     var keys = _.mapOwnKeys( map );
     for( var i = 0; i < keys.length; i++ )
     if( _.arrayIdentical( map[ keys[ i ] ], color ) )
@@ -223,9 +227,12 @@ function _colorSet( layer, color )
       }
       else
       {
+        var colorWas = color,
         color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMapShell });
         currentName = _getColorName( _.color.ColorMapShell, color );
       }
+
+      // console.log( '_colorSet', currentName, colorWas, '->', color );
 
       diagnosticInfo =
       {
@@ -905,7 +912,7 @@ var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
 
-var shellColorCodesBase =
+var shellColorCodesForWindowsBase =
 {
   'black'           : 0,
   'red'             : 1,
