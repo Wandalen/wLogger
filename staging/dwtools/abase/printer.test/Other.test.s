@@ -41,12 +41,18 @@ function currentColor( test )
 
   test.description = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );
+  if( isBrowser )
   var expected = [ 1, 0, 0 ];
+  else
+  var expected = [ 0.5, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
   test.description = 'case2 : next line color must be red too';
   logger.log( 'line' );
+  if( isBrowser )
   var expected = [ 1, 0, 0 ];
+  else
+  var expected = [ 0.5, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
   test.description = 'case3 : setting color to default';
@@ -56,9 +62,16 @@ function currentColor( test )
   test.description = 'case4 : setting two styles';
   logger.log( '#foreground : red##background : black#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
+  if( isBrowser )
   var expected =
   [
     [ 1, 0, 0  ],
+    [ 0, 0, 0  ]
+  ]
+  else
+  var expected =
+  [
+    [ 0.5, 0, 0  ],
     [ 0, 0, 0  ]
   ]
 
@@ -110,10 +123,17 @@ function currentColor( test )
   logger.foregroundColor = 'red';
   logger.backgroundColor = 'white';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
+  if( isBrowser )
   var expected =
   [
     [ 1, 0, 0 ],
     [ 1, 1, 1 ]
+  ]
+  else
+  var expected =
+  [
+    [ 0.5, 0, 0 ],
+    [ 0.9, 0.9, 0.9 ]
   ]
   test.identical( got, expected  );
 
@@ -372,7 +392,7 @@ function coloring( test )
   if( isBrowser )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
   else
-  test.identical( got[ 0 ], '\u001b[31mtext\u001b[39m' );
+  test.identical( got[ 0 ], '\u001b[31mtext\u001b[39;0m' );
 
 
   test.description =  "wColor, coloring : 0";
@@ -520,10 +540,11 @@ function diagnostic( test )
   l.backgroundColor = 'yellow';
   debugger
   var got = l._diagnosticColorCheck();
-  test.identical( got.collapse, true  );
+  test.identical( got.collapse, false  );
 
   /* ColorCollapse off after first warning */
 
+  _.Logger.diagnosticColorCollapse = 0;
   test.identical( _.Logger.diagnosticColorCollapse, 0 );
   l.foregroundColor = 'greenish yellow';
   l.backgroundColor = 'yellow';

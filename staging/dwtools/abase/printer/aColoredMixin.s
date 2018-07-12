@@ -105,7 +105,7 @@ function _rgbToCode( rgb, add )
   if( add === undefined )
   add = 0;
 
-  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  var name = _.color._colorNameNearest( rgb, ColorMapShell );
 
 
   if( process.platform !== 'win32' )
@@ -122,9 +122,9 @@ function _rgbToCode( rgb, add )
 
   if( isLight )
   {
-    if( process.platform === 'win32' )
+   /*  if( process.platform === 'win32' )
     ansi = '1;' + ansi;
-    else
+    else */
     ansi = ansi + 60;
   }
 
@@ -210,7 +210,16 @@ function _colorSet( layer, color )
   if( color && color !== 'default' )
   {
     var originalName = color;
-    color = _.color.rgbaFromTry( color, null );
+    if( isBrowser )
+    {
+      color = _.color.rgbaFromTry( color, null );
+    }
+    else
+    {
+      color = _.color.rgbaFromTry.apply( { colorMap : ColorMapShell }, [ color, null ] );
+      if( !color )
+      color = _.color.rgbaFromTry( originalName, null );
+    }
     var originalValue = color;
     var currentName;
 
@@ -223,8 +232,8 @@ function _colorSet( layer, color )
       }
       else
       {
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMapShell });
-        currentName = _getColorName( _.color.ColorMapShell, color );
+        color = _.color.colorNearestCustom({ color : color, colorMap : ColorMapShell });
+        currentName = _getColorName( ColorMapShell, color );
       }
 
       diagnosticInfo =
@@ -978,6 +987,27 @@ var illColorCombinations =
   { fg : 'light magenta', bg : 'light red', platform : 'linux' },
 
 ]
+
+var ColorMapShell =
+{
+  'light white'           : [ 1.0,1.0,1.0 ],
+  'light black'           : [ 0.5,0.5,0.5 ],
+  'light green'           : [ 0.0,1.0,0.0 ],
+  'light red'             : [ 1.0,0.0,0.0 ],
+  'light yellow'          : [ 1.0,1.0,0.0 ],
+  'light blue'            : [ 0.0,0.0,1.0 ],
+  'light cyan'            : [ 0.0,1.0,1.0 ],
+  'light magenta'         : [ 1.0,0.0,1.0 ],
+
+  'black'     : [ 0.0,0.0,0.0 ],
+  'yellow'    : [ 0.5,0.5,0.0 ],
+  'red'       : [ 0.5,0.0,0.0 ],
+  'magenta'   : [ 0.5,0.0,0.5 ],
+  'blue'      : [ 0.0,0.0,0.5 ],
+  'cyan'      : [ 0.0,0.5,0.5 ],
+  'green'     : [ 0.0,0.5,0.0 ],
+  'white'     : [ 0.9,0.9,0.9 ],
+}
 
 // --
 // relationships
