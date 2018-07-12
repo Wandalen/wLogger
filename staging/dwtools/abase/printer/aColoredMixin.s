@@ -499,9 +499,9 @@ function _writePrepareShell( o )
       if( self.usingColorFromStack )
       {
         if( self.backgroundColor )
-        result += `\x1b[49m`;
+        result += `\x1b[49;0m`;
         if( self.foregroundColor )
-        result += `\x1b[39m`;
+        result += `\x1b[39;0m`;
       }
     }
 
