@@ -315,13 +315,16 @@ function colorConsole( test )
 
 function shellColors( test )
 {
+
   test.case = 'shell colors codes test';
 
   var logger = new _.Logger();
 
   logger.foregroundColor = 'black';
+  debugger;
   test.identical( logger.foregroundColor, [ 0, 0, 0 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), 30 );
+  debugger;
 
   logger.foregroundColor = 'light black';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0.5 ] );
