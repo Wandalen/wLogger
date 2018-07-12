@@ -197,8 +197,8 @@ function consoleChaining( test )
   {
     consoleWasBarred = true;
     debugger
-    _global_.wTester._bar.bar = 0;
-    _.Logger.consoleBar( _global_.wTester._bar );
+    _global_.wTester._barOptions.bar = 0;
+    _.Logger.consoleBar( _global_.wTester._barOptions );
   }
 
   test.is( !_.Logger.consoleIsBarred( console ) );
@@ -367,7 +367,7 @@ function consoleChaining( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._bar = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -1475,8 +1475,8 @@ function consoleBar( test )
   if( _.Logger.consoleIsBarred( console ) )
   {
     consoleWasBarred = true;
-    _global_.wTester._bar.bar = 0;
-    _.Logger.consoleBar( _global_.wTester._bar );
+    _global_.wTester._barOptions.bar = 0;
+    _.Logger.consoleBar( _global_.wTester._barOptions );
   }
 
   //
@@ -1560,7 +1560,7 @@ function consoleBar( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._bar = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 }
