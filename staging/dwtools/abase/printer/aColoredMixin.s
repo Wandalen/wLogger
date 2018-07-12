@@ -462,7 +462,7 @@ function _writePrepareHtml( o )
 function _writePrepareShell( o )
 {
   var self = this;
-xxx
+
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.output[ 0 ] ) );
@@ -671,9 +671,9 @@ function _writePrepare( original )
     _.assert( _.arrayLike( o.output ) );
     _.assert( o.output.length === 1 )
 
-    if( _.color && self.coloring && 0 )
+    if( _.color && self.coloring )
     {
-      xxx
+
       if( self.permanentStyle )
       {
         o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],self.permanentStyle );
