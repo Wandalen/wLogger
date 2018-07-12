@@ -114,7 +114,7 @@ _.classMake
 _[ Self.nameShort ] = Self;
 
 if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self({ coloring : 1 });
+_global_.logger = _global_[ 'logger' ] = new Self(/* { coloring : 1 } */);
 
 // --
 // export
