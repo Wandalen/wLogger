@@ -5,22 +5,25 @@
 if( typeof module === 'undefined' )
 return;
 
+if( typeof module === 'undefined' )
+return;
+
 if( typeof module !== 'undefined' )
 {
-  try
-  {
-   require( '../../Base.s' );
-  }
-  catch( err )
-  {
-   require( 'wTools' );
-  }
-  var _ = wTools;
-  _.include( 'wTesting' );
 
+  require( '../printer/top/Logger.s' );
+
+  var _global = _global_; var _ = _global_.wTools;
+
+  _.include( 'wTesting' );
+  _.include( 'wFiles' );
+  _.include( 'wPath' );
 }
 
-var _ = _global_.wTools;
+//
+
+var _global = _global_; var _ = _global_.wTools;
+var Parent = _.Tester;
 
 // --
 // resource
@@ -119,7 +122,7 @@ var Self =
 
 };
 
-Self = wTestSuit( Self )
+Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );
 

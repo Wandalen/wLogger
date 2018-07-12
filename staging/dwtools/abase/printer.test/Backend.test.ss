@@ -83,7 +83,6 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.case = 'case3: red text on yellow background';
-  debugger;
   logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
