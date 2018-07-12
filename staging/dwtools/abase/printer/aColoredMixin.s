@@ -1027,7 +1027,7 @@ var Composes =
 
   colorsStack : null,
   passingRawColor : 0,
-  coloring : 0,
+  coloring : 1,
   coloringHeadAndTail : 1,
   coloringConnotation : 1,
   writingToHtml : 0,
