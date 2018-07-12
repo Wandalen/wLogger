@@ -34,7 +34,7 @@ var isUnix = process.platform !== 'win32' ? true : false;
 function simplest( test )
 {
 
-  test.description = 'simple1';
+  test.case = 'simple1';
 
   var logger = new _.Logger();
 
@@ -70,19 +70,19 @@ function colorConsole( test )
   };
   var logger = new _.Logger({ output : null, onWrite : onWrite });
 
-  test.description = 'case1: red text';
+  test.case = 'case1: red text';
   logger.log( _.color.strFormatForeground( 'text', 'red') );
   var expected = '\u001b[31mtext\u001b[39m';
   test.identical( logger.foregroundColor, null );
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case2: yellow background';
+  test.case = 'case2: yellow background';
   logger.log( _.color.strFormatBackground( 'text', 'yellow') );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[43mtext\u001b[49m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case3: red text on yellow background';
+  test.case = 'case3: red text on yellow background';
   debugger;
   logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
   test.identical( logger.foregroundColor, null );
@@ -92,20 +92,20 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
   debugger;
 
-  test.description = 'case4: yellow text on red background  + not styled text';
+  test.case = 'case4: yellow text on red background  + not styled text';
   logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'red'), 'yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49m\u001b[39mtext';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case5: unknown color ';
+  test.case = 'case5: unknown color ';
   logger.log( _.color.strFormatForeground( 'text', 'xxx') );
   test.identical( logger.foregroundColor, null );
   var expected = 'text';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case6: text without styles  ';
+  test.case = 'case6: text without styles  ';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
@@ -114,7 +114,7 @@ function colorConsole( test )
 
   //
 
-  test.description = 'coloring using directive in log';
+  test.case = 'coloring using directive in log';
 
   /**/
 
@@ -159,7 +159,7 @@ function colorConsole( test )
 
   //
 
-  test.description = 'coloring using setter';
+  test.case = 'coloring using setter';
 
   /**/
 
@@ -200,7 +200,7 @@ function colorConsole( test )
 
   //
 
-  test.description = 'stacking colors';
+  test.case = 'stacking colors';
   var logger = new _.Logger({ output : null, onWrite : onWrite });
 
   /**/
@@ -244,7 +244,7 @@ function colorConsole( test )
 
   //other
 
-  test.description = 'coloring directive'
+  test.case = 'coloring directive'
 
   /**/
 
@@ -283,7 +283,7 @@ function colorConsole( test )
   // test.identical( 0, 1 );
   //trackingColor problem, logger of test suit cant override it value correctly, directive is inside of it output
 
-  test.description = 'trackingColor directive'
+  test.case = 'trackingColor directive'
 
   /**/
 
@@ -316,7 +316,7 @@ function colorConsole( test )
 
 function shellColors( test )
 {
-  test.description = 'shell colors codes test';
+  test.case = 'shell colors codes test';
 
   var logger = new _.Logger();
 

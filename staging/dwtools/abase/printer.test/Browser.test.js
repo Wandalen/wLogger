@@ -32,7 +32,7 @@ function toStrEscaping( str )
 function simplest( test )
 {
 
-  test.description = 'simple1';
+  test.case = 'simple1';
 
   var logger = new _.Logger();
 
@@ -66,37 +66,37 @@ function colorConsole( test )
   var logger = new _.Logger( { output : null, onWrite : onWrite });
 
 
-  test.description = 'case1';
+  test.case = 'case1';
   var msg = _.color.strFormatForeground( 'msg', 'black' );
   logger.log( msg );
   var expected = [ '%cmsg','color:rgba( 0, 0, 0, 1 );background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case2';
+  test.case = 'case2';
   var msg = _.color.strFormatBackground( 'msg', 'black' );
   logger.log( msg );
   var expected = [ '%cmsg','color:none;background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case3';
+  test.case = 'case3';
   var msg = _.color.strFormatBackground( _.color.strFormatForeground( 'red text', 'red' ), 'black' );
   logger.log( msg );
   var expected = [ '%cred text','color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case4';
+  test.case = 'case4';
   var msg = _.color.strFormatForeground( 'yellow text' + _.color.strFormatBackground( _.color.strFormatForeground( 'red text', 'red' ), 'black' ), 'yellow')
   logger.log( msg );
   var expected = [ '%cyellow text%cred text','color:rgba( 255, 255, 0, 1 );background:none;', 'color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case5: unknown color';
+  test.case = 'case5: unknown color';
   var msg = _.color.strFormatForeground( 'msg', 'unknown')
   logger.log( msg );
   var expected = [ '%cmsg','color:none;background:none;' ];
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.description = 'case6: hex color';
+  test.case = 'case6: hex color';
   var msg = _.color.strFormatForeground( 'msg', 'ff00ff' )
   logger.log( msg );
   var expected = [ '%cmsg','color:rgba( 255, 0, 255, 1 );background:none;' ];

@@ -39,21 +39,21 @@ function currentColor( test )
 
   var logger = new _.Logger( { output : fakeConsole } );
 
-  test.description = 'case1 : setting foreground to red';
+  test.case = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : red#' );
   var expected = [ 1, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
-  test.description = 'case2 : next line color must be red too';
+  test.case = 'case2 : next line color must be red too';
   logger.log( 'line' );
   var expected = [ 1, 0, 0 ];
   test.identical( logger.foregroundColor, expected );
 
-  test.description = 'case3 : setting color to default';
+  test.case = 'case3 : setting color to default';
   logger.log( '#foreground : default#' );
   test.identical( logger.foregroundColor, null );
 
-  test.description = 'case4 : setting two styles';
+  test.case = 'case4 : setting two styles';
   logger.log( '#foreground : red##background : black#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
@@ -64,7 +64,7 @@ function currentColor( test )
 
   test.identical( got, expected  );
 
-  test.description = 'case5 : setting foreground to default, bg still black';
+  test.case = 'case5 : setting foreground to default, bg still black';
   logger.log( '#foreground : default#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
@@ -74,7 +74,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case6 : setting background to default';
+  test.case = 'case6 : setting background to default';
   logger.log( '#background : default#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
@@ -84,7 +84,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case7 : setting colors to default#2';
+  test.case = 'case7 : setting colors to default#2';
   logger.foregroundColor = 'default';
   logger.backgroundColor = 'default';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -95,7 +95,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case8 : setting colors to default#3';
+  test.case = 'case8 : setting colors to default#3';
   logger.foregroundColor = null;
   logger.backgroundColor = null;
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -106,7 +106,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case9 : setting colors from setter';
+  test.case = 'case9 : setting colors from setter';
   logger.foregroundColor = 'red';
   logger.backgroundColor = 'white';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -117,7 +117,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case10 : setting colors from setter, hex';
+  test.case = 'case10 : setting colors from setter, hex';
   logger.foregroundColor = 'ff0000';
   logger.backgroundColor = 'ffffff';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -128,7 +128,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case11 : setting colors from setter, unknown';
+  test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger( { output : fakeConsole } );
   logger.foregroundColor = 'd';
   logger.backgroundColor = 'd';
@@ -140,7 +140,7 @@ function currentColor( test )
   ]
 
   test.identical( got, expected  );
-  test.description = 'case12 : setting colors from setter, arrays';
+  test.case = 'case12 : setting colors from setter, arrays';
   logger.foregroundColor = [ 255, 0 , 0 ];
   logger.backgroundColor = [ 255, 255, 255 ];
   var got = [ logger.foregroundColor,logger.backgroundColor ];
@@ -151,7 +151,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case13 : setting colors from setter, arrays#2';
+  test.case = 'case13 : setting colors from setter, arrays#2';
   logger.foregroundColor = [ 1, 0, 0 ];
   logger.backgroundColor = [ 1, 1, 1 ];
   var got = [ logger.foregroundColor, logger.backgroundColor ];
@@ -162,7 +162,7 @@ function currentColor( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'case13 : setting colors from setter, bitmask';
+  test.case = 'case13 : setting colors from setter, bitmask';
   logger.foregroundColor = 0xff0000;
   logger.backgroundColor = 0xffffff;
   var got = [ logger.foregroundColor, logger.backgroundColor ];
@@ -180,7 +180,7 @@ function colorsStack( test )
 {
   var logger = new _.Logger({ output : null });
 
-  test.description = 'push foreground';
+  test.case = 'push foreground';
   logger.foregroundColor = 0xff0000;
   logger.foregroundColor = 0xffffff;
   var got = [ logger.colorsStack[ 'foreground' ], logger.foregroundColor ];
@@ -191,7 +191,7 @@ function colorsStack( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'push background';
+  test.case = 'push background';
   logger.backgroundColor = 0xff0000;
   logger.backgroundColor = 0xffffff;
   var got = [ logger.colorsStack[ 'background' ], logger.backgroundColor ];
@@ -202,7 +202,7 @@ function colorsStack( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'pop foreground';
+  test.case = 'pop foreground';
   logger.foregroundColor = null;
   var got = [ logger.colorsStack[ 'foreground' ], logger.foregroundColor ];
   var expected =
@@ -212,7 +212,7 @@ function colorsStack( test )
   ]
   test.identical( got, expected  );
 
-  test.description = 'pop background';
+  test.case = 'pop background';
   logger.backgroundColor = null;
   var got = [ logger.colorsStack[ 'background' ], logger.backgroundColor ];
   var expected =
@@ -233,18 +233,18 @@ function logUp( test )
 
   var logger = new _.Logger({ output : null, onWrite : _onWrite,coloring : 0 });
 
-  test.description = 'case1';
+  test.case = 'case1';
   var msg = "Up";
   logger.logUp( msg );
   test.identical( got.length - msg.length, 2 )
 
-  test.description = 'case2';
+  test.case = 'case2';
   var msg = "Up";
   logger.logUp( msg );
   logger.logUp( msg );
   test.identical( got.length - msg.length, 6 );
 
-  test.description = 'case3';
+  test.case = 'case3';
   test.shouldThrowError( function()
   {
     logger.upAct();
@@ -261,19 +261,19 @@ function logDown( test )
 
   var logger = new _.Logger({ output : null, onWrite : _onWrite,coloring : 0 });
 
-  test.description = 'case1';
+  test.case = 'case1';
   logger.up( 2 );
   var msg = "Down";
   logger.logDown( msg );
   test.identical( got.length - msg.length, 4 );
 
-  test.description = 'case2';
+  test.case = 'case2';
   test.shouldThrowError( function()
   {
     logger.downAct();
   })
 
-  test.description = 'cant go below zero level';
+  test.case = 'cant go below zero level';
   test.shouldThrowError( function()
   {
     var logger = new _.Logger();
@@ -290,7 +290,7 @@ function coloredToHtml( test )
   var fg = _.color.strFormatForeground;
   var bg = _.color.strFormatBackground;
 
-  test.description = 'default settings';
+  test.case = 'default settings';
 
   var src = 'simple text';
   var got = _.Logger.coloredToHtml( src );
@@ -332,7 +332,7 @@ function coloredToHtml( test )
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
-  test.description = 'compact mode disabled';
+  test.case = 'compact mode disabled';
 
   var src = 'simple text';
   var got = _.Logger.coloredToHtml({ src : src, compact : false });
@@ -367,7 +367,7 @@ function coloring( test )
 
   var l = new _.Logger({ output : null, coloring : true, onWrite : onWrite });
 
-  test.description = "wColor, coloring : 1";
+  test.case = "wColor, coloring : 1";
   l.log( _.color.strFormatForeground( 'text', 'red') );
   if( isBrowser )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
@@ -375,7 +375,7 @@ function coloring( test )
   test.identical( got[ 0 ], '\u001b[31mtext\u001b[39m' );
 
 
-  test.description =  "wColor, coloring : 0";
+  test.case =  "wColor, coloring : 0";
   l.coloring = false;
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
   test.identical( got[ 0 ], 'red text red background' );
@@ -386,7 +386,7 @@ function coloring( test )
 
 function emptyLines( test )
 {
-  test.description = 'logger is not skipping empty lines'
+  test.case = 'logger is not skipping empty lines'
 
   var got;
   var onWrite = function( args ){ got = args.outputForTerminal[ 0 ]; };
@@ -464,7 +464,7 @@ function diagnostic( test )
 
   //
 
-  test.description = 'ill color combinations test';
+  test.case = 'ill color combinations test';
 
   /* IllColorCombination diagnostic off */
 
@@ -501,7 +501,7 @@ function diagnostic( test )
 
   //
 
-  test.description = 'color collapse test';
+  test.case = 'color collapse test';
 
   /* ColorCollapse off */
 
@@ -555,11 +555,11 @@ function coloringNoColor( test )
 
   var l = new _.Logger({ output : null, coloring : true, onWrite : onWrite });
 
-  test.description = "No wColor, coloring : 1";
+  test.case = "No wColor, coloring : 1";
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
   test.identical( got, 'red text red background' );
 
-  test.description =  "No wColor, coloring : 0";
+  test.case =  "No wColor, coloring : 0";
   l.coloring = false;
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
   test.identical( got, 'red text red background' );
