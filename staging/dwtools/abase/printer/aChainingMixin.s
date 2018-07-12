@@ -829,14 +829,12 @@ function consoleIsBarred( output )
 function consoleBar( o )
 {
   var self = this;
+  var o = _.routineOptions( consoleBar, arguments );
 
   // console.log( 'Barring' );
   // console.log( 'self.consoleIsBarred( console )',self.consoleIsBarred( console ) );
   // console.log( 'o.bar',o.bar );
   // console.log( _.diagnosticStack() );
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.routineOptions( consoleBar,o );
   // _.assert( self.consoleIsBarred( console ) !== !!o.bar );
 
   if( !o.barLogger )
@@ -868,9 +866,6 @@ function consoleBar( o )
     o.barLogger.inputFrom( console,{ barring : 1 } );
     o.barLogger.outputTo( o.outputLogger );
 
-    // o.barLogger.log( '_barLogger' );
-    // o.outputLogger.log( 'outputLogger' );
-
   }
   else
   {
@@ -880,9 +875,6 @@ function consoleBar( o )
     o.outputLogger.outputUnchain( console );
     if( o.outputLoggerWasChainedToConsole )
     o.outputLogger.outputTo( console );
-
-    // o.barLogger.log( '_barLogger' );
-    // o.outputLogger.log( 'outputLogger' );
 
   }
 
@@ -1121,7 +1113,6 @@ var Statics =
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
-
 
   // var
 

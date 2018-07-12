@@ -118,7 +118,7 @@ function _rgbToCode( rgb, add )
     isLight = true;
   }
 
-  ansi = 30 + shellColorCodesBase[ name ] + add;
+  ansi = ( 30 + shellColorCodesForWindowsBase[ name ] + add );
 
   if( isLight )
   {
@@ -128,7 +128,9 @@ function _rgbToCode( rgb, add )
     ansi = ansi + 60;
   }
 
-  // console.log(ansi);
+  ansi += '';
+
+  // console.log( '_rgbToCode', _.strEscape( ansi ) );
 
   return ansi;
 }
@@ -199,6 +201,8 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
+    // if( color === 'light green' )
+    // debugger;
     var keys = _.mapOwnKeys( map );
     for( var i = 0; i < keys.length; i++ )
     if( _.arrayIdentical( map[ keys[ i ] ], color ) )
@@ -235,6 +239,8 @@ function _colorSet( layer, color )
         color = _.color.colorNearestCustom({ color : color, colorMap : ColorMapShell });
         currentName = _getColorName( ColorMapShell, color );
       }
+
+      // console.log( '_colorSet', currentName, colorWas, '->', color );
 
       diagnosticInfo =
       {
@@ -749,7 +755,7 @@ function topicUp()
   var result = _.strConcat.apply( undefined,arguments );
 
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'light white' ), 'black' );
 
   this.log();
   this.logUp( result );
@@ -914,7 +920,7 @@ var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
 
-var shellColorCodesBase =
+var shellColorCodesForWindowsBase =
 {
   'black'           : 0,
   'red'             : 1,
@@ -1082,7 +1088,6 @@ var Extend =
   _stackPush : _stackPush,
   _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
-
 
   // colored text
 
