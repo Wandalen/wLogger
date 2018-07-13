@@ -129,7 +129,6 @@ function _writePrepare( o )
   _.assert( _.mapIs( o ) );
   _.assert( _.arrayLike( o.input ) );
 
-  /*o.naked = _.strConcat.apply( _,args );*/
   o.pure = self._strConcat( o.input );
   o.output = [ o.pure ];
   o.outputForTerminal = [ o.pure ];
@@ -161,7 +160,7 @@ function _strConcat( args )
     linePostfix : self._postfix,
   }
 
-  var result = _.strConcat.apply( optionsForStr,args );
+  var result = _.strConcat( args, optionsForStr );
 
   return result;
 }

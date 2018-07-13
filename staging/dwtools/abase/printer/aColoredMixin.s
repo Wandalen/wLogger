@@ -105,7 +105,7 @@ function _rgbToCode( rgb, add )
   if( add === undefined )
   add = 0;
 
-  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  var name = _.color._colorNameNearest( rgb, ColorMapShell );
 
 
   if( process.platform !== 'win32' )
@@ -122,9 +122,9 @@ function _rgbToCode( rgb, add )
 
   if( isLight )
   {
-    if( process.platform === 'win32' )
+   /*  if( process.platform === 'win32' )
     ansi = '1;' + ansi;
-    else
+    else */
     ansi = ansi + 60;
   }
 
@@ -214,7 +214,16 @@ function _colorSet( layer, color )
   if( color && color !== 'default' )
   {
     var originalName = color;
-    color = _.color.rgbaFromTry( color, null );
+    if( isBrowser )
+    {
+      color = _.color.rgbaFromTry( color, null );
+    }
+    else
+    {
+      color = _.color.rgbaFromTry.apply( { colorMap : ColorMapShell }, [ color, null ] );
+      if( !color )
+      color = _.color.rgbaFromTry( originalName, null );
+    }
     var originalValue = color;
     var currentName;
 
@@ -227,9 +236,8 @@ function _colorSet( layer, color )
       }
       else
       {
-        var colorWas = color,
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMapShell });
-        currentName = _getColorName( _.color.ColorMapShell, color );
+        color = _.color.colorNearestCustom({ color : color, colorMap : ColorMapShell });
+        currentName = _getColorName( ColorMapShell, color );
       }
 
       // console.log( '_colorSet', currentName, colorWas, '->', color );
@@ -335,7 +343,8 @@ function coloredToHtml( o )
     {
       delimeter  : ''
     }
-    o.src = _.strConcat.apply( optionsForStr ,o.src );
+    // o.src = _.strConcat( [ o.src ], optionsForStr );
+    o.src = o.src.join( optionsForStr.delimeter );
   }
 
   var result = '';
@@ -722,12 +731,8 @@ function topic()
 {
   var self = this;
 
-  // debugger;
+  var result = _.strConcat( arguments );
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
-
-  // debugger;
   result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
 
   this.log();
@@ -743,11 +748,10 @@ function topicUp()
 {
   var self = this;
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
+  var result = _.strConcat( arguments );
 
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
+  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'light white' ), 'black' );
 
   this.log();
   this.logUp( result );
@@ -762,8 +766,7 @@ function topicDown()
 {
   var self = this;
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
+  var result = _.strConcat( arguments );
 
   debugger;
   result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
@@ -986,6 +989,27 @@ var illColorCombinations =
 
 ]
 
+var ColorMapShell =
+{
+  'light white'           : [ 1.0,1.0,1.0 ],
+  'light black'           : [ 0.5,0.5,0.5 ],
+  'light green'           : [ 0.0,1.0,0.0 ],
+  'light red'             : [ 1.0,0.0,0.0 ],
+  'light yellow'          : [ 1.0,1.0,0.0 ],
+  'light blue'            : [ 0.0,0.0,1.0 ],
+  'light cyan'            : [ 0.0,1.0,1.0 ],
+  'light magenta'         : [ 1.0,0.0,1.0 ],
+
+  'black'     : [ 0.0,0.0,0.0 ],
+  'yellow'    : [ 0.5,0.5,0.0 ],
+  'red'       : [ 0.5,0.0,0.0 ],
+  'magenta'   : [ 0.5,0.0,0.5 ],
+  'blue'      : [ 0.0,0.0,0.5 ],
+  'cyan'      : [ 0.0,0.5,0.5 ],
+  'green'     : [ 0.0,0.5,0.0 ],
+  'white'     : [ 0.9,0.9,0.9 ],
+}
+
 // --
 // relationships
 // --
@@ -1059,7 +1083,6 @@ var Extend =
   _stackPush : _stackPush,
   _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
-
 
   // colored text
 
