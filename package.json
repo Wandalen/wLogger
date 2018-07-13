@@ -3,11 +3,11 @@
   "version": "0.5.61",
   "engine": "node >= 6.0.0",
   "description": "The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging",
-  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wtory.net@domainsbyproxy.com>"
+      "email": "wanalen@willbe.so>"
     },
     {
       "name": "Volodymyr M.",
