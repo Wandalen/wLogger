@@ -343,7 +343,8 @@ function coloredToHtml( o )
     {
       delimeter  : ''
     }
-    o.src = _.strConcat( [ o.src ], optionsForStr );
+    // o.src = _.strConcat( [ o.src ], optionsForStr );
+    o.src = o.src.join( optionsForStr.delimeter );
   }
 
   var result = '';
