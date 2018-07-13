@@ -110,7 +110,7 @@ function _rgbToCode( rgb, add )
 
   if( process.platform !== 'win32' )
   if( shellColorCodesUnix[ name ] )
-  return shellColorCodesUnix[ name ] + add;
+  return _.toStr( shellColorCodesUnix[ name ] + add );
 
   if( _.strBegins( name, 'light' ) )
   {
@@ -343,8 +343,7 @@ function coloredToHtml( o )
     {
       delimeter  : ''
     }
-    // o.src = _.strConcat( [ o.src ], optionsForStr );
-    o.src = o.src.join( optionsForStr.delimeter );
+    o.src = _.strConcat( o.src, optionsForStr );
   }
 
   var result = '';
