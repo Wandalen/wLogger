@@ -343,7 +343,7 @@ function coloredToHtml( o )
     {
       delimeter  : ''
     }
-    o.src = _.strConcat.apply( optionsForStr ,o.src );
+    o.src = _.strConcat( [ o.src ], optionsForStr );
   }
 
   var result = '';
@@ -730,12 +730,8 @@ function topic()
 {
   var self = this;
 
-  // debugger;
+  var result = _.strConcat( arguments );
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
-
-  // debugger;
   result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
 
   this.log();
@@ -751,8 +747,7 @@ function topicUp()
 {
   var self = this;
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
+  var result = _.strConcat( arguments );
 
   debugger;
   result = _.color.strFormatForeground( _.color.strFormatBackground( result,'light white' ), 'black' );
@@ -770,8 +765,7 @@ function topicDown()
 {
   var self = this;
 
-  // var result = self._strConcat( arguments );
-  var result = _.strConcat.apply( undefined,arguments );
+  var result = _.strConcat( arguments );
 
   debugger;
   result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
