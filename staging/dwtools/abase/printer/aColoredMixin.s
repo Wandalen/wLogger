@@ -107,32 +107,36 @@ function _rgbToCode( rgb, add )
 
   var name = _.color._colorNameNearest( rgb, ColorMapShell );
 
-
-  if( process.platform !== 'win32' )
-  if( shellColorCodesUnix[ name ] )
-  return shellColorCodesUnix[ name ] + add;
-
-  if( _.strBegins( name, 'light' ) )
+  if( process.platform !== 'win32' && shellColorCodesUnix[ name ] )
   {
-    name = name.split( ' ' )[ 1 ];
-    isLight = true;
+    ansi = shellColorCodesUnix[ name ] + add;
+  }
+  else
+  {
+    if( _.strBegins( name, 'light' ) )
+    {
+      name = name.split( ' ' )[ 1 ];
+      isLight = true;
+    }
+
+    ansi = ( 30 + shellColorCodes[ name ] + add );
+
+    if( isLight )
+    {
+    /*  if( process.platform === 'win32' )
+      ansi = '1;' + ansi;
+      else */
+      ansi = ansi + 60;
+    }
+
+    // ansi += '';
+
+    // console.log( '_rgbToCode', _.strEscape( ansi ) );
   }
 
-  ansi = ( 30 + shellColorCodesForWindowsBase[ name ] + add );
+  _.assert( _.numberIs( ansi ) );
 
-  if( isLight )
-  {
-   /*  if( process.platform === 'win32' )
-    ansi = '1;' + ansi;
-    else */
-    ansi = ansi + 60;
-  }
-
-  ansi += '';
-
-  // console.log( '_rgbToCode', _.strEscape( ansi ) );
-
-  return ansi;
+  return _.toStr( ansi );
 }
 
 //
@@ -343,7 +347,7 @@ function coloredToHtml( o )
     {
       delimeter  : ''
     }
-    o.src = _.strConcat( [ o.src ], optionsForStr );
+    o.src = _.strConcat( o.src, optionsForStr );
   }
 
   var result = '';
@@ -914,7 +918,7 @@ var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
 
-var shellColorCodesForWindowsBase =
+var shellColorCodes =
 {
   'black'           : 0,
   'red'             : 1,
