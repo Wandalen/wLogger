@@ -680,15 +680,15 @@ function _writePrepare( original )
 
       if( self.permanentStyle )
       {
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],self.permanentStyle );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], self.permanentStyle );
       }
 
       if( self.coloringConnotation )
       {
         if( self.attributes.connotation === 'positive' )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'positive' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'positive' );
         else if( self.attributes.connotation === 'negative' )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'negative' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'negative' );
       }
 
       if( self.coloringHeadAndTail )
@@ -697,9 +697,9 @@ function _writePrepare( original )
       {
         var reserve = self.verbosityReserve();
         if( self.attributes.head && reserve > 1 )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'head' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'head' );
         else if( self.attributes.tail && reserve > 1 )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ],'tail' );
+        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'tail' );
       }
 
       if( !self.rawOutput )
@@ -736,11 +736,11 @@ function topic()
 
   var result = _.strConcat( arguments );
 
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
+  result = _.color.strFormat( result, 'topic.up' );
 
   this.log();
   this.log( result );
-  this.log();
+  // this.log();
 
   return result;
 }
@@ -754,11 +754,11 @@ function topicUp()
   var result = _.strConcat( arguments );
 
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'light white' ), 'black' );
+  result = _.color.strFormat( result, 'topic.up' );
 
   this.log();
   this.logUp( result );
-  this.log();
+  // this.log();
 
   return result;
 }
@@ -772,7 +772,7 @@ function topicDown()
   var result = _.strConcat( arguments );
 
   debugger;
-  result = _.color.strFormatForeground( _.color.strFormatBackground( result,'white' ), 'black' );
+  result = _.color.strFormat( result, 'topic.down' );
 
   this.log();
   this.logDown( result );
