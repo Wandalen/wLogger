@@ -1,6 +1,6 @@
 ( function _Backend_test_ss_( ) {
 
-'use strict'; /**/
+'use strict';
 
 /*
 
