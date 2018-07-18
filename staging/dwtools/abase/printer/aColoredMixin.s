@@ -71,72 +71,87 @@ function _mixin( cls )
 // etc
 // --
 
-function _rgbToCode( rgb, add )
+// function _rgbToCode( rgb, add )
+// {
+//   // var r = rgb[ 0 ];
+//   // var g = rgb[ 1 ];
+//   // var b = rgb[ 2 ];
+
+//   // var lightness = _.color.rgbToHsl( rgb )[ 2 ];
+//   //
+//   // var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
+//   //
+//   // // why 8 ???
+//   //
+//   // if( add )
+//   // ansi = ansi + add;
+//   //
+//   // if( lightness === .25  )
+//   // ansi = '1;' + ansi;
+
+//   // var name = Object.keys( _.color.ColorMapShell );
+//   // for( var i = 0; i < name.length; i++ )
+//   // {
+//   //   if( _.color.ColorMapShell[ name[ i ] ] === rgb )
+//   //   {
+//   //     name = name[ i ];
+//   //     break;
+//   //   }
+//   // }
+
+//   var ansi = 0;
+//   var isLight = false;
+
+//   if( add === undefined )
+//   add = 0;
+
+//   var name = _.color._colorNameNearest( rgb,  _.color.ColorMapShell );
+
+//   if( process.platform !== 'win32' && shellColorCodesUnix[ name ] )
+//   {
+//     ansi = shellColorCodesUnix[ name ] + add;
+//   }
+//   else
+//   {
+//     if( _.strBegins( name, 'light' ) )
+//     {
+//       name = name.split( ' ' )[ 1 ];
+//       isLight = true;
+//     }
+
+//     ansi = ( 30 + shellColorCodes[ name ] + add );
+
+//     if( isLight )
+//     {
+//     /*  if( process.platform === 'win32' )
+//       ansi = '1;' + ansi;
+//       else */
+//       ansi = ansi + 60;
+//     }
+
+//     // ansi += '';
+
+//     // console.log( '_rgbToCode', _.strEscape( ansi ) );
+//   }
+
+//   _.assert( _.numberIs( ansi ) );
+
+//   return _.toStr( ansi );
+// }
+
+//
+
+function _rgbToCode( rgb, isBackground )
 {
-  // var r = rgb[ 0 ];
-  // var g = rgb[ 1 ];
-  // var b = rgb[ 2 ];
+  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  var code = shellColorCodes[ name ];
 
-  // var lightness = _.color.rgbToHsl( rgb )[ 2 ];
-  //
-  // var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
-  //
-  // // why 8 ???
-  //
-  // if( add )
-  // ansi = ansi + add;
-  //
-  // if( lightness === .25  )
-  // ansi = '1;' + ansi;
+  if( isBackground )
+  code += 10; // add 10 to convert fg code to bg code
 
-  // var name = Object.keys( _.color.ColorMapShell );
-  // for( var i = 0; i < name.length; i++ )
-  // {
-  //   if( _.color.ColorMapShell[ name[ i ] ] === rgb )
-  //   {
-  //     name = name[ i ];
-  //     break;
-  //   }
-  // }
+  _.assert( _.numberIs( code ) );
 
-  var ansi = 0;
-  var isLight = false;
-
-  if( add === undefined )
-  add = 0;
-
-  var name = _.color._colorNameNearest( rgb, ColorMapShell );
-
-  if( process.platform !== 'win32' && shellColorCodesUnix[ name ] )
-  {
-    ansi = shellColorCodesUnix[ name ] + add;
-  }
-  else
-  {
-    if( _.strBegins( name, 'light' ) )
-    {
-      name = name.split( ' ' )[ 1 ];
-      isLight = true;
-    }
-
-    ansi = ( 30 + shellColorCodes[ name ] + add );
-
-    if( isLight )
-    {
-    /*  if( process.platform === 'win32' )
-      ansi = '1;' + ansi;
-      else */
-      ansi = ansi + 60;
-    }
-
-    // ansi += '';
-
-    // console.log( '_rgbToCode', _.strEscape( ansi ) );
-  }
-
-  _.assert( _.numberIs( ansi ) );
-
-  return _.toStr( ansi );
+  return _.toStr( code );
 }
 
 //
@@ -224,7 +239,7 @@ function _colorSet( layer, color )
     }
     else
     {
-      color = _.color.rgbaFromTry.apply( { colorMap : ColorMapShell }, [ color, null ] );
+      color = _.color.rgbaFromTry.apply( { colorMap :  _.color.ColorMapShell }, [ color, null ] );
       if( !color )
       color = _.color.rgbaFromTry( originalName, null );
     }
@@ -240,8 +255,8 @@ function _colorSet( layer, color )
       }
       else
       {
-        color = _.color.colorNearestCustom({ color : color, colorMap : ColorMapShell });
-        currentName = _getColorName( ColorMapShell, color );
+        color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
+        currentName = _getColorName(  _.color.ColorMapShell, color );
       }
 
       // console.log( '_colorSet', currentName, colorWas, '->', color );
@@ -503,7 +518,7 @@ function _writePrepareShell( o )
         result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
 
         if( self.backgroundColor )
-        result += `\x1b[${ self._rgbToCode( self.backgroundColor, 10 ) }m`;
+        result += `\x1b[${ self._rgbToCode( self.backgroundColor, true ) }m`;
       }
 
       result += strip;
@@ -920,21 +935,30 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 var shellColorCodes =
 {
-  'black'           : 0,
-  'red'             : 1,
-  'green'           : 2,
-  'yellow'          : 3,
-  'blue'            : 4,
-  'magenta'         : 5,
-  'cyan'            : 6,
-  'white'           : 7
+  'dark black'      : 30,
+  'dark red'        : 31,
+  'dark green'      : 32,
+  'dark yellow'     : 33,
+  'dark blue'       : 34,
+  'dark magenta'    : 35,
+  'dark cyan'       : 36,
+  'dark white'      : 37,
+
+  'black'           : 90,
+  'red'             : 91,
+  'green'           : 92,
+  'yellow'          : 93,
+  'blue'            : 94,
+  'magenta'         : 95,
+  'cyan'            : 96,
+  'white'           : 97
 }
 
-var shellColorCodesUnix =
+/* var shellColorCodesUnix =
 {
   'white'           : 37,
   'light white'     : 97,
-}
+} */
 
 var illColorCombinations =
 [
@@ -991,27 +1015,6 @@ var illColorCombinations =
   { fg : 'light magenta', bg : 'light red', platform : 'linux' },
 
 ]
-
-var ColorMapShell =
-{
-  'light white'           : [ 1.0,1.0,1.0 ],
-  'light black'           : [ 0.5,0.5,0.5 ],
-  'light green'           : [ 0.0,1.0,0.0 ],
-  'light red'             : [ 1.0,0.0,0.0 ],
-  'light yellow'          : [ 1.0,1.0,0.0 ],
-  'light blue'            : [ 0.0,0.0,1.0 ],
-  'light cyan'            : [ 0.0,1.0,1.0 ],
-  'light magenta'         : [ 1.0,0.0,1.0 ],
-
-  'black'     : [ 0.0,0.0,0.0 ],
-  'yellow'    : [ 0.5,0.5,0.0 ],
-  'red'       : [ 0.5,0.0,0.0 ],
-  'magenta'   : [ 0.5,0.0,0.5 ],
-  'blue'      : [ 0.0,0.0,0.5 ],
-  'cyan'      : [ 0.0,0.5,0.5 ],
-  'green'     : [ 0.0,0.5,0.0 ],
-  'white'     : [ 0.9,0.9,0.9 ],
-}
 
 // --
 // relationships
