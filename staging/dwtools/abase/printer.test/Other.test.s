@@ -1,6 +1,6 @@
 ( function _Other_test_s_( ) {
 
-'use strict'; /**/
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -296,7 +296,7 @@ function logDown( test )
   test.case = 'cant go below zero level';
   test.shouldThrowError( function()
   {
-    var logger = new _.Logger();
+    var logger = new _.Logger({ output : console });
     logger.logDown();
   })
 
@@ -449,7 +449,7 @@ function diagnostic( test )
     return;
   }
 
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
 
   //
 

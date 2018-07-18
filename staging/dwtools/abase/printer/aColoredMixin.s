@@ -1,6 +1,6 @@
 (function _aColoredMixin_s_() {
 
-'use strict'; /**/
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )

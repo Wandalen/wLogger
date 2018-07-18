@@ -1,6 +1,6 @@
 (function _aChainingMixin_s_() {
 
-'use strict'; /**/
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -84,8 +84,8 @@ function _initChainingMixin()
   var proto = this;
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
-  for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  proto.__initChainingMixinChannel( outputWriteMethods[ m ] );
+  for( var m = 0 ; m < proto.Channels.length ; m++ )
+  proto.__initChainingMixinChannel( Channels[ m ] );
 
 }
 
@@ -174,7 +174,7 @@ function _writeToChannel( channelName,args )
     // /* skip empty line output if logging directive without text, like: logger.log( '#foreground : red#' )
     //  output is not skipped for logger.log()
     // */
-    //
+    //xxx
     // if( !outputData.length )
     // continue;
 
@@ -271,14 +271,14 @@ function _writeToChannelIn( channelName,args )
  * 'supplement' - adds output if list is empty.
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * l.outputTo( logger, { combining : 'rewrite' } ); //returns true
  * logger._prefix = '--';
  * l.log( 'abc' );//logger prints '--abc'
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
+ * var l1 = new _.Logger({ output : console });
+ * var l2 = new _.Logger({ output : console });
  * l1.outputTo( logger, { combining : 'rewrite' } );
  * l2.outputTo( l1, { combining : 'rewrite' } );
  * logger._prefix = '*';
@@ -286,9 +286,9 @@ function _writeToChannelIn( channelName,args )
  * l2.log( 'msg from l2' );//logger prints '*msg from l2*'
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
- * var l3 = new _.Logger();
+ * var l1 = new _.Logger({ output : console });
+ * var l2 = new _.Logger({ output : console });
+ * var l3 = new _.Logger({ output : console });
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -301,7 +301,7 @@ function _writeToChannelIn( channelName,args )
  * //l3 prints '***msg from logger'
  *
  * @example
- * var l1 = new _.Logger();
+ * var l1 = new _.Logger({ output : console });
  * l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
  * logger.up( 2 );
  * l.up( 1 );
@@ -326,14 +326,12 @@ function _writeToChannelIn( channelName,args )
 function outputTo( output,o )
 {
   var self = this;
-  var o = o || Object.create( null );
-  var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
+  var knownCombining = [ 'rewrite','supplement','append','prepend' ];
 
-  _.routineOptions( self.outputTo,o );
+  var o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-
   _.assert( _.objectIs( output ) || _.consoleIs( output ) || output === null );
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  _.assert( !o.combining || _.arrayHas( knownCombining, o.combining ), 'unknown combining mode',o.combining );
 
   /* output */
 
@@ -372,7 +370,7 @@ function outputTo( output,o )
     Object.preventExtensions( o );
 
     if( !o.combining )
-    _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
+    _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
 
     if( o.combining === 'prepend' )
     {
@@ -392,12 +390,14 @@ function outputTo( output,o )
     }
 
     if( o.unbarring )
-    _.assert( output.isTerminal === undefined || output.isTerminal,'unbarring chaining possible only into terminal logger' );
+    debugger;
+    if( o.unbarring )
+    _.assert( output.isTerminal === undefined || output.isTerminal, 'unbarring chaining possible only into terminal logger' );
 
     if( o.unbarring )
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+    for( var m = 0 ; m < self.Channels.length ; m++ ) (function()
     {
-      var name = self.outputWriteMethods[ m ];
+      var name = self.Channels[ m ];
       o.methods[ name ] = function()
       {
 
@@ -410,6 +410,7 @@ function outputTo( output,o )
         return this[ symbolForChainDescriptor ].originalMethods[ name ].apply( this,arguments );
         else
         return this[ name ].apply( this,arguments );
+
       }
     })();
 
@@ -448,9 +449,9 @@ outputTo.defaults =
  * @param { Object } output - Logger that must be deleted from output list.
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
- * var l3 = new _.Logger();
+ * var l1 = new _.Logger({ output : console });
+ * var l2 = new _.Logger({ output : console });
+ * var l3 = new _.Logger({ output : console });
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -520,7 +521,7 @@ function outputUnchain( output )
  * console.log( 'msg for logger' ); //logger prints '*msg for logger'
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * logger.inputFrom( l );
  * logger._prefix = '*';
  * l.log( 'msg from logger' ); //logger prints '*msg from logger'
@@ -536,7 +537,7 @@ function inputFrom( input,o )
 {
   var self = this;
   var o = o || Object.create( null );
-  var combiningAllowed = [ 'rewrite','append','prepend' ];
+  var knownCombining = [ 'rewrite','append','prepend' ];
 
   _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -545,7 +546,7 @@ function inputFrom( input,o )
   if( _.routineIs( input.outputTo ) )
   return input.outputTo( self,_.mapOnly( o, input.outputTo.defaults ) );
 
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  _.assert( !o.combining || knownCombining.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
 
   /* input is barred check */
 
@@ -618,9 +619,9 @@ function inputFrom( input,o )
   }
   else
   {
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
+    for( var m = 0 ; m < self.Channels.length ; m++ ) ( function()
     {
-      var channel = self.outputWriteMethods[ m ];
+      var channel = self.Channels[ m ];
 
       _.assert( input[ channel ],'inputFrom expects input has method',channel );
 
@@ -695,9 +696,9 @@ function _outputToStream( o )
 
   _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
 
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
+  for( var m = 0 ; m < self.Channels.length ; m++ ) (function()
   {
-    var name = self.outputWriteMethods[ m ];
+    var name = self.Channels[ m ];
     o.methods[ name ] = function()
     {
       stream.write.apply( stream, arguments );
@@ -723,7 +724,7 @@ function _outputToStream( o )
  * console.log( 'msg for logger' ); //console prints 'msg for logger'
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * logger.inputFrom( l, { combining : 'append' } );
  * logger._prefix = '*';
  * l.log( 'msg for logger' ) //logger prints '*msg for logger'
@@ -779,9 +780,9 @@ function _inputUnchainForeign( input )
   if( !input.outputs.length )
   {
     var chainDescriptor = input[ symbolForChainDescriptor ];
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
+    for( var m = 0 ; m < self.Channels.length ; m++ )
     {
-      var name = self.outputWriteMethods[ m ];
+      var name = self.Channels[ m ];
       _.assert( input[ name ],'inputUnchain expects input has method',name,'something wrong' );
       input[ name ] = chainDescriptor.originalMethods[ name ];
     }
@@ -831,11 +832,7 @@ function consoleBar( o )
   var self = this;
   var o = _.routineOptions( consoleBar, arguments );
 
-  // console.log( 'Barring' );
-  // console.log( 'self.consoleIsBarred( console )',self.consoleIsBarred( console ) );
-  // console.log( 'o.bar',o.bar );
-  // console.log( _.diagnosticStack() );
-  // _.assert( self.consoleIsBarred( console ) !== !!o.bar );
+  debugger;
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
@@ -843,6 +840,8 @@ function consoleBar( o )
   o.outputLogger = this;
   if( !o.outputLogger )
   o.outputLogger = new self.Self();
+
+  /* */
 
   /* */
 
@@ -858,11 +857,18 @@ function consoleBar( o )
 
     _.assert( !o.barLogger.inputs.length );
     _.assert( !o.barLogger.outputs.length );
+    debugger;
+    // _.assert( o.outputLogger.outputs.length === 0 || ( o.outputLogger.outputs.length === 1 && o.outputLogger.outputs[ 0 ] === console ), '{-o.outputLogger-} should have no output' );
+    _.assert( !o.outputLoggerHadOutputs );
+
+    o.outputLoggerHadOutputs = o.outputLogger.outputs.slice();
 
     o.outputLoggerWasChainedToConsole = o.outputLogger.outputUnchain( console );
+    o.outputLogger.outputUnchain();
+
     o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
 
-    o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' };
+    o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' }; /* xxx */
     o.barLogger.inputFrom( console,{ barring : 1 } );
     o.barLogger.outputTo( o.outputLogger );
 
@@ -873,8 +879,18 @@ function consoleBar( o )
     o.barLogger.unchain();
 
     o.outputLogger.outputUnchain( console );
-    if( o.outputLoggerWasChainedToConsole )
-    o.outputLogger.outputTo( console );
+
+    _.assert( o.outputLoggerHadOutputs );
+
+    // if( o.outputLoggerWasChainedToConsole )
+    // o.outputLogger.outputTo( console );
+
+    for( var t = 0 ; t < o.outputLoggerHadOutputs.length ; t++ )
+    {
+      debugger;
+      var outputOptions = o.outputLoggerHadOutputs[ t ];
+      o.outputLogger.outputTo( outputOptions.output, _.mapOnly( outputOptions, o.outputLogger.outputTo.defaults ) );
+    }
 
   }
 
@@ -889,6 +905,9 @@ function consoleBar( o )
 unbarring link is not transitive, but terminating
 so no cycle
 
+
+ console -> barLogger -> outputLogger -> defLogger -> console
+
 */
 
   return o;
@@ -901,6 +920,7 @@ consoleBar.defaults =
   bar : 1,
   verbose : 0,
   outputLoggerWasChainedToConsole : null,
+  outputLoggerHadOutputs : null,
 }
 
 // --
@@ -1048,7 +1068,7 @@ function _outputSet( output )
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  self.outputTo( output,{ combining : 'rewrite' } );
+  self.outputTo( output, { combining : 'rewrite' } );
 
 }
 
@@ -1068,7 +1088,7 @@ function _outputGet( output )
 var symbolForChainDescriptor = Symbol.for( 'chainDescriptor' );
 var symbolForLevel = Symbol.for( 'level' );
 
-var outputWriteMethods =
+var Channels =
 [
   'log',
   'error',
@@ -1077,7 +1097,7 @@ var outputWriteMethods =
   'debug'
 ];
 
-var outputChangeLevelMethods =
+var ChangeLevelMethods =
 [
   'up',
   'down',
@@ -1116,8 +1136,8 @@ var Statics =
 
   // var
 
-  outputWriteMethods : outputWriteMethods,
-  outputChangeLevelMethods : outputChangeLevelMethods,
+  Channels : Channels,
+  ChangeLevelMethods : ChangeLevelMethods,
 
   unbarringConsoleOnError : 1
 

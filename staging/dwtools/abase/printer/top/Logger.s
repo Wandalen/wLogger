@@ -1,6 +1,6 @@
 (function _Logger_s_() {
 
-'use strict'; /**/ 
+'use strict';
 
 /*
 
@@ -69,7 +69,8 @@ var Aggregates =
 
 var Associates =
 {
-  output : console,
+  // output : console,
+  output : null,
 }
 
 var Restricts =
@@ -113,8 +114,8 @@ _.classMake
 
 _[ Self.nameShort ] = Self;
 
-if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self(/* { coloring : 1 } */);
+if( !_global_.logger || !( _global_.logger instanceof Self ) )
+_global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'global' });
 
 // --
 // export

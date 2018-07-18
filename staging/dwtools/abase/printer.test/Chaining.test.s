@@ -1,6 +1,6 @@
 ( function _Chaining_test_s_( ) {
 
-'use strict'; /**/
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -153,9 +153,9 @@ function chaining( test )
   test.identical( got, expected );
 
   // test.case = 'case5: l1->l2->l3 leveling off ';
-  // var l1 = new _.Logger();
-  // var l2 = new _.Logger();
-  // var l3 = new _.Logger();
+  // var l1 = new _.Logger({ output : console });
+  // var l2 = new _.Logger({ output : console });
+  // var l3 = new _.Logger({ output : console });
   // l1.outputTo( l2, { combining : 'rewrite', leveling : '' } );
   // l2.outputTo( l3, { combining : 'rewrite', leveling : '' } );
   // l1.up( 2 );
@@ -170,9 +170,9 @@ function chaining( test )
   // test.identical( got, expected );
   //
   // test.case = 'case6: l1->l2->l3 leveling on ';
-  // var l1 = new _.Logger();
-  // var l2 = new _.Logger();
-  // var l3 = new _.Logger();
+  // var l1 = new _.Logger({ output : console });
+  // var l2 = new _.Logger({ output : console });
+  // var l3 = new _.Logger({ output : console });
   // l1.outputTo( l2, { combining : 'rewrite', leveling : 'delta' } );
   // l2.outputTo( l3, { combining : 'rewrite', leveling : 'delta' } );
   // l1.up( 2 );
@@ -206,7 +206,7 @@ function consoleChaining( test )
   //
 
   test.case = 'inputFrom console that exists in outputs';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowError( () => l.inputFrom( console ) );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
@@ -223,7 +223,7 @@ function consoleChaining( test )
   //
 
   test.case = 'inputFrom console that exists in outputs, barring on';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowError( () => l.inputFrom( console, { barring : 1  } ) )
 
   //
@@ -255,7 +255,7 @@ function consoleChaining( test )
   //
 
   test.case = 'outputTo console that exists in outputs';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowError( () => l.outputTo( console ) );
   test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
   test.is( !_.Logger.consoleIsBarred( console ) );
@@ -263,7 +263,7 @@ function consoleChaining( test )
   //
 
   test.case = 'outputTo console that exists in outputs, unbarring on';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowError( () => l.outputTo( console, { unbarring : 1 } ) );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
@@ -297,9 +297,9 @@ function consoleChaining( test )
   test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : null, onWrite : onWrite });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
@@ -336,9 +336,9 @@ function consoleChaining( test )
 
   /*inputs*/
 
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
 
   /*outputs*/
 
@@ -377,9 +377,9 @@ function consoleChaining( test )
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var onWrite = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : null, onWrite : onWrite });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
@@ -418,9 +418,9 @@ function consoleChaining( test )
 
   /*inputs*/
 
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
 
   /*outputs*/
 
@@ -476,7 +476,7 @@ function chainingParallel( test )
   var l1 = new _.Logger( { onWrite : _onWrite  } );
   var l2 = new _.Logger( { onWrite : _onWrite  } );
   var l3 = new _.Logger( { onWrite : _onWrite  } );
-  var l4 = new _.Logger();
+  var l4 = new _.Logger({ output : console });
   l4.outputTo( l3, { combining : 'append' } );
   l4.outputTo( l2, { combining : 'append' } );
   l4.outputTo( l1, { combining : 'append' } );
@@ -488,9 +488,9 @@ function chainingParallel( test )
   test.case = 'case2: many inputs to 1 logger';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
-  var l4 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
+  var l4 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'rewrite' } );
   l3.outputTo( l1, { combining : 'rewrite' } );
   l4.outputTo( l1, { combining : 'rewrite' } );
@@ -504,9 +504,9 @@ function chainingParallel( test )
   test.case = 'case3: many inputs to 1 logger';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
-  var l4 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
+  var l4 = new _.Logger({ output : console });
   l1.inputFrom( l2, { combining : 'rewrite' } );
   l1.inputFrom( l3, { combining : 'rewrite' } );
   l1.inputFrom( l4, { combining : 'rewrite' } );
@@ -550,9 +550,9 @@ function chainingParallel( test )
   var l1 = new _.Logger( { output : null  } );
 
   /* input */
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
-  var l4 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
+  var l4 = new _.Logger({ output : console });
   l1.inputFrom( l2, { combining : 'append' } );
   l1.inputFrom( l3, { combining : 'append' } );
   l1.inputFrom( l4, { combining : 'append' } );
@@ -577,9 +577,9 @@ function chainingParallel( test )
   test.case = 'case4: outputTo/inputFrom, remove some outputs ';
   var got = [];
   var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
-  var l4 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
+  var l4 = new _.Logger({ output : console });
   l1.inputFrom( l2, { combining : 'rewrite' } );
   l1.inputFrom( l3, { combining : 'rewrite' } );
   l4.outputTo( l1, { combining : 'rewrite' } );
@@ -594,9 +594,9 @@ function chainingParallel( test )
   test.identical( got, expected );
 
   // test.case = 'case5: l1->* leveling off ';
-  // var l1 = new _.Logger();
-  // var l2 = new _.Logger();
-  // var l3 = new _.Logger();
+  // var l1 = new _.Logger({ output : console });
+  // var l2 = new _.Logger({ output : console });
+  // var l3 = new _.Logger({ output : console });
   // l1.outputTo( l2, { combining : 'rewrite', leveling : '' } );
   // l1.outputTo( l3, { combining : 'append', leveling : '' } );
   // l1.up( 2 );
@@ -610,9 +610,9 @@ function chainingParallel( test )
   // test.identical( got, expected );
   //
   // test.case = 'case6: l1->* leveling on ';
-  // var l1 = new _.Logger();
-  // var l2 = new _.Logger();
-  // var l3 = new _.Logger();
+  // var l1 = new _.Logger({ output : console });
+  // var l2 = new _.Logger({ output : console });
+  // var l3 = new _.Logger({ output : console });
   // l1.outputTo( l2, { combining : 'rewrite', leveling : 'delta' } );
   // l1.outputTo( l3, { combining : 'append', leveling : 'delta' } );
   // l1.up( 2 );
@@ -649,15 +649,15 @@ function outputTo( test )
   test.identical( got, expected );
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
-    var l1 = new _.Logger();
+    var l = new _.Logger({ output : console });
+    var l1 = new _.Logger({ output : console });
     l.outputTo( l1, { combining : 'append' } );
     l.outputTo( l1, { combining : 'append' } );
   });
 
   test.case = 'output already exist, combining : rewrite';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'append' } );
   var got = l.outputTo( l1, { combining : 'rewrite' } );
   var expected = true;
@@ -694,26 +694,26 @@ function outputTo( test )
   test.identical( got, expected );
 
   test.case = 'empty output';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   l.outputTo( null, { combining : 'rewrite' } );
   test.identical( l.outputs.length, 0 );
 
   test.case = 'empty output';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   l.outputTo( { },{ combining : 'rewrite' } );
   test.identical( l.outputs.length, 1 );
 
   /*rewrite*/
   test.case = 'rewrite with null';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   l.outputTo( null, { combining : 'rewrite' } );
   var got = [ l.output, l.outputs ];
   var expected = [ null, [] ];
   test.identical( got, expected );
 
   test.case = 'rewrite';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'rewrite' } );
   var got = ( l.output === l1 && l.outputs.length === 1 );
   var expected = true;
@@ -721,8 +721,8 @@ function outputTo( test )
 
   /*append*/
   test.case = 'append';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'append' } );
   var got = ( l.output === l1 && l.outputs.length === 2 );
   var expected = true;
@@ -730,14 +730,14 @@ function outputTo( test )
 
   test.case = 'append list is empty';
   var l = new _.Logger({ output : null});
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'append' } );
   var got = ( l.output === l1 && l.outputs.length === 1 );
   var expected = true;
   test.identical( got, expected );
 
   test.case = 'append null';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowErrorSync( function()
   {
     l.outputTo( null, { combining : 'append' } );
@@ -745,8 +745,8 @@ function outputTo( test )
 
 
   test.case = 'append existing';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'append' } );
   test.shouldThrowError(function()
   {
@@ -755,16 +755,16 @@ function outputTo( test )
 
   /*prepend*/
   test.case = 'prepend';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'prepend' } );
   var got = ( l.outputs[ 0 ].output === l1 && l.outputs.length === 2 );
   var expected = true;
   test.identical( got, expected );
 
   test.case = 'prepend existing';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'prepend' } );
   test.shouldThrowError(function()
   {
@@ -773,8 +773,8 @@ function outputTo( test )
   })
 
   test.case = 'prepend null';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'prepend' } );
   test.shouldThrowErrorSync( function()
   {
@@ -784,22 +784,22 @@ function outputTo( test )
 
   /*supplement*/
   test.case = 'try supplement not empty list';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   var got = l.outputTo( l1, { combining : 'supplement' } );
   var expected = false;
   test.identical( got, expected );
 
   test.case = 'supplement';
   var l = new _.Logger({  output : null });
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'supplement' } );
   var got = ( l.output && l.outputs.length === 1 );
   var expected = true;
   test.identical( got, expected );
 
   test.case = 'supplement null';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowErrorSync( function()
   {
     var got = l.outputTo( null, { combining : 'supplement' } );
@@ -809,7 +809,7 @@ function outputTo( test )
   /*combining off*/
   test.case = 'combining off';
   var l = new _.Logger({  output : null });
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1 );
   var got = ( l.output && l.outputs.length === 1 );
   var expected = true;
@@ -820,7 +820,7 @@ function outputTo( test )
   if( !Config.debug )
   return;
 
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
 
   //
 
@@ -894,7 +894,7 @@ function outputTo( test )
 
   test.case = ' ';
   var l1 = new _.Logger({ output : null });
-  var l2 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
   test.shouldThrowError( function()
   {
     l1.inputFrom( console );
@@ -922,7 +922,7 @@ function outputUnchain( test )
   test.case = 'case2 delete l1 from l2 outputs, no msg transfered';
   var got = [];
   var l1 = new _.Logger( { onWrite : _onWrite  } );
-  var l2 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'rewrite' } );
   l2.outputUnchain( l1 );
   l2.log( 'msg' )
@@ -933,7 +933,7 @@ function outputUnchain( test )
   var got = [];
   var l1 = new _.Logger( { onWrite : _onWrite  } );
   var l2 = new _.Logger( { onWrite : _onWrite  } );
-  var l3 = new _.Logger();
+  var l3 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'append' } );
   l3.outputTo( l2, { combining : 'append' } );
   l2.outputUnchain( l1 );
@@ -942,14 +942,14 @@ function outputUnchain( test )
   test.identical( got, expected );
 
   test.case = 'no args - remove all outputs';
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   test.identical( l1.outputs.length, 1 );
   l1.outputUnchain();
   test.identical( l1.outputs.length, 0 );
 
   test.case = 'empty outputs list';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'rewrite' } );
   l.outputUnchain( l1 );
   test.identical( l.outputs.length, 0 );
@@ -959,34 +959,34 @@ function outputUnchain( test )
   //
 
   test.case = 'remove console from output';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var got = l.outputUnchain( console );
   var expected = true;
   test.identical( got, expected );
 
   test.case = 'output not exists';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var got = l.outputUnchain( {} );
   var expected = false;
   test.identical( got, expected );
 
   test.case = 'remove from output';
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : l1 });
   var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length]
   var expected = [ true, 0, 0 ];
   test.identical( got, expected );
 
   test.case = 'remove from output';
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'append' } );
   var got = [ l2.outputUnchain( l1 ), l2.outputs.length, l1.inputs.length ]
   var expected = [ true, 1, 0 ];
   test.identical( got, expected );
 
   test.case = 'no args';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.identical( l.outputs.length, 1 );
   l.outputUnchain();
   test.identical( l.outputs.length, 0 );
@@ -995,7 +995,7 @@ function outputUnchain( test )
   test.case = 'output is not a object';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.outputUnchain( 1 );
   });
 
@@ -1007,7 +1007,7 @@ function outputUnchain( test )
   test.case = 'try to remove itself';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.outputUnchain( l );
   });
 
@@ -1017,7 +1017,7 @@ function outputUnchain( test )
   test.case = 'incorrect type';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.outputUnchain( '1' );
   });
 }
@@ -1031,7 +1031,7 @@ function inputFrom( test )
   test.case = 'case1: input already exist';
   test.shouldThrowError( function()
   {
-    var l1 = new _.Logger();
+    var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : l1 });
     l1.inputFrom( l2 );
   });
@@ -1039,8 +1039,8 @@ function inputFrom( test )
   test.case = 'case2: input already exist';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
-    var l1 = new _.Logger();
+    var l = new _.Logger({ output : console });
+    var l1 = new _.Logger({ output : console });
     l.outputTo( l1, { combining : 'append' } )
     l1.inputFrom( l );
   });
@@ -1070,7 +1070,7 @@ function inputFrom( test )
   //
 
   test.case = 'try to add existing input';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var l1 = new _.Logger({ output : l });
   test.shouldThrowError( function()
   {
@@ -1078,7 +1078,7 @@ function inputFrom( test )
   });
 
   test.case = 'try to add console that exists in output';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   test.shouldThrowError( function()
   {
     l.inputFrom( console );
@@ -1092,8 +1092,8 @@ function inputFrom( test )
   test.identical( got, expected );
 
   test.case = 'try to add other logger';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   var got = [ l.inputFrom( l1 ), l.inputs.length,l1.outputs.length ];
   var expected = [ true, 1, 2 ];
   test.identical( got, expected );
@@ -1101,22 +1101,22 @@ function inputFrom( test )
   test.case = 'try to add itself';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.inputFrom( l );
   });
 
   test.case = 'try to add null';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.inputFrom( null );
   });
 
   test.case = 'simple recursion';
   test.shouldThrowError( function()
   {
-    var l = new _.Logger();
-    var l1 = new _.Logger();
+    var l = new _.Logger({ output : console });
+    var l1 = new _.Logger({ output : console });
     l1.inputFrom( l );
     l1.inputFrom( l1 );
   });
@@ -1124,16 +1124,16 @@ function inputFrom( test )
   test.case = 'l1->l2,l2->l3,l3->l1';
   test.shouldThrowError( function()
   {
-    var l1 = new _.Logger();
-    var l2 = new _.Logger();
-    var l3 = new _.Logger();
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
     l1.inputFrom( l3 );
     l2.inputFrom( l1 );
     l3.inputFrom( l2 );
   });
 
   test.case = 'console->l1->l2->console';
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : null });
   test.shouldThrowError( function()
   {
@@ -1147,7 +1147,7 @@ function inputFrom( test )
   if( !Config.debug )
   return;
 
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
 
   //
 
@@ -1181,14 +1181,14 @@ function inputUnchain( test )
   var onWrite = function( args ){ got.push( args[0] ) };
 
   test.case = 'case1: input not exist in the list';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var got = l.inputUnchain( console );
   var expected = false;
   test.identical( got, expected );
 
   test.case = 'case2: input not exist in the list';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   var got = l.inputUnchain( l1 );
   var expected = false;
   test.identical( got, expected );
@@ -1205,7 +1205,7 @@ function inputUnchain( test )
   test.case = 'case4: remove logger from input';
   var got = [];
   var l1 = new _.Logger( { onWrite : onWrite } );
-  var l2 = new _.Logger();
+  var l2 = new _.Logger({ output : console });
   l1.inputFrom( l2 );
   l1.inputUnchain( l2 );
   l2.log( '1' );
@@ -1213,7 +1213,7 @@ function inputUnchain( test )
   test.identical( got, expected );
 
   test.case = 'no args - removes all inputs';
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : null });
   l1.inputFrom( l2 );
   test.identical( l1.inputs.length, 1 );
@@ -1233,14 +1233,14 @@ function inputUnchain( test )
   // test.identical( got, expected );
 
   test.case = 'input not exists';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var got = l.inputUnchain( console );
   var expected = false;
   test.identical( got, expected );
 
   test.case = 'remove logger from input';
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
   l2.inputFrom( l1 );
   var got = [ l2.inputs.length, l1.outputs.length ];
   var expected = [ 1, 2 ];
@@ -1250,9 +1250,9 @@ function inputUnchain( test )
   test.identical( got, expected );
 
   test.case = 'remove logger from input#2';
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
   l3.inputFrom( l1 );
   l3.inputFrom( l2 );
   var got = [ l3.inputUnchain( l1 ), l3.inputs.length, l1.outputs.length ];
@@ -1260,15 +1260,15 @@ function inputUnchain( test )
   test.identical( got, expected );
 
   test.case = 'no args';
-  var l = new _.Logger();
-  var l1 = new _.Logger();
+  var l = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console });
   l.inputFrom( l1 );
   test.identical( l.inputs.length, 1 )
   l.inputUnchain();
   test.identical( l.inputs.length, 0 )
 
   test.case = 'try to remove itself, false because no inputs';
-  var l = new _.Logger();
+  var l = new _.Logger({ output : console });
   var got = l.inputUnchain( l );
   test.identical( l.inputs.length, 0 );
   test.identical( got, false );
@@ -1279,7 +1279,7 @@ function inputUnchain( test )
   test.case = 'incorrect type';
   test.shouldThrowError( function()
   {
-    var logger = new _.Logger();
+    var logger = new _.Logger({ output : console });
     logger.inputUnchain( '1' );
   });
 }
@@ -1304,7 +1304,7 @@ function hasInputDeep( test )
   test.case = 'no args';
   test.shouldThrowError( function()
   {
-    var logger = new _.Logger();
+    var logger = new _.Logger({ output : console });
     logger.hasInputDeep();
   });
 }
@@ -1314,15 +1314,15 @@ function hasInputDeep( test )
 function hasOutputDeep( test )
 {
   test.case = 'has logger in outputs';
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
   l1.outputTo( l2,{ combining : 'rewrite' } );
   var got = l1.hasOutputDeep( l2 );
   var expected = true;
   test.identical( got, expected );
 
   test.case = 'object not exists in outputs';
-  var l1 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
   var got = l1.hasOutputDeep( {} );
   var expected = false;
   test.identical( got, expected );
@@ -1330,7 +1330,7 @@ function hasOutputDeep( test )
   test.case = 'no args';
   test.shouldThrowError( function()
   {
-    var logger = new _.Logger();
+    var logger = new _.Logger({ output : console });
     logger.hasOutputDeep();
   });
 }
@@ -1378,9 +1378,9 @@ function _hasOutput( test )
   test.identical( got, expected );
 
   test.case = 'two outputs for l1,l2, l1 has l3 in output chain';
-  var l1 = new _.Logger();
-  var l2 = new _.Logger();
-  var l3 = new _.Logger();
+  var l1 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : console });
+  var l3 = new _.Logger({ output : console });
   l1.outputTo( l2, { combining : 'append' } );
   l2.outputTo( l3, { combining : 'append' } );
   var got = l1._hasOutput( l3, {} );
@@ -1411,8 +1411,8 @@ function recursion( test )
   test.case = 'l1->l2->l1';
   test.shouldThrowError( function()
   {
-    var l1 = new _.Logger();
-    var l2 = new _.Logger();
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
     l1.outputTo( l2, { combining : 'rewrite' } );
     l2.outputTo( l1, { combining : 'rewrite' } );
   });
@@ -1420,10 +1420,10 @@ function recursion( test )
   test.case = 'multiple inputs, try to add existing input to output';
   test.shouldThrowError( function()
   {
-    var l1 = new _.Logger();
-    var l2 = new _.Logger();
-    var l3 = new _.Logger();
-    var l4 = new _.Logger();
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
+    var l4 = new _.Logger({ output : console });
     l1.outputTo( l4, { combining : 'rewrite' } );
     l2.outputTo( l4, { combining : 'rewrite' } );
     l3.outputTo( l4, { combining : 'rewrite' } );
@@ -1433,9 +1433,9 @@ function recursion( test )
   test.case = 'l3->l2,l2->l1,l1->l3';
   test.shouldThrowError( function()
   {
-    var l1 = new _.Logger();
-    var l2 = new _.Logger();
-    var l3 = new _.Logger();
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
     l1.inputFrom( l2, { combining : 'rewrite' } );
     l3.inputFrom( l1, { combining : 'rewrite' } );
     l2.inputFrom( l3, { combining : 'rewrite' } );
@@ -1454,14 +1454,14 @@ function recursion( test )
   test.case = 'input from existing output';
   test.shouldThrowError( function()
   {
-    var a = new _.Logger();
+    var a = new _.Logger({ output : console });
     a.inputFrom( console );
   });
 
   test.case = 'add existing output';
   test.shouldThrowError( function()
   {
-    var a = new _.Logger();
+    var a = new _.Logger({ output : console });
     a.outputTo( console, { combining : 'append' } );
   });
 }

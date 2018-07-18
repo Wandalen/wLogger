@@ -1,6 +1,6 @@
 ( function _Backend_test_ss_( ) {
 
-'use strict'; /**/
+'use strict';
 
 /*
 
@@ -36,7 +36,7 @@ function simplest( test )
 
   test.case = 'simple1';
 
-  var logger = new _.Logger();
+  var logger = new _.Logger({ output : console });
 
   logger.logUp( 'up' );
   logger.log( 'log' );
@@ -318,7 +318,7 @@ function shellColors( test )
 
   test.case = 'shell colors codes test';
 
-  var logger = new _.Logger();
+  var logger = new _.Logger({ output : console });
 
   logger.foregroundColor = 'black';
   debugger;

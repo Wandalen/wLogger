@@ -1,6 +1,6 @@
 (function _PrinterBase_s_() {
 
-'use strict'; /**/
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -177,7 +177,7 @@ function _strConcat( args )
  * If argument( dLevel ) is not specified, increases by one.
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * l.up( 2 );
  * console.log( l.level )
  * //returns 2
@@ -210,7 +210,7 @@ function up( dLevel )
  * If argument( dLevel ) is not specified, decreases by one.
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * l.up( 2 );
  * l.down( 2 );
  * console.log( l.level )

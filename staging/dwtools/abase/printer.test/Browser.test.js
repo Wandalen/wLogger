@@ -1,6 +1,6 @@
 ( function _Browser_test_s_( ) {
 
-'use strict'; /**/
+'use strict';
 
 var isBrowser = true;
 if( typeof module !== 'undefined' )
@@ -34,7 +34,7 @@ function simplest( test )
 
   test.case = 'simple1';
 
-  var logger = new _.Logger();
+  var logger = new _.Logger({ output : console });
 
   logger.logUp( 'up' );
   logger.log( 'log' );

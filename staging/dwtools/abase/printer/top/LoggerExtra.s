@@ -1,6 +1,6 @@
 (function _Logger_s_() {
 
-'use strict'; /**/
+'use strict';
 
 // require
 
@@ -163,7 +163,7 @@ function hookConsoleToFile( fileName )
   var self = this;
 
   require( 'include/dwtools/abase/layer3/aPathTools.s' );
-  require( 'include/dwtools/FileMid.s' );
+  require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
   fileName = _.pathJoin( _.pathRealMainDir(),fileName );
