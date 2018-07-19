@@ -224,8 +224,14 @@ function _colorSet( layer, color )
     // debugger;
     var keys = _.mapOwnKeys( map );
     for( var i = 0; i < keys.length; i++ )
-    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
-    return keys[ i ];
+    {
+      if( _.objectLike( map[ keys[ i ] ] ) )
+      continue;
+
+      if( _.arrayIdentical( map[ keys[ i ] ], color ) )
+      return keys[ i ];
+    }
+
   }
 
   /* */
@@ -935,7 +941,7 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 var shellColorCodes =
 {
-  'dark black'      : 30,
+  'black'           : 30,
   'dark red'        : 31,
   'dark green'      : 32,
   'dark yellow'     : 33,
@@ -944,7 +950,7 @@ var shellColorCodes =
   'dark cyan'       : 36,
   'dark white'      : 37,
 
-  'black'           : 90,
+  'bright black'    : 90,
   'red'             : 91,
   'green'           : 92,
   'yellow'          : 93,
