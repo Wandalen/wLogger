@@ -963,18 +963,34 @@ var shellColorCodes =
 
 var illColorCombinations =
 [
-  { fg : 'black', bg : 'light yellow', platform : 'win32' },
-  { fg : 'black', bg : 'yellow', platform : 'win32' },
-  { fg : 'black', bg : 'blue', platform : 'win32' },
+
+  { fg : 'white', bg : 'yellow', platform : 'win32' },
   { fg : 'green', bg : 'cyan', platform : 'win32' },
   { fg : 'red', bg : 'magenta', platform : 'win32' },
-  { fg : 'blue', bg : 'black', platform : 'win32' },
-  { fg : 'yellow', bg : 'cyan', platform : 'win32' },
-  { fg : 'cyan', bg : 'yellow', platform : 'win32' },
+  { fg : 'yellow', bg : 'white', platform : 'win32' },
   { fg : 'cyan', bg : 'green', platform : 'win32' },
+  { fg : 'cyan', bg : 'yellow', platform : 'win32' },
   { fg : 'magenta', bg : 'red', platform : 'win32' },
-  { fg : 'light black', bg : 'light yellow', platform : 'win32' },
-  { fg : 'light black', bg : 'yellow', platform : 'win32' },
+  { fg : 'bright black', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark blue', bg : 'blue', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark green', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark white', bg : 'green', platform : 'win32' },
+  { fg : 'dark white', bg : 'cyan', platform : 'win32' },
+  { fg : 'green', bg : 'dark white', platform : 'win32' },
+  { fg : 'blue', bg : 'dark blue', platform : 'win32' },
+  { fg : 'cyan', bg : 'dark white', platform : 'win32' },
+  { fg : 'bright black', bg : 'dark yellow', platform : 'win32' },
+  { fg : 'bright black', bg : 'dark cyan', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'bright black', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'dark cyan', platform : 'win32' },
+  { fg : 'dark red', bg : 'dark manenta', platform : 'win32' },
+  { fg : 'dark magenta', bg : 'dark red', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'bright black', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'dark yellow', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'dark green', platform : 'win32' },
+  { fg : 'dark green', bg : 'dark cyan', platform : 'win32' },
 
   /* */
 
