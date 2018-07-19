@@ -389,8 +389,8 @@ function outputTo( output,o )
       return true;
     }
 
-    if( o.unbarring )
-    debugger;
+    // if( o.unbarring )
+    // debugger;
     if( o.unbarring )
     _.assert( output.isTerminal === undefined || output.isTerminal, 'unbarring chaining possible only into terminal logger' );
 
@@ -832,7 +832,7 @@ function consoleBar( o )
   var self = this;
   var o = _.routineOptions( consoleBar, arguments );
 
-  debugger;
+  // debugger;
 
   if( !o.barLogger )
   o.barLogger = new self.Self({ output : null, name : 'barLogger' });
@@ -857,7 +857,7 @@ function consoleBar( o )
 
     _.assert( !o.barLogger.inputs.length );
     _.assert( !o.barLogger.outputs.length );
-    debugger;
+    // debugger;
     // _.assert( o.outputLogger.outputs.length === 0 || ( o.outputLogger.outputs.length === 1 && o.outputLogger.outputs[ 0 ] === console ), '{-o.outputLogger-} should have no output' );
     _.assert( !o.outputLoggerHadOutputs );
 
