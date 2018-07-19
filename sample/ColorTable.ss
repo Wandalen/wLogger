@@ -22,20 +22,24 @@ var _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
+_.include( 'wExecTools' );
 
 // require( '../staging/dwtools/abase/printer/top/Logger.s' );
 
 var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
-colorNames = colorNames.slice( 0, colorNames.length / 2 );
-colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
+// colorNames = colorNames.slice( 0, colorNames.length / 2 );
+// colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
 
 //
 
 function shortColor( name )
 {
   var parts = _.strSplit( name );
-  if( parts[ 0 ] === 'light' )
-  name = 'l.' + parts[ 1 ];
+  if( parts[ 0 ] === 'dark' )
+  name = 'd.' + parts[ 1 ];
+
+  if( parts[ 0 ] === 'bright' )
+  name = 'b.' + parts[ 1 ];
 
   return name;
 }
