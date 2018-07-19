@@ -146,10 +146,10 @@ function _rgbToCode( rgb, isBackground )
   var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
   var code = shellColorCodes[ name ];
 
+  _.assert( _.numberIs( code ), 'nothing found for color: ', name );
+
   if( isBackground )
   code += 10; // add 10 to convert fg code to bg code
-
-  _.assert( _.numberIs( code ) );
 
   return _.toStr( code );
 }
@@ -224,13 +224,8 @@ function _colorSet( layer, color )
     // debugger;
     var keys = _.mapOwnKeys( map );
     for( var i = 0; i < keys.length; i++ )
-    {
-      if( _.objectLike( map[ keys[ i ] ] ) )
-      continue;
-
-      if( _.arrayIdentical( map[ keys[ i ] ], color ) )
-      return keys[ i ];
-    }
+    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
+    return keys[ i ];
 
   }
 
