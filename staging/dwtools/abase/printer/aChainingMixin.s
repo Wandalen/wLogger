@@ -868,7 +868,8 @@ function consoleBar( o )
 
     o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
 
-    o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' }; /* xxx */
+    // o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' }; /* xxx */
+    o.barLogger.permanentStyle = 'bar.neutral';
     o.barLogger.inputFrom( console,{ barring : 1 } );
     o.barLogger.outputTo( o.outputLogger );
 
