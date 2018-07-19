@@ -146,10 +146,10 @@ function _rgbToCode( rgb, isBackground )
   var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
   var code = shellColorCodes[ name ];
 
+  _.assert( _.numberIs( code ), 'nothing found for color: ', name );
+
   if( isBackground )
   code += 10; // add 10 to convert fg code to bg code
-
-  _.assert( _.numberIs( code ) );
 
   return _.toStr( code );
 }
@@ -226,6 +226,7 @@ function _colorSet( layer, color )
     for( var i = 0; i < keys.length; i++ )
     if( _.arrayIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
+
   }
 
   /* */
@@ -935,7 +936,7 @@ var symbolForBackground = Symbol.for( 'backgroundColor' );
 
 var shellColorCodes =
 {
-  'dark black'      : 30,
+  'black'           : 30,
   'dark red'        : 31,
   'dark green'      : 32,
   'dark yellow'     : 33,
@@ -944,7 +945,7 @@ var shellColorCodes =
   'dark cyan'       : 36,
   'dark white'      : 37,
 
-  'black'           : 90,
+  'bright black'    : 90,
   'red'             : 91,
   'green'           : 92,
   'yellow'          : 93,
