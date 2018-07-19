@@ -16,18 +16,14 @@ if( typeof module !== 'undefined' )
 
   require( './aColoredMixin.s' )
 
-  var _global = _global_;
   var _ = _global_.wTools;
 
 }
 
-var symbolForLevel = Symbol.for( 'level' );
-var symbolForForeground = Symbol.for( 'foregroundColor' );
-var symbolForBackground = Symbol.for( 'backgroundColor' );
-
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterMid;
 var Self = function wPrinterTop( o )
 {
@@ -46,9 +42,40 @@ Self.nameShort = 'PrinterTop';
 function init( o )
 {
   var self = this;
-
   Parent.prototype.init.call( self,o );
+}
 
+//
+
+function colorFormat( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( !self.coloring || !_.color || !_.color.strFormat )
+  return src;
+  return _.color.strFormat( src, format );
+}
+
+//
+
+function colorBg( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( !self.coloring || !_.color || !_.color.strFormatBackground )
+  return src;
+  return _.color.strFormatBackground( src, format );
+}
+
+//
+
+function colorFg( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( !self.coloring || !_.color || !_.color.strFormatForeground )
+  return src;
+  return _.color.strFormatForeground( src, format );
 }
 
 // --
@@ -57,7 +84,7 @@ function init( o )
 
 var Composes =
 {
-
+  coloring : 0,
 }
 
 var Aggregates =
@@ -79,6 +106,9 @@ var Proto =
 
   init : init,
 
+  colorFormat : colorFormat,
+  colorBg : colorBg,
+  colorFg : colorFg,
 
   // relationships
 

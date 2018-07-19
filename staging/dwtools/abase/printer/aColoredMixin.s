@@ -752,6 +752,8 @@ function topic()
 
   var result = _.strConcat( arguments );
 
+  // qqq
+  // if( self.coloring )
   result = _.color.strFormat( result, 'topic.up' );
 
   this.log();
@@ -770,6 +772,7 @@ function topicUp()
   var result = _.strConcat( arguments );
 
   debugger;
+  // qqq
   result = _.color.strFormat( result, 'topic.up' );
 
   this.log();
@@ -788,6 +791,7 @@ function topicDown()
   var result = _.strConcat( arguments );
 
   debugger;
+  // qqq
   result = _.color.strFormat( result, 'topic.down' );
 
   this.log();

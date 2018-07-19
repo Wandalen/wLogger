@@ -888,7 +888,7 @@ function consoleBar( o )
 
     for( var t = 0 ; t < o.outputLoggerHadOutputs.length ; t++ )
     {
-      debugger;
+      // debugger;
       var outputOptions = o.outputLoggerHadOutputs[ t ];
       o.outputLogger.outputTo( outputOptions.output, _.mapOnly( outputOptions, o.outputLogger.outputTo.defaults ) );
     }

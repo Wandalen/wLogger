@@ -2,10 +2,8 @@
 
 'use strict';
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-  isBrowser = false;
 
   if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
@@ -323,6 +321,11 @@ var Associates =
 {
 }
 
+var Accessors =
+{
+  level : 'level',
+}
+
 // --
 // define class
 // --
@@ -364,6 +367,7 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Accessors : Accessors,
 
 }
 
@@ -377,17 +381,6 @@ _.classMake
 });
 
 _.Copyable.mixin( Self );
-
-//
-
-_.accessor
-({
-  object : Self.prototype,
-  names :
-  {
-    level : 'level',
-  }
-});
 
 //
 
