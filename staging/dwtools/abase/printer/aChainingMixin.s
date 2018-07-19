@@ -106,7 +106,7 @@ function __initChainingMixinChannel( name )
 
   function write()
   {
-    this._writeToChannel( name,_.arraySlice( arguments ) );
+    this._writeToChannel( name,_.longSlice( arguments ) );
     return this;
   }
 
@@ -157,7 +157,7 @@ function _writeToChannel( channelName,args )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
   var o = self.write.apply( self,args );
 
@@ -169,7 +169,7 @@ function _writeToChannel( channelName,args )
     var outputDescriptor = self.outputs[ i ];
     var outputData = ( outputDescriptor.output.isTerminal === undefined || outputDescriptor.output.isTerminal ) ? o.outputForTerminal : o.output;
 
-    _.assert( _.arrayLike( outputData ) );
+    _.assert( _.longIs( outputData ) );
 
     // /* skip empty line output if logging directive without text, like: logger.log( '#foreground : red#' )
     //  output is not skipped for logger.log()
@@ -197,7 +197,7 @@ function _writeToChannelUp( channelName,args )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
   self.up();
 
@@ -215,7 +215,7 @@ function _writeToChannelDown( channelName,args )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
   self.begin( 'tail' );
   self._writeToChannel( channelName,args );
@@ -233,7 +233,7 @@ function _writeToChannelIn( channelName,args )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
   _.assert( args.length === 2 );
   _.assert( _.strIs( args[ 0 ] ) );
 

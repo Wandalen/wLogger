@@ -686,8 +686,8 @@ function _writePrepare( original )
     o = original.call( self,o );
 
     _.assert( _.strIs( o.pure ) );
-    _.assert( _.arrayLike( o.input ) );
-    _.assert( _.arrayLike( o.output ) );
+    _.assert( _.longIs( o.input ) );
+    _.assert( _.longIs( o.output ) );
     _.assert( o.output.length === 1 )
 
     if( _.color && self.coloring )

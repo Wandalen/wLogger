@@ -1,6 +1,6 @@
 (function _PrinterMid_s_() {
 
-'use strict'; 
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
@@ -111,9 +111,6 @@ function _begin( key,val )
     return self;
   }
 
-  // if( key === 'verbosity' )
-  // _.assert( val <= 0 );
-
   if( self.attributes[ key ] !== undefined )
   {
     self._attributesStacks[ key ] = self._attributesStacks[ key ] || [];
@@ -157,20 +154,11 @@ function _end( key,val )
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
 
-  // if( val === undefined )
-  // {
-  //   self._end( key,val );
-  //   return self;
-  // }
-
   if( val !== undefined )
   _.assert
   (
     val === self.attributes[ key ],
-    '( begin ) does not have complemented ( end )' +
-    '\nbegin : ' + _.toStr( self.attributes[ key ] ),
-    '\nend : ' + _.toStr( val ),
-    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
+    () => self._attributeError( key, self.attributes[ key ], val )
   );
 
   if( self._attributesStacks[ key ] )
@@ -208,6 +196,116 @@ function end()
   }
 
   return self;
+}
+
+//
+
+function _rbegin( key, val )
+{
+  var self = this;
+  var attribute = self.attributes[ key ];
+
+  if( attribute === undefined )
+  {
+    self._begin( key, 0 );
+    attribute = 0;
+  }
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( key ),'expects string {-key-}, got', () => _.strTypeOf( key ) );
+  _.assert( _.numberIs( val ),'expects number {-val-}, got', () => _.strTypeOf( val ) );
+  _.assert( _.numberIs( attribute ), () => _.args( 'expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
+
+  return self._begin( key, val + attribute )
+}
+
+//
+
+function rbegin()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var argument = arguments[ a ];
+
+    if( _.objectIs( argument ) )
+    {
+      for( var key in argument )
+      self._rbegin( key,argument[ key ] )
+      return;
+    }
+
+    self._rbegin( argument,1 );
+  }
+
+  return self;
+}
+
+//
+
+function _rend( key,val )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.strIs( key ) );
+  _.assert( _.numberIs( val ) );
+
+  _.assert
+  (
+    _.arrayIs( self._attributesStacks[ key ] ) && _.numberIs( self._attributesStacks[ key ][ 0 ] ),
+    () => self._attributeError( key, undefined, val )
+  );
+
+  var attribute = self._attributesStacks[ key ][ 0 ];
+  var val = attribute + val;
+
+  self._end( key, val );
+
+  return self;
+}
+
+//
+
+function rend()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var argument = arguments[ a ];
+
+    if( _.objectIs( argument ) )
+    {
+      for( var key in argument )
+      self._rend( key,argument[ key ] )
+      return;
+    }
+
+    self._rend( argument )
+  }
+
+  return self;
+}
+
+//
+
+function _attributeError( key, begin, end )
+{
+  var self = this;
+
+  debugger;
+
+  return _.err
+  (
+    '{-begin-} does not have complemented {-end-}' +
+    '\nkey : ' + _.toStr( key ) +
+    '\nbegin : ' + _.toStr( begin ) +
+    '\nend : ' + _.toStr( end ) +
+    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
+  );
+
 }
 
 // --
@@ -442,12 +540,10 @@ var Proto =
 
   init : init,
 
-
   // etc
 
   levelSet : levelSet,
   _writeBegin : _writeBegin,
-
 
   // attributing
 
@@ -456,6 +552,12 @@ var Proto =
   _end : _end,
   end : end,
 
+  _rbegin : _rbegin,
+  rbegin : rbegin,
+  _rend : _rend,
+  rend : rend,
+
+  _attributeError : _attributeError,
 
   // verbosity
 
@@ -467,14 +569,12 @@ var Proto =
   _verboseEnough : _verboseEnough,
   _verbosityReport : _verbosityReport,
 
-
   // mine
 
   mine : mine,
   _minesDetonate : _minesDetonate,
   mineDetonate : mineDetonate,
   mineFinit : mineFinit,
-
 
   // relationships
 

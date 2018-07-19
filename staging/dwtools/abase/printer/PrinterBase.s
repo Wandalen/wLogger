@@ -100,9 +100,9 @@ function write()
   o = self._writePrepare( o );
 
   _.assert( _.mapIs( o ) );
-  _.assert( _.arrayLike( o.input ) );
-  _.assert( _.arrayLike( o.outputForTerminal ) );
-  _.assert( _.arrayLike( o.output ) );
+  _.assert( _.longIs( o.input ) );
+  _.assert( _.longIs( o.outputForTerminal ) );
+  _.assert( _.longIs( o.output ) );
 
   if( self.onWrite )
   self.onWrite( o );
@@ -127,7 +127,7 @@ function _writePrepare( o )
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.arrayLike( o.input ) );
+  _.assert( _.longIs( o.input ) );
 
   o.pure = self._strConcat( o.input );
   o.output = [ o.pure ];
