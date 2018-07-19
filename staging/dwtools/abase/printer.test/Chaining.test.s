@@ -1544,12 +1544,12 @@ function consoleBar( test )
 
   if( Config.debug )
   {
-    test.case = 'error if provider barLogger has inputs/outputs'
+    test.case = 'error if provided barLogger has inputs/outputs'
     test.is( !_.Logger.consoleIsBarred( console ) );
     var o =
     {
       outputLogger : _.Tester.logger,
-      barLogger : new _.Logger,
+      barLogger : new _.Logger({ output : console }),
       bar : 1,
     }
     test.shouldThrowError( () => _.Logger.consoleBar( o ) );

@@ -70,20 +70,20 @@ function colorConsole( test )
   };
   var logger = new _.Logger({ output : null, onWrite : onWrite });
 
-  test.case = 'case1: red text';
-  logger.log( _.color.strFormatForeground( 'text', 'red') );
+  test.case = 'case1: dark red text';
+  logger.log( _.color.strFormatForeground( 'text', 'dark red') );
   var expected = '\u001b[31mtext\u001b[39;0m';
   test.identical( logger.foregroundColor, null );
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.case = 'case2: yellow background';
-  logger.log( _.color.strFormatBackground( 'text', 'yellow') );
+  test.case = 'case2: dark yellow background';
+  logger.log( _.color.strFormatBackground( 'text', 'dark yellow') );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[43mtext\u001b[49;0m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  test.case = 'case3: red text on yellow background';
-  logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'red'), 'yellow') );
+  test.case = 'case3: dark red text on dark yellow background';
+  logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'dark red'), 'dark yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
@@ -91,8 +91,8 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
   debugger;
 
-  test.case = 'case4: yellow text on red background  + not styled text';
-  logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'red'), 'yellow') + 'text' );
+  test.case = 'case4: dark yellow text on dark red background  + not styled text';
+  logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'dark red'), 'dark yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49;0m\u001b[39;0mtext';
@@ -117,7 +117,7 @@ function colorConsole( test )
 
   /**/
 
-  logger.log( '#foreground : red#' );
+  logger.log( '#foreground : dark red#' );
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0.5, 0 ,0 ] );
   var expected = '\u001b[31mtext\u001b[39;0m';
@@ -126,7 +126,7 @@ function colorConsole( test )
   /**/
 
   logger.foregroundColor = 'default';
-  logger.log( '#background : red#' );
+  logger.log( '#background : dark red#' );
   logger.log( 'text' );
   test.identical( logger.backgroundColor, [ 0.5, 0 ,0 ] );
   var expected = '\u001b[41mtext\u001b[49;0m';
@@ -136,8 +136,8 @@ function colorConsole( test )
 
   logger.foregroundColor = 'default';
   logger.backgroundColor = 'default';
-  logger.log( '#foreground : red#' );
-  logger.log( '#background : yellow#' );
+  logger.log( '#foreground : dark red#' );
+  logger.log( '#background : dark yellow#' );
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0.5, 0 ,0 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5 ,0 ] );
@@ -162,8 +162,8 @@ function colorConsole( test )
 
   /**/
 
-  logger.foregroundColor = 'blue';
-  logger.backgroundColor = 'white';
+  logger.foregroundColor = 'dark blue';
+  logger.backgroundColor = 'dark white';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0, 0, 0.5 ] );
   test.identical( logger.backgroundColor, [ 0.9, 0.9, 0.9 ] );
@@ -176,7 +176,7 @@ function colorConsole( test )
   /**/
 
   logger.foregroundColor = 'xxx';
-  logger.backgroundColor = 'white';
+  logger.backgroundColor = 'dark white';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, [ 0.9, 0.9, 0.9 ] );
@@ -207,11 +207,11 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
 
-  logger.foregroundColor = 'red';
-  logger.foregroundColor = 'blue';
+  logger.foregroundColor = 'dark red';
+  logger.foregroundColor = 'dark blue';
 
-  logger.backgroundColor = 'yellow';
-  logger.backgroundColor = 'green';
+  logger.backgroundColor = 'dark yellow';
+  logger.backgroundColor = 'dark green';
 
   test.identical( logger.foregroundColor, [ 0, 0, 0.5 ] )
   test.identical( logger.backgroundColor, [ 0, 0.5, 0 ] )
@@ -249,8 +249,8 @@ function colorConsole( test )
 
   var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#coloring : 0#' );
-  logger.log( '#foreground : red#' );
-  logger.log( '#background : yellow#' );
+  logger.log( '#foreground : dark red#' );
+  logger.log( '#background : dark yellow#' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0 ] );
   logger.log( 'text' );
@@ -265,10 +265,10 @@ function colorConsole( test )
 
   var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#coloring : 0#' );
-  logger.log( '#foreground : red#' );
-  logger.log( '#foreground : blue#' );
-  logger.log( '#background : red#' );
-  logger.log( '#background : blue#' );
+  logger.log( '#foreground : dark red#' );
+  logger.log( '#foreground : dark blue#' );
+  logger.log( '#background : dark red#' );
+  logger.log( '#background : dark blue#' );
   test.identical( logger.foregroundColor, [ 0, 0, 0.5 ] );
   test.identical( logger.backgroundColor, [ 0, 0, 0.5 ] );
   logger.log( '#foreground : default#' );
@@ -288,10 +288,10 @@ function colorConsole( test )
 
   var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#trackingColor : 0#' );
-  logger.log( '#foreground : red#' );
-  logger.log( '#foreground : blue#' );
-  logger.log( '#background : red#' );
-  logger.log( '#background : blue#' );
+  logger.log( '#foreground : dark red#' );
+  logger.log( '#foreground : dark blue#' );
+  logger.log( '#background : dark red#' );
+  logger.log( '#background : dark blue#' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
 
@@ -299,9 +299,9 @@ function colorConsole( test )
 
   var logger = new _.Logger({ output : null, onWrite : onWrite });
   logger.log( '#trackingColor : 0#' );
-  logger.log( '#foreground : red#' );
+  logger.log( '#foreground : dark red#' );
   logger.log( '#trackingColor : 1#' );
-  logger.log( '#foreground : red#' );
+  logger.log( '#foreground : dark red#' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
   logger.log( 'text' );
   var expected = '\u001b[31mtext\u001b[39;0m';
@@ -320,93 +320,93 @@ function shellColors( test )
 
   var logger = new _.Logger({ output : console });
 
-  logger.foregroundColor = 'black';
+  logger.foregroundColor = 'dark black';
   debugger;
   test.identical( logger.foregroundColor, [ 0, 0, 0 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '30' );
 
 
-  logger.foregroundColor = 'light black';
+  logger.foregroundColor = 'black';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0.5 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '90' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;30' );
 
-  logger.foregroundColor = 'red';
+  logger.foregroundColor = 'dark red';
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '31' );
 
-  logger.foregroundColor = 'light red';
+  logger.foregroundColor = 'red';
   test.identical( logger.foregroundColor, [ 1, 0, 0 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '91' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;31' );
 
-  logger.foregroundColor = 'green';
+  logger.foregroundColor = 'dark green';
   test.identical( logger.foregroundColor, [ 0, 0.5, 0 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '32' );
 
-  logger.foregroundColor = 'light green';
+  logger.foregroundColor = 'green';
   test.identical( logger.foregroundColor, [ 0, 1, 0 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '92' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;32' );
 
-  logger.foregroundColor = 'yellow';
+  logger.foregroundColor = 'dark yellow';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '33' );
 
-  logger.foregroundColor = 'light yellow';
+  logger.foregroundColor = 'yellow';
   test.identical( logger.foregroundColor, [ 1, 1, 0 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '93' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;33' );
 
-  logger.foregroundColor = 'blue';
+  logger.foregroundColor = 'dark blue';
   test.identical( logger.foregroundColor, [ 0, 0, 0.5 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '34' );
 
-  logger.foregroundColor = 'light blue';
+  logger.foregroundColor = 'blue';
   test.identical( logger.foregroundColor, [ 0, 0, 1 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '94' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;34' );
 
-  logger.foregroundColor = 'magenta';
+  logger.foregroundColor = 'dark magenta';
   test.identical( logger.foregroundColor, [ 0.5, 0, 0.5 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '35' );
 
-  logger.foregroundColor = 'light magenta';
+  logger.foregroundColor = 'magenta';
   test.identical( logger.foregroundColor, [ 1, 0, 1] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '95' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;35' );
 
-  logger.foregroundColor = 'cyan';
+  logger.foregroundColor = 'dark cyan';
   test.identical( logger.foregroundColor, [ 0, 0.5, 0.5 ] );
   test.identical( logger._rgbToCode( logger.foregroundColor ), '36' );
 
-  logger.foregroundColor = 'light cyan';
+  logger.foregroundColor = 'cyan';
   test.identical( logger.foregroundColor, [ 0, 1, 1 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '96' );
   // else
   // test.identical( logger._rgbToCode( logger.foregroundColor ), '1;36' );
 
-  logger.foregroundColor = 'white';
+  logger.foregroundColor = 'dark white';
   test.identical( logger.foregroundColor, [ 0.9, 0.9, 0.9 ] );
   // if( isUnix )
   // test.identical( logger._rgbToCode( logger.foregroundColor ), 97 );
   // else
   test.identical( logger._rgbToCode( logger.foregroundColor ), '37' );
 
-  logger.foregroundColor = 'light white';
+  logger.foregroundColor = 'white';
   test.identical( logger.foregroundColor, [ 1, 1, 1 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '97' );
