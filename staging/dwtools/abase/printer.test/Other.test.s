@@ -150,8 +150,14 @@ function currentColor( test )
 
   test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger( { output : fakeConsole } );
-  logger.foregroundColor = 'd';
-  logger.backgroundColor = 'd';
+  test.shouldThrowError( () =>
+  {
+    logger.foregroundColor = 'd';
+  })
+  test.shouldThrowError( () =>
+  {
+    logger.backgroundColor = 'd';
+  })
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
@@ -490,7 +496,7 @@ function diagnostic( test )
 
   _.Logger.diagnosticColor = 0;
 
-  l.foregroundColor = 'dark black';
+  l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
   var got = l._diagnosticColorCheck();
   test.identical( got.ill, undefined  );
@@ -499,7 +505,7 @@ function diagnostic( test )
 
   _.Logger.diagnosticColor = 1;
 
-  l.foregroundColor = 'dark black';
+  l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
   var got = l._diagnosticColorCheck();
   test.identical( got.ill, true );
@@ -507,7 +513,7 @@ function diagnostic( test )
   /* after warning diagnostic is disabled */
 
   test.identical( _.Logger.diagnosticColor, 0 );
-  l.foregroundColor = 'dark black';
+  l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
   var got = l._diagnosticColorCheck();
   test.identical( got.ill, undefined );

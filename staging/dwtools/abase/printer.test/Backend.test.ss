@@ -99,10 +99,11 @@ function colorConsole( test )
   test.identical( _escaping( got ), _escaping( expected ) );
 
   test.case = 'case5: unknown color ';
-  logger.log( _.color.strFormatForeground( 'text', 'xxx') );
+  test.shouldThrowError( () =>
+  {
+    logger.log( _.color.strFormatForeground( 'text', 'xxx') );
+  })
   test.identical( logger.foregroundColor, null );
-  var expected = 'text';
-  test.identical( _escaping( got ), _escaping( expected ) );
 
   test.case = 'case6: text without styles  ';
   logger.log( 'text' );
@@ -148,13 +149,16 @@ function colorConsole( test )
 
   logger.foregroundColor = 'default';
   logger.backgroundColor = 'default';
-  logger.log( '#foreground : xxx#' );
-  logger.log( '#background : xxx#' );
-  logger.log( 'text' );
+  test.shouldThrowError( () =>
+  {
+    logger.log( '#foreground : xxx#' );
+  })
+  test.shouldThrowError( () =>
+  {
+    logger.log( '#background : xxx#' );
+  })
   test.identical( logger.foregroundColor, null );
   test.identical( logger.foregroundColor, null );
-  var expected = 'text';
-  test.identical( _escaping( got ), _escaping( expected ) );
 
   //
 
@@ -175,7 +179,11 @@ function colorConsole( test )
 
   /**/
 
-  logger.foregroundColor = 'xxx';
+  var logger = new _.Logger({ output : null, onWrite : onWrite });
+  test.shouldThrowError( () =>
+  {
+    logger.foregroundColor = 'xxx';
+  })
   logger.backgroundColor = 'dark white';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
@@ -189,8 +197,14 @@ function colorConsole( test )
   /**/
 
   var logger = new _.Logger({ output : null, onWrite : onWrite });
-  logger.foregroundColor = 'xxx';
-  logger.backgroundColor = 'xxx';
+  test.shouldThrowError( () =>
+  {
+    logger.foregroundColor = 'xxx';
+  })
+  test.shouldThrowError( () =>
+  {
+    logger.backgroundColor = 'xxx';
+  })
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
@@ -326,7 +340,7 @@ function shellColors( test )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '30' );
 
 
-  logger.foregroundColor = 'black';
+  logger.foregroundColor = 'bright black';
   test.identical( logger.foregroundColor, [ 0.5, 0.5, 0.5 ] );
   // if( isUnix )
   test.identical( logger._rgbToCode( logger.foregroundColor ), '90' );

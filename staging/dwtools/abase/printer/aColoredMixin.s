@@ -244,33 +244,33 @@ function _colorSet( layer, color )
       if( !color )
       color = _.color.rgbaFromTry( originalName, null );
     }
+
+    if( !color )
+    throw _.err( 'Can\'t set', layer, 'color.', 'Unknown color name:', _.strQuote( originalName ) );
+
     var originalValue = color;
     var currentName;
 
-    if( color )
+    if( isBrowser )
     {
-      if( isBrowser )
-      {
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
-        currentName = _getColorName( _.color.ColorMap, color );
-      }
-      else
-      {
-        color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
-        currentName = _getColorName(  _.color.ColorMapShell, color );
-      }
-
-      // console.log( '_colorSet', currentName, colorWas, '->', color );
-
-      diagnosticInfo =
-      {
-        originalValue : originalValue,
-        originalName : originalName,
-        currentName : currentName,
-        exact : !!_.color._colorDistance( color, originalValue )
-      };
-
+      color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
+      currentName = _getColorName( _.color.ColorMap, color );
     }
+    else
+    {
+      color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
+      currentName = _getColorName(  _.color.ColorMapShell, color );
+    }
+
+    // console.log( '_colorSet', currentName, colorWas, '->', color );
+
+    diagnosticInfo =
+    {
+      originalValue : originalValue,
+      originalName : originalName,
+      currentName : currentName,
+      exact : !!_.color._colorDistance( color, originalValue )
+    };
 
   }
 
