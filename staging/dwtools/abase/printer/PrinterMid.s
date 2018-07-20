@@ -247,6 +247,7 @@ function rbegin()
 function _rend( key,val )
 {
   var self = this;
+  var attributeStack = self._attributesStacks[ key ];
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
@@ -254,11 +255,11 @@ function _rend( key,val )
 
   _.assert
   (
-    _.arrayIs( self._attributesStacks[ key ] ) && _.numberIs( self._attributesStacks[ key ][ 0 ] ),
+    _.arrayIs( attributeStack ) && _.numberIs( attributeStack[ attributeStack.length-1 ] ),
     () => self._attributeError( key, undefined, val )
   );
 
-  var attribute = self._attributesStacks[ key ][ 0 ];
+  var attribute = attributeStack[ attributeStack.length-1 ];
   var val = attribute + val;
 
   self._end( key, val );
@@ -529,6 +530,12 @@ var Associates =
 {
 }
 
+var Forbids =
+{
+  format : 'format',
+  tags : 'tags',
+}
+
 // --
 // define class
 // --
@@ -582,6 +589,7 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Forbids : Forbids,
 
 }
 
@@ -595,18 +603,6 @@ _.classMake
 });
 
 _.assert( Self.prototype.init === init );
-
-//
-
-_.accessorForbid
-({
-  object : Self.prototype,
-  names :
-  {
-    format : 'format',
-    tags : 'tags',
-  }
-});
 
 //
 
