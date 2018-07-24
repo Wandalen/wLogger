@@ -412,7 +412,7 @@ function outputTo( output, o )
   o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  var o2 = _.mapExtend( null, o );
+  let o2 = _.mapExtend( null, o );
   o2.inputPrinter = self;
   o2.outputPrinter = output;
   o2.outputCombining = o.combining;
@@ -599,7 +599,7 @@ function inputFrom( input, o )
   o = _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  var o2 = _.mapExtend( null, o );
+  let o2 = _.mapExtend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self;
   o2.inputCombining = o.combining;
@@ -711,7 +711,7 @@ function unchain()
 
 function consoleIsBarred( output )
 {
-  var self = this;
+  let self = this;
 
   _.assert( _.consoleIs( output ) );
   _.assert( arguments.length === 1, 'expects single argument' );
@@ -1259,7 +1259,9 @@ _.classMake
 // export
 // --
 
-Self = _[ Self.nameShort ] = Self;
+_[ Self.nameShort ] = Self;
+
+debugger;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
