@@ -5,17 +5,12 @@
 if( typeof module !== 'undefined' )
 {
 
-  // if( typeof wPrinterMid !== 'undefined' )
-  // debugger;
-  // if( typeof wPrinterMid !== 'undefined' )
-  // return;
-
-  // if( !_global_.wPrinterBase )
   require( './PrinterBase.s' );
 
-  require( './aChainingMixin.s' )
+  var _ = _global_.wTools;
 
-  var _global = _global_; var _ = _global_.wTools;
+  require( './aChainer.s' );
+  require( './aChainingMixin.s' )
 
   _.include( 'wCopyable' );
 
@@ -48,7 +43,7 @@ Self.nameShort = 'PrinterMid';
 function init( o )
 {
   var self = this;
-  var o = o || {};
+  var o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
@@ -75,22 +70,49 @@ function levelSet( level )
   var level = self[ symbolForLevel ];
 
   self._prefix = _.strDup( self._dprefix || '',level );
-  self._postfix = _.strDup( self._dpostfix|| '',level );
+  self._postfix = _.strDup( self._dpostfix || '',level );
 
 }
 
 //
 
-function _writeBegin( args )
+function _transformBegin( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  Parent.prototype._writeBegin.call( self,args );
+  if( !self.verboseEnough() )
+  return;
 
-  self._minesDetonate();
+  o = Parent.prototype._transformBegin.call( self, o );
 
+  if( !o )
+  return;
+
+  if( self.onTransformEnd )
+  o = self.onTransformEnd( o );
+
+  if( !o )
+  return;
+
+  self._laterActualize();
+
+  return o;
+}
+
+//
+
+function _transformEnd( o )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( self.onTransformEnd )
+  self.onTransformEnd( o );
+
+  return o;
 }
 
 // --
@@ -371,9 +393,11 @@ function _verbosityReserve()
 
 //
 
-function verboseEnough( args )
+function verboseEnough()
 {
   var self = this;
+
+  _.assert( arguments.length === 0 );
 
   if( !self.usingVerbosity )
   return true;
@@ -405,45 +429,45 @@ function _verbosityReport()
 }
 
 // --
-// mine
+// later
 // --
 
-function mine( name )
+function later( name )
 {
   var self = this;
-  var mine = Object.create( null );
+  var later = Object.create( null );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
 
-  mine.name = name;
-  mine.after = [];
-  mine.logger = self;
-  mine.autoFinit = 1;
-  mine.detonated = 0;
-  mine.log = function log()
+  later.name = name;
+  later.after = [];
+  later.logger = self;
+  later.autoFinit = 1;
+  later.detonated = 0;
+  later.log = function log()
   {
     if( this.logger.verboseEnough )
     this.after.push([ 'log',arguments ]);
   }
 
-  self._mines[ name ] = mine;
+  self._mines[ name ] = later;
 
-  return mine;
+  return later;
 }
 
 //
 
-function _minesDetonate()
+function _laterActualize()
 {
   var self = this;
   var result = Object.create( null );
 
   for( var m in self._mines )
   {
-    var mine = self._mines[ m ];
-    if( !mine.detonated )
-    self.mineDetonate( mine );
+    var later = self._mines[ m ];
+    if( !later.detonated )
+    self.laterActualize( later );
   }
 
   return result;
@@ -451,45 +475,45 @@ function _minesDetonate()
 
 //
 
-function mineDetonate( mine )
+function laterActualize( later )
 {
   var self = this;
 
-  if( _.strIs( mine ) )
-  mine = self._mines[ mine ];
+  if( _.strIs( later ) )
+  later = self._mines[ later ];
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.mapIs( mine ) );
+  _.assert( _.mapIs( later ) );
 
-  mine.detonated = 1;
+  later.detonated = 1;
 
-  for( var a = 0 ; a < mine.after.length ; a++ )
+  for( var a = 0 ; a < later.after.length ; a++ )
   {
-    var after = mine.after[ a ];
+    var after = later.after[ a ];
     self[ after[ 0 ] ].apply( self,after[ 1 ] );
   }
 
-  if( mine.autoFinit )
-  self.mineFinit( mine );
+  if( later.autoFinit )
+  self.laterFinit( later );
 
   return self;
 }
 
 //
 
-function mineFinit( mine )
+function laterFinit( later )
 {
   var self = this;
 
-  if( _.strIs( mine ) )
-  mine = self._mines[ mine ];
+  if( _.strIs( later ) )
+  later = self._mines[ later ];
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.mapIs( mine ) );
-  _.assert( self._mines[ mine.name ] === mine );
+  _.assert( _.mapIs( later ) );
+  _.assert( self._mines[ later.name ] === later );
 
-  Object.freeze( mine );
-  delete self._mines[ mine.name ];
+  Object.freeze( later );
+  delete self._mines[ later.name ];
 
   return self;
 }
@@ -503,19 +527,13 @@ var symbolForLevel = Symbol.for( 'level' );
 var Composes =
 {
 
-  _prefix : '',
-  _postfix : '',
-
-  _dprefix : '  ',
-  _dpostfix : '',
-
-  _verbosityStack : [],
   verbosity : null,
   usingVerbosity : 1,
 
-  _attributesStacks : {},
-  attributes : {},
-  _mines : {},
+  onTransformBegin : null,
+  onTransformEnd : null,
+
+  attributes : Object.create( null ),
 
 }
 
@@ -528,6 +546,22 @@ var Aggregates =
 
 var Associates =
 {
+}
+
+var Restricts =
+{
+
+  _prefix : '',
+  _postfix : '',
+
+  _dprefix : '  ',
+  _dpostfix : '',
+
+  _verbosityStack : [],
+
+  _attributesStacks : Object.create( null ),
+  _mines : Object.create( null ),
+
 }
 
 var Forbids =
@@ -550,7 +584,7 @@ var Proto =
   // etc
 
   levelSet : levelSet,
-  _writeBegin : _writeBegin,
+  _transformBegin : _transformBegin,
 
   // attributing
 
@@ -576,12 +610,12 @@ var Proto =
   _verboseEnough : _verboseEnough,
   _verbosityReport : _verbosityReport,
 
-  // mine
+  // later
 
-  mine : mine,
-  _minesDetonate : _minesDetonate,
-  mineDetonate : mineDetonate,
-  mineFinit : mineFinit,
+  later : later,
+  _laterActualize : _laterActualize,
+  laterActualize : laterActualize,
+  laterFinit : laterFinit,
 
   // relationships
 
@@ -589,6 +623,7 @@ var Proto =
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
   Forbids : Forbids,
 
 }
@@ -604,13 +639,11 @@ _.classMake
 
 _.assert( Self.prototype.init === init );
 
-//
-
-_[ Self.nameShort ] = Self;
-
 // --
 // export
 // --
+
+_[ Self.nameShort ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

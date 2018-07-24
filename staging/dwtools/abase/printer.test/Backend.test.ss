@@ -63,12 +63,12 @@ function colorConsole( test )
 {
 
   var got;
-  var onWrite = function( args )
+  var onTransformEnd = function( args )
   {
     debugger;
     got = args.outputForTerminal[ 0 ];
   };
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   test.case = 'case1: dark red text';
   logger.log( _.color.strFormatForeground( 'text', 'dark red') );
@@ -114,7 +114,7 @@ function colorConsole( test )
 
   //
 
-  test.case = 'coloring using directive in log';
+  test.case = 'outputGray using directive in log';
 
   /**/
 
@@ -162,7 +162,7 @@ function colorConsole( test )
 
   //
 
-  test.case = 'coloring using setter';
+  test.case = 'outputGray using setter';
 
   /**/
 
@@ -196,15 +196,9 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
-  test.shouldThrowError( () =>
-  {
-    logger.foregroundColor = 'xxx';
-  })
-  test.shouldThrowError( () =>
-  {
-    logger.backgroundColor = 'xxx';
-  })
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  logger.foregroundColor = 'xxx';
+  logger.backgroundColor = 'xxx';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
@@ -214,7 +208,7 @@ function colorConsole( test )
   //
 
   test.case = 'stacking colors';
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   /**/
 
@@ -257,12 +251,12 @@ function colorConsole( test )
 
   //other
 
-  test.case = 'coloring directive'
+  test.case = 'outputGray directive'
 
   /**/
 
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
-  logger.log( '#coloring : 0#' );
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  logger.log( '#outputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#background : dark yellow#' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
@@ -270,15 +264,15 @@ function colorConsole( test )
   logger.log( 'text' );
   var expected = 'text';
   test.identical( _escaping( got ), _escaping( expected ) );
-  logger.log( '#coloring : 1#' );
+  logger.log( '#outputGray : 0#' );
   logger.log( 'text' );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
   test.identical( _escaping( got ), _escaping( expected ) );
 
-  /* stacking colors even if coloring is disabled */
+  /* stacking colors even if outputGray is enabled */
 
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
-  logger.log( '#coloring : 0#' );
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  logger.log( '#outputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#foreground : dark blue#' );
   logger.log( '#background : dark red#' );
@@ -294,14 +288,14 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   // test.identical( 0, 1 );
-  //trackingColor problem, logger of test suit cant override it value correctly, directive is inside of it output
+  //inputGray problem, logger of test suit cant override it value correctly, directive is inside of it output
 
-  test.case = 'trackingColor directive'
+  test.case = 'inputGray directive'
 
   /**/
 
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
-  logger.log( '#trackingColor : 0#' );
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  logger.log( '#inputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#foreground : dark blue#' );
   logger.log( '#background : dark red#' );
@@ -311,17 +305,17 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, onWrite : onWrite });
-  logger.log( '#trackingColor : 0#' );
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  logger.log( '#inputGray : 1#' );
   logger.log( '#foreground : dark red#' );
-  logger.log( '#trackingColor : 1#' );
+  logger.log( '#inputGray : 0#' );
   logger.log( '#foreground : dark red#' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
   logger.log( 'text' );
   var expected = '\u001b[31mtext\u001b[39;0m';
   test.identical( _escaping( got ), _escaping( expected ) );
   // test.identical( 0, 1 );
-  //trackingColor problem, logger of test suit cant override it value correctly, directive is inside of it output
+  //inputGray problem, logger of test suit cant override it value correctly, directive is inside of it output
 
 }
 
