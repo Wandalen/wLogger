@@ -82,6 +82,9 @@ function _transformBegin( o )
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
+  if( self.onTransformBegin )
+  o = self.onTransformBegin( o );
+
   if( !self.verboseEnough() )
   return;
 
@@ -89,9 +92,6 @@ function _transformBegin( o )
 
   if( !o )
   return;
-
-  if( self.onTransformEnd )
-  o = self.onTransformEnd( o );
 
   if( !o )
   return;
