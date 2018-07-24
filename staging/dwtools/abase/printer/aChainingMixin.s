@@ -730,8 +730,6 @@ function consoleBar( o )
   let self = this;
   o = _.routineOptions( consoleBar, arguments );
 
-  debugger;
-
   if( !o.barPrinter )
   o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
   if( !o.outputPrinter && this.instanceIs() )

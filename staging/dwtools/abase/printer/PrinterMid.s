@@ -85,13 +85,13 @@ function _transformBegin( o )
   if( self.onTransformBegin )
   o = self.onTransformBegin( o );
 
+  if( !o )
+  return;
+
   if( !self.verboseEnough() )
   return;
 
   o = Parent.prototype._transformBegin.call( self, o );
-
-  if( !o )
-  return;
 
   if( !o )
   return;
