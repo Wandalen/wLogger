@@ -772,6 +772,9 @@ function _colorSet( layer, color )
   symbol = symbolForBackground;
   else _.assert( 0, 'unexpected' );
 
+  if( _.strIs( color ) )
+  color = color.trim();
+
   if( !_.color )
   {
     self[ symbol ] = null;
