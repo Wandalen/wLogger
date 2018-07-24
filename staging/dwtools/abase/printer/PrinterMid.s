@@ -112,7 +112,7 @@ function _transformEnd( o )
   if( self.onTransformEnd )
   self.onTransformEnd( o );
 
-  o = Parent.prototype._transformBegin.call( self, o );
+  o = Parent.prototype._transformEnd.call( self, o );
 
   if( !o )
   return;
