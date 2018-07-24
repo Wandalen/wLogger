@@ -93,10 +93,8 @@ _.classMake
   extend : Proto,
 });
 
-debugger;
 _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
-debugger;
 
 _[ Self.nameShort ] = Self;
 

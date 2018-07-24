@@ -1261,8 +1261,6 @@ _.classMake
 
 _[ Self.nameShort ] = Self;
 
-debugger;
-
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
 delete require.cache[ module.id ];
