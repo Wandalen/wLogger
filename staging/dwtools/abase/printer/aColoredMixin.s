@@ -104,9 +104,12 @@ function _transformActHtml( o )
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
   _.assert( o.outputForPrinter.length === 1 );
-  _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
-  _.assert( _.routineIs( o.onInlined ) );
-  _.routineOptions( _transformActHtml, o );
+
+  // _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
+  // _.assert( _.routineIs( o.onInlined ) );
+
+  var options = _.mapOnly( o, _transformActHtml.defaults );
+  _.routineOptions( _transformActHtml, options );
 
   var result = '';
   var spanCount = 0;
@@ -117,7 +120,7 @@ function _transformActHtml( o )
     if( _.arrayIs( splitted[ i ] ) )
     {
       var style = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ];
+      var color = splitted[ i ][ 1 ].trim();
 
       if( color && color !== 'default' )
       {
@@ -146,14 +149,14 @@ function _transformActHtml( o )
 
       if( color === 'default' && spanCount )
       {
-        result += `</${o.tag}>`;
+        result += `</${options.tag}>`;
         spanCount--;
       }
       else
       {
         var style = '';
 
-        if( o.compact )
+        if( options.compact )
         {
           if( fg )
           style += `color:${ _.color.colorToRgbaHtml( fg ) };`;
@@ -169,9 +172,9 @@ function _transformActHtml( o )
         }
 
         if( style.length )
-        result += `<${o.tag} style='${style}'>`;
+        result += `<${options.tag} style='${style}'>`;
         else
-        result += `<${o.tag}>`;
+        result += `<${options.tag}>`;
 
         spanCount++;
       }
@@ -180,9 +183,9 @@ function _transformActHtml( o )
     {
       var text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
 
-      if( !o.compact && !spanCount )
+      if( !options.compact && !spanCount )
       {
-        result += `<${o.tag}>${text}</${o.tag}>`;
+        result += `<${options.tag}>${text}</${options.tag}>`;
       }
       else
       result += text;
@@ -198,7 +201,7 @@ function _transformActHtml( o )
 
 _transformActHtml.defaults =
 {
-  src : null,
+  // src : null,
   tag : 'span',
   compact : true,
 }
