@@ -122,6 +122,8 @@ function _transformAct( o )
   o.outputForPrinter = [ o.pure ];
   o.outputForTerminal = [ o.pure ];
 
+  /* !!! remove later */
+
   _.accessorForbid
   ({
     object : o,

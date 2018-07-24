@@ -409,19 +409,19 @@ function _transformSplit( o )
     var directive = split[ 0 ];
     var value = split[ 1 ];
     var input = true;
-    var output = true;
+    // var output = true;
 
     if( directive === 'inputRaw' )
-    inputRaw += _.boolFrom( value ) ? +1 : -1;
+    inputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
     else if( inputRaw )
     input = false;
     else if( inputGray && _.arrayHas( self.DirectiveColoring, directive ) )
     input = false;
 
-    if( outputRaw )
-    output = false;
-    else if( outputGray && _.arrayHas( self.DirectiveColoring, directive ) )
-    output = false;
+    // if( outputRaw )
+    // output = false;
+    // else if( outputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    // output = false;
 
     if( !input )
     {
@@ -431,11 +431,11 @@ function _transformSplit( o )
     }
 
     if( directive === 'inputGray' )
-    inputGray += _.boolFrom( value ) ? +1 : -1;
+    inputGray += _.boolFrom( value.trim() ) ? +1 : -1;
     if( directive === 'outputRaw' )
-    outputRaw += _.boolFrom( value ) ? +1 : -1;
+    outputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
     if( directive === 'outputGray' )
-    outputGray += _.boolFrom( value ) ? +1 : -1;
+    outputGray += _.boolFrom( value.trim() ) ? +1 : -1;
 
   });
 
@@ -507,7 +507,7 @@ function _directiveApply( directive )
 
   if( name === 'inputRaw' )
   {
-    self.inputRaw = _.boolFrom( value );
+    self.inputRaw = _.boolFrom( value.trim() );
     return true;
   }
 
@@ -530,17 +530,17 @@ function _directiveApply( directive )
 
   if( name === 'outputGray' )
   {
-    self.outputGray = _.boolFrom( value );
+    self.outputGray = _.boolFrom( value.trim() );
     return true;
   }
   else if( name === 'inputGray' )
   {
-    self.inputGray = _.boolFrom( value );
+    self.inputGray = _.boolFrom( value.trim() );
     return true;
   }
   else if( name === 'outputRaw' )
   {
-    self.outputRaw = _.boolFrom( value );
+    self.outputRaw = _.boolFrom( value.trim() );
     return true;
   }
 
@@ -568,6 +568,9 @@ function _transformAct( original )
 
     if( !self.outputGray && _.color ) /* xxx */
     self._transformColor( o );
+
+    if( _.strHas( o.pure, '1832' ) )
+    debugger;
 
     self._transformSplit( o );
 
@@ -912,6 +915,9 @@ function _inputGraySet( src )
   if( src < 0 )
   debugger;
 
+  if( src < 0 )
+  src = 0;
+
   self[ inputGraySymbol ] = src;
 
 }
@@ -928,6 +934,9 @@ function _outputGraySet( src )
 
   if( src < 0 )
   debugger;
+
+  if( src < 0 )
+  src = 0;
 
   self[ outputGraySymbol ] = src;
 
@@ -946,6 +955,9 @@ function _inputRawSet( src )
   if( src < 0 )
   debugger;
 
+  if( src < 0 )
+  src = 0;
+
   self[ inputRawSymbol ] = src;
 
 }
@@ -962,6 +974,9 @@ function _outputRawSet( src )
 
   if( src < 0 )
   debugger;
+
+  if( src < 0 )
+  src = 0;
 
   self[ outputRawSymbol ] = src;
 
