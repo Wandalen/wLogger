@@ -150,8 +150,14 @@ function currentColor( test )
 
   test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger( { output : fakeConsole } );
-  logger.foregroundColor = 'd';
-  logger.backgroundColor = 'd';
+  test.shouldThrowError( () =>
+  {
+    logger.foregroundColor = 'd';
+  })
+  test.shouldThrowError( () =>
+  {
+    logger.backgroundColor = 'd';
+  })
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
@@ -310,69 +316,78 @@ function coloredToHtml( test )
   var fg = _.color.strFormatForeground;
   var bg = _.color.strFormatBackground;
 
+  var got;
+
+  function onTransformEnd( o )
+  {
+    got = o.outputForTerminal[ 0 ];
+  }
+
+  var l = new _.Logger({ output : null, onTransformEnd : onTransformEnd, writingToHtml : 1 })
+
   test.case = 'default settings';
 
   var src = 'simple text';
-  var got = _.Logger.coloredToHtml( src );
+  l.log( src );
   var expected = 'simple text';
   test.identical( got, expected );
 
   var src = fg( 'red text', 'red' );
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='color:rgba( 255, 0, 0, 1 );'>red text</span>';
+  l.log( src );
+  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span>";
   test.identical( got, expected );
 
-  var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>';
+  var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ].join( '' );
+  l.log( src );
+  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
-  var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
-  var got = _.Logger.coloredToHtml( src );
-  var expected = 'some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text';
+  var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ].join( '' );
+  l.log( src );
+  var expected = "some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text";
   test.identical( got, expected );
 
   var src = fg( '\nred text' + fg( 'yellow text', 'yellow' ) + 'red text', 'red' );
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='color:rgba( 255, 0, 0, 1 );'><br>red text<span style='color:rgba( 255, 255, 0, 1 );'>yellow text</span>red text</span>';
+  l.log( src );
+  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'><br>red text<span style='color:rgba( 255, 255, 0, 1 );'>yellow text</span>red text</span>";
   test.identical( got, expected );
 
   var src = bg( '\nred background' + bg( 'yellow background', 'yellow' ) + 'red background', 'red' );
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='background:rgba( 255, 0, 0, 1 );'><br>red background<span style='background:rgba( 255, 255, 0, 1 );'>yellow background</span>red background</span>';
+  l.log( src );
+  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'><br>red background<span style='background:rgba( 255, 255, 0, 1 );'>yellow background</span>red background</span>";
   test.identical( got, expected );
 
   var src = '#background : red#red#background : blue#blue#background : default#red#background : default#';
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>';
+  l.log( src );
+  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
   var src = _.color.strFormatBackground( 'red' + _.color.strFormatBackground( 'blue','blue' ) + 'red','red' );
-  var got = _.Logger.coloredToHtml( src );
-  var expected = '<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>';
+  l.log( src );
+  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
-  test.case = 'compact mode disabled';
+  // test.case = 'compact mode disabled';
 
-  var src = 'simple text';
-  var got = _.Logger.coloredToHtml({ src : src, compact : false });
-  var expected = '<span>simple text</span>';
-  test.identical( got, expected );
+  // var src = 'simple text';
+  // l.log({ src : src, compact : false });
+  // var expected = "<span>simple text</span>";
+  // test.identical( got, expected );
 
-  var src = fg( 'red text', 'red' );
-  var got = _.Logger.coloredToHtml({ src : src, compact : false });
-  var expected = '<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span>';
-  test.identical( got, expected );
+  // var src = fg( 'red text', 'red' );
+  // l.log({ src : src, compact : false });
+  // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span>";
+  // test.identical( got, expected );
 
-  var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
-  var got = _.Logger.coloredToHtml({ src : src, compact : false });
-  var expected = '<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>';
-  test.identical( got, expected );
+  // var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
+  // l.log({ src : src, compact : false });
+  // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
+  // test.identical( got, expected );
 
-  var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
-  var got = _.Logger.coloredToHtml({ src : src, compact : false });
-  var expected = '<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>';
-  test.identical( got, expected );
+  // var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
+  // l.log({ src : src, compact : false });
+  // var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
+  // test.identical( got, expected );
 }
 
 //
@@ -490,7 +505,7 @@ function diagnostic( test )
 
   _.Logger.diagnosingColor = 0;
 
-  l.foregroundColor = 'dark black';
+  l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
   var got = l._diagnosingColorCheck();
   test.identical( got.ill, undefined  );
@@ -499,7 +514,7 @@ function diagnostic( test )
 
   _.Logger.diagnosingColor = 1;
 
-  l.foregroundColor = 'dark black';
+  l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
   var got = l._diagnosingColorCheck();
   test.identical( got.ill, true );
@@ -563,6 +578,92 @@ function diagnostic( test )
 
 //
 
+function stateChangingValue( test )
+{
+
+  test.open( 'inputGray' );
+  runFor( 'inputGray' );
+  test.close( 'inputGray' );
+
+  test.open( 'outputGray' );
+  runFor( 'outputGray' );
+  test.close( 'outputGray' );
+
+  test.open( 'inputRaw' );
+  runFor( 'inputRaw' );
+  test.close( 'inputRaw' );
+
+  test.open( 'outputRaw' );
+  runFor( 'outputRaw' );
+  test.close( 'outputRaw' );
+
+  function runFor( state )
+  {
+
+    test.case = state + ': ' + 'number';
+    var l = new _.Logger();
+    l[ state ] = 1;
+    test.identical( l[ state ], 1 );
+    l[ state ] = 1;
+    test.identical( l[ state ], 1 );
+    l[ state ] = 0;
+    test.identical( l[ state ], 0 );
+    l[ state ] = -1;
+    test.identical( l[ state ], 0 );
+
+    //
+
+    test.case = state + ': ' + 'bool';
+    var l = new _.Logger();
+    var prev = l[ state ];
+    l[ state ] = true;
+    test.identical( l[ state ], prev + 1 );
+    var prev = l[ state ];
+    l[ state ] = false;
+    test.identical( l[ state ], prev - 1 );
+
+    //
+
+    test.case = state + ': ' + 'as directive, number';
+    var l = new _.Logger();
+    l.log( `#${state}:1#` )
+    test.identical( l[ state ], 1 );
+    l.log( `#${state}:1#` )
+    test.identical( l[ state ], 2 );
+    l.log( `#${state}:0#` )
+    test.identical( l[ state ], 1 );
+    l.log( `#${state}:-1#` )
+    test.identical( l[ state ], 2 );
+
+    //
+
+    test.case = state + ': ' + 'as directive, bool';
+    var l = new _.Logger();
+    l.log( `#${state}:true#` )
+    test.identical( l[ state ], 1 );
+    l.log( `#${state}:true#` )
+    test.identical( l[ state ], 2 );
+    l.log( `#${state}:false#` )
+    test.identical( l[ state ], 1 );
+    l.log( `#${state}:false#` )
+    test.identical( l[ state ], 0 );
+
+    //
+
+
+    if( !Config.debug )
+    return
+
+    test.case = state + ': ' + 'string';
+    test.shouldThrowError( () =>
+    {
+      l[ state ] = '1';
+    })
+  }
+}
+
+//
+
 function coloringNoColor( test )
 {
   /* _.color.strFormat is used by tester, can't disable color */
@@ -598,6 +699,8 @@ var Self =
   silencing : 1,
   /* verbosity : 1, */
 
+  routineTimeOut : 9999999,
+
   tests :
   {
     currentColor : currentColor,
@@ -608,6 +711,7 @@ var Self =
     outputGray : outputGray,
     emptyLines : emptyLines,
     diagnostic : diagnostic,
+    stateChangingValue : stateChangingValue,
     // coloringNoColor : coloringNoColor, /* needs fix */
 
   },

@@ -104,9 +104,12 @@ function _transformActHtml( o )
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
   _.assert( o.outputForPrinter.length === 1 );
-  _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
-  _.assert( _.routineIs( o.onInlined ) );
-  _.routineOptions( _transformActHtml, o );
+
+  // _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
+  // _.assert( _.routineIs( o.onInlined ) );
+
+  var options = _.mapOnly( o, _transformActHtml.defaults );
+  _.routineOptions( _transformActHtml, options );
 
   let result = '';
   let spanCount = 0;
@@ -117,7 +120,7 @@ function _transformActHtml( o )
     if( _.arrayIs( splitted[ i ] ) )
     {
       let style = splitted[ i ][ 0 ];
-      let color = splitted[ i ][ 1 ];
+      let color = splitted[ i ][ 1 ].trim();
 
       if( color && color !== 'default' )
       {
@@ -146,14 +149,14 @@ function _transformActHtml( o )
 
       if( color === 'default' && spanCount )
       {
-        result += `</${o.tag}>`;
+        result += `</${options.tag}>`;
         spanCount--;
       }
       else
       {
         let style = '';
 
-        if( o.compact )
+        if( options.compact )
         {
           if( fg )
           style += `color:${ _.color.colorToRgbaHtml( fg ) };`;
@@ -169,9 +172,9 @@ function _transformActHtml( o )
         }
 
         if( style.length )
-        result += `<${o.tag} style='${style}'>`;
+        result += `<${options.tag} style='${style}'>`;
         else
-        result += `<${o.tag}>`;
+        result += `<${options.tag}>`;
 
         spanCount++;
       }
@@ -180,9 +183,9 @@ function _transformActHtml( o )
     {
       let text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
 
-      if( !o.compact && !spanCount )
+      if( !options.compact && !spanCount )
       {
-        result += `<${o.tag}>${text}</${o.tag}>`;
+        result += `<${options.tag}>${text}</${options.tag}>`;
       }
       else
       result += text;
@@ -198,7 +201,7 @@ function _transformActHtml( o )
 
 _transformActHtml.defaults =
 {
-  src : null,
+  // src : null,
   tag : 'span',
   compact : true,
 }
@@ -755,6 +758,9 @@ function _colorSet( layer, color )
   symbol = symbolForBackground;
   else _.assert( 0, 'unexpected' );
 
+  if( _.strIs( color ) )
+  color = color.trim();
+
   if( !_.color )
   {
     self[ symbol ] = null;
@@ -795,8 +801,11 @@ function _colorSet( layer, color )
       color = _.color.rgbaFromTry( originalName, null );
     }
 
-    let originalValue = color;
-    let currentName;
+    if( !color )
+    throw _.err( 'Can\'t set', layer, 'color.', 'Unknown color name:', _.strQuote( originalName ) );
+
+    var originalValue = color;
+    var currentName;
 
     if( color )
     {
@@ -1112,18 +1121,34 @@ let shellColorCodes =
 
 let PoisonedColorCombination =
 [
-  { fg : 'black', bg : 'light yellow', platform : 'win32' },
-  { fg : 'black', bg : 'yellow', platform : 'win32' },
-  { fg : 'black', bg : 'blue', platform : 'win32' },
+
+  { fg : 'white', bg : 'yellow', platform : 'win32' },
   { fg : 'green', bg : 'cyan', platform : 'win32' },
   { fg : 'red', bg : 'magenta', platform : 'win32' },
-  { fg : 'blue', bg : 'black', platform : 'win32' },
-  { fg : 'yellow', bg : 'cyan', platform : 'win32' },
-  { fg : 'cyan', bg : 'yellow', platform : 'win32' },
+  { fg : 'yellow', bg : 'white', platform : 'win32' },
   { fg : 'cyan', bg : 'green', platform : 'win32' },
+  { fg : 'cyan', bg : 'yellow', platform : 'win32' },
   { fg : 'magenta', bg : 'red', platform : 'win32' },
-  { fg : 'light black', bg : 'light yellow', platform : 'win32' },
-  { fg : 'light black', bg : 'yellow', platform : 'win32' },
+  { fg : 'bright black', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark blue', bg : 'blue', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark green', bg : 'magenta', platform : 'win32' },
+  { fg : 'dark white', bg : 'green', platform : 'win32' },
+  { fg : 'dark white', bg : 'cyan', platform : 'win32' },
+  { fg : 'green', bg : 'dark white', platform : 'win32' },
+  { fg : 'blue', bg : 'dark blue', platform : 'win32' },
+  { fg : 'cyan', bg : 'dark white', platform : 'win32' },
+  { fg : 'bright black', bg : 'dark yellow', platform : 'win32' },
+  { fg : 'bright black', bg : 'dark cyan', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'bright black', platform : 'win32' },
+  { fg : 'dark yellow', bg : 'dark cyan', platform : 'win32' },
+  { fg : 'dark red', bg : 'dark manenta', platform : 'win32' },
+  { fg : 'dark magenta', bg : 'dark red', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'bright black', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'dark yellow', platform : 'win32' },
+  { fg : 'dark cyan', bg : 'dark green', platform : 'win32' },
+  { fg : 'dark green', bg : 'dark cyan', platform : 'win32' },
 
   /* */
 
