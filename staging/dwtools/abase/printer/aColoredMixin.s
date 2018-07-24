@@ -1,8 +1,8 @@
 (function _aColoredMixin_s_() {
 
 'use strict';
-/* xxxx #fg:red# */
-var isBrowser = true;
+
+let isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
@@ -25,7 +25,7 @@ if( typeof module !== 'undefined' )
 
   isBrowser = false;
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   try
   {
@@ -39,10 +39,10 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wPrinterColoredMixin( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wPrinterColoredMixin( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1 );
   if( !( this instanceof Self ) )
@@ -63,7 +63,7 @@ _.assert( _.strExtractInlined );
 
 function _stackPush( layer, color )
 {
-  var self = this;
+  let self = this;
 
   if( !self._colorsStack )
   self._colorsStack = { 'foreground' : [], 'background' : [] };
@@ -75,7 +75,7 @@ function _stackPush( layer, color )
 
 function _stackPop( layer )
 {
-  var self = this;
+  let self = this;
 
   return self._colorsStack[ layer ].pop();
 }
@@ -84,7 +84,7 @@ function _stackPop( layer )
 
 function _stackIsNotEmpty( layer )
 {
-  var self = this;
+  let self = this;
 
   if( self._colorsStack && self._colorsStack[ layer ].length )
   return true;
@@ -98,7 +98,7 @@ function _stackIsNotEmpty( layer )
 
 function _transformActHtml( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
@@ -108,20 +108,20 @@ function _transformActHtml( o )
   _.assert( _.routineIs( o.onInlined ) );
   _.routineOptions( _transformActHtml, o );
 
-  var result = '';
-  var spanCount = 0;
-  var splitted = o.outputSplitted;
+  let result = '';
+  let spanCount = 0;
+  let splitted = o.outputSplitted;
 
-  for( var i = 0; i < splitted.length; i++ )
+  for( let i = 0; i < splitted.length; i++ )
   {
     if( _.arrayIs( splitted[ i ] ) )
     {
-      var style = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ];
+      let style = splitted[ i ][ 0 ];
+      let color = splitted[ i ][ 1 ];
 
       if( color && color !== 'default' )
       {
-        var color = _.color.rgbaFromTry( color, null );
+        let color = _.color.rgbaFromTry( color, null );
         if( color )
         color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap })
       }
@@ -135,8 +135,8 @@ function _transformActHtml( o )
         self.backgroundColor = color;
       }
 
-      var fg = self.foregroundColor;
-      var bg = self.backgroundColor;
+      let fg = self.foregroundColor;
+      let bg = self.backgroundColor;
 
       if( !fg || fg === 'default' )
       fg = null;
@@ -151,7 +151,7 @@ function _transformActHtml( o )
       }
       else
       {
-        var style = '';
+        let style = '';
 
         if( o.compact )
         {
@@ -178,7 +178,7 @@ function _transformActHtml( o )
     }
     else
     {
-      var text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
+      let text = _.strReplaceAll( splitted[ i ], '\n', '<br>' );
 
       if( !o.compact && !spanCount )
       {
@@ -207,18 +207,18 @@ _transformActHtml.defaults =
 
 function _transformAct_nodejs( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
-  var result = '';
-  var splitted = o.outputSplitted;
+  let result = '';
+  let splitted = o.outputSplitted;
 
   splitted.forEach( function( split )
   {
-    var output = !!_.color;
+    let output = !!_.color;
 
     if( _.arrayIs( split ) )
     {
@@ -269,14 +269,14 @@ function _transformAct_nodejs( o )
 
 function _transformAct_browser( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
-  var result = [ '' ];
-  var splitted = o.outputSplitted;
+  let result = [ '' ];
+  let splitted = o.outputSplitted;
 
   if( splitted.length === 1 && !self._isStyled )
   {
@@ -284,7 +284,7 @@ function _transformAct_browser( o )
     return splitted;
   }
 
-  for( var i = 0; i < splitted.length; i++ )
+  for( let i = 0; i < splitted.length; i++ )
   {
     if( _.arrayIs( splitted[ i ] ) )
     {
@@ -303,8 +303,8 @@ function _transformAct_browser( o )
       }
       else
       {
-        var fg = self.foregroundColor || 'none';
-        var bg = self.backgroundColor || 'none';
+        let fg = self.foregroundColor || 'none';
+        let bg = self.backgroundColor || 'none';
 
         result[ 0 ] += `%c${ splitted[ i ] }`;
         result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
@@ -321,16 +321,16 @@ function _transformAct_browser( o )
 
 function _transformActWithoutColors( o )
 {
-  var self = this;
-  var result = '';
+  let self = this;
+  let result = '';
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
-  var splitted = o.outputSplitted;
+  let splitted = o.outputSplitted;
 
-  for( var i = 0 ; i < splitted.length ; i++ )
+  for( let i = 0 ; i < splitted.length ; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
     result += splitted[ i ];
@@ -345,7 +345,7 @@ function _transformActWithoutColors( o )
 
 function _transformColor( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
 
@@ -366,7 +366,7 @@ function _transformColor( o )
   if( self.attributes.head || self.attributes.tail )
   if( _.strStrip( o.pure ) )
   {
-    var reserve = self.verbosityReserve();
+    let reserve = self.verbosityReserve();
     if( self.attributes.head && reserve > 1 )
     o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'head' );
     else if( self.attributes.tail && reserve > 1 )
@@ -379,8 +379,8 @@ function _transformColor( o )
 
 function _transformSplit( o )
 {
-  var self = this;
-  var result = [ '' ];
+  let self = this;
+  let result = [ '' ];
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
@@ -392,24 +392,23 @@ function _transformSplit( o )
     return;
   }
 
-  var splitted = o.outputSplitted = self._split( o.outputForPrinter[ 0 ] );
+  let splitted = o.outputSplitted = self._split( o.outputForPrinter[ 0 ] );
 
-  var inputRaw = self.inputRaw;
-  var inputGray = self.inputGray;
-  var outputRaw = self.outputRaw;
-  var outputGray = self.outputGray;
+  let inputRaw = self.inputRaw;
+  let inputGray = self.inputGray;
+  let outputRaw = self.outputRaw;
+  let outputGray = self.outputGray;
 
   splitted.forEach( ( split,i ) =>
   {
-    var split = splitted[ i ];
 
     if( !_.arrayIs( split ) )
     return;
 
-    var directive = split[ 0 ];
-    var value = split[ 1 ];
-    var input = true;
-    // var output = true;
+    let directive = split[ 0 ];
+    let value = split[ 1 ];
+    let input = true;
+    // let output = true;
 
     if( directive === 'inputRaw' )
     inputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
@@ -449,10 +448,10 @@ function _transformSplit( o )
 
 function _join( splitted )
 {
-  var self = this;
+  let self = this;
   _.assert( _.arrayIs( splitted ) );
 
-  var result = '';
+  let result = '';
   splitted.forEach( ( split,i ) =>
   {
     if( _.strIs( split ) )
@@ -469,9 +468,9 @@ function _join( splitted )
 
 function _split( src )
 {
-  var self = this;
+  let self = this;
   _.assert( _.strIs( src ) );
-  var splitted = _.strExtractInlined
+  let splitted = _.strExtractInlined
   ({
     src : src,
     onInlined : self._splitHandle.bind( self ),
@@ -485,8 +484,8 @@ function _split( src )
 
 function _splitHandle( split )
 {
-  var self = this;
-  var parts = split.split( ':' );
+  let self = this;
+  let parts = split.split( ':' );
   if( parts.length === 2 )
   {
     parts[ 0 ] = parts[ 0 ].trim();
@@ -500,10 +499,10 @@ function _splitHandle( split )
 
 function _directiveApply( directive )
 {
-  var self = this;
-  var handled = 0;
-  var name = directive[ 0 ];
-  var value = directive[ 1 ];
+  let self = this;
+  let handled = 0;
+  let name = directive[ 0 ];
+  let value = directive[ 1 ];
 
   if( name === 'inputRaw' )
   {
@@ -554,7 +553,7 @@ function _transformAct( original )
 
   return function _transformAct( o )
   {
-    var self = this;
+    let self = this;
 
     _.assert( _.mapIs( o ) );
 
@@ -566,35 +565,19 @@ function _transformAct( original )
     _.assert( o.outputForPrinter.length === 1 )
     _.assert( arguments.length === 1, 'expects single argument' );
 
-    if( !self.outputGray && _.color ) /* xxx */
+    if( !self.outputGray && _.color )
     self._transformColor( o );
 
-    if( _.strHas( o.pure, '1832' ) )
-    debugger;
-
-    self._transformSplit( o );
+    self._transformSplit( o ); /* xxx */
 
     /* */
 
-    // if( !self.outputRaw && !self.outputGray && _.color )
-    {
-
-      // if( !self.Self.outputRaw )
-      // if( !self.outputRaw )
-      {
-        if( self.writingToHtml )
-        self._transformActHtml( o );
-        else if( Config.platform === 'nodejs' )
-        self._transformAct_nodejs( o );
-        else if( Config.platform === 'browser' )
-        self._transformAct_browser( o );
-      }
-
-    }
-    // else
-    // {
-    //   self._transformActWithoutColors( o ); xxx
-    // }
+    if( self.writingToHtml )
+    self._transformActHtml( o );
+    else if( Config.platform === 'nodejs' )
+    self._transformAct_nodejs( o );
+    else if( Config.platform === 'browser' )
+    self._transformAct_browser( o );
 
     _.assert( _.arrayIs( o.outputForPrinter ) );
 
@@ -607,8 +590,8 @@ function _transformAct( original )
 
 function _rgbToCode_nodejs( rgb, isBackground )
 {
-  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
-  var code = shellColorCodes[ name ];
+  let name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  let code = shellColorCodes[ name ];
 
   _.assert( _.numberIs( code ), 'nothing found for color: ', name );
 
@@ -622,7 +605,7 @@ function _rgbToCode_nodejs( rgb, isBackground )
 
 function _diagnosingColorCheck()
 {
-  var self = this;
+  let self = this;
 
   if( isBrowser )
   return;
@@ -632,15 +615,15 @@ function _diagnosingColorCheck()
 
   /* qqq : ??? */
 
-  var stackFg = self._diagnosingColorsStack[ 'foreground' ];
-  var stackBg = self._diagnosingColorsStack[ 'background' ];
+  let stackFg = self._diagnosingColorsStack[ 'foreground' ];
+  let stackBg = self._diagnosingColorsStack[ 'background' ];
 
-  var fg = stackFg[ stackFg.length - 1 ];
-  var bg = stackBg[ stackBg.length - 1 ];
+  let fg = stackFg[ stackFg.length - 1 ];
+  let bg = stackBg[ stackBg.length - 1 ];
 
   /* */
 
-  var result = {};
+  let result = {};
 
   if( self.diagnosingColor )
   result.ill = self._diagnosingColorIll( fg, bg );
@@ -656,12 +639,12 @@ function _diagnosingColorCheck()
 
 function _diagnosingColorIll( fg, bg )
 {
-  var self = this;
-  var ill = false;
+  let self = this;
+  let ill = false;
 
-  for( var i = 0; i < PoisonedColorCombination.length; i++ )
+  for( let i = 0; i < PoisonedColorCombination.length; i++ )
   {
-    var combination = PoisonedColorCombination[ i ];
+    let combination = PoisonedColorCombination[ i ];
     if( combination.fg === fg.originalName && combination.bg === bg.originalName )
     // if( combination.platform === process.platform )
     {
@@ -688,14 +671,14 @@ function _diagnosingColorIll( fg, bg )
 
 function _diagnosingColorCollapse( fg, bg )
 {
-  var self = this;
-  var collapse = false;
+  let self = this;
+  let collapse = false;
 
   if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
   {
     if( fg.originalName !== bg.originalName )
     {
-      var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
+      let diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
       if( diff <= 0.25 )
       collapse = true;
     }
@@ -726,7 +709,7 @@ function _diagnosingColorCollapse( fg, bg )
 
 function _foregroundColorGet()
 {
-  var self = this;
+  let self = this;
   return self[ symbolForForeground ];
 }
 
@@ -734,7 +717,7 @@ function _foregroundColorGet()
 
 function _backgroundColorGet()
 {
-  var self = this;
+  let self = this;
   return self[ symbolForBackground ];
 }
 
@@ -742,8 +725,8 @@ function _backgroundColorGet()
 
 function _foregroundColorSet( color )
 {
-  var self = this;
-  var layer = 'foreground';
+  let self = this;
+  let layer = 'foreground';
 
   self._colorSet( layer, color );
 }
@@ -752,8 +735,8 @@ function _foregroundColorSet( color )
 
 function _backgroundColorSet( color )
 {
-  var self = this;
-  var layer = 'background';
+  let self = this;
+  let layer = 'background';
 
   self._colorSet( layer, color );
 }
@@ -762,9 +745,9 @@ function _backgroundColorSet( color )
 
 function _colorSet( layer, color )
 {
-  var self = this;
-  var symbol;
-  var diagnosticInfo;
+  let self = this;
+  let symbol;
+  let diagnosticInfo;
 
   if( layer === 'foreground' )
   symbol = symbolForForeground;
@@ -789,8 +772,8 @@ function _colorSet( layer, color )
   {
     // if( color === 'light green' )
     // debugger;
-    var keys = _.mapOwnKeys( map );
-    for( var i = 0; i < keys.length; i++ )
+    let keys = _.mapOwnKeys( map );
+    for( let i = 0; i < keys.length; i++ )
     if( _.arrayIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
 
@@ -800,7 +783,7 @@ function _colorSet( layer, color )
 
   if( color && color !== 'default' )
   {
-    var originalName = color;
+    let originalName = color;
     if( isBrowser )
     {
       color = _.color.rgbaFromTry( color, null );
@@ -812,8 +795,8 @@ function _colorSet( layer, color )
       color = _.color.rgbaFromTry( originalName, null );
     }
 
-    var originalValue = color;
-    var currentName;
+    let originalValue = color;
+    let currentName;
 
     if( color )
     {
@@ -874,7 +857,7 @@ function _colorSet( layer, color )
 
 function styleSet( style )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( style ) );
@@ -886,7 +869,7 @@ function styleSet( style )
     return;
   }
 
-  var style = _.color.strColorStyle( style );
+  let style = _.color.strColorStyle( style );
 
   if( !style )
   return;
@@ -903,7 +886,7 @@ function styleSet( style )
 
 function _inputGraySet( src )
 {
-  var self = this;
+  let self = this;
   _.assert( _.boolLike( src ) );
 
   if( _.boolIs( src ) )
@@ -923,7 +906,7 @@ function _inputGraySet( src )
 
 function _outputGraySet( src )
 {
-  var self = this;
+  let self = this;
   _.assert( _.boolLike( src ) );
 
   if( _.boolIs( src ) )
@@ -943,7 +926,7 @@ function _outputGraySet( src )
 
 function _inputRawSet( src )
 {
-  var self = this;
+  let self = this;
   _.assert( _.boolLike( src ) );
 
   if( _.boolIs( src ) )
@@ -963,7 +946,7 @@ function _inputRawSet( src )
 
 function _outputRawSet( src )
 {
-  var self = this;
+  let self = this;
   _.assert( _.boolLike( src ) );
 
   if( _.boolIs( src ) )
@@ -985,7 +968,7 @@ function _outputRawSet( src )
 
 function colorFormat( src, format )
 {
-  var self = this;
+  let self = this;
   _.assert( arguments.length === 2 );
   if( self.outputGray || !_.color || !_.color.strFormat )
   return src;
@@ -996,7 +979,7 @@ function colorFormat( src, format )
 
 function colorBg( src, format )
 {
-  var self = this;
+  let self = this;
   _.assert( arguments.length === 2 );
   if( self.outputGray || !_.color || !_.color.strFormatBackground )
   return src;
@@ -1007,7 +990,7 @@ function colorBg( src, format )
 
 function colorFg( src, format )
 {
-  var self = this;
+  let self = this;
   _.assert( arguments.length === 2 );
   if( self.outputGray || !_.color || !_.color.strFormatForeground )
   return src;
@@ -1018,7 +1001,7 @@ function colorFg( src, format )
 
 function escape( src )
 {
-  var self = this;
+  let self = this;
   _.assert( arguments.length === 1 );
   if( /*self.outputGray ||*/ !_.color || !_.color.strFormatForeground )
   return src;
@@ -1039,9 +1022,9 @@ function str()
 
 function topic()
 {
-  var self = this;
+  let self = this;
 
-  var result = _.strConcat( arguments );
+  let result = _.strConcat( arguments );
 
   if( !self.outputGray )
   result = _.color.strFormat( result, 'topic.up' );
@@ -1056,9 +1039,9 @@ function topic()
 
 function topicUp()
 {
-  var self = this;
+  let self = this;
 
-  var result = _.strConcat( arguments );
+  let result = _.strConcat( arguments );
 
   if( !self.outputGray )
   result = _.color.strFormat( result, 'topic.up' );
@@ -1073,9 +1056,9 @@ function topicUp()
 
 function topicDown()
 {
-  var self = this;
+  let self = this;
 
-  var result = _.strConcat( arguments );
+  let result = _.strConcat( arguments );
 
   if( !self.outputGray )
   result = _.color.strFormat( result, 'topic.down' );
@@ -1091,16 +1074,16 @@ function topicDown()
 // fields
 // --
 
-var symbolForLevel = Symbol.for( 'level' );
-var symbolForForeground = Symbol.for( 'foregroundColor' );
-var symbolForBackground = Symbol.for( 'backgroundColor' );
+let symbolForLevel = Symbol.for( 'level' );
+let symbolForForeground = Symbol.for( 'foregroundColor' );
+let symbolForBackground = Symbol.for( 'backgroundColor' );
 
-var inputGraySymbol = Symbol.for( 'inputGray' );
-var outputGraySymbol = Symbol.for( 'outputGray' );
-var inputRawSymbol = Symbol.for( 'inputRaw' );
-var outputRawSymbol = Symbol.for( 'outputRaw' );
+let inputGraySymbol = Symbol.for( 'inputGray' );
+let outputGraySymbol = Symbol.for( 'outputGray' );
+let inputRawSymbol = Symbol.for( 'inputRaw' );
+let outputRawSymbol = Symbol.for( 'outputRaw' );
 
-var shellColorCodes =
+let shellColorCodes =
 {
   'black'           : 30,
   'dark red'        : 31,
@@ -1121,13 +1104,13 @@ var shellColorCodes =
   'white'           : 97
 }
 
-/* var shellColorCodesUnix =
+/* let shellColorCodesUnix =
 {
   'white'           : 37,
   'light white'     : 97,
 } */
 
-var PoisonedColorCombination =
+let PoisonedColorCombination =
 [
   { fg : 'black', bg : 'light yellow', platform : 'win32' },
   { fg : 'black', bg : 'yellow', platform : 'win32' },
@@ -1183,14 +1166,14 @@ var PoisonedColorCombination =
 
 ]
 
-var Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw' ];
-var DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
+let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw' ];
+let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
 
 // --
 // relationships
 // --
 
-var Composes =
+let Composes =
 {
 
   foregroundColor : null,
@@ -1209,17 +1192,17 @@ var Composes =
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 
 }
 
-var Associates =
+let Associates =
 {
 
 }
 
-var Restricts =
+let Restricts =
 {
 
   _colorsStack : null,
@@ -1230,7 +1213,7 @@ var Restricts =
 
 }
 
-var Statics =
+let Statics =
 {
   rawAll : 0,
   diagnosingColor : 1, /* xxx */
@@ -1240,14 +1223,14 @@ var Statics =
   DirectiveColoring : DirectiveColoring,
 }
 
-var Forbids =
+let Forbids =
 {
   coloring : 'coloring',
   outputColoring : 'outputColoring',
   inputColoring : 'inputColoring',
 }
 
-var Accessors =
+let Accessors =
 {
 
   foregroundColor : 'foregroundColor',
@@ -1264,14 +1247,14 @@ var Accessors =
 // define class
 // --
 
-var Functors =
+let Functors =
 {
 
   _transformAct : _transformAct,
 
 }
 
-var Extend =
+let Extend =
 {
 
   // stack
@@ -1356,7 +1339,7 @@ _.classMake
 // export
 // --
 
-wTools[ Self.nameShort ] = Self;
+_[ Self.nameShort ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

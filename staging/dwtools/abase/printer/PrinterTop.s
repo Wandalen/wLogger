@@ -93,22 +93,10 @@ _.classMake
   extend : Proto,
 });
 
+debugger;
 _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
-
-//
-//
-// _.accessor
-// ({
-//   object : Self.prototype,
-//   combining : 'rewrite',
-//   names :
-//   {
-//     level : 'level',
-//   }
-// });
-//
-//
+debugger;
 
 _[ Self.nameShort ] = Self;
 
