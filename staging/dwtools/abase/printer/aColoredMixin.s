@@ -1,7 +1,7 @@
 (function _aColoredMixin_s_() {
 
 'use strict';
-
+/* xxxx #fg:red# */
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -37,270 +37,25 @@ if( typeof module !== 'undefined' )
 
 }
 
+//
+
 var _global = _global_;
 var _ = _global_.wTools;
+var Parent = null;
+var Self = function wPrinterColoredMixin( o )
+{
+  _.assert( arguments.length === 0 || arguments.length === 1 );
+  if( !( this instanceof Self ) )
+  if( o instanceof Self )
+  return o;
+  else
+  return new( _.routineJoin( Self, Self, arguments ) );
+  return Self.prototype.init.apply( this,arguments );
+}
+
+Self.nameShort = 'PrinterColoredMixin';
 
 _.assert( _.strExtractInlined );
-
-//
-
-function _mixin( cls )
-{
-
-  var dstProto = cls.prototype;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.routineIs( cls ) );
-
-  _.mixinApply
-  ({
-    dstProto : dstProto,
-    descriptor : Self,
-  });
-
-  _.accessor
-  ({
-    object : dstProto,
-    combining : 'rewrite',
-    names : Accessors,
-  });
-
-}
-
-// --
-// etc
-// --
-
-// function _rgbToCode( rgb, add )
-// {
-//   // var r = rgb[ 0 ];
-//   // var g = rgb[ 1 ];
-//   // var b = rgb[ 2 ];
-
-//   // var lightness = _.color.rgbToHsl( rgb )[ 2 ];
-//   //
-//   // var ansi = 30 + ( ( Math.round( b ) << 2 ) | ( Math.round( g ) << 1 ) | Math.round( r ) );
-//   //
-//   // // why 8 ???
-//   //
-//   // if( add )
-//   // ansi = ansi + add;
-//   //
-//   // if( lightness === .25  )
-//   // ansi = '1;' + ansi;
-
-//   // var name = Object.keys( _.color.ColorMapShell );
-//   // for( var i = 0; i < name.length; i++ )
-//   // {
-//   //   if( _.color.ColorMapShell[ name[ i ] ] === rgb )
-//   //   {
-//   //     name = name[ i ];
-//   //     break;
-//   //   }
-//   // }
-
-//   var ansi = 0;
-//   var isLight = false;
-
-//   if( add === undefined )
-//   add = 0;
-
-//   var name = _.color._colorNameNearest( rgb,  _.color.ColorMapShell );
-
-//   if( process.platform !== 'win32' && shellColorCodesUnix[ name ] )
-//   {
-//     ansi = shellColorCodesUnix[ name ] + add;
-//   }
-//   else
-//   {
-//     if( _.strBegins( name, 'light' ) )
-//     {
-//       name = name.split( ' ' )[ 1 ];
-//       isLight = true;
-//     }
-
-//     ansi = ( 30 + shellColorCodes[ name ] + add );
-
-//     if( isLight )
-//     {
-//     /*  if( process.platform === 'win32' )
-//       ansi = '1;' + ansi;
-//       else */
-//       ansi = ansi + 60;
-//     }
-
-//     // ansi += '';
-
-//     // console.log( '_rgbToCode', _.strEscape( ansi ) );
-//   }
-
-//   _.assert( _.numberIs( ansi ) );
-
-//   return _.toStr( ansi );
-// }
-
-//
-
-function _rgbToCode( rgb, isBackground )
-{
-  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
-  var code = shellColorCodes[ name ];
-
-  _.assert( _.numberIs( code ), 'nothing found for color: ', name );
-
-  if( isBackground )
-  code += 10; // add 10 to convert fg code to bg code
-
-  return _.toStr( code );
-}
-
-//
-
-function _foregroundColorGet()
-{
-  var self = this;
-  return self[ symbolForForeground ];
-}
-
-//
-
-function _backgroundColorGet()
-{
-  var self = this;
-  return self[ symbolForBackground ];
-}
-
-//
-
-function _foregroundColorSet( color )
-{
-  var self = this;
-  var layer = 'foreground';
-
-  self._colorSet( layer, color );
-}
-
-//
-
-function _backgroundColorSet( color )
-{
-  var self = this;
-  var layer = 'background';
-
-  self._colorSet( layer, color );
-}
-
-//
-
-function _colorSet( layer, color )
-{
-  var self = this;
-
-  var symbol;
-  var diagnosticInfo;
-
-  if( layer === 'foreground' )
-  symbol = symbolForForeground;
-  else if( layer === 'background' )
-  symbol = symbolForBackground;
-  else _.assert( 0,'unexpected' );
-
-  if( !_.color )
-  {
-    self[ symbol ] = null;
-    return;
-  }
-
-  _.assert( _.symbolIs( symbol ) );
-
-  if( !_.color )
-  {
-    color = null;
-  }
-
-  function _getColorName( map, color )
-  {
-    // if( color === 'light green' )
-    // debugger;
-    var keys = _.mapOwnKeys( map );
-    for( var i = 0; i < keys.length; i++ )
-    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
-    return keys[ i ];
-
-  }
-
-  /* */
-
-  if( color && color !== 'default' )
-  {
-    var originalName = color;
-    if( isBrowser )
-    {
-      color = _.color.rgbaFromTry( color, null );
-    }
-    else
-    {
-      color = _.color.rgbaFromTry.apply( { colorMap :  _.color.ColorMapShell }, [ color, null ] );
-      if( !color )
-      color = _.color.rgbaFromTry( originalName, null );
-    }
-    var originalValue = color;
-    var currentName;
-
-    if( color )
-    {
-      if( isBrowser )
-      {
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
-        currentName = _getColorName( _.color.ColorMap, color );
-      }
-      else
-      {
-        color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
-        currentName = _getColorName(  _.color.ColorMapShell, color );
-      }
-
-      // console.log( '_colorSet', currentName, colorWas, '->', color );
-
-      diagnosticInfo =
-      {
-        originalValue : originalValue,
-        originalName : originalName,
-        currentName : currentName,
-        exact : !!_.color._colorDistance( color, originalValue )
-      };
-
-    }
-
-  }
-
-  /* */
-
-  if( !color || color === 'default' )
-  {
-    if( self._stackIsNotEmpty( layer ) )
-    self[ symbol ] = self._stackPop( layer );
-    else
-    self[ symbol ] = null;
-
-    if( self.diagnosticColorsStack  )
-    self.diagnosticColorsStack[ layer ].pop();
-  }
-  else
-  {
-    if( self[ symbol ] )
-    self._stackPush( layer, self[ symbol ] );
-
-    self[ symbol ] = color;
-    self._isStyled = 1;
-
-    if( !self.diagnosticColorsStack  )
-    self.diagnosticColorsStack = { 'foreground' : [], 'background' : [] };
-
-    self.diagnosticColorsStack[ layer ].push( diagnosticInfo );
-  }
-
-}
 
 // --
 // stack
@@ -310,10 +65,10 @@ function _stackPush( layer, color )
 {
   var self = this;
 
-  if( !self.colorsStack )
-  self.colorsStack = { 'foreground' : [], 'background' : [] };
+  if( !self._colorsStack )
+  self._colorsStack = { 'foreground' : [], 'background' : [] };
 
-  self.colorsStack[ layer ].push( color );
+  self._colorsStack[ layer ].push( color );
 }
 
 //
@@ -322,7 +77,7 @@ function _stackPop( layer )
 {
   var self = this;
 
-  return self.colorsStack[ layer ].pop();
+  return self._colorsStack[ layer ].pop();
 }
 
 //
@@ -331,45 +86,31 @@ function _stackIsNotEmpty( layer )
 {
   var self = this;
 
-  if( self.colorsStack && self.colorsStack[ layer ].length )
+  if( self._colorsStack && self._colorsStack[ layer ].length )
   return true;
 
   return false;
 }
 
 // --
-// colored text
+// transform
 // --
 
-function coloredToHtml( o )
+function _transformActHtml( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-
-  if( !_.objectIs( o ) )
-  o = { src : o }
-
-  if( !o.onInlined )
-  o.onInlined = self._handleStrip || _handleStrip;
-
-  _.routineOptions( coloredToHtml,o );
+  _.assert( _.mapIs( o ) );
+  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
+  _.assert( o.outputForPrinter.length === 1 );
   _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
   _.assert( _.routineIs( o.onInlined ) );
-
-  if( _.arrayIs( o.src ) )
-  {
-    var optionsForStr =
-    {
-      delimeter  : ''
-    }
-    o.src = _.strConcat( o.src, optionsForStr );
-  }
+  _.routineOptions( _transformActHtml, o );
 
   var result = '';
   var spanCount = 0;
-
-  var splitted = _.strExtractInlined({ src : o.src, onInlined : o.onInlined, preservingEmpty : 0 } );
+  var splitted = o.outputSplitted;
 
   for( var i = 0; i < splitted.length; i++ )
   {
@@ -450,81 +191,65 @@ function coloredToHtml( o )
 
   _.assert( spanCount === 0 );
 
-  return result;
-}
-
-coloredToHtml.defaults =
-{
-  src : null,
-  tag : 'span',
-  compact : true,
-  onInlined : null,
-}
-
-//
-
-function _writePrepareHtml( o )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.output[ 0 ] ) );
-  _.assert( o.output.length === 1 );
-
-  o.outputForTerminal = [ self.coloredToHtml( o.output[ 0 ] ) ];
+  o.outputForTerminal = [ result ];
 
   return o;
 }
 
+_transformActHtml.defaults =
+{
+  src : null,
+  tag : 'span',
+  compact : true,
+}
+
 //
 
-function _writePrepareShell( o )
+function _transformAct_nodejs( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.output[ 0 ] ) );
+  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
   var result = '';
+  var splitted = o.outputSplitted;
 
-  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip, preservingEmpty : 0 } );
-  var layersOnly = true;
-
-  splitted.forEach( function( strip )
+  splitted.forEach( function( split )
   {
+    var output = !!_.color;
 
-    if( _.arrayIs( strip ) )
+    if( _.arrayIs( split ) )
     {
-      self._handleDirective( strip );
-
-      if( self.ignoreDirectives )
-      {
-        if( strip[ 0 ] !== 'ignoreDirectives' )
-        strip = '#' + strip[ 0 ] + ' : ' + strip[ 1 ] + '#';
-      }
+      self._directiveApply( split );
+      if( output && self.outputRaw )
+      output = 0;
+      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      output = 0;
+    }
+    else
+    {
+      output = output && !self.outputRaw && !self.outputGray;
     }
 
-    if( _.strIs( strip ) )
+    if( _.strIs( split ) )
     {
-      layersOnly = false;
 
-      if( self.usingColorFromStack )
+      if( output )
       {
-        // if( self.foregroundColor && self.backgroundColor )
-        self._diagnosticColorCheck();
+        self._diagnosingColorCheck();
 
         if( self.foregroundColor )
-        result += `\x1b[${ self._rgbToCode( self.foregroundColor ) }m`;
+        result += `\x1b[${ self._rgbToCode_nodejs( self.foregroundColor ) }m`;
 
         if( self.backgroundColor )
-        result += `\x1b[${ self._rgbToCode( self.backgroundColor, true ) }m`;
+        result += `\x1b[${ self._rgbToCode_nodejs( self.backgroundColor, true ) }m`;
       }
 
-      result += strip;
+      result += split;
 
-      if( self.usingColorFromStack )
+      if( output )
       {
         if( self.backgroundColor )
         result += `\x1b[49;0m`;
@@ -535,9 +260,6 @@ function _writePrepareShell( o )
 
   });
 
-  // if( layersOnly && splitted.length )
-  // o.outputForTerminal = [];
-  // else
   o.outputForTerminal = [ result ];
 
   return o;
@@ -545,17 +267,17 @@ function _writePrepareShell( o )
 
 //
 
-function _writePrepareBrowser( o )
+function _transformAct_browser( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.output[ 0 ] ) );
+  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
   var result = [ '' ];
+  var splitted = o.outputSplitted;
 
-  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip, preservingEmpty : 0 } );
   if( splitted.length === 1 && !self._isStyled )
   {
     if( !_.arrayIs( splitted[ 0 ] ) )
@@ -566,7 +288,7 @@ function _writePrepareBrowser( o )
   {
     if( _.arrayIs( splitted[ i ] ) )
     {
-      self._handleDirective( splitted[ i ] );
+      self._directiveApply( splitted[ i ] );
 
       if( !self.foregroundColor && !self.backgroundColor )
       self._isStyled = 0;
@@ -575,7 +297,7 @@ function _writePrepareBrowser( o )
     }
     else
     {
-      if( ( !i && !self._isStyled ) || !self.usingColorFromStack )
+      if( ( !i && !self._isStyled ) || self.outputGray )
       {
         result[ 0 ] += splitted[ i ];
       }
@@ -597,16 +319,17 @@ function _writePrepareBrowser( o )
 
 //
 
-function _writePrepareWithoutColors( o )
+function _transformActWithoutColors( o )
 {
   var self = this;
   var result = '';
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.output[ 0 ] ) );
+  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
-  var splitted = _.strExtractInlined({ src : o.output[ 0 ], onInlined : self._handleStrip, preservingEmpty : 0 } );
+  var splitted = o.outputSplitted;
+
   for( var i = 0 ; i < splitted.length ; i++ )
   {
     if( _.strIs( splitted[ i ] ) )
@@ -620,185 +343,528 @@ function _writePrepareWithoutColors( o )
 
 //
 
-function _handleStrip( strip )
+function _transformColor( o )
 {
-  var allowedKeys = [ 'bg', 'background', 'fg', 'foreground', 'coloring', 'trackingColor', 'ignoreDirectives' ];
-  var parts = strip.split( ' : ' );
+  var self = this;
+
+  _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
+
+  if( self.permanentStyle )
+  {
+    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], self.permanentStyle );
+  }
+
+  if( self.coloringConnotation )
+  {
+    if( self.attributes.connotation === 'positive' )
+    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'positive' );
+    else if( self.attributes.connotation === 'negative' )
+    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'negative' );
+  }
+
+  if( self.coloringHeadAndTail )
+  if( self.attributes.head || self.attributes.tail )
+  if( _.strStrip( o.pure ) )
+  {
+    var reserve = self.verbosityReserve();
+    if( self.attributes.head && reserve > 1 )
+    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'head' );
+    else if( self.attributes.tail && reserve > 1 )
+    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'tail' );
+  }
+
+}
+
+//
+
+function _transformSplit( o )
+{
+  var self = this;
+  var result = [ '' ];
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
+  _.assert( !o.outputSplitted );
+
+  if( self.raw || self.rawAll )
+  {
+    o.outputSplitted = o.outputForPrinter;
+    return;
+  }
+
+  var splitted = o.outputSplitted = self._split( o.outputForPrinter[ 0 ] );
+
+  var inputRaw = self.inputRaw;
+  var inputGray = self.inputGray;
+  var outputRaw = self.outputRaw;
+  var outputGray = self.outputGray;
+
+  splitted.forEach( ( split,i ) =>
+  {
+    var split = splitted[ i ];
+
+    if( !_.arrayIs( split ) )
+    return;
+
+    var directive = split[ 0 ];
+    var value = split[ 1 ];
+    var input = true;
+    var output = true;
+
+    if( directive === 'inputRaw' )
+    inputRaw += _.boolFrom( value ) ? +1 : -1;
+    else if( inputRaw )
+    input = false;
+    else if( inputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    input = false;
+
+    if( outputRaw )
+    output = false;
+    else if( outputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    output = false;
+
+    if( !input )
+    {
+      split = '#' + split[ 0 ] + ':' + split[ 1 ] + '#';
+      splitted[ i ] = split;
+      return;
+    }
+
+    if( directive === 'inputGray' )
+    inputGray += _.boolFrom( value ) ? +1 : -1;
+    if( directive === 'outputRaw' )
+    outputRaw += _.boolFrom( value ) ? +1 : -1;
+    if( directive === 'outputGray' )
+    outputGray += _.boolFrom( value ) ? +1 : -1;
+
+  });
+
+  o.outputForPrinter = [ self._join( splitted ) ];
+
+}
+
+// --
+//
+// --
+
+function _join( splitted )
+{
+  var self = this;
+  _.assert( _.arrayIs( splitted ) );
+
+  var result = '';
+  splitted.forEach( ( split,i ) =>
+  {
+    if( _.strIs( split ) )
+    result += split
+    else if( _.arrayIs( split ) )
+    result += '#' + split.join( ':' ) + '#';
+    else _.assert( 0 );
+  });
+
+  return result;
+}
+
+//
+
+function _split( src )
+{
+  var self = this;
+  _.assert( _.strIs( src ) );
+  var splitted = _.strExtractInlined
+  ({
+    src : src,
+    onInlined : self._splitHandle.bind( self ),
+    preservingEmpty : 0,
+    stripping : 0,
+  });
+  return splitted;
+}
+
+//
+
+function _splitHandle( split )
+{
+  var self = this;
+  var parts = split.split( ':' );
   if( parts.length === 2 )
   {
-    if( !_.arrayHas( allowedKeys, parts[ 0 ] ) )
+    parts[ 0 ] = parts[ 0 ].trim();
+    if( !_.arrayHas( self.Directive, parts[ 0 ] ) )
     return;
-    // return;
     return parts;
   }
 }
 
 //
 
-function _handleDirective( directive )
+function _directiveApply( directive )
 {
   var self = this;
-
+  var handled = 0;
   var name = directive[ 0 ];
   var value = directive[ 1 ];
 
-  if( name === 'ignoreDirectives' )
+  if( name === 'inputRaw' )
   {
-    self.ignoreDirectives = _.boolFrom( value );
+    self.inputRaw = _.boolFrom( value );
+    return true;
   }
 
-  if( self.ignoreDirectives )
+  if( self.inputRaw )
   return;
 
-  if( self.trackingColor )
+  if( !self.inputGray )
   {
-    if( name === 'foreground' )
+    if( name === 'foreground' || name === 'fg' )
     {
       self.foregroundColor = value;
+      return true;
     }
-    if( name === 'background' )
+    else if( name === 'background' || name === 'bg' )
     {
       self.backgroundColor = value;
+      return true;
     }
   }
 
-  if( name === 'coloring' )
+  if( name === 'outputGray' )
   {
-    self.usingColorFromStack = _.boolFrom( value );
+    self.outputGray = _.boolFrom( value );
+    return true;
   }
-  if( name === 'trackingColor' )
+  else if( name === 'inputGray' )
   {
-    self.trackingColor = _.boolFrom( value );
+    self.inputGray = _.boolFrom( value );
+    return true;
   }
+  else if( name === 'outputRaw' )
+  {
+    self.outputRaw = _.boolFrom( value );
+    return true;
+  }
+
+  _.assert( 0, 'Unknown logger directive', _.strQuote( name ) );
 }
 
 //
 
-function _writePrepare( original )
+function _transformAct( original )
 {
 
-  return function _writePrepare( o )
+  return function _transformAct( o )
   {
     var self = this;
 
-    _.assert( arguments.length === 1, 'expects single argument' );
     _.assert( _.mapIs( o ) );
 
     o = original.call( self,o );
 
     _.assert( _.strIs( o.pure ) );
     _.assert( _.longIs( o.input ) );
-    _.assert( _.longIs( o.output ) );
-    _.assert( o.output.length === 1 )
+    _.assert( _.longIs( o.outputForPrinter ) );
+    _.assert( o.outputForPrinter.length === 1 )
+    _.assert( arguments.length === 1, 'expects single argument' );
 
-    if( _.color && self.coloring )
+    if( !self.outputGray && _.color ) /* xxx */
+    self._transformColor( o );
+
+    self._transformSplit( o );
+
+    /* */
+
+    // if( !self.outputRaw && !self.outputGray && _.color )
     {
 
-      if( self.permanentStyle )
-      {
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], self.permanentStyle );
-      }
-
-      if( self.coloringConnotation )
-      {
-        if( self.attributes.connotation === 'positive' )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'positive' );
-        else if( self.attributes.connotation === 'negative' )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'negative' );
-      }
-
-      if( self.coloringHeadAndTail )
-      if( self.attributes.head || self.attributes.tail )
-      if( _.strStrip( o.pure ) )
-      {
-        var reserve = self.verbosityReserve();
-        if( self.attributes.head && reserve > 1 )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'head' );
-        else if( self.attributes.tail && reserve > 1 )
-        o.output[ 0 ] = _.color.strFormat( o.output[ 0 ], 'tail' );
-      }
-
-      if( !self.rawOutput )
-      if( !self.passingRawColor )
+      // if( !self.Self.outputRaw )
+      // if( !self.outputRaw )
       {
         if( self.writingToHtml )
-        self._writePrepareHtml( o );
-        else if( !isBrowser && !module.isBrowser )
-        self._writePrepareShell( o );
-        else
-        self._writePrepareBrowser( o );
+        self._transformActHtml( o );
+        else if( Config.platform === 'nodejs' )
+        self._transformAct_nodejs( o );
+        else if( Config.platform === 'browser' )
+        self._transformAct_browser( o );
       }
 
     }
-    else
-    {
-      self._writePrepareWithoutColors( o );
-    }
+    // else
+    // {
+    //   self._transformActWithoutColors( o ); xxx
+    // }
 
-    _.assert( _.arrayIs( o.output ) );
+    _.assert( _.arrayIs( o.outputForPrinter ) );
 
     return o;
   }
 
 }
 
-// --
-// topic
-// --
+//
 
-function topic()
+function _rgbToCode_nodejs( rgb, isBackground )
 {
-  var self = this;
+  var name = _.color._colorNameNearest( rgb, _.color.ColorMapShell );
+  var code = shellColorCodes[ name ];
 
-  var result = _.strConcat( arguments );
+  _.assert( _.numberIs( code ), 'nothing found for color: ', name );
 
-  // qqq
-  // if( self.coloring )
-  result = _.color.strFormat( result, 'topic.up' );
+  if( isBackground )
+  code += 10; /* add 10 to convert fg code to bg code */
 
-  this.log();
-  this.log( result );
-  // this.log();
-
-  return result;
+  return _.toStr( code );
 }
 
 //
 
-function topicUp()
+function _diagnosingColorCheck()
 {
   var self = this;
 
-  var result = _.strConcat( arguments );
+  if( isBrowser )
+  return;
 
-  debugger;
-  // qqq
-  result = _.color.strFormat( result, 'topic.up' );
+  if( !self.foregroundColor || !self.backgroundColor )
+  return;
 
-  this.log();
-  this.logUp( result );
-  // this.log();
+  /* qqq : ??? */
+
+  var stackFg = self._diagnosingColorsStack[ 'foreground' ];
+  var stackBg = self._diagnosingColorsStack[ 'background' ];
+
+  var fg = stackFg[ stackFg.length - 1 ];
+  var bg = stackBg[ stackBg.length - 1 ];
+
+  /* */
+
+  var result = {};
+
+  if( self.diagnosingColor )
+  result.ill = self._diagnosingColorIll( fg, bg );
+
+  if( self.diagnosingColorCollapse )
+  result.collapse = self._diagnosingColorCollapse( fg, bg );
 
   return result;
+
 }
 
 //
 
-function topicDown()
+function _diagnosingColorIll( fg, bg )
 {
   var self = this;
+  var ill = false;
 
-  var result = _.strConcat( arguments );
+  for( var i = 0; i < PoisonedColorCombination.length; i++ )
+  {
+    var combination = PoisonedColorCombination[ i ];
+    if( combination.fg === fg.originalName && combination.bg === bg.originalName )
+    // if( combination.platform === process.platform )
+    {
+      self.diagnosingColor = 0;
+      ill = true;
+      // logger.foregroundColor = 'blue';
+      // logger.backgroundColor = 'yellow';
+      logger.styleSet( 'info.negative' );
+      logger.warn( 'Warning!. Ill colors combination: ' );
+      logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
+      logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
+      logger.warn( 'platform : ', combination.platform );
+      logger.styleSet( 'default' );
+      // logger.foregroundColor = 'default';
+      // logger.backgroundColor = 'default';
+      // break;
+    }
+  }
 
-  debugger;
-  // qqq
-  result = _.color.strFormat( result, 'topic.down' );
+  return ill;
+}
 
-  this.log();
-  this.logDown( result );
-  this.log();
+//
 
-  return result;
+function _diagnosingColorCollapse( fg, bg )
+{
+  var self = this;
+  var collapse = false;
+
+  if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
+  {
+    if( fg.originalName !== bg.originalName )
+    {
+      var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
+      if( diff <= 0.25 )
+      collapse = true;
+    }
+  }
+
+  if( collapse )
+  {
+    // logger.foregroundColor = 'blue';
+    // logger.backgroundColor = 'yellow';
+    self.diagnosingColorCollapse = 0;
+    logger.styleSet( 'info.negative' );
+    logger.warn( 'Warning: Color collapse in native terminal.' );
+    logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
+    logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
+    logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
+    logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
+    logger.styleSet( 'default' );
+    // logger.foregroundColor = 'default';
+    // logger.backgroundColor = 'default';
+  }
+
+  return collapse;
+}
+
+// --
+// accessor
+// --
+
+function _foregroundColorGet()
+{
+  var self = this;
+  return self[ symbolForForeground ];
+}
+
+//
+
+function _backgroundColorGet()
+{
+  var self = this;
+  return self[ symbolForBackground ];
+}
+
+//
+
+function _foregroundColorSet( color )
+{
+  var self = this;
+  var layer = 'foreground';
+
+  self._colorSet( layer, color );
+}
+
+//
+
+function _backgroundColorSet( color )
+{
+  var self = this;
+  var layer = 'background';
+
+  self._colorSet( layer, color );
+}
+
+//
+
+function _colorSet( layer, color )
+{
+  var self = this;
+  var symbol;
+  var diagnosticInfo;
+
+  if( layer === 'foreground' )
+  symbol = symbolForForeground;
+  else if( layer === 'background' )
+  symbol = symbolForBackground;
+  else _.assert( 0, 'unexpected' );
+
+  if( !_.color )
+  {
+    self[ symbol ] = null;
+    return;
+  }
+
+  _.assert( _.symbolIs( symbol ) );
+
+  if( !_.color )
+  {
+    color = null;
+  }
+
+  function _getColorName( map, color )
+  {
+    // if( color === 'light green' )
+    // debugger;
+    var keys = _.mapOwnKeys( map );
+    for( var i = 0; i < keys.length; i++ )
+    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
+    return keys[ i ];
+
+  }
+
+  /* */
+
+  if( color && color !== 'default' )
+  {
+    var originalName = color;
+    if( isBrowser )
+    {
+      color = _.color.rgbaFromTry( color, null );
+    }
+    else
+    {
+      color = _.color.rgbaFromTry.apply( { colorMap :  _.color.ColorMapShell }, [ color, null ] );
+      if( !color )
+      color = _.color.rgbaFromTry( originalName, null );
+    }
+
+    var originalValue = color;
+    var currentName;
+
+    if( color )
+    {
+      if( isBrowser )
+      {
+        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
+        currentName = _getColorName( _.color.ColorMap, color );
+      }
+      else
+      {
+        color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
+        currentName = _getColorName(  _.color.ColorMapShell, color );
+      }
+
+      // console.log( '_colorSet', currentName, colorWas, '->', color );
+
+      diagnosticInfo =
+      {
+        originalValue : originalValue,
+        originalName : originalName,
+        currentName : currentName,
+        exact : !!_.color._colorDistance( color, originalValue )
+      };
+
+    }
+
+  }
+
+  /* */
+
+  if( !color || color === 'default' )
+  {
+    if( self._stackIsNotEmpty( layer ) )
+    self[ symbol ] = self._stackPop( layer );
+    else
+    self[ symbol ] = null;
+
+    if( self._diagnosingColorsStack  )
+    self._diagnosingColorsStack[ layer ].pop();
+  }
+  else
+  {
+    if( self[ symbol ] )
+    self._stackPush( layer, self[ symbol ] );
+
+    self[ symbol ] = color;
+    self._isStyled = 1;
+
+    if( !self._diagnosingColorsStack  )
+    self._diagnosingColorsStack = { 'foreground' : [], 'background' : [] };
+
+    self._diagnosingColorsStack[ layer ].push( diagnosticInfo );
+  }
+
 }
 
 //
@@ -832,111 +898,192 @@ function styleSet( style )
 
 //
 
-function _diagnosticColorCheck()
+function _inputGraySet( src )
 {
   var self = this;
+  _.assert( _.boolLike( src ) );
 
-  if( isBrowser )
-  return;
+  if( _.boolIs( src ) )
+  src = self.inputGray + ( src ? 1 : -1 );
 
-  if( !self.foregroundColor || !self.backgroundColor )
-  return;
+  if( src < 0 )
+  debugger;
 
-  var stackFg = self.diagnosticColorsStack[ 'foreground' ];
-  var stackBg = self.diagnosticColorsStack[ 'background' ];
-
-  var fg = stackFg[ stackFg.length - 1 ];
-  var bg = stackBg[ stackBg.length - 1 ];
-
-  /* */
-
-  var result = {};
-
-  if( self.diagnosticColor )
-  result.ill = self._diagnosticColor( fg, bg );
-
-  if( self.diagnosticColorCollapse )
-  result.collapse = self._diagnosticColorCollapse( fg, bg );
-
-  return result;
+  self[ inputGraySymbol ] = src;
 
 }
 
 //
 
-function _diagnosticColor( fg, bg )
+function _outputGraySet( src )
 {
   var self = this;
-  var ill = false;
+  _.assert( _.boolLike( src ) );
 
-  for( var i = 0; i < illColorCombinations.length; i++ )
-  {
-    var combination = illColorCombinations[ i ];
-    if( combination.fg === fg.originalName && combination.bg === bg.originalName )
-    // if( combination.platform === process.platform )
-    {
-      self.diagnosticColor = 0;
-      ill = true;
-      // logger.foregroundColor = 'blue';
-      // logger.backgroundColor = 'yellow';
-      logger.styleSet( 'info.negative' );
-      logger.warn( 'Warning!. Ill colors combination: ' );
-      logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
-      logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
-      logger.warn( 'platform : ', combination.platform );
-      logger.styleSet( 'default' );
-      // logger.foregroundColor = 'default';
-      // logger.backgroundColor = 'default';
-      // break;
-    }
-  }
+  if( _.boolIs( src ) )
+  src = self.outputGray + ( src ? 1 : -1 );
 
-  return ill;
+  if( src < 0 )
+  debugger;
+
+  self[ outputGraySymbol ] = src;
+
 }
 
 //
 
-function _diagnosticColorCollapse( fg, bg )
+function _inputRawSet( src )
 {
   var self = this;
-  var collapse = false;
+  _.assert( _.boolLike( src ) );
 
-  if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
-  {
-    if( fg.originalName !== bg.originalName )
-    {
-      var diff = _.color._colorDistance( fg.originalValue, bg.originalValue );
-      if( diff <= 0.25 )
-      collapse = true;
-    }
-  }
+  if( _.boolIs( src ) )
+  src = self.inputRaw + ( src ? 1 : -1 );
 
-  if( collapse )
-  {
-    // logger.foregroundColor = 'blue';
-    // logger.backgroundColor = 'yellow';
-    self.diagnosticColorCollapse = 0;
-    logger.styleSet( 'info.negative' );
-    logger.warn( 'Warning: Color collapse in native terminal.' );
-    logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
-    logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
-    logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
-    logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
-    logger.styleSet( 'default' );
-    // logger.foregroundColor = 'default';
-    // logger.backgroundColor = 'default';
-  }
+  if( src < 0 )
+  debugger;
 
-  return collapse;
+  self[ inputRawSymbol ] = src;
+
+}
+
+//
+
+function _outputRawSet( src )
+{
+  var self = this;
+  _.assert( _.boolLike( src ) );
+
+  if( _.boolIs( src ) )
+  src = self.outputRaw + ( src ? 1 : -1 );
+
+  if( src < 0 )
+  debugger;
+
+  self[ outputRawSymbol ] = src;
+
 }
 
 // --
-// type
+// string formatters
+// --
+
+function colorFormat( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( self.outputGray || !_.color || !_.color.strFormat )
+  return src;
+  return _.color.strFormat( src, format );
+}
+
+//
+
+function colorBg( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( self.outputGray || !_.color || !_.color.strFormatBackground )
+  return src;
+  return _.color.strFormatBackground( src, format );
+}
+
+//
+
+function colorFg( src, format )
+{
+  var self = this;
+  _.assert( arguments.length === 2 );
+  if( self.outputGray || !_.color || !_.color.strFormatForeground )
+  return src;
+  return _.color.strFormatForeground( src, format );
+}
+
+//
+
+function escape( src )
+{
+  var self = this;
+  _.assert( arguments.length === 1 );
+  if( /*self.outputGray ||*/ !_.color || !_.color.strFormatForeground )
+  return src;
+  return _.color.strEscape( src );
+}
+
+//
+
+function str()
+{
+  debugger;
+  return _.str.apply( _, arguments );
+}
+
+// --
+// topic
+// --
+
+function topic()
+{
+  var self = this;
+
+  var result = _.strConcat( arguments );
+
+  if( !self.outputGray )
+  result = _.color.strFormat( result, 'topic.up' );
+
+  this.log();
+  this.log( result );
+
+  return result;
+}
+
+//
+
+function topicUp()
+{
+  var self = this;
+
+  var result = _.strConcat( arguments );
+
+  if( !self.outputGray )
+  result = _.color.strFormat( result, 'topic.up' );
+
+  this.log();
+  this.logUp( result );
+
+  return result;
+}
+
+//
+
+function topicDown()
+{
+  var self = this;
+
+  var result = _.strConcat( arguments );
+
+  if( !self.outputGray )
+  result = _.color.strFormat( result, 'topic.down' );
+
+  this.log();
+  this.logDown( result );
+  this.log();
+
+  return result;
+}
+
+// --
+// fields
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
 var symbolForForeground = Symbol.for( 'foregroundColor' );
 var symbolForBackground = Symbol.for( 'backgroundColor' );
+
+var inputGraySymbol = Symbol.for( 'inputGray' );
+var outputGraySymbol = Symbol.for( 'outputGray' );
+var inputRawSymbol = Symbol.for( 'inputRaw' );
+var outputRawSymbol = Symbol.for( 'outputRaw' );
 
 var shellColorCodes =
 {
@@ -965,7 +1112,7 @@ var shellColorCodes =
   'light white'     : 97,
 } */
 
-var illColorCombinations =
+var PoisonedColorCombination =
 [
   { fg : 'black', bg : 'light yellow', platform : 'win32' },
   { fg : 'black', bg : 'yellow', platform : 'win32' },
@@ -1021,6 +1168,9 @@ var illColorCombinations =
 
 ]
 
+var Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw' ];
+var DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
+
 // --
 // relationships
 // --
@@ -1030,23 +1180,17 @@ var Composes =
 
   foregroundColor : null,
   backgroundColor : null,
+  permanentStyle : null,
 
-  colorsStack : null,
-  passingRawColor : 0,
-  coloring : 1,
   coloringHeadAndTail : 1,
   coloringConnotation : 1,
   writingToHtml : 0,
 
-  _isStyled : 0,
-  _cursorSaved : 0,
-  usingColorFromStack : 1,
-  trackingColor : 1,
-  ignoreDirectives : 0,
-
-  permanentStyle : null,
-
-  diagnosticColorsStack : null
+  raw : 0,
+  inputGray : 0,
+  outputGray : 0,
+  inputRaw : 0,
+  outputRaw : 0,
 
 }
 
@@ -1060,29 +1204,55 @@ var Associates =
 
 }
 
+var Restricts =
+{
+
+  _colorsStack : null,
+  _diagnosingColorsStack : null, /* qqq : what for??? */
+
+  _isStyled : 0,
+  _cursorSaved : 0,
+
+}
+
 var Statics =
 {
-  coloredToHtml : coloredToHtml,
-  rawOutput : false,
-  diagnosticColor : 1,
-  diagnosticColorCollapse : 1,
-  illColorCombinations : illColorCombinations
+  rawAll : 0,
+  diagnosingColor : 1, /* xxx */
+  diagnosingColorCollapse : 1,
+  PoisonedColorCombination : PoisonedColorCombination,
+  Directive : Directive,
+  DirectiveColoring : DirectiveColoring,
+}
+
+var Forbids =
+{
+  coloring : 'coloring',
+  outputColoring : 'outputColoring',
+  inputColoring : 'inputColoring',
 }
 
 var Accessors =
 {
+
   foregroundColor : 'foregroundColor',
   backgroundColor : 'backgroundColor',
+
+  inputGray : 'inputGray',
+  outputGray : 'outputGray',
+  inputRaw : 'inputRaw',
+  outputRaw : 'outputRaw',
+
 }
 
 // --
 // define class
 // --
 
-var Functor =
+var Functors =
 {
 
-  _writePrepare : _writePrepare,
+  _transformAct : _transformAct,
 
 }
 
@@ -1095,28 +1265,48 @@ var Extend =
   _stackPop : _stackPop,
   _stackIsNotEmpty : _stackIsNotEmpty,
 
-  // colored text
+  // transform
 
-  coloredToHtml : coloredToHtml,
-  _writePrepareHtml : _writePrepareHtml,
-  _writePrepareShell : _writePrepareShell,
-  _writePrepareBrowser : _writePrepareBrowser,
-  _writePrepareWithoutColors : _writePrepareWithoutColors,
+  _transformActHtml : _transformActHtml,
+  _transformAct_nodejs : _transformAct_nodejs,
+  _transformAct_browser : _transformAct_browser,
+  _transformActWithoutColors : _transformActWithoutColors,
+  _transformColor : _transformColor,
+  _transformSplit : _transformSplit,
 
-  _handleStrip : _handleStrip,
-  _handleDirective : _handleDirective,
+  //
+
+  _join : _join,
+  _split : _split,
+  _splitHandle : _splitHandle,
+  _directiveApply : _directiveApply,
+
+  _rgbToCode_nodejs : _rgbToCode_nodejs,
+  _diagnosingColorCheck : _diagnosingColorCheck,
+  _diagnosingColorIll : _diagnosingColorIll,
+  _diagnosingColorCollapse : _diagnosingColorCollapse,
+
+  // accessor
 
   _foregroundColorGet : _foregroundColorGet,
   _backgroundColorGet : _backgroundColorGet,
   _foregroundColorSet : _foregroundColorSet,
   _backgroundColorSet : _backgroundColorSet,
   _colorSet : _colorSet,
+  styleSet : styleSet,
 
-  _rgbToCode : _rgbToCode,
-  _diagnosticColorCheck : _diagnosticColorCheck,
-  _diagnosticColor : _diagnosticColor,
-  _diagnosticColorCollapse : _diagnosticColorCollapse,
+  _inputGraySet : _inputGraySet,
+  _outputGraySet : _outputGraySet,
+  _inputRawSet : _inputRawSet,
+  _outputRawSet : _outputRawSet,
 
+  // string formatters
+
+  colorFormat : colorFormat,
+  colorBg : colorBg,
+  colorFg : colorFg,
+  escape : escape,
+  str : str,
 
   // topic
 
@@ -1124,37 +1314,34 @@ var Extend =
   topicUp : topicUp,
   topicDown : topicDown,
 
-  styleSet : styleSet,
-
   // relationships
 
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
   Statics : Statics,
+  Forbids : Forbids,
+  Accessors : Accessors,
 
 }
 
 //
 
-var Self =
-{
-
+_.classMake
+({
+  cls : Self,
   extend : Extend,
-  functor : Functor,
-
-  _mixin : _mixin,
-
-  name : 'wPrinterColoredMixin',
-  nameShort : 'PrinterColoredMixin',
-
-}
-
-Self = _[ Self.nameShort ] = _.mixinMake( Self );
+  functors : Functors,
+  withMixin : true,
+  withClass : true,
+});
 
 // --
 // export
 // --
+
+wTools[ Self.nameShort ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

@@ -62,7 +62,7 @@ function prepareInfo()
   var row = _.arrayFillTimes( [] , 3 , '-' );
   var currentPlatform;
 
-  function onWrite( data )
+  function onTransformEnd( data )
   {
     var rowMap =
     {
@@ -75,7 +75,7 @@ function prepareInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onWrite : onWrite
+    onTransformEnd : onTransformEnd
   })
 
   var result = [];

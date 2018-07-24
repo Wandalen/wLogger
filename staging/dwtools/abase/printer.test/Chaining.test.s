@@ -97,7 +97,7 @@ function chaining( test )
 
   test.case = 'case1: l2 -> l1';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite } );
   var l2 = new _.Logger( { output : l1 } );
   l2.log( '1' );
   l2.log( '2' );
@@ -106,8 +106,8 @@ function chaining( test )
 
   test.case = 'case2: l3 -> l2 -> l1';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
-  var l2 = new _.Logger( { output : l1, onWrite : _onWrite } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite } );
+  var l2 = new _.Logger( { output : l1, onTransformEnd : _onWrite } );
   var l3 = new _.Logger( { output : l2 } );
   l2.log( 'l2' );
   l3.log( 'l3' );
@@ -116,10 +116,10 @@ function chaining( test )
 
   test.case = 'case3: l4->l3->l2->l1';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
-  var l2 = new _.Logger( { output : l1, onWrite : _onWrite } );
-  var l3 = new _.Logger( { output : l2, onWrite : _onWrite } );
-  var l4 = new _.Logger( { output : l3, onWrite : _onWrite } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite } );
+  var l2 = new _.Logger( { output : l1, onTransformEnd : _onWrite } );
+  var l3 = new _.Logger( { output : l2, onTransformEnd : _onWrite } );
+  var l4 = new _.Logger( { output : l3, onTransformEnd : _onWrite } );
   l4.log( 'l4' );
   l3.log( 'l3' );
   l2.log( 'l2' );
@@ -133,10 +133,10 @@ function chaining( test )
 
   test.case = 'case4: l1 <- l2 <- l3 <- l4 ';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite } );
-  var l2 = new _.Logger( { onWrite : _onWrite } );
-  var l3 = new _.Logger( { onWrite : _onWrite } );
-  var l4 = new _.Logger( { onWrite : _onWrite } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite } );
+  var l2 = new _.Logger( { onTransformEnd : _onWrite } );
+  var l3 = new _.Logger( { onTransformEnd : _onWrite } );
+  var l4 = new _.Logger( { onTransformEnd : _onWrite } );
   l3.inputFrom( l4 );
   l2.inputFrom( l3 );
   l1.inputFrom( l2 );
@@ -197,7 +197,7 @@ function consoleChaining( test )
   {
     consoleWasBarred = true;
     debugger
-    _global_.wTester._barOptions.bar = 0;
+    _global_.wTester._barOptions.exclusiveOutputPrinter = 0;
     _.Logger.consoleBar( _global_.wTester._barOptions );
   }
 
@@ -218,37 +218,37 @@ function consoleChaining( test )
   test.is( chained );
   test.is( !_.Logger.consoleIsBarred( console ) );
   l.inputUnchain( console );
-  test.is( !l.hasInputNotDeep( console ) );
+  test.is( !l.hasInputClose( console ) );
 
   //
 
-  test.case = 'inputFrom console that exists in outputs, barring on';
+  test.case = 'inputFrom console that exists in outputs, exclusiveOutput on';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.inputFrom( console, { barring : 1  } ) )
+  test.shouldThrowError( () => l.inputFrom( console, { exclusiveOutput : 1  } ) )
 
   //
 
-  test.case = 'inputFrom console that not exists in outputs, barring on';
+  test.case = 'inputFrom console that not exists in outputs, exclusiveOutput on';
   var l = new _.Logger({ output : null });
-  var chained = l.inputFrom( console, { barring : 1 } );
+  var chained = l.inputFrom( console, { exclusiveOutput : 1 } );
   test.is( chained );
   test.is( _.Logger.consoleIsBarred( console ) );
   l.inputUnchain( console );
-  test.is( !l.hasInputNotDeep( console ) );
+  test.is( !l.hasInputClose( console ) );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
   if( Config.debug )
   {
-    test.case = 'console is barred, try to chain again';
+    test.case = 'console is excluded, try to chain again';
     var l = new _.Logger({ output : null });
-    var chained = l.inputFrom( console, { barring : 1 } );
+    var chained = l.inputFrom( console, { exclusiveOutput : 1 } );
     test.is( chained );
     test.is( _.Logger.consoleIsBarred( console ) );
-    test.shouldThrowError( () => l.inputFrom( console, { barring : 1 } ) );
+    test.shouldThrowError( () => l.inputFrom( console, { exclusiveOutput : 1 } ) );
     l.inputUnchain( console );
-    test.is( !l.hasInputNotDeep( console ) );
+    test.is( !l.hasInputClose( console ) );
     test.is( !_.Logger.consoleIsBarred( console ) );
   }
 
@@ -262,45 +262,45 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'outputTo console that exists in outputs, unbarring on';
+  test.case = 'outputTo console that exists in outputs, originalOutput on';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.outputTo( console, { unbarring : 1 } ) );
+  test.shouldThrowError( () => l.outputTo( console, { originalOutput : 1 } ) );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
-  test.case = 'outputTo console that exists in inputs, unbarring off';
+  test.case = 'outputTo console that exists in inputs, originalOutput off';
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
-  test.shouldThrowError( () => l.outputTo( console, { unbarring : 0 } ) );
-  test.is( !l.hasOutputNotDeep( console ) );
+  test.shouldThrowError( () => l.outputTo( console, { originalOutput : 0 } ) );
+  test.is( !l.hasOutputClose( console ) );
   l.inputUnchain( console );
-  test.is( !l.hasInputNotDeep( console ) );
+  test.is( !l.hasInputClose( console ) );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
-  test.case = 'outputTo console that exists in inputs, unbarring on';
+  test.case = 'outputTo console that exists in inputs, originalOutput on';
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
-  l.outputTo( console, { unbarring : 1 } );
+  l.outputTo( console, { originalOutput : 1 } );
   test.is( l.outputs[ l.outputs.length - 1 ] === console.inputs[ console.inputs.length - 1 ] );
   l.inputUnchain( console );
   l.outputUnchain( console );
-  test.is( !l.hasInputNotDeep( console ) && !l.inputs.length );
-  test.is( !l.hasOutputNotDeep( console ) && !l.outputs.length );
+  test.is( !l.hasInputClose( console ) && !l.inputs.length );
+  test.is( !l.hasOutputClose( console ) && !l.outputs.length );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
-  test.case = 'console is not barred, several inputs for console';
+  test.case = 'console is not excluded, several inputs for console';
   test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  var l4 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
   l2.log( 'l2' );
@@ -310,13 +310,13 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'console is not barred, several outputs from console';
+  test.case = 'console is not excluded, several outputs from console';
   test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger({ output : null, onWrite : onWrite });
-  var l2 = new _.Logger({ output : null, onWrite : onWrite });
-  var l3 = new _.Logger({ output : null, onWrite : onWrite });
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l2 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l3 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   l1.inputFrom( console, { combining : 'append' } );
   l2.inputFrom( console, { combining : 'append' } );
@@ -329,10 +329,10 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'console is not barred, several outputs/inputs';
+  test.case = 'console is not excluded, several outputs/inputs';
   test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
 
   /*inputs*/
 
@@ -342,9 +342,9 @@ function consoleChaining( test )
 
   /*outputs*/
 
-  var l4 = new _.Logger({ output : null, onWrite : onWrite });
-  var l5 = new _.Logger({ output : null, onWrite : onWrite });
-  var l6 = new _.Logger({ output : null, onWrite : onWrite });
+  var l4 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l5 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l6 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   l4.inputFrom( console, { combining : 'append' } );
   l5.inputFrom( console, { combining : 'append' } );
@@ -367,20 +367,20 @@ function consoleChaining( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
   //
 
-  test.case = 'console is barred, several inputs for console';
+  test.case = 'console is excluded, several inputs for console';
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, onWrite : onWrite });
+  var l4 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
   l2.log( 'l2' );
@@ -390,13 +390,13 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'console is barred, several outputs from console';
+  test.case = 'console is excluded, several outputs from console';
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger({ output : null, onWrite : onWrite });
-  var l2 = new _.Logger({ output : null, onWrite : onWrite });
-  var l3 = new _.Logger({ output : null, onWrite : onWrite });
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
+  var l1 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l2 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l3 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   l1.inputFrom( console, { combining : 'append' } );
   l2.inputFrom( console, { combining : 'append' } );
@@ -411,10 +411,10 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'console is barred, several outputs/inputs';
+  test.case = 'console is excluded, several outputs/inputs';
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
-  var onWrite = ( o ) => received.push( o.output[ 0 ] );
+  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
 
   /*inputs*/
 
@@ -424,9 +424,9 @@ function consoleChaining( test )
 
   /*outputs*/
 
-  var l4 = new _.Logger({ output : null, onWrite : onWrite });
-  var l5 = new _.Logger({ output : null, onWrite : onWrite });
-  var l6 = new _.Logger({ output : null, onWrite : onWrite });
+  var l4 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l5 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
+  var l6 = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
 
   l4.inputFrom( console, { combining : 'append' } );
   l5.inputFrom( console, { combining : 'append' } );
@@ -447,16 +447,16 @@ function consoleChaining( test )
 
   //
 
-  test.case = 'if console is barred, other console outputs must be omitted';
+  test.case = 'if console is excluded, other console outputs must be omitted';
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
     output : null,
-    onWrite : ( o ) => received.push( o.input[ 0 ] )
+    onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
   })
   l.inputFrom( console );
-  test.is( l.hasInputNotDeep( console ) );
+  test.is( l.hasInputClose( console ) );
   console.log( 'message' );
   l.inputUnchain( console );
   test.is( _.Logger.consoleIsBarred( console ) );
@@ -473,9 +473,9 @@ function chainingParallel( test )
 
   test.case = 'case1: 1 -> *';
   var got = [];
-  var l1 = new _.Logger( { onWrite : _onWrite  } );
-  var l2 = new _.Logger( { onWrite : _onWrite  } );
-  var l3 = new _.Logger( { onWrite : _onWrite  } );
+  var l1 = new _.Logger( { onTransformEnd : _onWrite  } );
+  var l2 = new _.Logger( { onTransformEnd : _onWrite  } );
+  var l3 = new _.Logger( { onTransformEnd : _onWrite  } );
   var l4 = new _.Logger({ output : console });
   l4.outputTo( l3, { combining : 'append' } );
   l4.outputTo( l2, { combining : 'append' } );
@@ -487,7 +487,7 @@ function chainingParallel( test )
 
   test.case = 'case2: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite  } );
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -503,7 +503,7 @@ function chainingParallel( test )
 
   test.case = 'case3: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite  } );
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -519,10 +519,10 @@ function chainingParallel( test )
 
   test.case = 'case3: 1 logger to many loggers';
   var got = [];
-  var l1 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l2 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l3 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l4 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l1 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l2 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l3 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l4 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
   l1.outputTo( l2, { combining : 'append' } );
   l1.outputTo( l3, { combining : 'append' } );
   l1.outputTo( l4, { combining : 'append' } );
@@ -533,10 +533,10 @@ function chainingParallel( test )
 
   test.case = 'case3: many loggers from 1 logger';
   var got = [];
-  var l1 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l2 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l3 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
-  var l4 = new _.Logger({ output : fakeConsole, onWrite : _onWrite });
+  var l1 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l2 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l3 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
+  var l4 = new _.Logger({ output : fakeConsole, onTransformEnd : _onWrite });
   l2.inputFrom( l1, { combining : 'append' } );
   l3.inputFrom( l1, { combining : 'append' } );
   l4.inputFrom( l1, { combining : 'append' } );
@@ -558,9 +558,9 @@ function chainingParallel( test )
   l1.inputFrom( l4, { combining : 'append' } );
 
   /* output */
-  var l5 = new _.Logger({ output : null, onWrite : _onWrite });
-  var l6 = new _.Logger({ output : null, onWrite : _onWrite });
-  var l7 = new _.Logger({ output : null, onWrite : _onWrite });
+  var l5 = new _.Logger({ output : null, onTransformEnd : _onWrite });
+  var l6 = new _.Logger({ output : null, onTransformEnd : _onWrite });
+  var l7 = new _.Logger({ output : null, onTransformEnd : _onWrite });
 
   l1.outputTo( l5, { combining : 'append' } );
   l1.outputTo( l6, { combining : 'append' } );
@@ -576,7 +576,7 @@ function chainingParallel( test )
 
   test.case = 'case4: outputTo/inputFrom, remove some outputs ';
   var got = [];
-  var l1 = new _.Logger( { output : fakeConsole, onWrite : _onWrite  } );
+  var l1 = new _.Logger( { output : fakeConsole, onTransformEnd : _onWrite  } );
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -627,8 +627,8 @@ function chainingParallel( test )
 
   // !!! needs silencing = false
   // test.case = 'case7: input from console twice ';
-  // var l1 = new _.Logger({ output : null,onWrite : _onWrite });
-  // var l2 = new _.Logger({ output : null,onWrite : _onWrite });
+  // var l1 = new _.Logger({ output : null,onTransformEnd : _onWrite });
+  // var l2 = new _.Logger({ output : null,onTransformEnd : _onWrite });
   // l1.inputFrom( console );
   // l2.inputFrom( console );
   // var got = [];
@@ -675,12 +675,12 @@ function outputTo( test )
   l3.outputTo( console );
 
   var got = [];
-  var temp = console.outputs[ 0 ].output.onWrite;
-  console.outputs[ 0 ].output.onWrite = ( o ) => got.push( o.input[ 0 ] );
+  var temp = console.outputs[ 0 ].output.onTransformEnd;
+  console.outputs[ 0 ].output.onTransformEnd = ( o ) => got.push( o.input[ 0 ] );
   l.log( 1 );
   l2.log( 2 );
   l3.log( 3 );
-  console.outputs[ 0 ].output.onWrite = temp;
+  console.outputs[ 0 ].output.onTransformEnd = temp;
   test.identical( got, [ '1', '2', '3' ] );
 
   //
@@ -911,8 +911,8 @@ function outputUnchain( test )
 
   test.case = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
-  var l1 = new _.Logger( { onWrite : _onWrite  } );
-  var l2 = new _.Logger( { onWrite : _onWrite  } );
+  var l1 = new _.Logger( { onTransformEnd : _onWrite  } );
+  var l2 = new _.Logger( { onTransformEnd : _onWrite  } );
   l2.outputTo( l1, { combining : 'append' } );
   l2.outputUnchain( l1 )
   l2.log( 'msg' );
@@ -921,7 +921,7 @@ function outputUnchain( test )
 
   test.case = 'case2 delete l1 from l2 outputs, no msg transfered';
   var got = [];
-  var l1 = new _.Logger( { onWrite : _onWrite  } );
+  var l1 = new _.Logger( { onTransformEnd : _onWrite  } );
   var l2 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'rewrite' } );
   l2.outputUnchain( l1 );
@@ -931,8 +931,8 @@ function outputUnchain( test )
 
   test.case = 'case3: delete l1 from l2 outputs';
   var got = [];
-  var l1 = new _.Logger( { onWrite : _onWrite  } );
-  var l2 = new _.Logger( { onWrite : _onWrite  } );
+  var l1 = new _.Logger( { onTransformEnd : _onWrite  } );
+  var l2 = new _.Logger( { onTransformEnd : _onWrite  } );
   var l3 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'append' } );
   l3.outputTo( l2, { combining : 'append' } );
@@ -1026,7 +1026,7 @@ function outputUnchain( test )
 
 function inputFrom( test )
 {
-  var onWrite = function( args ){ got.push( args.output[ 0 ] ) };
+  var onTransformEnd = function( args ){ got.push( args.output[ 0 ] ) };
 
   test.case = 'case1: input already exist';
   test.shouldThrowError( function()
@@ -1049,7 +1049,7 @@ function inputFrom( test )
   //
   // test.case = 'case3: console as input';
   // var got = [];
-  // var l = new _.Logger( { output : null, onWrite : onWrite } );
+  // var l = new _.Logger( { output : null, onTransformEnd : onTransformEnd } );
   // l.inputFrom( console );
   // l._prefix = '*';
   // console.log( 'abc' )
@@ -1059,7 +1059,7 @@ function inputFrom( test )
 
   test.case = 'case4: logger as input';
   var got = [];
-  var l = new _.Logger( { onWrite : onWrite } );
+  var l = new _.Logger( { onTransformEnd : onTransformEnd } );
   var l2 = new _.Logger( );
   l.inputFrom( l2 );
   l._prefix = '--';
@@ -1178,7 +1178,7 @@ function inputFrom( test )
 
 function inputUnchain( test )
 {
-  var onWrite = function( args ){ got.push( args[0] ) };
+  var onTransformEnd = function( args ){ got.push( args[0] ) };
 
   test.case = 'case1: input not exist in the list';
   var l = new _.Logger({ output : console });
@@ -1195,7 +1195,7 @@ function inputUnchain( test )
 
   test.case = 'case3: remove console from input';
   var got = [];
-  var l = new _.Logger( { output : null,onWrite : onWrite } );
+  var l = new _.Logger( { output : null,onTransformEnd : onTransformEnd } );
   l.inputFrom( console );
   l.inputUnchain( console );
   console.log( '1' );
@@ -1204,7 +1204,7 @@ function inputUnchain( test )
 
   test.case = 'case4: remove logger from input';
   var got = [];
-  var l1 = new _.Logger( { onWrite : onWrite } );
+  var l1 = new _.Logger( { onTransformEnd : onTransformEnd } );
   var l2 = new _.Logger({ output : console });
   l1.inputFrom( l2 );
   l1.inputUnchain( l2 );
@@ -1475,31 +1475,31 @@ function consoleBar( test )
   if( _.Logger.consoleIsBarred( console ) )
   {
     consoleWasBarred = true;
-    _global_.wTester._barOptions.bar = 0;
+    _global_.wTester._barOptions.exclusiveOutputPrinter = 0;
     _.Logger.consoleBar( _global_.wTester._barOptions );
   }
 
   //
 
-  test.case = 'bar/unbar console'
+  test.case = 'exclusiveOutputPrinter/unbar console'
   var barDescriptor = _.Logger.consoleBar
   ({
     outputLogger : _.Tester.logger,
-    barLogger : null,
-    bar : 1,
+    barPrinter : null,
+    exclusiveOutputPrinter : 1,
   });
   test.is( _.Logger.consoleIsBarred( console ) );
 
   if( Config.debug )
   {
-    //try to bar console again
+    //try to exclusiveOutputPrinter console again
     test.shouldThrowError( () =>
     {
       _.Logger.consoleBar
       ({
         outputLogger : _.Tester.logger,
-        barLogger : null,
-        bar : 1,
+        barPrinter : null,
+        exclusiveOutputPrinter : 1,
       })
     });
 
@@ -1511,31 +1511,31 @@ function consoleBar( test )
     test.is( consoleIsBarred );
   }
 
-  barDescriptor.bar = 0;
+  barDescriptor.exclusiveOutputPrinter = 0;
   _.Logger.consoleBar( barDescriptor );
   test.is( !_.Logger.consoleIsBarred( console ) );
 
   //
 
-  test.case = 'barred console forwards message only to bar logger';
+  test.case = 'excluded console forwards message only to exclusiveOutputPrinter logger';
   test.is( !_.Logger.consoleIsBarred( console ) );
   var barDescriptor = _.Logger.consoleBar
   ({
     outputLogger : _.Tester.logger,
-    barLogger : null,
-    bar : 1,
+    barPrinter : null,
+    exclusiveOutputPrinter : 1,
   });
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
     output : null,
-    onWrite : ( o ) => received.push( o.input[ 0 ] )
+    onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
   });
-  l.inputFrom( console, { barring : 0 } );
+  l.inputFrom( console, { exclusiveOutput : 0 } );
   console.log( 'message' );
   l.inputUnchain( console );
-  barDescriptor.bar = 0;
+  barDescriptor.exclusiveOutputPrinter = 0;
   _.Logger.consoleBar( barDescriptor );
   test.identical( received, [] );
   test.is( !_.Logger.consoleIsBarred( console ) );
@@ -1544,13 +1544,13 @@ function consoleBar( test )
 
   if( Config.debug )
   {
-    test.case = 'error if provided barLogger has inputs/outputs'
+    test.case = 'error if provided barPrinter has inputs/outputs'
     test.is( !_.Logger.consoleIsBarred( console ) );
     var o =
     {
       outputLogger : _.Tester.logger,
-      barLogger : new _.Logger({ output : console }),
-      bar : 1,
+      barPrinter : new _.Logger({ output : console }),
+      exclusiveOutputPrinter : 1,
     }
     test.shouldThrowError( () => _.Logger.consoleBar( o ) );
     test.is( !_.Logger.consoleIsBarred( console ) );
@@ -1560,7 +1560,7 @@ function consoleBar( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, bar : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 }

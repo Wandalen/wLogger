@@ -44,7 +44,7 @@ function shortColor( name )
 
 function prepareTableInfo()
 {
-  function onWrite( data )
+  function onTransformEnd( data )
   {
     if( c <= colorNames.length / 2 )
     row1[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
@@ -62,7 +62,7 @@ function prepareTableInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onWrite : onWrite
+    onTransformEnd : onTransformEnd
   })
   for( var i = 0; i < colorNames.length; i++ )
   {

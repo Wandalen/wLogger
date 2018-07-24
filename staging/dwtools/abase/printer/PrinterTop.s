@@ -37,45 +37,14 @@ var Self = function wPrinterTop( o )
 
 Self.nameShort = 'PrinterTop';
 
+// --
 //
+// --
 
 function init( o )
 {
   var self = this;
   Parent.prototype.init.call( self,o );
-}
-
-//
-
-function colorFormat( src, format )
-{
-  var self = this;
-  _.assert( arguments.length === 2 );
-  if( !self.coloring || !_.color || !_.color.strFormat )
-  return src;
-  return _.color.strFormat( src, format );
-}
-
-//
-
-function colorBg( src, format )
-{
-  var self = this;
-  _.assert( arguments.length === 2 );
-  if( !self.coloring || !_.color || !_.color.strFormatBackground )
-  return src;
-  return _.color.strFormatBackground( src, format );
-}
-
-//
-
-function colorFg( src, format )
-{
-  var self = this;
-  _.assert( arguments.length === 2 );
-  if( !self.coloring || !_.color || !_.color.strFormatForeground )
-  return src;
-  return _.color.strFormatForeground( src, format );
 }
 
 // --
@@ -84,7 +53,7 @@ function colorFg( src, format )
 
 var Composes =
 {
-  coloring : 0,
+  // outputGray : 1,
 }
 
 var Aggregates =
@@ -105,10 +74,6 @@ var Proto =
   // routine
 
   init : init,
-
-  colorFormat : colorFormat,
-  colorBg : colorBg,
-  colorFg : colorFg,
 
   // relationships
 
@@ -132,17 +97,17 @@ _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
 
 //
-
-_.accessor
-({
-  object : Self.prototype,
-  combining : 'rewrite',
-  names :
-  {
-    level : 'level',
-  }
-});
-
+//
+// _.accessor
+// ({
+//   object : Self.prototype,
+//   combining : 'rewrite',
+//   names :
+//   {
+//     level : 'level',
+//   }
+// });
+//
 //
 
 _[ Self.nameShort ] = Self;

@@ -60,10 +60,10 @@ var _escaping = function( str )
 function colorConsole( test )
 {
   var got;
-  var onWrite = function( args ){ console.log(args);got = args.outputForTerminal };
+  var onTransformEnd = function( args ){ console.log(args);got = args.outputForTerminal };
 
 
-  var logger = new _.Logger( { output : null, onWrite : onWrite });
+  var logger = new _.Logger( { output : null, onTransformEnd : onTransformEnd });
 
 
   test.case = 'case1';
