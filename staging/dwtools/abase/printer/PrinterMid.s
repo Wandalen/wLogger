@@ -112,6 +112,11 @@ function _transformEnd( o )
   if( self.onTransformEnd )
   self.onTransformEnd( o );
 
+  o = Parent.prototype._transformBegin.call( self, o );
+
+  if( !o )
+  return;
+
   return o;
 }
 
@@ -585,6 +590,7 @@ var Proto =
 
   levelSet : levelSet,
   _transformBegin : _transformBegin,
+  _transformEnd : _transformEnd,
 
   // attributing
 
