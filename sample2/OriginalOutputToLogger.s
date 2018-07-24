@@ -19,8 +19,8 @@ l1.outputTo( l2, { exclusiveOutput : 1 } );
 l1.log( 'This message will not get on screen' );
 
 let l3 = new _.Logger({ name : 'l3' });
-l3.outputTo( l1, { originalOutput : 1 } );
-// l1.inputFrom( l3, { originalOutput : 1 } );
+// l3.outputTo( l1, { originalOutput : 1 } );
+l1.inputFrom( l3, { originalOutput : 1 } );
 
 l1.log( 'This message will neither get on screen' );
 debugger;

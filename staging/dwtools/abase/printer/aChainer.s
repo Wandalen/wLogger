@@ -199,7 +199,7 @@ function _chain( o )
     _.arrayAppendOnceStrictly( outputChainer.inputs, cd );
   }
 
-  if( cd.outputCombining === 'prepend' )
+  if( cd.inputCombining === 'prepend' )
   {
     _.arrayPrependOnceStrictly( inputChainer.outputs, cd );
   }
@@ -664,8 +664,8 @@ function _unchain( o )
 
   if( cd1.originalOutput )
   {
-    inputChainer.hasOriginalOutputs -= 1;
-    _.assert( inputChainer.hasOriginalOutputs >= 0 );
+    outputChainer.hasOriginalOutputs -= 1;
+    _.assert( outputChainer.hasOriginalOutputs >= 0 );
   }
 
   return 1;
@@ -744,7 +744,6 @@ function inputUnchain( input )
     let result = 0;
     self.inputs.forEach( ( input ) =>
     {
-      debugger; xxx
       result += self.inputUnchain( input.inputPrinter );
     });
     return result;

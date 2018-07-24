@@ -367,7 +367,7 @@ function consoleChaining( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -1484,7 +1484,7 @@ function consoleBar( test )
   test.case = 'exclusiveOutputPrinter/unbar console'
   var barDescriptor = _.Logger.consoleBar
   ({
-    outputLogger : _.Tester.logger,
+    outputPrinter : _.Tester.logger,
     barPrinter : null,
     exclusiveOutputPrinter : 1,
   });
@@ -1497,7 +1497,7 @@ function consoleBar( test )
     {
       _.Logger.consoleBar
       ({
-        outputLogger : _.Tester.logger,
+        outputPrinter : _.Tester.logger,
         barPrinter : null,
         exclusiveOutputPrinter : 1,
       })
@@ -1521,7 +1521,7 @@ function consoleBar( test )
   test.is( !_.Logger.consoleIsBarred( console ) );
   var barDescriptor = _.Logger.consoleBar
   ({
-    outputLogger : _.Tester.logger,
+    outputPrinter : _.Tester.logger,
     barPrinter : null,
     exclusiveOutputPrinter : 1,
   });
@@ -1548,7 +1548,7 @@ function consoleBar( test )
     test.is( !_.Logger.consoleIsBarred( console ) );
     var o =
     {
-      outputLogger : _.Tester.logger,
+      outputPrinter : _.Tester.logger,
       barPrinter : new _.Logger({ output : console }),
       exclusiveOutputPrinter : 1,
     }
@@ -1560,7 +1560,7 @@ function consoleBar( test )
 
   if( consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputLogger : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, exclusiveOutputPrinter : 1 });
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 }

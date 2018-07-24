@@ -4,7 +4,6 @@ let _ = require( '../include/dwtools/Base.s' );
 _.include( 'wLogger' );
 
 let hooked = '';
-
 let l1 = new _.Logger({ name : 'l1', onTransformEnd : onTransformEnd });
 let l2 = new _.Logger({ name : 'l2', onTransformEnd : onTransformEnd });
 

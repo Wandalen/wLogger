@@ -238,7 +238,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
     // debugger;
     if( cd.originalOutput )
     {
-      outputChainer.originalWrite[ channelName ].apply( cd.outputPrinter, outputData );
+      return outputChainer.originalWrite[ channelName ].apply( cd.outputPrinter, outputData );
     }
 
     // if( inputChainer.exclusiveOutputPrinter )
@@ -606,65 +606,6 @@ function inputFrom( input, o )
   delete o2.combining;
 
   return chainer._chain( o2 );
-
-  // if( _.routineIs( input.outputTo ) )
-  // return input.outputTo( self,_.mapOnly( o, input.outputTo.defaults ) );
-  //
-  // _.assert( !o.combining || _.arrayHas( self.Combining, o.combining ), () => 'Unknown combining mode ' + _.strQuote( o.combining ) );
-  //
-  // /* input check */
-  //
-  // if( Config.debug )
-  // if( o.combining !== 'rewrite' )
-  // if( self.hasInputClose( input ) )
-  // _.assert( 0, 'inputFrom : This input already exists as input in the chain', input );
-  //
-  // /* recursive outputs check */
-  //
-  // if( Config.debug )
-  // if( self.hasOutputDeep( input ) )
-  // _.assert( 0, 'inputFrom : This input already exists as output in the chain', input );
-  //
-  // o.outputPrinter = self;
-  // o.inputPrinter = input;
-  //
-  // let cd = self._chainDescriptorMake( o );
-
-  // qqq : repair?
-  // if( Config.debug )
-  // if( cd.exclusiveOutput && _.consoleIs( input ) && self.consoleIsBarred( input )  )
-  // {
-  //   if( self.unbarringConsoleOnError )
-  //   {
-  //     let chainer = cd.outputPrinter[ chainerSymbol ];
-  //     _.assert( chainDescriptor && chainDescriptor.exclusiveOutputPrinter );
-  //     chainDescriptor.exclusiveOutputPrinter.unchain();
-  //   }
-  //   _.assert( 0, 'This input is already excluded', input );
-  // }
-
-  // /* */
-  //
-  // if( _.streamIs( input ) )
-  // {
-  //   result = self._inputFromStream( cd );
-  // }
-  // else
-  // {
-  //   result = self._inputFromConsole( cd );
-  // }
-  //
-  // debugger;
-  // let chainer = input.outputs ? input : input[ chainerSymbol ];
-  // if( cd.exclusiveOutput )
-  // {
-  //   _.assert( !chainer.exclusiveOutputPrinter, 'console is already excluded' );
-  //   chainer.exclusiveOutputPrinter = self;
-  // }
-  //
-  // /* */
-  //
-  // return result;
 }
 
 var defaults = inputFrom.defaults = Object.create( null );
@@ -672,97 +613,6 @@ var defaults = inputFrom.defaults = Object.create( null );
 defaults.combining = 'append';
 defaults.exclusiveOutput = 0;
 defaults.originalOutput = 0;
-
-// //
-//
-// function _inputFromConsole( cd )
-// {
-//   let self = this;
-//   let input = cd.inputPrinter;
-//
-//   _.assert( arguments.length === 1 );
-//   _.assert( self.isPrinter );
-//   _.assert( cd.inputPrinter );
-//   _.assert( !cd.inputPrinter.isPrinter );
-//   _.assert( cd.inputPrinter.outputs === undefined );
-//   _.assert( _.consoleIs( cd.inputPrinter ) );
-//
-//   /* */
-//
-//   debugger;
-//   let chainer = input[ chainerSymbol ] || self._chainerMakeFor( input );
-//   let cds = chainer.outputs;
-//
-//   if( cd.combining === 'rewrite' )
-//   {
-//     cds.forEach( ( cd,k ) =>
-//     {
-//       debugger; xxx
-//       if( cd.inputPrinter === input )
-//       cd.outputPrinter.inputUnchain( input );
-//     });
-//     debugger; xxx
-//   }
-//
-//   /* */
-//
-//   if( cd.combining === 'prepend' )
-//   _.arrayPrependOnceStrictly( cds, cd );
-//   else
-//   _.arrayAppendOnceStrictly( cds, cd );
-//
-//   _.arrayAppendOnceStrictly( self.inputs, cd );
-//
-//   self.Channel.forEach( ( channel, c ) =>
-//   {
-//     input[ channel ] = chainer.writeFromConsole[ channel ];
-//   });
-//
-// }
-//
-// //
-//
-// function _inputFromStream( cd )
-// {
-//   let self = this;
-//
-//   let outputChannel = 'log';
-//
-//   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
-//
-//   if( !stream.onDataHandler )
-//   {
-//     stream.on( 'data', function( data )
-//     {
-//       if( _.bufferAnyIs( data ) )
-//       data = _.bufferToStr( data );
-//
-//       if( _.strEnds( data,'\n' ) )
-//       data = _.strRemoveEnd( data,'\n' );
-//
-//       for( let d = 0 ; d < stream.outputs.length ; d++ )
-//       stream.outputs[ d ].outputPrinter[ outputChannel ].call( stream.outputs[ d ].outputPrinter, data );
-//     })
-//     stream.onDataHandler = 1;
-//   }
-// }
-//
-//
-//
-// function _inputFromAfter( cd )
-// {
-//   let self = this;
-//
-//   if( cd.combining === 'prepend' )
-//   {
-//     self.inputs.unshift( cd );
-//   }
-//   else
-//   {
-//     self.inputs.push( cd );
-//   }
-//
-// }
 
 //
 
@@ -866,11 +716,9 @@ function consoleIsBarred( output )
   _.assert( _.consoleIs( output ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  debugger;
   let chainer = output[ chainerSymbol ]
   if( !chainer )
   return false;
-  debugger;
 
   return !!chainer.exclusiveOutputPrinter;
 }
@@ -880,9 +728,9 @@ function consoleIsBarred( output )
 function consoleBar( o )
 {
   let self = this;
-  let o = _.routineOptions( consoleBar, arguments );
+  o = _.routineOptions( consoleBar, arguments );
 
-  // debugger;
+  debugger;
 
   if( !o.barPrinter )
   o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
@@ -893,9 +741,7 @@ function consoleBar( o )
 
   /* */
 
-  /* */
-
-  if( o.exclusiveOutputPrinter )
+  if( o.on )
   {
 
     if( o.verbose )
@@ -907,18 +753,15 @@ function consoleBar( o )
 
     _.assert( !o.barPrinter.inputs.length );
     _.assert( !o.barPrinter.outputs.length );
-    // debugger;
-    // _.assert( o.outputPrinter.outputs.length === 0 || ( o.outputPrinter.outputs.length === 1 && o.outputPrinter.outputs[ 0 ] === console ), '{-o.outputPrinter-} should have no output' );
     _.assert( !o.outputPrinterHadOutputs );
 
     o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
 
-    // o.outputLoggerWasChainedToConsole = o.outputPrinter.outputUnchain( console );
     o.outputPrinter.outputUnchain();
 
     o.outputPrinter.outputTo( console,{ originalOutput : 1, combining : 'rewrite' } );
 
-    o.barPrinter.permanentStyle = 'exclusiveOutputPrinter.neutral';
+    o.barPrinter.permanentStyle = 'exclusiveOutput.neutral';
     o.barPrinter.inputFrom( console,{ exclusiveOutput : 1 } );
     o.barPrinter.outputTo( o.outputPrinter );
 
@@ -932,12 +775,8 @@ function consoleBar( o )
 
     _.assert( o.outputPrinterHadOutputs );
 
-    // if( o.outputLoggerWasChainedToConsole )
-    // o.outputPrinter.outputTo( console );
-
     for( let t = 0 ; t < o.outputPrinterHadOutputs.length ; t++ )
     {
-      // debugger;
       let outputOptions = o.outputPrinterHadOutputs[ t ];
       o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly( outputOptions, o.outputPrinter.outputTo.defaults ) );
     }
@@ -967,9 +806,8 @@ consoleBar.defaults =
 {
   outputPrinter : null,
   barPrinter : null,
-  exclusiveOutputPrinter : 1,
+  on : 1,
   verbose : 0,
-  // outputLoggerWasChainedToConsole : null,
   outputPrinterHadOutputs : null,
 }
 
