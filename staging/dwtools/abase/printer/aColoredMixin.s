@@ -546,7 +546,7 @@ function _directiveApply( directive )
     return true;
   }
 
-  _.assert( 0, 'Unknown logger directive', _.strQuote( name ) );
+  // _.assert( 0, 'Unknown logger directive', _.strQuote( name ) );
 }
 
 //

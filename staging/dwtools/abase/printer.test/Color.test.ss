@@ -31,7 +31,7 @@ var isUnix = process.platform !== 'win32' ? true : false;
 
 //
 
-var _escaping = function( str )
+var escape = function( str )
 {
   return _.toStr( str,{ escaping : 1 } );
 }
@@ -53,13 +53,13 @@ function colorConsole( test )
   logger.log( _.color.strFormatForeground( 'text', 'dark red') );
   var expected = '\u001b[31mtext\u001b[39;0m';
   test.identical( logger.foregroundColor, null );
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case2: dark yellow background';
   logger.log( _.color.strFormatBackground( 'text', 'dark yellow') );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[43mtext\u001b[49;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case3: dark red text on dark yellow background';
   logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'dark red'), 'dark yellow') );
@@ -67,7 +67,7 @@ function colorConsole( test )
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
   debugger;
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
   debugger;
 
   test.case = 'case4: dark yellow text on dark red background  + not styled text';
@@ -75,7 +75,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49;0m\u001b[39;0mtext';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case5: unknown color ';
   test.shouldThrowError( () =>
@@ -101,7 +101,7 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0.5, 0 ,0 ] );
   var expected = '\u001b[31mtext\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /**/
 
@@ -110,7 +110,7 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.backgroundColor, [ 0.5, 0 ,0 ] );
   var expected = '\u001b[41mtext\u001b[49;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /**/
 
@@ -122,7 +122,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 0.5, 0 ,0 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5 ,0 ] );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /**/
 
@@ -154,7 +154,7 @@ function colorConsole( test )
   // var expected = '\u001b[34m\u001b[107mtext\u001b[39;0m\u001b[49;0m';
   // else
   var expected = '\u001b[34m\u001b[47mtext\u001b[49;0m\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /**/
 
@@ -171,7 +171,7 @@ function colorConsole( test )
   // var expected = '\u001b[107mtext\u001b[49;0m';
   // else
   var expected = '\u001b[47mtext\u001b[49;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /**/
 
@@ -188,7 +188,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   //
 
@@ -210,7 +210,7 @@ function colorConsole( test )
   test.identical( logger.backgroundColor, [ 0, 0.5, 0 ] )
   logger.log( 'text' );
   var expected = '\u001b[34m\u001b[42mtext\u001b[49;0m\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   //setting to default to get stacked color
 
@@ -221,7 +221,7 @@ function colorConsole( test )
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0 ] );
   logger.log( 'text' );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   //setting to default, no stacked colors, must be null
 
@@ -232,7 +232,7 @@ function colorConsole( test )
   test.identical( logger.backgroundColor, null );
   logger.log( 'text' );
   var expected = 'text';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   //other
 
@@ -248,11 +248,11 @@ function colorConsole( test )
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0 ] );
   logger.log( 'text' );
   var expected = 'text';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
   logger.log( '#outputGray : 0#' );
   logger.log( 'text' );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
 
   /* stacking colors even if outputGray is enabled */
 
@@ -298,13 +298,354 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 0.5, 0, 0 ] );
   logger.log( 'text' );
   var expected = '\u001b[31mtext\u001b[39;0m';
-  test.identical( _escaping( got ), _escaping( expected ) );
+  test.identical( escape( got ), escape( expected ) );
   // test.identical( 0, 1 );
   //inputGray problem, logger of test suit cant override it value correctly, directive is inside of it output
 
 }
 
-colorConsole.timeOut = 999999;
+//
+
+function colorConsoleDirectives( test )
+{
+  let got;
+  let fg = _.color.strFormatForeground;
+  let bg = _.color.strFormatBackground;
+
+  function onTransformEnd( o )
+  {
+    got = o;
+    // console.log( test.case );
+    // console.log( 'o.outputForTerminal:', escape( o.outputForTerminal[ 0 ] ) )
+    // console.log( 'o.outputForPrinter', escape( o.outputForPrinter[ 0 ] ) )
+  }
+
+  let l = new _.Logger({ output : null, onTransformEnd : onTransformEnd  });
+
+  test.open( 'setting states as property' )
+
+  function runCase( o )
+  {
+    test.case =
+    _.toStr
+    ({
+      inputGray : o.inputGray,
+      outputGray : o.outputGray,
+      inputRaw : o.inputRaw,
+      outputRaw : o.outputRaw
+    });
+
+    l.inputGray = o.inputGray;
+    l.outputGray = o.outputGray;
+    l.inputRaw = o.inputRaw;
+    l.outputRaw = o.outputRaw;
+
+    l.log( o.text );
+
+    test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.outputForTerminal ) );
+    test.identical( escape( got.outputForPrinter[ 0 ] ), escape( o.text ) );
+  }
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '\u001b[91mtext\u001b[39;0m'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : 'text'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 1,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : 'text'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 1,
+    inputRaw : 1,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 0,
+    inputRaw : 1,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 1,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : 'text'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 1,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 0,
+    inputRaw : 1,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 1,
+    outputGray : 1,
+    inputRaw : 1,
+    outputRaw : 0,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 1,
+    outputRaw : 1,
+    text : '#foreground: red#text#foreground: default#',
+    outputForTerminal : '#foreground: red#text#foreground: default#'
+  })
+
+  test.close( 'setting states as property' );
+
+  /* - */
+
+  test.open( 'states combined with colored input' )
+
+  let output = 'text';
+  let coloredInput = '#fg: red#text#fg: default#';
+  let coloredOutput = '\u001b[91mtext\u001b[39;0m'
+
+  let inputGrayOn = '#inputGray:1#';
+  let inputGrayOff = '#inputGray:0#';
+  let outputGrayOn = '#outputGray:1#';
+  let outputGrayOff = '#outputGray:0#';
+
+  let inputRawOn = '#inputRaw:1#';
+  let inputRawOff = '#inputRaw:0#';
+  let outputRawOn = '#outputRaw:1#';
+  let outputRawOff = '#outputRaw:0#';
+
+  function runCase2( o )
+  {
+    test.case = o.case;
+
+    var directiveOn = `#${o.directive}:1#`;
+    var directiveOff = `#${o.directive}:0#`;
+    var input = coloredInput + directiveOn + coloredInput + directiveOn + coloredInput + directiveOff + coloredInput + directiveOff + coloredInput;
+
+    l.inputGray = o.other;
+    l.outputGray = o.other;
+    l.inputRaw = o.other;
+    l.outputRaw = o.other;
+    l[ o.directive ] = 0;
+
+    l.log( input );
+    test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.expected ) );
+  }
+
+  runCase2
+  ({
+    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 0 ',
+    other : 0,
+    directive : 'inputGray',
+    expected : coloredOutput + coloredInput + coloredInput + coloredInput + coloredOutput
+  })
+
+  runCase2
+  ({
+    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 0 ',
+    other : 0,
+    directive : 'outputGray',
+    expected : coloredOutput + output + output + output + coloredOutput
+  })
+
+  runCase2
+  ({
+    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 0 ',
+    other : 0,
+    directive : 'inputRaw',
+    expected : coloredOutput + coloredInput + coloredInput + coloredInput + coloredOutput
+  })
+
+  runCase2
+  ({
+    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 0 ',
+    other : 0,
+    directive : 'outputRaw',
+    expected : coloredOutput + output + output + output + coloredOutput
+  })
+
+  /**/
+
+  runCase2
+  ({
+    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1 ',
+    other : 1,
+    directive : 'inputGray',
+    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1 ',
+    other : 1,
+    directive : 'outputGray',
+    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 1 ',
+    other : 1,
+    directive : 'inputRaw',
+    expected : coloredInput + coloredInput + coloredInput + coloredInput + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1 ',
+    other : 1,
+    directive : 'outputRaw',
+    expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
+  })
+
+  /**/
+
+  runCase2
+  ({
+    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 2 ',
+    other : 2,
+    directive : 'inputGray',
+    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 2 ',
+    other : 2,
+    directive : 'outputGray',
+    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 2 ',
+    other : 2,
+    directive : 'inputRaw',
+    expected : coloredInput + coloredInput + coloredInput + coloredInput + coloredInput
+  })
+
+  runCase2
+  ({
+    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 2 ',
+    other : 2,
+    directive : 'outputRaw',
+    expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
+  })
+
+  test.close( 'states combined with colored input' )
+}
 
 //
 
@@ -419,6 +760,7 @@ var Self =
   tests :
   {
     colorConsole : colorConsole,
+    colorConsoleDirectives : colorConsoleDirectives,
     shellColors : shellColors,
   },
 
