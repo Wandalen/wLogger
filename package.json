@@ -1,6 +1,6 @@
 {
   "name": "wLogger",
-  "version": "0.5.82",
+  "version": "0.5.83",
   "engine": "node >= 6.0.0",
   "description": "The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging",
   "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
