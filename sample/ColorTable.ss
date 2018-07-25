@@ -34,7 +34,7 @@ var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
 
 function shortColor( name )
 {
-  var parts = _.strSplit( name );
+  var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
   if( parts[ 0 ] === 'dark' )
   name = 'd.' + parts[ 1 ];
 

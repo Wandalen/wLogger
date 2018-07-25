@@ -31,7 +31,7 @@ colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
 
 function shortColor( name )
 {
-  var parts = _.strSplit( name );
+  var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
   if( parts[ 0 ] === 'light' )
   name = 'l.' + parts[ 1 ];
 

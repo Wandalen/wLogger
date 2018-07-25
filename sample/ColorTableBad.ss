@@ -32,11 +32,11 @@ function prepareInfo()
 
   function shortColor( name )
   {
-  var parts = _.strSplit( name );
-  if( parts[ 0 ] === 'light' )
-  name = 'l.' + parts[ 1 ];
+    var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
+    if( parts[ 0 ] === 'light' )
+    name = 'l.' + parts[ 1 ];
 
-  return name;
+    return name;
   }
 
   function searchInList( src )

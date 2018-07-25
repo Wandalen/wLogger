@@ -1169,6 +1169,8 @@ let PoisonedColorCombination =
 
   /* */
 
+/* qqq : light black? */
+
   { fg : 'green', bg : 'cyan', platform : 'linux' },
   { fg : 'blue', bg : 'magenta', platform : 'linux' },
   { fg : 'blue', bg : 'light black', platform : 'linux' },
