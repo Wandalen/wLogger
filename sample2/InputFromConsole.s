@@ -1,12 +1,15 @@
 
-let _ = require( '../include/dwtools/Base.s' );
+if( typeof module !== 'undefined' )
+require( 'wTools' );
+
+let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
 let hooked = '';
 
-let l1 = new _.Logger({ name : 'l1', onTransformEnd : onTransformEnd });
-let l2 = new _.Logger({ name : 'l2', onTransformEnd : onTransformEnd });
+let l1 = new _.Logger({ name : 'l1', onTransformBegin : onTransformBegin });
+let l2 = new _.Logger({ name : 'l2', onTransformBegin : onTransformBegin });
 
 l1.inputFrom( console );
 
@@ -26,9 +29,8 @@ console.log( 'hello3' );
 console.log( hooked );
 hooked = '';
 
-function onTransformEnd( o )
+function onTransformBegin( o )
 {
-  o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-  hooked += o.input[ 0 ] + '\n';
+  hooked += this.name + ' : ' + o.input[ 0 ] + '\n';
   return o;
 }
