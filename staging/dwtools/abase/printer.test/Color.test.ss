@@ -329,10 +329,13 @@ function colorConsoleDirectives( test )
     test.case =
     _.toStr
     ({
-      inputGray : o.inputGray,
-      outputGray : o.outputGray,
-      inputRaw : o.inputRaw,
-      outputRaw : o.outputRaw
+      ig : o.inputGray,
+      og : o.outputGray,
+      ir : o.inputRaw,
+      or : o.outputRaw
+    },
+    {
+      multiline : 0,
     });
 
     l.inputGray = o.inputGray;
@@ -341,6 +344,8 @@ function colorConsoleDirectives( test )
     l.outputRaw = o.outputRaw;
 
     l.log( o.text );
+
+    debugger;
 
     test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.outputForTerminal ) );
     test.identical( escape( got.outputForPrinter[ 0 ] ), escape( o.text ) );
