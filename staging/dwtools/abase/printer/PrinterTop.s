@@ -2,6 +2,25 @@
 
 'use strict';
 
+/*
+
+Kinds of Chain : [ ordinary, excluding, original ]
+
+Kinds of Print-like object : [ console, printer ]
+
+Kinds of situations :
+
+conosle -> ordinary -> self
+printer -> ordinary -> self
+conosle -> excluding -> self
+printer -> excluding -> self
+self -> ordinary -> conosle
+self -> ordinary -> printer
+self -> original -> conosle
+self -> original -> printer
+
+*/
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
