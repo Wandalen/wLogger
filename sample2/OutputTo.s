@@ -3,9 +3,9 @@ let _ = require( '../include/dwtools/Base.s' );
 
 _.include( 'wLogger' );
 
-let l1 = new _.Logger({ name : 'l1', onTransformEnd : onTransformEnd });
-let l2 = new _.Logger({ name : 'l2', onTransformEnd : onTransformEnd });
-let l3 = new _.Logger({ name : 'l3', onTransformEnd : onTransformEnd });
+let l1 = new _.Logger({ name : 'l1', onTransformBegin : onTransformBegin });
+let l2 = new _.Logger({ name : 'l2', onTransformBegin : onTransformBegin });
+let l3 = new _.Logger({ name : 'l3', onTransformBegin : onTransformBegin });
 
 l1.outputTo( l2 );
 l2.outputTo( l3 );
@@ -23,7 +23,7 @@ l3.outputUnchain( console );
 
 l1.log( 'hello3' );
 
-function onTransformEnd( o )
+function onTransformBegin( o )
 {
   o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
   return o;
