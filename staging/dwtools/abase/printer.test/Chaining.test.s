@@ -1600,19 +1600,29 @@ function finit( test )
 {
 
   /* +console -> ordinary -> self
-  printer -> ordinary -> self
-  console -> excluding -> self
-  printer -> excluding -> self
-  self -> ordinary -> console
-  self -> ordinary -> printer
-  self -> original -> console
-  self -> original -> printer */
+  +printer -> ordinary -> self
+  +console -> excluding -> self
+  + printer -> excluding -> self
+  +self -> ordinary -> console
+  +self -> ordinary -> printer
+  +self -> original -> console
+  +self -> original -> printer */
+
+  var consoleWasBarred = false;
+
+  if( _.Logger.consoleIsBarred( console ) )
+  {
+    consoleWasBarred = true;
+    _global_.wTester._barOptions.on = 0;
+    _.Logger.consoleBar( _global_.wTester._barOptions );
+  }
+
 
   test.open( 'console -> ordinary -> self' );
 
-  let printer = new _.Logger();
-  let printerBefore = printerGatherInfo( printer );
-  let consoleBefore = printerGatherInfo( console );
+  var printer = new _.Logger();
+  var printerBefore = printerGatherInfo( printer );
+  var consoleBefore = printerGatherInfo( console );
   test.will = 'must not have console in inputs';
   test.is( !printer.hasInputClose( console ) );
   printer.inputFrom( console, { exclusiveOutput : 0, originalOutput : 0 } );
@@ -1646,7 +1656,7 @@ function finit( test )
   test.is( printerIsNotChained( printerA ) );
   test.is( printerIsNotChained( printerB ) );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0 } );
-  test.will = 'must have printerA in inputs after printerA.outputTo( printerB )';
+  test.will = 'must be chained';
   test.is( printerA.hasOutputClose( printerB ) );
   test.is( printerB.hasInputClose( printerA ) );
   printerA.finit();
@@ -1675,7 +1685,7 @@ function finit( test )
   test.is( printerIsNotChained( printerA ) );
   test.is( printerIsNotChained( printerB ) );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0 } );
-  test.will = 'must have printerA in inputs after printerA.outputTo( printerB )';
+  test.will = 'must be chained';
   test.is( printerA.hasOutputClose( printerB ) );
   test.is( printerB.hasInputClose( printerA ) );
   printerB.finit();
@@ -1703,7 +1713,7 @@ function finit( test )
   test.will = 'must not have chains';
   test.is( printerIsNotChained( printerA ) );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0 } );
-  test.will = 'must have printerA in inputs after printerA.outputTo( printerB )';
+  test.will = 'must be chained';
   test.is( printerA.hasOutputClose( printerB ) );
   test.is( chainerGet( printerB ).hasInputClose( printerA ) );
   printerA.finit();
@@ -1719,6 +1729,232 @@ function finit( test )
   test.will = null;
 
   test.close( 'printer -> ordinary -> self' );
+
+  /* - */
+
+  test.open( 'console -> excluding -> self' );
+
+  var printer = new _.Logger();
+  var printerBefore = printerGatherInfo( printer );
+  var consoleBefore = printerGatherInfo( console );
+  test.will = 'must not have console in inputs';
+  test.is( !printer.hasInputClose( console ) );
+  printer.inputFrom( console, { exclusiveOutput : 1, originalOutput : 0 } );
+  test.will = 'must have console in inputs after printer.inputFrom( console )';
+  test.is( printer.hasInputClose( console ) );
+  printer.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printer ) );
+  test.will = 'console must not be chained with printer';
+  test.is( printerIsNotChainedWith( console, printer ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerBefore, printer ) );
+  test.will = 'console must not be modified';
+  test.is( printerIsNotModified( consoleBefore, console ) );
+  test.will = null;
+
+  test.close( 'console -> excluding -> self' );
+
+  /* - */
+
+  test.open( 'printer -> excluding -> self' );
+
+  test.case = 'self = printer, finit on left side of chain'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  test.is( printerIsNotChained( printerB ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0 } );
+  test.will = 'must be chained';
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( printerB.hasInputClose( printerA ) );
+  printerA.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.is( printerIsNotChained( printerB ) );
+  test.will = 'printerA must not be chained with printerB';
+  test.is( printerIsNotChainedWith( printerA, printerB ) );
+  test.will = 'printerB must not be chained with printerA';
+  test.is( printerIsNotChainedWith( printerB, printerA ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  //
+
+  test.case = 'self = printer, finit on right side of chain'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  test.is( printerIsNotChained( printerB ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0 } );
+  test.will = 'must be chained';
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( printerB.hasInputClose( printerA ) );
+  printerB.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.is( printerIsNotChained( printerB ) );
+  test.will = 'printerA must not be chained with printerB';
+  test.is( printerIsNotChainedWith( printerA, printerB ) );
+  test.will = 'printerB must not be chained with printerA';
+  test.is( printerIsNotChainedWith( printerB, printerA ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  test.close( 'printer -> excluding -> self' );
+
+  /* - */
+
+  test.open( 'self -> ordinary -> console' );
+
+  test.case = 'self = printer'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = console;
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0 } );
+  test.will = 'must be chained';
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( chainerGet( printerB ).hasInputClose( printerA ) );
+  printerA.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.will = 'printerA must not be chained with printerB';
+  test.is( printerIsNotChainedWith( printerA, printerB ) );
+  test.will = 'printerB must not be chained with printerA';
+  test.is( printerIsNotChainedWith( printerB, printerA ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  test.close( 'self -> ordinary -> console' );
+
+  /* - */
+
+  test.open( 'self -> ordinary -> printer' );
+
+  test.case = 'self = printer'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0 } );
+  test.will = 'must be chained';
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( chainerGet( printerB ).hasInputClose( printerA ) );
+  printerA.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.will = 'printerA must not be chained with printerB';
+  test.is( printerIsNotChainedWith( printerA, printerB ) );
+  test.will = 'printerB must not be chained with printerA';
+  test.is( printerIsNotChainedWith( printerB, printerA ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  test.close( 'self -> ordinary -> printer' );
+
+  /* - */
+
+  test.open( 'self -> original -> console' );
+
+  test.case = 'self = printer'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = console;
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1 } );
+  test.will = 'printerA.hasOutputClose( printerB ) must give negative becase of original chain';
+  test.is( !printerA.hasOutputClose( printerB ) );
+  test.will = 'but still have console in outputs';
+  test.is( printerA.outputs[ 0 ].outputPrinter === printerB );
+  test.will = 'printerB.hasInputClose( printerA ) must give negative becase of original chain';
+  var consoleChainer = chainerGet( printerB );
+  test.is( !consoleChainer.hasInputClose( printerA ) );
+  test.will = 'but still have printerA in inputs';
+  test.is( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter === printerA );
+  printerA.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.will = 'printerB must not be chained with printerA';
+  test.is( printerIsNotChainedWith( printerB, printerA ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  test.close( 'self -> original -> console' );
+
+  /* - */
+
+  test.open( 'self -> original -> printer' );
+
+  test.case = 'self = printer'
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerA' });
+  var printerABefore = printerGatherInfo( printerA );
+  var printerBBefore = printerGatherInfo( printerB );
+
+  test.will = 'must not have chains';
+  test.is( printerIsNotChained( printerA ) );
+  printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1 } );
+  test.will = 'printerA.hasOutputClose( printerB ) must give negative becase of original chain';
+  test.is( !printerA.hasOutputClose( printerB ) );
+  test.will = 'but still have console in outputs';
+  test.is( printerA.outputs[ 0 ].outputPrinter === printerB );
+  test.will = 'printerB.hasInputClose( printerA ) must give negative becase of original chain';
+  var consoleChainer = chainerGet( printerB );
+  test.is( !consoleChainer.hasInputClose( printerA ) );
+  test.will = 'but still have printerA in inputs';
+  test.is( printerB.inputs[ 0 ].inputPrinter === printerA );
+  printerA.finit();
+  test.will = 'must not have any chains after finit';
+  test.is( printerIsNotChained( printerA ) );
+  test.is( printerIsNotChained( printerB ) );
+  test.will = 'printer must not be modified';
+  test.is( printerIsNotModified( printerABefore, printerA ) );
+  test.is( printerIsNotModified( printerBBefore, printerB ) );
+  test.will = null;
+
+  test.close( 'self -> original -> printer' );
+
+  /* - */
+
+  if( consoleWasBarred )
+  {
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.is( _.Logger.consoleIsBarred( console ) );
+  }
 
 
   function printerGatherInfo( printer )

@@ -72,11 +72,11 @@ function init( o )
 function finit()
 {
   var self = this;
-  debugger;xxx
+  // debugger;xxx
 
   self.unchainEverything();
 
-  _.Copyable.finit.call( self );
+  _.Copyable.supplement.finit.call( self );
 }
 
 //
