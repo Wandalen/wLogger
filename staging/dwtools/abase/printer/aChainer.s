@@ -180,6 +180,7 @@ function _chain( o )
   /* input check */
 
   if( Config.debug )
+  if( !o.originalOutput )
   if( inputChainer.hasInputClose( o.outputPrinter ) )
   _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
 
