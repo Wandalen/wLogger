@@ -161,26 +161,7 @@ function _chain( o )
   /* */
 
   _.assert( o.outputPrinter, 'expects {-o.outputPrinter-}' );
-  _.assert( self !== o.outputPrinter, 'Output to itself is not correct chaining' );
-
-  if( Config.debug )
-  if( self.hasOutputClose( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Close loop', _.toStrShort( o.inputPrinter ), 'outputPrinter to', _.toStrShort( o.outputPrinter ) ]) );
-
-  /* input check */
-
-  if( Config.debug )
-  if( self.hasInputClose( o.inputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Close loop', _.toStrShort( o.inputPrinter ), 'outputPrinter to', _.toStrShort( o.outputPrinter ) ]) );
-
-  /*
-    no need to check inputs if chaining is originalOutput
-  */
-
-  if( Config.debug )
-  if( !o.originalOutput )
-  if( self.hasInputDeep( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Deep loop', _.toStrShort( o.inputPrinter ), 'outputPrinter to', _.toStrShort( o.outputPrinter ) ]) );
+  _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
 
   let cd = self._chainDescriptorMake( o );
 
@@ -189,6 +170,27 @@ function _chain( o )
 
   let inputChainer = cd.inputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.inputPrinter );
   let outputChainer = cd.outputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.outputPrinter );
+
+  /* output check */
+
+  if( Config.debug )
+  if( inputChainer.hasOutputClose( o.outputPrinter ) )
+  _.assert( 0, () => _.strConcat([ 'inputPrinter', _.toStrShort( o.inputPrinter ), 'already has outputPrinter', _.toStrShort( o.outputPrinter ), 'in outputs' ] ) );
+
+  /* input check */
+
+  if( Config.debug )
+  if( inputChainer.hasInputClose( o.outputPrinter ) )
+  _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
+
+  /*
+    no need to check inputs if chaining is originalOutput
+  */
+
+  if( Config.debug )
+  if( !o.originalOutput )
+  if( inputChainer.hasInputDeep( o.outputPrinter ) )
+  _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
 
   if( cd.outputCombining === 'prepend' )
   {
