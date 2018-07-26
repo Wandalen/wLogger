@@ -693,10 +693,11 @@ function outputUnchain( output )
   if( output === undefined )
   {
     let result = 0;
-    self.outputs.forEach( ( output ) =>
+    for( let i = self.outputs.length - 1; i >= 0; i-- )
     {
-      result += self.outputUnchain( output.outputPrinter );
-    });
+      result += self.outputUnchain( self.outputs[ i ].outputPrinter );
+    }
+
     return result;
   }
 
