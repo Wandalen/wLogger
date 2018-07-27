@@ -50,7 +50,7 @@ var Self = function wPrinterBase( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterBase';
+Self.shortName = 'PrinterBase';
 
 // --
 // inter
@@ -389,7 +389,7 @@ _.Copyable.mixin( Self );
 // export
 // --
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

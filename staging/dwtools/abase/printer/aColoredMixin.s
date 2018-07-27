@@ -53,7 +53,7 @@ let Self = function wPrinterColoredMixin( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterColoredMixin';
+Self.shortName = 'PrinterColoredMixin';
 
 _.assert( _.strExtractInlined );
 
@@ -978,7 +978,7 @@ function _outputRawSet( src )
 function colorFormat( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormat )
   return src;
   return _.color.strFormat( src, format );
@@ -989,7 +989,7 @@ function colorFormat( src, format )
 function colorBg( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormatBackground )
   return src;
   return _.color.strFormatBackground( src, format );
@@ -1000,7 +1000,7 @@ function colorBg( src, format )
 function colorFg( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2 );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormatForeground )
   return src;
   return _.color.strFormatForeground( src, format );
@@ -1366,7 +1366,7 @@ _.classMake
 // export
 // --
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

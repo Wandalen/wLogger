@@ -54,7 +54,7 @@ var Self = function wPrinterTop( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterTop';
+Self.shortName = 'PrinterTop';
 
 // --
 //
@@ -115,7 +115,7 @@ _.classMake
 _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 // --
 // export

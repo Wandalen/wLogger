@@ -59,46 +59,46 @@ let Self = function wPrinterChainingMixin( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterChainingMixin';
+Self.shortName = 'PrinterChainingMixin';
 
 //
 
-function _mixin( o )
+function onMixinEnd( dstClass, mixinDescriptor )
 {
+  let dstPrototype = dstClass.prototype;
 
-  let cls = o.cls;
-  let dstProto = cls.prototype;
+  _.assert( dstPrototype._writeToChannelWithoutExclusion === _writeToChannelWithoutExclusion );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( _.routineIs( dstClass ) );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.routineIs( cls ) );
-
-  dstProto._initChainingMixin();
+  dstPrototype._initChainingMixin( mixinDescriptor );
 
 }
 
 //
 
-function _initChainingMixin()
+function _initChainingMixin( mixinDescriptor )
 {
   let proto = this;
+
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
   proto.Channel.forEach( ( channel, c ) =>
   {
-    proto._initChainingMixinChannel( channel );
+    proto._initChainingMixinChannel( mixinDescriptor, channel );
   });
 
 }
 
 //
 
-function _initChainingMixinChannel( channel )
+function _initChainingMixinChannel( mixinDescriptor, channel )
 {
   let proto = this;
-  let mixin = proto.constructor.__mixin__;
+  // let mixin = proto.constructor.__mixin__;
 
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channel ) );
 
   if( proto[ channel ] )
@@ -106,10 +106,15 @@ function _initChainingMixinChannel( channel )
 
   /* */
 
-  mixin.extend[ channel ] = proto[ channel ] = write;
-  mixin.extend[ channel + 'Up' ] = proto[ channel + 'Up' ] = writeUp;
-  mixin.extend[ channel + 'Down' ] = proto[ channel + 'Down' ] = writeDown;
-  mixin.extend[ channel + 'In' ] = proto[ channel + 'In' ] = writeIn;
+  proto[ channel ] = write;
+  proto[ channel + 'Up' ] = writeUp;
+  proto[ channel + 'Down' ] = writeDown;
+  proto[ channel + 'In' ] = writeIn;
+
+  // this.extend[ channel ] = proto[ channel ] = write;
+  // this.extend[ channel + 'Up' ] = proto[ channel + 'Up' ] = writeUp;
+  // this.extend[ channel + 'Down' ] = proto[ channel + 'Down' ] = writeDown;
+  // this.extend[ channel + 'In' ] = proto[ channel + 'In' ] = writeIn;
 
   /* */
 
@@ -1227,29 +1232,12 @@ let Extend =
 
 //
 
-// let Self =
-// {
-//
-//   supplement : Supplement,
-//   extend : Extend,
-//
-//   _mixin : _mixin,
-//
-//   name : 'wPrinterChainingMixin',
-//   nameShort : 'PrinterChainingMixin',
-//
-// }
-//
-// Self = _[ Self.nameShort ] = _.mixinMake( Self );
-
-//
-
 _.classMake
 ({
   cls : Self,
   extend : Extend,
   supplement : Supplement,
-  onClassMakeEnd : _mixin,
+  onMixinEnd : onMixinEnd,
   functors : Functors,
   withMixin : true,
   withClass : true,
@@ -1259,7 +1247,7 @@ _.classMake
 // export
 // --
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

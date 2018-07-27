@@ -40,7 +40,7 @@ var Self = function wLogger( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'Logger';
+Self.shortName = 'Logger';
 
 //
 
@@ -112,7 +112,7 @@ _.classMake
 
 //
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( !_global_.logger || !( _global_.logger instanceof Self ) )
 _global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'global' });

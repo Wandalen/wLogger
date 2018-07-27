@@ -47,7 +47,7 @@ var Self = function wPrinterToLayeredHtml( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterToLayeredHtml';
+Self.shortName = 'PrinterToLayeredHtml';
 
 //
 
@@ -268,7 +268,7 @@ _.classMake
   extend : Proto,
 });
 
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export

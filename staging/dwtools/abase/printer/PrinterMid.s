@@ -34,7 +34,7 @@ var Self = function wPrinterMid( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterMid';
+Self.shortName = 'PrinterMid';
 
 // --
 // routines
@@ -129,7 +129,7 @@ function _begin( key,val )
   var self = this;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.strIs( key ),'expects string ( key ), got',_.strTypeOf( key ) );
+  _.assert( _.strIs( key ),'expects string {-key-}, got',_.strTypeOf( key ) );
 
   if( val === undefined )
   {
@@ -649,7 +649,7 @@ _.assert( Self.prototype.init === init );
 // export
 // --
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

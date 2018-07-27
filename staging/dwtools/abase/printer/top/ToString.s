@@ -45,7 +45,7 @@ var Self = function wPrinterToString( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterToString';
+Self.shortName = 'PrinterToString';
 
 //
 
@@ -125,7 +125,7 @@ _.classMake
   extend : Proto,
 });
 
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export
@@ -137,6 +137,6 @@ delete require.cache[ module.id ];
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 })();

@@ -47,7 +47,7 @@ var Self = function wChainer( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'Chainer';
+Self.shortName = 'Chainer';
 
 // --
 // inter
@@ -815,6 +815,7 @@ function _chainDescriptorMake( o )
   var self = this;
   _.assert( arguments.length === 1 );
   let r = Object.create( null );
+
   Object.assign( r, self.ChainDescriptor );
 
   /* !!! : remove it later */
@@ -829,7 +830,7 @@ function _chainDescriptorMake( o )
   });
 
   Object.preventExtensions( r );
-  Object.assign( r, o )
+  Object.assign( r, o );
   return r;
 }
 
@@ -866,6 +867,7 @@ function _chainerMakeFor( printer )
     }
     else chainer.originalWrite[ channel ] = function writeToChannelWithoutExclusion()
     {
+      debugger;
       return this._writeToChannelWithoutExclusion( channel, arguments );
     }
 
@@ -921,7 +923,7 @@ function _chainerWriteToPrinter( channel )
   let cds = chainer.outputs;
   let args = _.longSlice( arguments, 1 );
 
-  xxx
+  debugger; xxx
 
   _.assert( _.arrayIs( cds ) );
   _.assert( chainer.originalWrite[ channel ] );
@@ -1154,10 +1156,10 @@ let Aggregates =
 let Associates =
 {
   printer : null,
-  inputs : [],
-  outputs : [],
-  originalWrite : Object.create( null ),
-  writeFromConsole : Object.create( null ),
+  inputs : _.define.multiple([]),
+  outputs : _.define.multiple([]),
+  originalWrite : _.define.multiple({}),
+  writeFromConsole : _.define.multiple({}),
   exclusiveOutputPrinter : null,
 }
 
@@ -1266,7 +1268,7 @@ _.Copyable.mixin( Self );
 // export
 // --
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )
