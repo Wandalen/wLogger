@@ -1,13 +1,15 @@
 
 /* qqq : make it nicer */
 
-let _ = require( '../include/dwtools/Base.s' );
+if( typeof module !== 'undefined' )
+require( 'wTools' );
+
+let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
-let hooked = '';
-let outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformEnd : onTransformEnd });
-let barPrinter = new _.Logger({ name : 'barPrinter', onTransformEnd : onTransformEnd });
+let outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin });
+let barPrinter = new _.Logger({ name : 'barPrinter', onTransformBegin : onTransformBegin });
 
 var bar = _.Logger.consoleBar
 ({
@@ -15,18 +17,17 @@ var bar = _.Logger.consoleBar
   barPrinter : barPrinter,
 });
 
-console.log( 'console.log' );
-outputPrinter.log( 'outputPrinter.log' );
+console.log( 'console.log - #1' );
+outputPrinter.log( 'outputPrinter.log - #1' );
 
 bar.on = 0;
 _.Logger.consoleBar( bar )
 
-console.log( 'console.log' );
-outputPrinter.log( 'outputPrinter.log' );
+console.log( 'console.log - #2' );
+outputPrinter.log( 'outputPrinter.log - #2' );
 
-function onTransformEnd( o )
+function onTransformBegin( o )
 {
-  o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-  hooked += o.input[ 0 ] + '\n';
+  o.input[ 0 ] = this.name +  ' : ' + o.input[ 0 ];
   return o;
 }

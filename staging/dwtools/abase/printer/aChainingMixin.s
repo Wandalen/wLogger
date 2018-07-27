@@ -172,7 +172,7 @@ function finit( original )
   {
     let self = this;
 
-    debugger; xxx
+    // debugger; xxx
     self.chainer.finit();
 
     let result = original.apply( self, arguments );

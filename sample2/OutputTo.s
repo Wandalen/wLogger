@@ -1,5 +1,8 @@
 
-let _ = require( '../include/dwtools/Base.s' );
+if( typeof module !== 'undefined' )
+require( 'wTools' );
+
+let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
@@ -25,6 +28,6 @@ l1.log( 'hello3' );
 
 function onTransformBegin( o )
 {
-  o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+  o.input[ 0 ] = o.input[ 0 ] + ' : ' + this.name;
   return o;
 }

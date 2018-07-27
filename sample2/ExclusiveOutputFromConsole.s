@@ -1,5 +1,8 @@
 
-let _ = require( '../include/dwtools/Base.s' );
+if( typeof module !== 'undefined' )
+require( 'wTools' );
+
+let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
