@@ -878,7 +878,7 @@ function styleSet( style )
     return;
   }
 
-  let style = _.color.strColorStyle( style );
+  var style = _.color.strColorStyle( style );
 
   if( !style )
   return;
