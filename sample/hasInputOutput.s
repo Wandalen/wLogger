@@ -31,7 +31,7 @@ console.log( 'printerA exists in the input chain of printerC:', printerC.hasInpu
 /*
   printerA -> printerB -> printerC
 
-  has*Close - looks only printer's
-  has*Deep - looks through all outputs/inputs in the chain
+  has*Close - looks only printer's inputs/outputs
+  has*Deep - looks through all inputs/outputs in the chain
 
 */
