@@ -43,7 +43,8 @@
   "devDependencies": {
     "wTesting": "",
     "wFiles": "",
-    "wLogger": "."
+    "wLogger": ".",
+    "cli-table2": ""
   },
   "keywords": [
     "wTools",
