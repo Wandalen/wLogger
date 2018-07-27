@@ -120,11 +120,11 @@ function _transformActHtml( o )
     if( _.arrayIs( splitted[ i ] ) )
     {
       let style = splitted[ i ][ 0 ];
-      let color = splitted[ i ][ 1 ].trim();
+      var color = splitted[ i ][ 1 ].trim();
 
       if( color && color !== 'default' )
       {
-        let color = _.color.rgbaFromTry( color, null );
+        color = _.color.rgbaFromTry( color, null );
         if( color )
         color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap })
       }
