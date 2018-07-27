@@ -738,7 +738,6 @@ function outputUnchain( output )
 function inputUnchain( input )
 {
   let self = this;
-  let result = 0;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.printerLike( input ) || input === undefined );
@@ -746,10 +745,10 @@ function inputUnchain( input )
   if( input === undefined )
   {
     let result = 0;
-    self.inputs.forEach( ( input ) =>
+    for( let i = self.inputs.length - 1; i >= 0; i-- )
     {
-      result += self.inputUnchain( input.inputPrinter );
-    });
+      result += self.inputUnchain( self.inputs[ i ].inputPrinter );
+    }
     return result;
   }
 
