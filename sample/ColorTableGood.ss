@@ -23,17 +23,36 @@ var _global = _global_; var _ = _global_.wTools;
 require( 'wConsequence' );
 require( 'wLogger' );
 
-var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
-colorNames = colorNames.slice( 0, colorNames.length / 2 );
-colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
+let colorNames =
+[
+  'white',
+  'black',
+  'green',
+  'red',
+  'yellow',
+  'blue',
+  'cyan',
+  'magenta',
+  'bright black',
+  'dark yellow',
+  'dark red',
+  'dark magenta',
+  'dark blue',
+  'dark cyan',
+  'dark green',
+  'dark white'
+]
 
 //
 
 function shortColor( name )
 {
-  var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
-  if( parts[ 0 ] === 'light' )
-  name = 'l.' + parts[ 1 ];
+  var parts = _.strSplitNonPreserving({ src : name, preservingDelimeters : 0 });
+  if( parts[ 0 ] === 'dark' )
+  name = 'd.' + parts[ 1 ];
+
+  if( parts[ 0 ] === 'bright' )
+  name = 'b.' + parts[ 1 ];
 
   return name;
 }
@@ -42,6 +61,7 @@ function shortColor( name )
 
 function prepareTableInfo()
 {
+  logger.diagnosingColor = 0;
 
   function onTransformEnd( data )
   {
@@ -78,19 +98,15 @@ function prepareTableInfo()
     }
   }
 
-  function addLight( c )
-  {
-    if( !_.strBegins( c, 'light' ) )
-    return 'light ' + c;
-    return c;
-  }
+  let platform = process.platform;
 
-  _.Logger.illColorCombinations.forEach( ( c ) =>
+  _.Logger.PoisonedColorCombination.forEach( ( c ) =>
   {
+    if( c.platform !== platform )
+    return;
+
     remove( c.fg, c.bg );
     remove( c.bg, c.fg );
-    remove( addLight( c.fg ), addLight( c.bg ) );
-    remove( addLight( c.bg ), addLight( c.fg ) );
   })
 
   var map = {};
@@ -159,7 +175,7 @@ function drawTable()
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-  o.colWidths.push.apply( o.colWidths, _.arrayFillTimes( [], colorNames.length / 2,  6 ) );
+  o.colWidths.push.apply( o.colWidths, _.arrayFillTimes( [], colorNames.length / 2,  8 ) );
   o.rowAligns.push.apply( o.rowAligns, _.arrayFillTimes( [], colorNames.length / 2, 'center' ) );
   o.colAligns = o.rowAligns;
 
@@ -178,5 +194,4 @@ function drawTable()
   logger.log( table.toString() );
 }
 
-_.shell( 'npm i cli-table2' )
-.doThen( () => drawTable() )
+drawTable();
