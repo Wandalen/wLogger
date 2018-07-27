@@ -1292,6 +1292,81 @@ function inputUnchain( test )
 
 //
 
+function output( test )
+{
+  /*
+
+     combining:
+
+    'rewrite', 'supplement', 'append', 'prepend'
+
+    printer -> ordinary -> printer
+    printer -> ordinary -> console
+    printer -> exclusive -> printer
+    printer -> exclusive -> console
+    printer -> original -> printer
+    printer -> original -> console
+
+    try to do multiple original/exclusive output in different order
+  */
+
+  /* - */
+
+  test.open( 'printer -> ordinary -> printer' );
+
+  test.case = 'combining : rewrite, printers have no other chains';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+  var hooked = [];
+  printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
+  test.will = 'printerA must have printerB in outputs'
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.inputs.length,0 );
+  test.will = 'printerB must have printerA in inputs'
+  test.is( printerB.hasInputClose( printerA ) );
+  test.identical( printerB.inputs.length, 1 );
+  test.identical( printerB.outputs.length, 0 );
+  printerA.log( 'for printer B' );
+  test.will = 'message from printerA must reach both of handlers';
+  test.identical( hooked, [ 'begin : for printer B', 'end : for printer B' ] );
+
+  test.case = 'combining : rewrite, printers have other chains';
+  test.case = 'combining : rewrite, printers have other chains';
+  test.case = 'combining : rewrite, connect to other chain';
+
+  test.case = 'combining : append, printers have no other chains';
+  test.case = 'combining : append, printers have other chains';
+  test.case = 'combining : append, connect to other chain';
+
+  test.case = 'combining : prepend, printers have no other chains';
+  test.case = 'combining : prepend, printers have other chains';
+  test.case = 'combining : prepend, connect to other chain';
+
+  test.case = 'combining : supplement, printers have no other chains';
+  test.case = 'combining : supplement, printers have other chains';
+  test.case = 'combining : supplement, connect to other chain';
+
+  test.close( 'printer -> ordinary -> printer' );
+
+
+  function onTransformBegin( o )
+  {
+    hooked.push( 'begin' + ' : ' + o.input[ 0 ] );
+    return o;
+  }
+
+  function onTransformEnd( o )
+  {
+    hooked.push( 'end' + ' : ' + o.input[ 0 ] );
+    return o;
+  }
+
+}
+
+//
+
 function hasInputDeep( test )
 {
   test.case = 'has console in inputs';
