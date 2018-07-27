@@ -36,8 +36,12 @@ function prepareInfo()
   function shortColor( name )
   {
     var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
-    if( parts[ 0 ] === 'light' )
-    name = 'l.' + parts[ 1 ];
+
+    if( parts[ 0 ] === 'dark' )
+    name = 'd.' + parts[ 1 ];
+
+    if( parts[ 0 ] === 'bright' )
+    name = 'b.' + parts[ 1 ];
 
     return name;
   }
@@ -141,7 +145,7 @@ function drawTable()
   var o =
   {
     head : [ "fg - bg", 'win32', 'darwin', 'linux' ],
-    colWidths : [ 30 ],
+    colWidths : [ 22 ],
     rowAligns : [ 'left', 'center', 'center', 'center' ],
     colAligns : [ 'center', 'center', 'center', 'center' ],
     style:
