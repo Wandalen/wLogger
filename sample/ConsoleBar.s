@@ -5,7 +5,6 @@ require( 'wTools' );
 let _ = _global_.wTools;
 
 _.include( 'wLogger' );
-_.include( 'wColor' );
 
 /*  By default logger cant use console as input & output device in one time, by using consoleBar we can
 get all console output and print it through outputPrinter without recursion */
