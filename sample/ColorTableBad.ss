@@ -23,12 +23,15 @@ var _ = _global_.wTools
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
 
+
 //
 
 function prepareInfo()
 {
   var list = [];
   var splitter = ' - ';
+
+  logger.diagnosingColor = 0;
 
   function shortColor( name )
   {
@@ -46,17 +49,22 @@ function prepareInfo()
     return list[ i ][ src.fg + splitter + src.bg ];
   }
 
-  _.Logger.illColorCombinations.forEach( function( c )
+  let platform = process.platform;
+
+  _.Logger.PoisonedColorCombination.forEach( function( c )
   {
-  var res = searchInList( c );
-  if( res )
-  res.push( c.platform );
-  else
-  {
-    var newItem = {};
-    newItem[ c.fg + splitter + c.bg ] = [ c.platform ];
-    list.push( newItem );
-  }
+    if( c.platform !== platform )
+    return;
+
+    var res = searchInList( c );
+    if( res )
+    res.push( c.platform );
+    else
+    {
+      var newItem = {};
+      newItem[ c.fg + splitter + c.bg ] = [ c.platform ];
+      list.push( newItem );
+    }
   })
 
   var row = _.arrayFillTimes( [] , 3 , '-' );
@@ -110,7 +118,7 @@ function prepareInfo()
     for( var i = 0; i < c[ key ].length; i++ )
     {
       currentPlatform = c[ key ][ i ];
-      silencedLogger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'Ill combination', fg ) ,bg ));
+      silencedLogger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'TEXT TEXT TEXT', fg ) ,bg ));
   }
   var newRow = {};
   var fg = shortColor( combination[ 0 ] );
@@ -133,12 +141,12 @@ function drawTable()
   var o =
   {
     head : [ "fg - bg", 'win32', 'darwin', 'linux' ],
-    colWidths : [ 19 ],
+    colWidths : [ 30 ],
     rowAligns : [ 'left', 'center', 'center', 'center' ],
     colAligns : [ 'center', 'center', 'center', 'center' ],
     style:
     {
-     compact : true,
+     compact : false,
      'padding-left': 0,
      'padding-right': 0
     },
@@ -153,5 +161,4 @@ function drawTable()
 
 //
 
-_.shell( 'npm i cli-table2' )
-.doThen( () => drawTable() );
+drawTable();

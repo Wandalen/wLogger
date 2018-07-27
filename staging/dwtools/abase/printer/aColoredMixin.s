@@ -1143,7 +1143,7 @@ let PoisonedColorCombination =
   { fg : 'bright black', bg : 'dark cyan', platform : 'win32' },
   { fg : 'dark yellow', bg : 'bright black', platform : 'win32' },
   { fg : 'dark yellow', bg : 'dark cyan', platform : 'win32' },
-  { fg : 'dark red', bg : 'dark manenta', platform : 'win32' },
+  { fg : 'dark red', bg : 'dark magenta', platform : 'win32' },
   { fg : 'dark magenta', bg : 'dark red', platform : 'win32' },
   { fg : 'dark cyan', bg : 'bright black', platform : 'win32' },
   { fg : 'dark cyan', bg : 'dark yellow', platform : 'win32' },
