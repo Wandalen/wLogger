@@ -1143,7 +1143,7 @@ let Channel =
 // }
 
 // --
-// relationships
+// relations
 // --
 
 let Composes =
@@ -1243,7 +1243,7 @@ let Extend =
   hasOutputClose : hasOutputClose,
   hasOutputDeep : hasOutputDeep,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

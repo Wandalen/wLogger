@@ -524,7 +524,7 @@ function laterFinit( later )
 }
 
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -623,7 +623,7 @@ var Proto =
   laterActualize : laterActualize,
   laterFinit : laterFinit,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

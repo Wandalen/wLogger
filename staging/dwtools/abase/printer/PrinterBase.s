@@ -306,7 +306,7 @@ function _strConcat( args )
 // }
 
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -364,7 +364,7 @@ var Proto =
   // canPrintFrom : canPrintFrom,
   // printFrom : printFrom,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

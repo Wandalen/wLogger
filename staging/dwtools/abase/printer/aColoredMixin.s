@@ -241,7 +241,7 @@ function _transformAct_nodejs( o )
 
       if( output )
       {
-        self._diagnosingColorCheck();
+        self._diagnoseColorCheck();
 
         if( self.foregroundColor )
         result += `\x1b[${ self._rgbToCode_nodejs( self.foregroundColor ) }m`;
@@ -606,7 +606,7 @@ function _rgbToCode_nodejs( rgb, isBackground )
 
 //
 
-function _diagnosingColorCheck()
+function _diagnoseColorCheck()
 {
   let self = this;
 
@@ -629,10 +629,10 @@ function _diagnosingColorCheck()
   let result = {};
 
   if( self.diagnosingColor )
-  result.ill = self._diagnosingColorIll( fg, bg );
+  result.ill = self._diagnoseColorIll( fg, bg );
 
   if( self.diagnosingColorCollapse )
-  result.collapse = self._diagnosingColorCollapse( fg, bg );
+  result.collapse = self._diagnoseColorCollapse( fg, bg );
 
   return result;
 
@@ -640,7 +640,7 @@ function _diagnosingColorCheck()
 
 //
 
-function _diagnosingColorIll( fg, bg )
+function _diagnoseColorIll( fg, bg )
 {
   let self = this;
   let ill = false;
@@ -672,7 +672,7 @@ function _diagnosingColorIll( fg, bg )
 
 //
 
-function _diagnosingColorCollapse( fg, bg )
+function _diagnoseColorCollapse( fg, bg )
 {
   let self = this;
   let collapse = false;
@@ -1197,7 +1197,7 @@ let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGr
 let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
 
 // --
-// relationships
+// relations
 // --
 
 let Composes =
@@ -1307,9 +1307,9 @@ let Extend =
   _directiveApply : _directiveApply,
 
   _rgbToCode_nodejs : _rgbToCode_nodejs,
-  _diagnosingColorCheck : _diagnosingColorCheck,
-  _diagnosingColorIll : _diagnosingColorIll,
-  _diagnosingColorCollapse : _diagnosingColorCollapse,
+  _diagnoseColorCheck : _diagnoseColorCheck,
+  _diagnoseColorIll : _diagnoseColorIll,
+  _diagnoseColorCollapse : _diagnoseColorCollapse,
 
   // accessor
 
@@ -1339,7 +1339,7 @@ let Extend =
   topicUp : topicUp,
   topicDown : topicDown,
 
-  // relationships
+  // relations
 
   Composes : Composes,
   Aggregates : Aggregates,

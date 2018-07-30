@@ -1075,7 +1075,7 @@ let ChangeLevelMethods =
 ];
 
 // --
-// relationships
+// relations
 // --
 
 let Composes =
@@ -1218,7 +1218,7 @@ let Extend =
   _chainerGet : _chainerGet,
   _chainerMakeFor : _chainerMakeFor,
 
-  // relationships
+  // relations
 
   Composes : Composes,
   Aggregates : Aggregates,

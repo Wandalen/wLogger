@@ -75,7 +75,7 @@ function write()
 }
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -106,7 +106,7 @@ var Proto =
 
   write : write,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

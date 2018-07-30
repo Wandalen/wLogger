@@ -416,7 +416,7 @@ var _methods =
 ];
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -461,7 +461,7 @@ var Proto =
 
   _methods : _methods,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

@@ -199,7 +199,7 @@ function _makeNextLineDom()
 }
 
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -250,7 +250,7 @@ var Proto =
   _makeNextLineDom : _makeNextLineDom,
 
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

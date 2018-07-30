@@ -67,7 +67,7 @@ function init( o )
 }
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -94,7 +94,7 @@ var Proto =
 
   init : init,
 
-  // relationships
+  // relations
 
   constructor : Self,
   Composes : Composes,

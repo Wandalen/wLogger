@@ -470,7 +470,7 @@ function diagnostic( test )
 
   _.Logger.diagnosingColor = 0;
   _.Logger.diagnosingColorCollapse = 0;
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
   //
@@ -480,21 +480,21 @@ function diagnostic( test )
 
   /**/
 
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
   /**/
 
   l.foregroundColor = 'red';
   l.backgroundColor = 'default';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
   /**/
 
   l.foregroundColor = 'default';
   l.backgroundColor = 'red';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
   //
@@ -507,7 +507,7 @@ function diagnostic( test )
 
   l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.ill, undefined  );
 
   /* IllColorCombination diagnostic on */
@@ -516,7 +516,7 @@ function diagnostic( test )
 
   l.foregroundColor = 'bright black';
   l.backgroundColor = 'dark yellow';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.ill, true );
 
   /* after warning diagnostic is disabled */
@@ -524,14 +524,14 @@ function diagnostic( test )
   test.identical( _.Logger.diagnosingColor, 0 );
   l.foregroundColor = 'dark black';
   l.backgroundColor = 'dark yellow';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.ill, undefined );
 
   _.Logger.diagnosingColor = 1;
 
   l.foregroundColor = 'dark yellow';
   l.backgroundColor = 'dark blue';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.ill, false );
 
   //
@@ -544,7 +544,7 @@ function diagnostic( test )
 
   l.foregroundColor = 'yellowish pink';
   l.backgroundColor = 'dark magenta';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.collapse, undefined  );
 
   /* ColorCollapse on */
@@ -554,7 +554,7 @@ function diagnostic( test )
   l.foregroundColor = 'greenish yellow';
   l.backgroundColor = 'dark yellow';
   debugger
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.collapse, false  );
 
   /* ColorCollapse off after first warning */
@@ -563,7 +563,7 @@ function diagnostic( test )
   test.identical( _.Logger.diagnosingColorCollapse, 0 );
   l.foregroundColor = 'greenish yellow';
   l.backgroundColor = 'dark yellow';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.collapse, undefined  );
 
   /* ColorCollapse on */
@@ -572,7 +572,7 @@ function diagnostic( test )
 
   l.foregroundColor = 'dark red';
   l.backgroundColor = 'dark yellow';
-  var got = l._diagnosingColorCheck();
+  var got = l._diagnoseColorCheck();
   test.identical( got.collapse, false  );
 }
 
