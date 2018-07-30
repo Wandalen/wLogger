@@ -97,13 +97,13 @@ function _chain( o )
 
   if( self.outputs.length )
   {
-    if( o.outputCombining === 'supplement' )
+    if( o.inputCombining === 'supplement' )
     {
       debugger; xxx
       result = 0;
       return result;
     }
-    else if( o.outputCombining === 'rewrite' )
+    else if( o.inputCombining === 'rewrite' )
     {
       debugger;
       self.outputUnchain();
@@ -114,13 +114,13 @@ function _chain( o )
 
   if( self.inputs.length )
   {
-    if( o.inputCombining === 'supplement' )
+    if( o.outputCombining === 'supplement' )
     {
       debugger; xxx
       result = 0;
       return result;
     }
-    else if( o.inputCombining === 'rewrite' )
+    else if( o.outputCombining === 'rewrite' )
     {
       self.inputUnchain();
     }
