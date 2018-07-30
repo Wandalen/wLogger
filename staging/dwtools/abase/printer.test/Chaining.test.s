@@ -2054,6 +2054,69 @@ function output( test )
 
 //
 
+function input( test )
+{
+  var consoleWasBarred = false;
+
+  if( _.Logger.consoleIsBarred( console ) )
+  {
+    consoleWasBarred = true;
+    _global_.wTester._barOptions.on = 0;
+    _.Logger.consoleBar( _global_.wTester._barOptions );
+  }
+
+  /* - */
+
+  test.case = 'exclusive input from console';
+
+  var printerA = console;
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+  var hooked = [];
+  var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+
+  /* chain input/output to console */
+
+  printerB.inputFrom( printerA, { exclusiveOutput : 1 } );
+  outputPrinter.inputFrom( printerA, { combining : 'append' } );
+
+  var consoleChainer = printerA[ Symbol.for( 'chainer' ) ];
+  // test.identical( consoleChainer.outputs[ consoleChainer.outputs.length - 2 ].outputPrinter, outputPrinter );
+  test.identical( consoleChainer.outputs[ consoleChainer.outputs.length - 1 ].outputPrinter, printerB );
+  // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, inputPrinter );
+
+  console.log( 'console for printerB' );
+  printerB.inputUnchain( printerA );
+  outputPrinter.inputUnchain( printerA );
+
+  var expected = [ 'begin : printerB : console for printerB', 'end : printerB : console for printerB' ];
+  test.identical( hooked, expected )
+
+  /* - */
+
+  if( consoleWasBarred )
+  {
+    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.is( _.Logger.consoleIsBarred( console ) );
+  }
+
+
+  function onTransformBegin( o )
+  {
+    hooked.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
+    return o;
+  }
+
+  function onTransformEnd( o )
+  {
+    hooked.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
+    return o;
+  }
+
+}
+
+//
+
 function hasInputDeep( test )
 {
   test.case = 'has console in inputs';
