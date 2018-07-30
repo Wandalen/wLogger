@@ -420,7 +420,8 @@ function outputTo( output, o )
   let o2 = _.mapExtend( null, o );
   o2.inputPrinter = self;
   o2.outputPrinter = output;
-  o2.outputCombining = o.combining;
+  o2.inputCombining = o.combining;
+  // o2.outputCombining = o.combining;
   delete o2.combining;
 
   return chainer._chain( o2 );
@@ -431,64 +432,6 @@ var defaults = outputTo.defaults = Object.create( null );
 defaults.combining = 'append';
 defaults.exclusiveOutput = 0;
 defaults.originalOutput = 0;
-
-//
-//
-// function _inputFromConsole( cd )
-// {
-//   let self = this;
-//
-//   _.assert( arguments.length === 1 );
-//   _.assert( self.isPrinter );
-//   _.assert( !cd.outputPrinter.isPrinter );
-//   _.assert( cd.outputPrinter.outputs === undefined );
-//
-//   /* qqq : non-printer objects should not be spoiled by writing/rewriting fields, but "chainerSymbol" */
-//
-//   let chainer = cd.outputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.outputPrinter );
-//   let cds = chainer.inputs;
-//
-//   if( Config.debug )
-//   _.assert( !self.hasInputDeep( cd.outputPrinter ) );
-//
-//   _.arrayAppendOnceStrictly( cds, cd );
-//
-//   return true;
-// }
-
-//
-//
-// function _outputUnbarring( cd )
-// {
-//   let self = this;
-//
-//   _.assert( cd.outputPrinter );
-//   _.assert( cd.outputPrinter.isTerminal === undefined || cd.outputPrinter.isTerminal, 'originalOutput chaining possible only into terminal logger' );
-//   _.assert( arguments.length === 1 );
-//
-//   debugger; xxx
-//
-//   return true;
-// }
-
-// //
-//
-// function _outputToStream( cd )
-// {
-//   let self = this;
-//   let stream = cd.outputPrinter;
-//
-//   _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
-//
-//   self.Channel.forEach( ( channel, c ) =>
-//   {
-//     cd.write[ channel ] = function()
-//     {
-//       stream.write.apply( stream, arguments );
-//     }
-//   })();
-//
-// }
 
 //
 
@@ -535,35 +478,6 @@ function outputUnchain( output )
   inputChainer.outputUnchain( output );
 }
 
-// function outputUnchain( output )
-// {
-//   let self = this;
-//
-//   _.assert( arguments.length === 0 || arguments.length === 1 );
-//   _.assert( _.printerLike( output ) || output === undefined );
-//   _.assert( self !== output, 'Can not remove outputPrinter from outputs' );
-//
-//   if( output === undefined )
-//   {
-//     let result = 0;
-//     self.outputs.forEach( ( output ) =>
-//     {
-//       result += self.outputUnchain( output.outputPrinter ); xxx
-//     });
-//     return result;
-//   }
-//
-//   _.assert( self.outputs.length, 'Outputs list is empty' );
-//
-//   let outputChainer = output[ chainerSymbol ];
-//   let cd1 = _.arrayRemovedOnceElementStrictly( self.outputs, output, ( cd ) => cd.outputPrinter, ( e ) => e );
-//   let cd2 = _.arrayRemovedOnceElementStrictly( outputChainer.inputs, self, ( cd ) => cd.inputPrinter, ( e ) => e );
-//   _.assert( cd1 === cd2 )
-//   self._chainDescriptorFree( cd1 );
-//
-//   return 1;
-// }
-
 //
 
 /**
@@ -607,7 +521,8 @@ function inputFrom( input, o )
   let o2 = _.mapExtend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self;
-  o2.inputCombining = o.combining;
+  // o2.inputCombining = o.combining;
+  o2.outputCombining = o.combining;
   delete o2.combining;
 
   return chainer._chain( o2 );
@@ -656,49 +571,6 @@ function inputUnchain( input )
   let outputChainer = self[ chainerSymbol ];
   _.assert( arguments.length === 0 || arguments.length === 1 );
   return outputChainer.inputUnchain( input );
-
-  // // if( input === undefined )
-  // // {
-  // //   let result = 0;
-  // //   self.inputs.forEach( ( input ) =>
-  // //   {
-  // //     result += self.inputUnchain( input.inputPrinter ); xxx
-  // //   });
-  // //   return result;
-  // // }
-  // //
-  // // debugger;
-  // // let chainer = input[ chainerSymbol ];
-  // // let cds = chainer.outputs;
-  // // let cd1 = _.arrayRemovedOnceElementStrictly( self.inputs, input, ( cd ) => cd.inputPrinter, ( e ) => e );
-  // // let cd2 = _.arrayRemovedOnceElementStrictly( cds, self, ( cd ) => cd.outputPrinter, ( e ) => e );
-  // // _.assert( cd1 === cd2 )
-  // // self._chainDescriptorFree( cd1 );
-  // //
-  // // if( cd1.exclusiveOutput )
-  // // {
-  // //   _.assert( chainer.exclusiveOutputPrinter === self )
-  // //   chainer.exclusiveOutputPrinter = null;
-  // // }
-  //
-  // /* xxx : only one instance */
-  //
-  // // for( let i = self.inputs.length-1 ; i >= 0  ; i-- )
-  // // if( self.inputs[ i ].inputPrinter === input || input === undefined )
-  // // {
-  // //   let ainput = self.inputs[ i ].inputPrinter;
-  // //
-  // //   if( _.routineIs( ainput.outputUnchain ) )
-  // //   {
-  // //     result += ainput.outputUnchain( self ); xxx
-  // //     continue;
-  // //   }
-  // //
-  // //   result += self._inputUnchainConsoleLike( ainput );
-  // //   self.inputs.splice( i, 1 );
-  // // }
-  //
-  // return result;
 }
 
 //
