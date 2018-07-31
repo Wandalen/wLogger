@@ -270,6 +270,60 @@ function _transformAct_nodejs( o )
 
 //
 
+// function _transformAct_browser( o )
+// {
+//   let self = this;
+
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.mapIs( o ) );
+//   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
+
+//   let result = [ '' ];
+//   let splitted = o.outputSplitted;
+
+//   if( splitted.length === 1 && !self._isStyled )
+//   {
+//     if( !_.arrayIs( splitted[ 0 ] ) )
+//     return splitted;
+//   }
+
+//   for( let i = 0; i < splitted.length; i++ )
+//   {
+//     if( _.arrayIs( splitted[ i ] ) )
+//     {
+//       self._directiveApply( splitted[ i ] );
+
+//       if( !self.foregroundColor && !self.backgroundColor )
+//       self._isStyled = 0;
+//       else if( !!self.foregroundColor | !!self.backgroundColor )
+//       self._isStyled = 1;
+//     }
+//     else
+//     {
+//       if( ( !i && !self._isStyled ) || self.outputGray )
+//       {
+//         result[ 0 ] += splitted[ i ];
+//       }
+//       else
+//       {
+//         let fg = self.foregroundColor || 'none';
+//         let bg = self.backgroundColor || 'none';
+
+//         result[ 0 ] += `%c${ splitted[ i ] }`;
+//         result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
+//         /* qqq : make it working without _.color */
+
+//       }
+//     }
+//   }
+
+//   o.outputForTerminal = result;
+
+//   return o;
+// }
+
+//
+
 function _transformAct_browser( o )
 {
   let self = this;
@@ -280,42 +334,56 @@ function _transformAct_browser( o )
 
   let result = [ '' ];
   let splitted = o.outputSplitted;
+  let styled = false;
 
-  if( splitted.length === 1 && !self._isStyled )
+  splitted.forEach( function( split )
   {
-    if( !_.arrayIs( splitted[ 0 ] ) )
-    return splitted;
-  }
+    let output = !!_.color;
 
-  for( let i = 0; i < splitted.length; i++ )
-  {
-    if( _.arrayIs( splitted[ i ] ) )
+    if( _.arrayIs( split ) )
     {
-      self._directiveApply( splitted[ i ] );
-
-      if( !self.foregroundColor && !self.backgroundColor )
-      self._isStyled = 0;
-      else if( !!self.foregroundColor | !!self.backgroundColor )
-      self._isStyled = 1;
+      self._directiveApply( split );
+      if( output && self.outputRaw )
+      output = 0;
+      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      output = 0;
     }
     else
     {
-      if( ( !i && !self._isStyled ) || self.outputGray )
-      {
-        result[ 0 ] += splitted[ i ];
-      }
-      else
-      {
-        let fg = self.foregroundColor || 'none';
-        let bg = self.backgroundColor || 'none';
-
-        result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
-        /* qqq : make it working without _.color */
-
-      }
+      output = output && !self.outputRaw && !self.outputGray;
     }
-  }
+
+    if( _.strIs( split ) )
+    {
+      var foregroundColor = 'none';
+      var backgroundColor = 'none';
+
+      if( output )
+      {
+        if( self.foregroundColor )
+        {
+          foregroundColor = _.color.colorToRgbaHtml( self.foregroundColor);
+          styled = true;
+        }
+
+        if( self.backgroundColor )
+        {
+          backgroundColor = _.color.colorToRgbaHtml( self.backgroundColor);
+          styled = true;
+        }
+      }
+
+      if( styled )
+      {
+        result[ 0 ] += '%c';
+        var style = `color:${ foregroundColor };background:${ backgroundColor }`;
+        result.push( style );
+      }
+
+      result[ 0 ] += split;
+    }
+
+  });
 
   o.outputForTerminal = result;
 
