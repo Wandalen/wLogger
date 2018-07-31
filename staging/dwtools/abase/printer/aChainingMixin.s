@@ -686,6 +686,24 @@ consoleBar.defaults =
   outputPrinterHadOutputs : null,
 }
 
+//
+
+function chain( o )
+{
+  _.assert( arguments.length === 1 );
+  _.routineOptions( _.Chainer.prototype._chain, o )
+  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
+
+  let inputChainer = _chainerGet.call( o.inputPrinter );
+  if( !inputChainer )
+  inputChainer = _.Chainer._chainerMakeFor( o.inputPrinter );
+
+  _.assert( inputChainer instanceof _.Chainer );
+
+  return _.Chainer.prototype._chain.call( inputChainer, o );
+}
+
 // --
 // checker
 // --
@@ -892,6 +910,8 @@ let Statics =
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
+
+  chain : chain,
 
   // fields
 
