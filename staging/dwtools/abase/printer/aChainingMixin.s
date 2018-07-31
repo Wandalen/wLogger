@@ -648,7 +648,7 @@ function consoleBar( o )
 
     o.outputPrinter.outputUnchain( console );
 
-    _.assert( o.outputPrinterHadOutputs );
+    _.assert( !!o.outputPrinterHadOutputs );
 
     for( let t = 0 ; t < o.outputPrinterHadOutputs.length ; t++ )
     {

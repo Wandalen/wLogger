@@ -88,8 +88,8 @@ function _chain( o )
 
   o = _.routineOptions( self._chain, arguments );
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( o.outputPrinter ) || _._arrayLike( o.outputPrinter ) );
-  _.assert( _.printerLike( o.inputPrinter ) || _._arrayLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
+  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
@@ -128,7 +128,7 @@ function _chain( o )
 
   /* */
 
-  if( _._arrayLike( o.outputPrinter ) )
+  if( _.arrayLike( o.outputPrinter ) )
   {
 
     o.outputPrinter.forEach( ( outputPrinter ) =>
@@ -144,7 +144,7 @@ function _chain( o )
 
   /* */
 
-  if( _._arrayLike( o.inputPrinter ) )
+  if( _.arrayLike( o.inputPrinter ) )
   {
 
     o.inputPrinter.forEach( ( inputPrinter ) =>
@@ -160,7 +160,7 @@ function _chain( o )
 
   /* */
 
-  _.assert( o.outputPrinter, 'expects {-o.outputPrinter-}' );
+  _.assert( !!o.outputPrinter, 'expects {-o.outputPrinter-}' );
   _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
 
   let cd = self._chainDescriptorMake( o );
@@ -270,7 +270,7 @@ function _inputFromConsole( cd )
   _.assert( _.consoleIs( cd.inputPrinter ) );
   _.assert( cd.inputPrinter.outputs === undefined );
   _.assert( !cd.inputPrinter.isPrinter );
-  _.assert( inputChainer );
+  _.assert( !!inputChainer );
 
 }
 
@@ -285,7 +285,7 @@ function _outputToConsole( cd )
   _.assert( _.consoleIs( cd.outputPrinter ) );
   _.assert( cd.outputPrinter.outputs === undefined );
   _.assert( !cd.outputPrinter.isPrinter );
-  _.assert( outputChainer );
+  _.assert( _.objectIs( outputChainer ) );
 
   self.Channel.forEach( ( channel, c ) =>
   {
@@ -433,12 +433,12 @@ function outputTo( output, o )
   return self._chain( o2 );
 
   // _.assert( arguments.length === 1 );
-  // _.assert( _.printerLike( output ) || output === null || _._arrayLike( output ) );
+  // _.assert( _.printerLike( output ) || output === null || _.arrayLike( output ) );
   // _.assert( !o.combining || _.arrayHas( self.Combining, o.combining ), () => 'unknown combining mode ' + _.strQuote( o.combining ) );
 
   // /* output */
   //
-  // if( _._arrayLike( output ) )
+  // if( _.arrayLike( output ) )
   // {
   //
   //   if( o.combining === 'rewrite' )
@@ -895,7 +895,7 @@ function _chainerWriteToConsole( channel )
   let args = _.longSlice( arguments, 1 );
 
   _.assert( _.arrayIs( cds ) );
-  _.assert( chainer.originalWrite[ channel ] );
+  _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );
 
   if( chainer.exclusiveOutputPrinter )
   {
@@ -929,7 +929,7 @@ function _chainerWriteToPrinter( channel )
   debugger; xxx
 
   _.assert( _.arrayIs( cds ) );
-  _.assert( chainer.originalWrite[ channel ] );
+  _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );
 
   if( chainer.exclusiveOutputPrinter )
   {
@@ -1245,7 +1245,7 @@ let Extend =
 
   // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
