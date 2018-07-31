@@ -1321,6 +1321,71 @@ function output( test )
 
   /* - */
 
+  test.open( 'output exists' );
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+
+  test.shouldThrowError( () => printerA.outputTo( printerB, { combining : 'unknown' } ) );
+
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } ) );
+
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } ) );
+
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } ) );
+
+  printerA.outputTo( printerB );
+  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+
+  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+
+  test.close( 'output exists' );
+
+  /* - */
+
+  test.open( 'close/deep loop' );
+
+  test.case = 'close';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+
+  printerA.outputTo( printerB );
+
+  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+
+  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+
+  test.case = 'deep';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+  var printerC = new _.Logger({ name : 'printerC' });
+
+  printerA.outputTo( printerB );
+  printerB.outputTo( printerC );
+
+  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+
+  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+
+  test.close( 'close/deep loop' );
+
+
+  /* - */
+
   test.open( 'printer -> ordinary -> printer' );
 
   test.case = 'combining : rewrite, printers have no other chains';
@@ -2027,8 +2092,207 @@ function output( test )
 
   /* - */
 
-  // test.open( 'multiple original/exclusive output' );
-  // test.close( 'multiple original/exclusive output' );
+  test.open( 'multiple original/exclusive output' );
+
+  test.case = 'two otputs';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+
+  printerA.outputTo( printerO, { originalOutput : 1 } );
+  printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
+  printerB.inputFrom( printerO );
+  printerB.inputFrom( printerEx );
+
+  hooked = [];
+
+  printerA.log( 'for printerB' );
+
+  var expected =
+  [
+    'begin : printerB : printerEx : for printerB',
+    'end : printerB : printerEx : for printerB'
+  ];
+  test.identical( hooked, expected );
+
+  function onTransformBegin2( o )
+  {
+    o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+    return o;
+  }
+
+  test.case = 'two otputs, console as input';
+
+  var printerA = console;
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+
+  printerO.inputFrom( printerA, { originalOutput : 1 } );
+  printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
+  printerB.inputFrom( printerO );
+  printerB.inputFrom( printerEx );
+
+  hooked = [];
+
+  printerA.log( 'for printerB' );
+  printerO.inputUnchain( printerA );
+  printerEx.inputUnchain( printerA );
+
+  var expected =
+  [
+    'begin : printerB : printerEx : for printerB',
+    'end : printerB : printerEx : for printerB'
+  ];
+  test.identical( hooked, expected );
+
+  function onTransformBegin2( o )
+  {
+    o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+    return o;
+  }
+
+  test.case = 'two otputs, console as input, diff order';
+
+  var printerA = console;
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+
+  printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
+  printerO.inputFrom( printerA, { originalOutput : 1 } );
+  printerB.inputFrom( printerO );
+  printerB.inputFrom( printerEx );
+
+  hooked = [];
+
+  printerA.log( 'for printerB' );
+  printerO.inputUnchain( printerA );
+  printerEx.inputUnchain( printerA );
+
+  var expected =
+  [
+    'begin : printerB : printerEx : for printerB',
+    'end : printerB : printerEx : for printerB'
+  ];
+  test.identical( hooked, expected );
+
+  test.case = 'two otputs, different order';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
+
+  printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
+  printerA.outputTo( printerO, { originalOutput : 1 } );
+  printerB.inputFrom( printerO );
+  printerB.inputFrom( printerEx );
+
+  hooked = [];
+
+  printerA.log( 'for printerB' );
+
+  var expected =
+  [
+    'begin : printerB : printerEx : for printerB',
+    'end : printerB : printerEx : for printerB'
+  ];
+  test.identical( hooked, expected );
+
+  function onTransformBegin2( o )
+  {
+    o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+    return o;
+  }
+
+  test.case = 'multiple outputs, different order';
+
+  var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+  var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd : onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+
+  printerA.outputTo( printerB, { exclusiveOutput : 1 } );
+  printerA.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerB.outputTo( printerC, { originalOutput : 1 } );
+  printerC.outputTo( printerD, { exclusiveOutput : 1 } );
+  printerC.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerD.outputTo( printerE, { originalOutput : 1 } );
+
+  hooked = [];
+  printerA.log( 'for E' );
+  var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+  test.identical( hooked, expected )
+
+  test.case = 'multiple outputs, different order';
+
+  var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+  var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd : onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+
+  printerA.outputTo( printerB, { originalOutput : 1 } );
+  printerB.outputTo( printerC, { exclusiveOutput : 1 } );
+  printerB.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerC.outputTo( printerD, { exclusiveOutput : 1 } );
+  printerC.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerD.outputTo( printerE, { originalOutput : 1 } );
+
+  hooked = [];
+  printerA.log( 'for E' );
+  var expected = [ 'end : printerE : printerD : printerB : printerA : for E' ];
+  test.identical( hooked, expected )
+
+  test.case = 'multiple outputs, different order';
+
+  var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+  var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd : onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+
+  printerA.outputTo( printerB, { originalOutput : 1 } );
+  printerB.outputTo( printerC, { exclusiveOutput : 1 } );
+  printerB.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerC.outputTo( printerD, { originalOutput : 1 } );
+  printerD.outputTo( printerE, { exclusiveOutput : 1 } );
+  printerD.outputTo( outputPrinter, { originalOutput : 1 } );
+
+  hooked = [];
+  printerA.log( 'for E' );
+  var expected = [ 'end : printerE : printerD : printerC : printerB : printerA : for E' ];
+  test.identical( hooked, expected );
+
+  test.case = 'multiple outputs, different order';
+
+  var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+  var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd : onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+
+  printerA.outputTo( printerB, { exclusiveOutput : 1 } );
+  printerA.outputTo( outputPrinter, { originalOutput : 1 } );
+  printerB.outputTo( printerC, { originalOutput : 1 } );
+  printerC.outputTo( printerD, { originalOutput : 1 } );
+  printerD.outputTo( printerE, { exclusiveOutput : 1 } );
+  printerD.outputTo( outputPrinter, { originalOutput : 1 } );
+
+  hooked = [];
+  printerA.log( 'for E' );
+  var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+  test.identical( hooked, expected )
+
+  test.close( 'multiple original/exclusive output' );
 
 
   if( consoleWasBarred )
@@ -2037,6 +2301,11 @@ function output( test )
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
+  function onTransformBegin2( o )
+  {
+    o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+    return o;
+  }
 
   function onTransformBegin( o )
   {
@@ -2868,6 +3137,9 @@ var Self =
     // outputUnchain : outputUnchain,
     // inputFrom : inputFrom,
     // inputUnchain : inputUnchain,
+
+    output : output,
+    input : input,
 
     hasInputDeep : hasInputDeep,
     hasOutputDeep : hasOutputDeep,
