@@ -699,7 +699,7 @@ var Self =
   silencing : 1,
   /* verbosity : 1, */
 
-  routineTimeOut : 9999999,
+  // routineTimeOut : 9999999,
 
   tests :
   {

@@ -2781,7 +2781,7 @@ var Self =
 
   name : 'Tools/base/printer/Chaining',
 
-  routineTimeOut : 999999,
+  // routineTimeOut : 999999,
 
   silencing : 1,
   /* verbosity : 1, */
