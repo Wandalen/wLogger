@@ -332,6 +332,11 @@ var Accessors =
   level : 'level',
 }
 
+var Statics =
+{
+  MetaType : 'Printer',
+}
+
 // --
 // define class
 // --
@@ -371,6 +376,7 @@ var Proto =
   Aggregates : Aggregates,
   Associates : Associates,
   Accessors : Accessors,
+  Statics : Statics,
 
 }
 
