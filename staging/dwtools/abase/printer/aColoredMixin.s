@@ -55,7 +55,7 @@ let Self = function wPrinterColoredMixin( o )
 
 Self.shortName = 'PrinterColoredMixin';
 
-_.assert( _.strExtractInlined );
+_.assert( _.routineIs( _.strExtractInlined ) );
 
 // --
 // stack
@@ -311,6 +311,8 @@ function _transformAct_browser( o )
 
         result[ 0 ] += `%c${ splitted[ i ] }`;
         result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
+        /* qqq : make it working without _.color */
+
       }
     }
   }

@@ -2799,10 +2799,10 @@ function finit( test )
     info.name = printer.name;
     info.keys = _.mapOwnKeys( printer );
 
-    if( _._arrayLike( chainer.outputs ) )
+    if( _.arrayLike( chainer.outputs ) )
     info.outputs = chainer.outputs.slice();
 
-    if( _._arrayLike( chainer.inputs ) )
+    if( _.arrayLike( chainer.inputs ) )
     info.inputs = chainer.inputs.slice();
 
     return info;

@@ -63,7 +63,7 @@ Self.shortName = 'PrinterChainingMixin';
 
 //
 
-function onMixinEnd( dstClass, mixinDescriptor )
+function onMixinEnd( mixinDescriptor, dstClass )
 {
   let dstPrototype = dstClass.prototype;
 
@@ -333,7 +333,7 @@ function _writeToChannelIn( channelName,args )
 }
 
 // --
-// write xxx
+//
 // --
 
 /**
@@ -648,7 +648,7 @@ function consoleBar( o )
 
     o.outputPrinter.outputUnchain( console );
 
-    _.assert( o.outputPrinterHadOutputs );
+    _.assert( !!o.outputPrinterHadOutputs );
 
     for( let t = 0 ; t < o.outputPrinterHadOutputs.length ; t++ )
     {
@@ -690,49 +690,6 @@ consoleBar.defaults =
 // checker
 // --
 
-// function _hasInput( input,o )
-// {
-//   let self = this;
-//
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-//   _.assert( _.mapIs( o ) );
-//   _.assert( _.printerLike( input ) || _.processIs( input ) );
-//   _.routineOptions( _hasInput, o );
-//
-//   for( let d = 0 ; d < self.inputs.length ; d++ )
-//   {
-//     if( self.inputs[ d ].inputPrinter === input )
-//     {
-//       if( o.withoutOutputToOriginal && self.inputs[ d ].originalOutput )
-//       continue;
-//       return true;
-//     }
-//   }
-//
-//   if( o.deep )
-//   for( let d = 0 ; d < self.inputs.length ; d++ )
-//   {
-//     let inputs = self.inputs[ d ].inputPrinter.inputs;
-//     if( o.withoutOutputToOriginal && self.inputs[ d ].originalOutput )
-//     continue;
-//     if( inputs && inputs.length )
-//     {
-//       if( _hasInput.call( self.inputs[ d ].inputPrinter, input, o ) )
-//       return true;
-//     }
-//   }
-//
-//   return false;
-// }
-//
-// _hasInput.defaults =
-// {
-//   deep : 1,
-//   withoutOutputToOriginal : 1,
-// }
-//
-//
-
 function hasInput( input, o )
 {
   let self = this;
@@ -767,50 +724,6 @@ function hasInputDeep( input )
   return chainer._hasInput( input,{ deep : 1 } );
 }
 
-//
-//
-// function _hasOutput( output,o )
-// {
-//   let self = this;
-//
-//   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-//   _.assert( _.mapIs( o ) );
-//   _.assert( _.printerLike( output ) || _.processIs( output ));
-//   _.routineOptions( _hasOutput,o );
-//
-//   for( let d = 0 ; d < self.outputs.length ; d++ )
-//   {
-//     if( self.outputs[ d ].outputPrinter === output )
-//     {
-//       if( o.withoutOutputToOriginal && self.outputs[ d ].originalOutput )
-//       continue;
-//       // debugger;
-//       return true;
-//     }
-//   }
-//
-//   if( o.deep )
-//   for( let d = 0 ; d < self.outputs.length ; d++ )
-//   {
-//     let outputs = self.outputs[ d ].outputPrinter.outputs;
-//     if( o.withoutOutputToOriginal && self.outputs[ d ].originalOutput )
-//     continue;
-//     if( outputs && outputs.length )
-//     {
-//       if( _hasOutput.call( self.outputs[ d ].outputPrinter, output, o ) )
-//       return true;
-//     }
-//   }
-//
-//   return false;
-// }
-//
-// _hasOutput.defaults =
-// {
-//   deep : 1,
-//   withoutOutputToOriginal : 1,
-// }
-//
 //
 
 function hasOutput( output, o )
@@ -1037,27 +950,19 @@ let Supplement =
 }
 
 //
-//
+
 let Extend =
 {
 
   // chaining
 
   outputTo : outputTo,
-  // _inputFromConsole : _inputFromConsole,
-  // _outputUnbarring : _outputUnbarring,
-  // _outputToStream : _outputToStream,
 
   outputUnchain : outputUnchain,
 
   inputFrom : inputFrom,
 
-  // _inputFromConsole : _inputFromConsole,
-  // _inputFromStream : _inputFromStream,
-  // _inputFromAfter : _inputFromAfter,
-
   inputUnchain : inputUnchain,
-  // _inputUnchainConsoleLike : _inputUnchainConsoleLike,
 
   unchain : unchain,
 
@@ -1066,12 +971,10 @@ let Extend =
 
   // checker
 
-  // _hasInput : _hasInput,
   hasInput : hasInput,
   hasInputClose : hasInputClose,
   hasInputDeep : hasInputDeep,
 
-  // _hasOutput : _hasOutput,
   hasOutput : hasOutput,
   hasOutputClose : hasOutputClose,
   hasOutputDeep : hasOutputDeep,
