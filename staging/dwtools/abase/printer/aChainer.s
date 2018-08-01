@@ -105,7 +105,7 @@ function _chain( o )
   {
     if( o.inputCombining === 'supplement' )
     {
-      debugger; xxx
+      // debugger; xxx
       result = 0;
       return result;
     }
@@ -122,7 +122,7 @@ function _chain( o )
   {
     if( o.outputCombining === 'supplement' )
     {
-      debugger; xxx
+      // debugger; xxx
       result = 0;
       return result;
     }
