@@ -802,7 +802,7 @@ function _outputSet( output )
 function _outputGet( output )
 {
   let self = this;
-  _.assert( self.outputs );
+  _.assert( _.arrayIs( self.outputs ) );
   return self.outputs.length ? self.outputs[ self.outputs.length-1 ].outputPrinter : null;
 }
 
