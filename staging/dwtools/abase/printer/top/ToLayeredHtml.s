@@ -47,7 +47,7 @@ var Self = function wPrinterToLayeredHtml( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterToLayeredHtml';
+Self.shortName = 'PrinterToLayeredHtml';
 
 //
 
@@ -199,7 +199,7 @@ function _makeNextLineDom()
 }
 
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -250,9 +250,9 @@ var Proto =
   _makeNextLineDom : _makeNextLineDom,
 
 
-  // relationships
+  // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -268,7 +268,7 @@ _.classMake
   extend : Proto,
 });
 
-_global_[ Self.name ] = _[ Self.nameShort ] = Self;
+_global_[ Self.name ] = _[ Self.shortName ] = Self;
 
 // --
 // export

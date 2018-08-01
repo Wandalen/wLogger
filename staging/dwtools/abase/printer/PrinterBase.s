@@ -2,10 +2,8 @@
 
 'use strict';
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-  isBrowser = false;
 
   if( typeof _global_ === 'undefined' || !_global_.wBase )
   {
@@ -24,7 +22,8 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wCopyable' );
   _.include( 'wStringer' );
@@ -38,7 +37,8 @@ if( typeof module !== 'undefined' )
  * @class wPrinterBase
  */
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = null;
 var Self = function wPrinterBase( o )
 {
@@ -50,7 +50,7 @@ var Self = function wPrinterBase( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterBase';
+Self.shortName = 'PrinterBase';
 
 // --
 // inter
@@ -71,98 +71,77 @@ function init( o )
 }
 
 // --
-// write
+// transform
 // --
 
-function write()
+function transform( o )
 {
   var self = this;
 
-  if( !self.verboseEnough( arguments ) )
+  _.assertMapHasAll( o, transform.defaults );
+
+  o = self._transformBegin( o );
+
+  if( !o )
   return;
 
-  /* */
-
-  // if( arguments.length === 1 )
-  // if( self.canPrintFrom( arguments[ 0 ] ) )
-  // {
-  //   self.printFrom( arguments[ 0 ] );
-  //   return;
-  // }
-
-  /* */
-
-  var o = Object.create( null );
-  o.input = arguments;
-
-  self._writeBegin( o );
-
-  o = self._writePrepare( o );
+  o = self._transformAct( o );
 
   _.assert( _.mapIs( o ) );
-  _.assert( _.arrayLike( o.input ) );
-  _.assert( _.arrayLike( o.outputForTerminal ) );
-  _.assert( _.arrayLike( o.output ) );
+  _.assert( _.longIs( o.input ) );
 
-  if( self.onWrite )
-  self.onWrite( o );
+  o = self._transformEnd( o );
 
-  self._writeEnd( o );
+  return o;
+}
 
+transform.defaults =
+{
+  input : null,
+}
+
+//
+
+function _transformBegin( o )
+{
+  _.assert( arguments.length === 1, 'expects single argument' );
   return o;
 }
 
 //
 
-function _writeBegin( args )
-{
-  _.assert( arguments.length === 1, 'expects single argument' );
-}
-
-//
-
-function _writePrepare( o )
+function _transformAct( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.arrayLike( o.input ) );
+  _.assert( _.longIs( o.input ) );
 
   o.pure = self._strConcat( o.input );
-  o.output = [ o.pure ];
+  o.outputForPrinter = [ o.pure ];
   o.outputForTerminal = [ o.pure ];
+
+  /* !!! remove later */
+
+  _.accessorForbid
+  ({
+    object : o,
+    names :
+    {
+      output : 'output',
+    }
+  });
 
   return o;
 }
 
 //
 
-function _writeEnd( args )
+function _transformEnd( o )
 {
   _.assert( arguments.length === 1, 'expects single argument' );
-}
-
-//
-
-function _strConcat( args )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-
-  if( !_.strConcat )
-  return _.str.apply( _,args );
-
-  var optionsForStr =
-  {
-    linePrefix : self._prefix,
-    linePostfix : self._postfix,
-  }
-
-  var result = _.strConcat( args, optionsForStr );
-
-  return result;
+  return o;
 }
 
 // --
@@ -177,7 +156,7 @@ function _strConcat( args )
  * If argument( dLevel ) is not specified, increases by one.
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * l.up( 2 );
  * console.log( l.level )
  * //returns 2
@@ -210,7 +189,7 @@ function up( dLevel )
  * If argument( dLevel ) is not specified, decreases by one.
  *
  * @example
- * var l = new _.Logger();
+ * var l = new _.Logger({ output : console });
  * l.up( 2 );
  * l.down( 2 );
  * console.log( l.level )
@@ -254,53 +233,80 @@ function levelSet( level )
 // etc
 // --
 
-function verboseEnough( args )
+function write()
 {
   var self = this;
-  return true;
+
+  var o = self.transform({ input : arguments });
+
+  _.assert( o.outputForPrinter );
+
+  return self;
 }
 
 //
 
-function canPrintFrom( src )
-{
-  var self = this;
-
-  if( !_.objectIs( src ) )
-  return false;
-
-  if( _.routineIs( src._print ) && _.routineIs( src._print.makeIterator ) )
-  return true;
-
-  // if( _.routineIs( src.print ) )
-  // return true;
-
-  return false;
-}
-
-//
-
-function printFrom( src )
+function _strConcat( args )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.routineIs( src._print ) );
-  _.assert( _.routineIs( src._print.makeIterator ) );
-  _.assert( src._print.length === 2 );
 
-  var iterator = src._print.makeIterator({ printer : self });
-  var iteration = iterator.iterationNew();
+  if( !_.strConcat )
+  return _.str.apply( _,args );
 
-  Object.preventExtensions( iterator );
-  Object.preventExtensions( iteration );
+  var optionsForStr =
+  {
+    linePrefix : self._prefix,
+    linePostfix : self._postfix,
+  }
 
-  src._print( iteration,iterator );
+  var result = _.strConcat( args, optionsForStr );
 
+  return result;
 }
 
+//
+//
+// function canPrintFrom( src )
+// {
+//   var self = this;
+//
+//   if( !_.objectIs( src ) )
+//   return false;
+//
+//   if( _.routineIs( src._print ) && _.routineIs( src._print.makeIterator ) )
+//   return true;
+//
+//   // if( _.routineIs( src.print ) )
+//   // return true;
+//
+//   return false;
+// }
+//
+// //
+//
+// function printFrom( src )
+// {
+//   var self = this;
+//
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.routineIs( src._print ) );
+//   _.assert( _.routineIs( src._print.makeIterator ) );
+//   _.assert( src._print.length === 2 );
+//
+//   var iterator = src._print.makeIterator({ printer : self });
+//   var iteration = iterator.iterationNew();
+//
+//   Object.preventExtensions( iterator );
+//   Object.preventExtensions( iteration );
+//
+//   src._print( iteration,iterator );
+//
+// }
+
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -308,10 +314,8 @@ var symbolForLevel = Symbol.for( 'level' );
 var Composes =
 {
 
+  name : '',
   level : 0,
-  onWrite : null,
-
-  name : 'xxx',
 
 }
 
@@ -321,6 +325,16 @@ var Aggregates =
 
 var Associates =
 {
+}
+
+var Accessors =
+{
+  level : 'level',
+}
+
+var Statics =
+{
+  MetaType : 'Printer',
 }
 
 // --
@@ -334,15 +348,12 @@ var Proto =
 
   init : init,
 
+  // transform
 
-  // write
-
-  write : write,
-  _writeBegin : _writeBegin,
-  _writePrepare : _writePrepare,
-  _writeEnd : _writeEnd,
-  _strConcat : _strConcat,
-
+  transform : transform,
+  _transformBegin : _transformBegin,
+  _transformAct : _transformAct,
+  _transformEnd : _transformEnd,
 
   // leveling
 
@@ -350,20 +361,22 @@ var Proto =
   down : down,
   levelSet : levelSet,
 
-
   // etc
 
-  verboseEnough : verboseEnough,
-  canPrintFrom : canPrintFrom,
-  printFrom : printFrom,
+  write : write,
+  _strConcat : _strConcat,
 
+  // canPrintFrom : canPrintFrom,
+  // printFrom : printFrom,
 
-  // relationships
+  // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Accessors : Accessors,
+  Statics : Statics,
 
 }
 
@@ -378,24 +391,11 @@ _.classMake
 
 _.Copyable.mixin( Self );
 
-//
-
-_.accessor
-({
-  object : Self.prototype,
-  names :
-  {
-    level : 'level',
-  }
-});
-
-//
-
-_[ Self.nameShort ] = Self;
-
 // --
 // export
 // --
+
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

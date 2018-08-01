@@ -1,13 +1,13 @@
 {
   "name": "wLogger",
-  "version": "0.5.61",
+  "version": "0.5.93",
   "engine": "node >= 6.0.0",
   "description": "The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging",
-  "author": "Kostiantyn Wandalen <wtory.net@domainsbyproxy.com>",
+  "author": "Kostiantyn Wandalen <wanalen@willbe.so>",
   "contributors": [
     {
       "name": "Kostiantyn Wandalen",
-      "email": "wtory.net@domainsbyproxy.com>"
+      "email": "wanalen@willbe.so>"
     },
     {
       "name": "Volodymyr M.",
@@ -43,7 +43,8 @@
   "devDependencies": {
     "wTesting": "",
     "wFiles": "",
-    "wLogger": "."
+    "wLogger": ".",
+    "cli-table2": ""
   },
   "keywords": [
     "wTools",

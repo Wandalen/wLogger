@@ -2,6 +2,25 @@
 
 'use strict';
 
+/*
+
+Kinds of Chain : [ ordinary, excluding, original ]
+
+Kinds of Print-like object : [ console, printer ]
+
+Kinds of situations :
+
+conosle -> ordinary -> self
+printer -> ordinary -> self
+conosle -> excluding -> self
+printer -> excluding -> self
+self -> ordinary -> conosle
+self -> ordinary -> printer
+self -> original -> conosle
+self -> original -> printer
+
+*/
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -16,18 +35,14 @@ if( typeof module !== 'undefined' )
 
   require( './aColoredMixin.s' )
 
-  var _global = _global_;
   var _ = _global_.wTools;
 
 }
 
-var symbolForLevel = Symbol.for( 'level' );
-var symbolForForeground = Symbol.for( 'foregroundColor' );
-var symbolForBackground = Symbol.for( 'backgroundColor' );
-
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterMid;
 var Self = function wPrinterTop( o )
 {
@@ -39,25 +54,25 @@ var Self = function wPrinterTop( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterTop';
+Self.shortName = 'PrinterTop';
 
+// --
 //
+// --
 
 function init( o )
 {
   var self = this;
-
   Parent.prototype.init.call( self,o );
-
 }
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
 {
-
+  // outputGray : 1,
 }
 
 var Aggregates =
@@ -79,10 +94,9 @@ var Proto =
 
   init : init,
 
+  // relations
 
-  // relationships
-
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -101,21 +115,7 @@ _.classMake
 _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
 
-//
-
-_.accessor
-({
-  object : Self.prototype,
-  combining : 'rewrite',
-  names :
-  {
-    level : 'level',
-  }
-});
-
-//
-
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
 // --
 // export

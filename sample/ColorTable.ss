@@ -1,6 +1,4 @@
 
-
-
 if( typeof _global_ === 'undefined' || !_global_.wBase )
 {
   let toolsPath = '../../../dwtools/Base.s';
@@ -22,20 +20,38 @@ var _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
+_.include( 'wExecTools' );
 
-// require( '../staging/dwtools/abase/printer/top/Logger.s' );
-
-var colorNames = _.mapOwnKeys( _.color.ColorMapShell );
-colorNames = colorNames.slice( 0, colorNames.length / 2 );
-colorNames.forEach( ( name ) => colorNames.push( 'light ' + name ) );
+var colorNames =
+[
+  'white',
+  'black',
+  'green',
+  'red',
+  'yellow',
+  'blue',
+  'cyan',
+  'magenta',
+  'bright black',
+  'dark yellow',
+  'dark red',
+  'dark magenta',
+  'dark blue',
+  'dark cyan',
+  'dark green',
+  'dark white'
+]
 
 //
 
 function shortColor( name )
 {
-  var parts = _.strSplit( name );
-  if( parts[ 0 ] === 'light' )
-  name = 'l.' + parts[ 1 ];
+  var parts = _.strSplitNonPreserving({ src : name, preservingDelimeters : 0 });
+  if( parts[ 0 ] === 'dark' )
+  name = 'd.' + parts[ 1 ];
+
+  if( parts[ 0 ] === 'bright' )
+  name = 'b.' + parts[ 1 ];
 
   return name;
 }
@@ -44,7 +60,7 @@ function shortColor( name )
 
 function prepareTableInfo()
 {
-  function onWrite( data )
+  function onTransformEnd( data )
   {
     if( c <= colorNames.length / 2 )
     row1[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
@@ -62,8 +78,9 @@ function prepareTableInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onWrite : onWrite
+    onTransformEnd : onTransformEnd,
   })
+  silencedLogger.diagnosingColor = 0;
   for( var i = 0; i < colorNames.length; i++ )
   {
     fg = colorNames[ i ];
@@ -127,5 +144,4 @@ function drawTable()
   logger.log( table.toString() );
 }
 
-_.shell( 'npm i cli-table2' )
-.doThen( () => drawTable() );
+drawTable();

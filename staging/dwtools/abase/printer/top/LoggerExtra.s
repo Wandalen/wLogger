@@ -163,7 +163,7 @@ function hookConsoleToFile( fileName )
   var self = this;
 
   require( 'include/dwtools/abase/layer3/aPathTools.s' );
-  require( 'include/dwtools/FileMid.s' );
+  require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
   fileName = _.pathJoin( _.pathRealMainDir(),fileName );
@@ -416,7 +416,7 @@ var _methods =
 ];
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -461,9 +461,9 @@ var Proto =
 
   _methods : _methods,
 
-  // relationships
+  // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

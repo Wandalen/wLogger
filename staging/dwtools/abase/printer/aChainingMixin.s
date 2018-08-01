@@ -2,6 +2,16 @@
 
 'use strict';
 
+/*
+
+qqq!
+
+  Printer could input / output from / to non-printer objects.
+  Doing that printer preserves all fields of the object, but "chainerSymbol" field which got reference on chain decriptor.
+  Printer does not write / rewrite any fields of destination / source object, but "chainerSymbol" field.
+
+*/
+
 if( typeof module !== 'undefined' )
 {
 
@@ -22,91 +32,95 @@ if( typeof module !== 'undefined' )
     require( toolsPath );
   }
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wProto' );
 
-}
-
-var _global = _global_;
-var _ = _global_.wTools;
-
-//
-
-function _mixin( cls )
-{
-
-  var dstProto = cls.prototype;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.routineIs( cls ) );
-
-  _.mixinApply
-  ({
-    dstProto : dstProto,
-    descriptor : Self,
-  });
-
-  /* */
-
-  _.accessor
-  ({
-    object : dstProto,
-    names :
-    {
-      output : 'output',
-    }
-  });
-
-  /* */
-
-  _.accessorForbid
-  ({
-    object : dstProto,
-    names :
-    {
-      format : 'format',
-      upAct : 'upAct',
-      downAct : 'downAct',
-    }
-  });
-
-  /* */
-
-  dstProto._initChainingMixin();
+  require( './aChainer.s' );
 
 }
 
 //
 
-function _initChainingMixin()
+/**
+ * @class wPrinterChainingMixin
+ */
+
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wPrinterChainingMixin( o )
 {
-  var proto = this;
+  if( !( this instanceof Self ) )
+  if( o instanceof Self )
+  return o;
+  else
+  return new( _.routineJoin( Self, Self, arguments ) );
+  return Self.prototype.init.apply( this,arguments );
+}
+
+Self.shortName = 'PrinterChainingMixin';
+
+//
+
+function onMixinEnd( mixinDescriptor, dstClass )
+{
+  let dstPrototype = dstClass.prototype;
+
+  _.assert( dstPrototype._writeToChannelWithoutExclusion === _writeToChannelWithoutExclusion );
+  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( _.routineIs( dstClass ) );
+
+  dstPrototype._initChainingMixin( mixinDescriptor );
+
+}
+
+//
+
+function _initChainingMixin( mixinDescriptor )
+{
+  let proto = this;
+
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
 
-  for( var m = 0 ; m < proto.outputWriteMethods.length ; m++ )
-  proto.__initChainingMixinChannel( outputWriteMethods[ m ] );
+  proto.Channel.forEach( ( channel, c ) =>
+  {
+    proto._initChainingMixinChannel( mixinDescriptor, channel );
+  });
 
 }
 
 //
 
-function __initChainingMixinChannel( name )
+function _initChainingMixinChannel( mixinDescriptor, channel )
 {
-  var proto = this;
+  let proto = this;
+  // let mixin = proto.constructor.__mixin__;
 
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.strIs( name ) );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( channel ) );
 
-  if( proto[ name ] )
+  if( proto[ channel ] )
   return;
+
+  /* */
+
+  proto[ channel ] = write;
+  proto[ channel + 'Up' ] = writeUp;
+  proto[ channel + 'Down' ] = writeDown;
+  proto[ channel + 'In' ] = writeIn;
+
+  // this.extend[ channel ] = proto[ channel ] = write;
+  // this.extend[ channel + 'Up' ] = proto[ channel + 'Up' ] = writeUp;
+  // this.extend[ channel + 'Down' ] = proto[ channel + 'Down' ] = writeDown;
+  // this.extend[ channel + 'In' ] = proto[ channel + 'In' ] = writeIn;
 
   /* */
 
   function write()
   {
-    this._writeToChannel( name,_.arraySlice( arguments ) );
+    this._writeToChannel( channel, _.longSlice( arguments ) );
     return this;
   }
 
@@ -114,9 +128,7 @@ function __initChainingMixinChannel( name )
 
   function writeUp()
   {
-
-    this._writeToChannelUp( name,arguments );
-
+    this._writeToChannelUp( channel, arguments );
     return this;
   }
 
@@ -124,9 +136,7 @@ function __initChainingMixinChannel( name )
 
   function writeDown()
   {
-
-    this._writeToChannelDown( name,arguments );
-
+    this._writeToChannelDown( channel, arguments );
     return this;
   }
 
@@ -134,75 +144,151 @@ function __initChainingMixinChannel( name )
 
   function writeIn()
   {
-
-    this._writeToChannelIn( name,arguments );
-
+    this._writeToChannelIn( channel, arguments );
     return this;
   }
-
-  /* */
-
-  proto[ name ] = write;
-  proto[ name + 'Up' ] = writeUp;
-  proto[ name + 'Down' ] = writeDown;
-  proto[ name + 'In' ] = writeIn;
 
 }
 
 //
 
-function _writeToChannel( channelName,args )
+function init( original )
 {
-  var self = this;
+
+  return function init()
+  {
+    let self = this;
+
+    self[ chainerSymbol ] = self._chainerMakeFor( self );
+
+    let result = original.apply( self, arguments );
+
+    return result;
+  }
+
+}
+
+//
+
+function finit( original )
+{
+
+  return function finit()
+  {
+    let self = this;
+
+    // debugger; xxx
+    self.chainer.finit();
+
+    let result = original.apply( self, arguments );
+
+    return result;
+  }
+
+}
+
+// --
+// write
+// --
+
+function _writeToChannel( channelName, args )
+{
+  let self = this;
+  let inputChainer = self[ chainerSymbol ];
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
-  var o = self.write.apply( self,args );
+  if( inputChainer.exclusiveOutputPrinter )
+  {
+    inputChainer.exclusiveOutputPrinter[ channelName ].apply( inputChainer.exclusiveOutputPrinter, args );
+    // if( !inputChainer.hasOriginalOutputs )
+    return;
+  }
+
+  return self._writeToChannelWithoutExclusion( channelName, args );
+}
+
+//
+
+function _writeToChannelWithoutExclusion( channelName, args )
+{
+  let self = this;
+  let inputChainer = self[ chainerSymbol ];
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.longIs( args ) );
+
+  // if( inputChainer.exclusiveOutputPrinter )
+  // {
+  //   inputChainer.exclusiveOutputPrinter[ channelName ].apply( inputChainer.exclusiveOutputPrinter, args );
+  //   if( !inputChainer.hasOriginalOutputs )
+  //   return;
+  // }
+
+  let o = self.transform({ input : args, channelName : channelName });
 
   if( !o )
   return;
 
-  for( var i = 0 ; i < self.outputs.length ; i++ )
+  self.outputs.forEach( ( cd ) =>
   {
-    var outputDescriptor = self.outputs[ i ];
-    var outputData = ( outputDescriptor.output.isTerminal === undefined || outputDescriptor.output.isTerminal ) ? o.outputForTerminal : o.output;
+    let outputChainer = cd.outputPrinter[ chainerSymbol ];
+    let outputData = cd.outputPrinter.isPrinter ? o.outputForPrinter : o.outputForTerminal;
 
-    _.assert( _.arrayLike( outputData ) );
+    _.assert( _.longIs( outputData ) );
 
-    // /* skip empty line output if logging directive without text, like: logger.log( '#foreground : red#' )
-    //  output is not skipped for logger.log()
-    // */
-    //
-    // if( !outputData.length )
-    // continue;
-
-    if( outputDescriptor.methods[ channelName ] )
-    outputDescriptor.methods[ channelName ].apply( outputDescriptor.output,outputData );
-    else
+    // debugger;
+    if( cd.originalOutput )
     {
-      _.assert( _.routineIs( outputDescriptor.output[ channelName ] ) );
-      outputDescriptor.output[ channelName ].apply( outputDescriptor.output,outputData );
+      return outputChainer.originalWrite[ channelName ].apply( cd.outputPrinter, outputData );
     }
-  }
 
+    // if( inputChainer.exclusiveOutputPrinter )
+    // return;
+
+    // if( cd.write && cd.write[ channelName ] )
+    // {
+    //   xxx
+    //   cd.write[ channelName ].apply( cd.outputPrinter,outputData );
+    // }
+    // else
+    // {
+      _.assert( _.routineIs( cd.outputPrinter[ channelName ] ) );
+      cd.outputPrinter[ channelName ].apply( cd.outputPrinter, outputData );
+    // }
+
+  });
+
+}
+
+//
+
+function write()
+{
+  let self = this;
+
+  self._writeToChannel( channelName, arguments );
+
+  return self;
 }
 
 //
 
 function _writeToChannelUp( channelName,args )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
   self.up();
 
   self.begin( 'head' );
-  self._writeToChannel( channelName,args );
+  self._writeToChannel( channelName, args );
   self.end( 'head' );
 
 }
@@ -211,11 +297,11 @@ function _writeToChannelUp( channelName,args )
 
 function _writeToChannelDown( channelName,args )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
 
   self.begin( 'tail' );
   self._writeToChannel( channelName,args );
@@ -229,15 +315,15 @@ function _writeToChannelDown( channelName,args )
 
 function _writeToChannelIn( channelName,args )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
-  _.assert( _.arrayLike( args ) );
+  _.assert( _.longIs( args ) );
   _.assert( args.length === 2 );
   _.assert( _.strIs( args[ 0 ] ) );
 
-  var tag = Object.create( null );
+  let tag = Object.create( null );
   tag[ args[ 0 ] ] = args[ 1 ];
 
   self.begin( tag );
@@ -247,7 +333,7 @@ function _writeToChannelIn( channelName,args )
 }
 
 // --
-// write
+//
 // --
 
 /**
@@ -271,14 +357,14 @@ function _writeToChannelIn( channelName,args )
  * 'supplement' - adds output if list is empty.
  *
  * @example
- * var l = new _.Logger();
+ * let l = new _.Logger({ output : console });
  * l.outputTo( logger, { combining : 'rewrite' } ); //returns true
  * logger._prefix = '--';
  * l.log( 'abc' );//logger prints '--abc'
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
+ * let l1 = new _.Logger({ output : console });
+ * let l2 = new _.Logger({ output : console });
  * l1.outputTo( logger, { combining : 'rewrite' } );
  * l2.outputTo( l1, { combining : 'rewrite' } );
  * logger._prefix = '*';
@@ -286,9 +372,9 @@ function _writeToChannelIn( channelName,args )
  * l2.log( 'msg from l2' );//logger prints '*msg from l2*'
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
- * var l3 = new _.Logger();
+ * let l1 = new _.Logger({ output : console });
+ * let l2 = new _.Logger({ output : console });
+ * let l3 = new _.Logger({ output : console });
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -301,7 +387,7 @@ function _writeToChannelIn( channelName,args )
  * //l3 prints '***msg from logger'
  *
  * @example
- * var l1 = new _.Logger();
+ * let l1 = new _.Logger({ output : console });
  * l.outputTo( logger, { combining : 'rewrite', leveling : 'delta' } );
  * logger.up( 2 );
  * l.up( 1 );
@@ -323,119 +409,29 @@ function _writeToChannelIn( channelName,args )
  *
  */
 
-function outputTo( output,o )
+function outputTo( output, o )
 {
-  var self = this;
-  var o = o || Object.create( null );
-  var combiningAllowed = [ 'rewrite','supplement','append','prepend' ];
+  let self = this;
+  let chainer = self[ chainerSymbol ];
 
-  _.routineOptions( self.outputTo,o );
+  o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  _.assert( _.objectIs( output ) || _.consoleIs( output ) || output === null );
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
+  let o2 = _.mapExtend( null, o );
+  o2.inputPrinter = self;
+  o2.outputPrinter = output;
+  o2.inputCombining = o.combining;
+  // o2.outputCombining = o.combining;
+  delete o2.combining;
 
-  /* output */
-
-  if( output )
-  {
-
-    _.assert( self !== output, 'outputTo : Adding of itself to outputs is not allowed' );
-
-    if( o.combining !== 'rewrite' )
-    if( self.hasOutputNotDeep( output ) )
-    throw _.err( 'outputTo : This output already exists as immediate output', output );
-
-    /*
-      no need to check inputs if chaining is unbarring
-    */
-
-    if( !o.unbarring )
-    if( self.inputs )
-    if( self.hasInputDeep( output ) )
-    throw _.err( 'outputTo : This object already exists in input chain', output );
-
-    if( !output.inputs )
-    output.inputs = [];
-
-    if( self.outputs.length )
-    {
-      if( o.combining === 'supplement' )
-      return false;
-      else if( o.combining === 'rewrite' )
-      self.outputs.splice( 0,self.outputs.length );
-    }
-
-    o.output = output;
-    o.input = self;
-    o.methods = Object.create( null );
-    Object.preventExtensions( o );
-
-    if( !o.combining )
-    _.assert( self.outputs.length === 0, 'outputTo : combining if off, multiple outputs are not allowed' );
-
-    if( o.combining === 'prepend' )
-    {
-      self.outputs.unshift( o );
-      output.inputs.unshift( o );
-    }
-    else
-    {
-      self.outputs.push( o );
-      output.inputs.push( o );
-    }
-
-    if( _.streamIs( output ) ) // ???
-    {
-      self._outputToStream( o );
-      return true;
-    }
-
-    if( o.unbarring )
-    _.assert( output.isTerminal === undefined || output.isTerminal,'unbarring chaining possible only into terminal logger' );
-
-    if( o.unbarring )
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
-    {
-      var name = self.outputWriteMethods[ m ];
-      o.methods[ name ] = function()
-      {
-
-        /*
-          unbarred output data into terminal logger with help of original methods
-          without passing message forward in a chain
-        */
-
-        if( this[ symbolForChainDescriptor ] && this[ symbolForChainDescriptor ].originalMethods[ name ] )
-        return this[ symbolForChainDescriptor ].originalMethods[ name ].apply( this,arguments );
-        else
-        return this[ name ].apply( this,arguments );
-      }
-    })();
-
-  }
-  else
-  {
-    if( self.outputs.length )
-    {
-      if( o.combining === 'rewrite' )
-      {
-        for( var d = 0; d < self.outputs.length ; d++ )
-        self.outputUnchain( self.outputs[ d ].output );
-        self.outputs.splice( 0,self.outputs.length );
-      }
-      else _.assert( 0,'outputTo can remove outputs only if ( o.combining ) is "rewrite"' );
-    }
-  }
-
-  return true;
+  return chainer._chain( o2 );
 }
 
-outputTo.defaults =
-{
-  combining : 0,
-  unbarring : 0,
-}
+var defaults = outputTo.defaults = Object.create( null );
+
+defaults.combining = 'append';
+defaults.exclusiveOutput = 0;
+defaults.originalOutput = 0;
 
 //
 
@@ -448,9 +444,9 @@ outputTo.defaults =
  * @param { Object } output - Logger that must be deleted from output list.
  *
  * @example
- * var l1 = new _.Logger();
- * var l2 = new _.Logger();
- * var l3 = new _.Logger();
+ * let l1 = new _.Logger({ output : console });
+ * let l2 = new _.Logger({ output : console });
+ * let l3 = new _.Logger({ output : console });
  * logger.outputTo( l1, { combining : 'rewrite' } );
  * logger.outputTo( l2, { combining : 'append' } );
  * logger.outputTo( l3, { combining : 'append' } );
@@ -472,32 +468,14 @@ outputTo.defaults =
  *
  */
 
+/* qqq : should return number */
+
 function outputUnchain( output )
 {
-  var self = this;
-
-  if( !self.outputs.length )
-  return false;
-
+  let self = this;
+  let inputChainer = self[ chainerSymbol ];
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( output ) || _.consoleIs( output ) || output === undefined );
-  _.assert( self.outputs.length, 'outputUnchain : outputs list is empty' );
-  _.assert( self !== output, 'outputUnchain : Can not remove itself from outputs' );
-
-  if( output === undefined )
-  {
-    var result = false;
-    for( var i = 0 ; i < self.outputs.length ; i++ )
-    result = self.outputUnchain( self.outputs[ i ].output ) || result;
-    return result;
-  }
-
-  var result = _.arrayRemovedOnce( self.outputs, output, ( e ) => e.output, ( e ) => e ) >= 0;
-
-  if( output.inputs )
-  _.arrayRemovedOnce( output.inputs, self, ( e ) => e.input, ( e ) => e );
-
-  return result;
+  inputChainer.outputUnchain( output );
 }
 
 //
@@ -520,7 +498,7 @@ function outputUnchain( output )
  * console.log( 'msg for logger' ); //logger prints '*msg for logger'
  *
  * @example
- * var l = new _.Logger();
+ * let l = new _.Logger({ output : console });
  * logger.inputFrom( l );
  * logger._prefix = '*';
  * l.log( 'msg from logger' ); //logger prints '*msg from logger'
@@ -532,179 +510,29 @@ function outputUnchain( output )
  *
  */
 
-function inputFrom( input,o )
+function inputFrom( input, o )
 {
-  var self = this;
-  var o = o || Object.create( null );
-  var combiningAllowed = [ 'rewrite','append','prepend' ];
+  let self = this;
+  let chainer = self[ chainerSymbol ];
 
-  _.routineOptions( self.inputFrom,o );
+  o = _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) || input === null );
 
-  if( _.routineIs( input.outputTo ) )
-  return input.outputTo( self,_.mapOnly( o, input.outputTo.defaults ) );
+  let o2 = _.mapExtend( null, o );
+  o2.inputPrinter = input;
+  o2.outputPrinter = self;
+  // o2.inputCombining = o.combining;
+  o2.outputCombining = o.combining;
+  delete o2.combining;
 
-  _.assert( !o.combining || combiningAllowed.indexOf( o.combining ) !== -1, 'unknown combining mode',o.combining );
-
-  /* input is barred check */
-
-  if( Config.debug )
-  {
-    if( o.barring && _.consoleIs( input ) && self.consoleIsBarred( input )  )
-    {
-      if( self.unbarringConsoleOnError )
-      {
-        var chainDescriptor = input[ symbolForChainDescriptor ];
-        _.assert( chainDescriptor && chainDescriptor.bar );
-        chainDescriptor.bar.unchain();
-      }
-      throw _.err( 'inputFrom : This input is already barred', input );
-    }
-  }
-
-  /* input check */
-
-  if( o.combining !== 'rewrite' )
-  if( self.hasInputNotDeep( input ) )
-  throw _.err( 'inputFrom : This input already exists as input in the chain', input );
-
-  /* recursive outputs check */
-
-  if( self.hasOutputDeep( input ) )
-  throw _.err( 'inputFrom : This input already exists as output in the chain', input );
-
-  /* */
-
-  if( !input.outputs )
-  {
-    input.outputs = [];
-  }
-
-  if( input.outputs.length )
-  {
-    if( o.combining === 'rewrite' )
-    input.outputs.splice( 0,input.outputs.length );
-  }
-
-  /* */
-
-  o.output = self;
-  o.input = input;
-
-  if( o.combining === 'prepend' )
-  input.outputs.unshift( o );
-  else
-  input.outputs.push( o );
-
-  self.inputs.push( o );
-
-  var chainDescriptor = input[ symbolForChainDescriptor ];
-  if( !chainDescriptor )
-  {
-    chainDescriptor = input[ symbolForChainDescriptor ] = Object.create( null );
-    chainDescriptor.bar = null;
-    // chainDescriptor.barringMethods = Object.create( null );
-    chainDescriptor.originalMethods = Object.create( null );
-  }
-
-  o.chainDescriptor = chainDescriptor;
-
-  /* */
-
-  if( _.streamIs( input ) )
-  {
-    self._inputFromStream( input );
-  }
-  else
-  {
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) ( function()
-    {
-      var channel = self.outputWriteMethods[ m ];
-
-      _.assert( input[ channel ],'inputFrom expects input has method',channel );
-
-      if( !chainDescriptor.originalMethods[ channel ] )
-      {
-        _.assert( !chainDescriptor.bar );
-        chainDescriptor.originalMethods[ channel ] = input[ channel ];
-        // chainDescriptor.barringMethods[ channel ] = input[ channel ];
-        input[ channel ] = function()
-        {
-          if( chainDescriptor.bar )
-          return chainDescriptor.bar[ channel ].apply( chainDescriptor.bar,arguments );
-          for( var d = 0 ; d < input.outputs.length ; d++ )
-          input.outputs[ d ].output[ channel ].apply( input.outputs[ d ].output, arguments );
-          return chainDescriptor.originalMethods[ channel ].apply( input, arguments );
-        }
-      }
-
-    })();
-  }
-
-  /* */
-
-  if( o.barring )
-  chainDescriptor.bar = self;
-
-  return true;
+  return chainer._chain( o2 );
 }
 
-inputFrom.defaults =
-{
-  combining : 'append',
-  barring : 0,
-}
+var defaults = inputFrom.defaults = Object.create( null );
 
-inputFrom.defaults.__proto__ = outputTo.defaults;
-
-//
-
-function _inputFromStream( stream )
-{
-  var self = this;
-
-  var outputChannel = 'log';
-
-  _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
-
-  if( !stream.onDataHandler )
-  {
-    stream.on( 'data', function( data )
-    {
-      if( _.bufferAnyIs( data ) )
-      data = _.bufferToStr( data );
-
-      if( _.strEnds( data,'\n' ) )
-      data = _.strRemoveEnd( data,'\n' );
-
-      for( var d = 0 ; d < stream.outputs.length ; d++ )
-      stream.outputs[ d ].output[ outputChannel ].call( stream.outputs[ d ].output, data );
-    })
-    stream.onDataHandler = 1;
-  }
-}
-
-//
-
-function _outputToStream( o )
-{
-  var self = this;
-
-  var stream = o.output;
-
-  _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
-
-  for( var m = 0 ; m < self.outputWriteMethods.length ; m++ ) (function()
-  {
-    var name = self.outputWriteMethods[ m ];
-    o.methods[ name ] = function()
-    {
-      stream.write.apply( stream, arguments );
-    }
-  })();
-
-}
+defaults.combining = 'append';
+defaults.exclusiveOutput = 0;
+defaults.originalOutput = 0;
 
 //
 
@@ -723,7 +551,7 @@ function _outputToStream( o )
  * console.log( 'msg for logger' ); //console prints 'msg for logger'
  *
  * @example
- * var l = new _.Logger();
+ * let l = new _.Logger({ output : console });
  * logger.inputFrom( l, { combining : 'append' } );
  * logger._prefix = '*';
  * l.log( 'msg for logger' ) //logger prints '*msg for logger'
@@ -739,71 +567,17 @@ function _outputToStream( o )
 
 function inputUnchain( input )
 {
-  var self = this;
-  var result = false;
-
+  let self = this;
+  let outputChainer = self[ chainerSymbol ];
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.objectIs( input ) || _.consoleIs( input ) || input === undefined );
-
-  for( var i = self.inputs.length-1 ; i >= 0  ; i-- )
-  if( self.inputs[ i ].input === input || input === undefined )
-  {
-    var ainput = self.inputs[ i ].input;
-
-    if( _.routineIs( ainput.outputUnchain ) )
-    {
-      result = ainput.outputUnchain( self );
-      continue;
-    }
-
-    result = self._inputUnchainForeign( ainput ) || result;
-    self.inputs.splice( i, 1 );
-  }
-
-  return result;
-}
-
-//
-
-function _inputUnchainForeign( input )
-{
-  var self = this;
-
-  _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( ( _.objectIs( input ) || _.consoleIs( input ) ) && !( input instanceof _.PrinterBase ) );
-
-  /* */
-
-  var result = _.arrayRemovedOnce( input.outputs, self, ( e ) => e.output, ( e ) => e ) >= 0;
-
-  if( !input.outputs.length )
-  {
-    var chainDescriptor = input[ symbolForChainDescriptor ];
-    for( var m = 0 ; m < self.outputWriteMethods.length ; m++ )
-    {
-      var name = self.outputWriteMethods[ m ];
-      _.assert( input[ name ],'inputUnchain expects input has method',name,'something wrong' );
-      input[ name ] = chainDescriptor.originalMethods[ name ];
-    }
-
-    delete input.outputs;
-    delete input[ symbolForChainDescriptor ];
-  }
-  else
-  {
-    var chainDescriptor = input[ symbolForChainDescriptor ]
-    if( chainDescriptor.bar === self )
-    chainDescriptor.bar = null;
-  }
-
-  return result;
+  return outputChainer.inputUnchain( input );
 }
 
 //
 
 function unchain()
 {
-  var self = this;
+  let self = this;
 
   self.inputUnchain();
   self.outputUnchain();
@@ -814,80 +588,89 @@ function unchain()
 
 function consoleIsBarred( output )
 {
-  _.assert( output === console );
+  let self = this;
+
+  _.assert( _.consoleIs( output ) );
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  var descriptor = output[ symbolForChainDescriptor ];
-  if( !descriptor )
+  let chainer = output[ chainerSymbol ]
+  if( !chainer )
   return false;
 
-  return !!descriptor.bar;
+  return !!chainer.exclusiveOutputPrinter;
 }
 
 //
 
 function consoleBar( o )
 {
-  var self = this;
-  var o = _.routineOptions( consoleBar, arguments );
+  let self = this;
+  o = _.routineOptions( consoleBar, arguments );
 
-  // console.log( 'Barring' );
-  // console.log( 'self.consoleIsBarred( console )',self.consoleIsBarred( console ) );
-  // console.log( 'o.bar',o.bar );
-  // console.log( _.diagnosticStack() );
-  // _.assert( self.consoleIsBarred( console ) !== !!o.bar );
-
-  if( !o.barLogger )
-  o.barLogger = new self.Self({ output : null, name : 'barLogger' });
-  if( !o.outputLogger && this.instanceIs() )
-  o.outputLogger = this;
-  if( !o.outputLogger )
-  o.outputLogger = new self.Self();
+  if( !o.barPrinter )
+  o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
+  if( !o.outputPrinter && this.instanceIs() )
+  o.outputPrinter = this;
+  if( !o.outputPrinter )
+  o.outputPrinter = new self.Self();
 
   /* */
 
-  if( o.bar )
+  if( o.on )
   {
 
     if( o.verbose )
     {
-      o.outputLogger.begin({ verbosity : 4 });
-      o.outputLogger.log( 'Barring console' );
-      o.outputLogger.end({ verbosity : 4 });
+      o.outputPrinter.begin({ verbosity : 4 });
+      o.outputPrinter.log( 'Barring console' );
+      o.outputPrinter.end({ verbosity : 4 });
     }
 
-    _.assert( !o.barLogger.inputs.length );
-    _.assert( !o.barLogger.outputs.length );
+    _.assert( !o.barPrinter.inputs.length );
+    _.assert( !o.barPrinter.outputs.length );
+    _.assert( !o.outputPrinterHadOutputs );
 
-    o.outputLoggerWasChainedToConsole = o.outputLogger.outputUnchain( console );
-    o.outputLogger.outputTo( console,{ unbarring : 1, combining : 'rewrite' } );
+    o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
 
-    o.barLogger.permanentStyle = { fg : 'blue', bg : 'yellow' };
-    o.barLogger.inputFrom( console,{ barring : 1 } );
-    o.barLogger.outputTo( o.outputLogger );
+    o.outputPrinter.outputUnchain();
+
+    o.outputPrinter.outputTo( console,{ originalOutput : 1, combining : 'rewrite' } );
+
+    o.barPrinter.permanentStyle = 'exclusiveOutput.neutral';
+    o.barPrinter.inputFrom( console,{ exclusiveOutput : 1 } );
+    o.barPrinter.outputTo( o.outputPrinter );
 
   }
   else
   {
 
-    o.barLogger.unchain();
+    o.barPrinter.unchain();
 
-    o.outputLogger.outputUnchain( console );
-    if( o.outputLoggerWasChainedToConsole )
-    o.outputLogger.outputTo( console );
+    o.outputPrinter.outputUnchain( console );
+
+    _.assert( !!o.outputPrinterHadOutputs );
+
+    for( let t = 0 ; t < o.outputPrinterHadOutputs.length ; t++ )
+    {
+      let outputOptions = o.outputPrinterHadOutputs[ t ];
+      o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly( outputOptions, o.outputPrinter.outputTo.defaults ) );
+    }
 
   }
 
 /*
 
-     barring       ordinary       unbarring
- console -> barLogger -> outputLogger -> console
+     exclusiveOutput        ordinary      originalOutput
+ console    ->    barPrinter  ->  outputPrinter   ->   console
    ^
    |
  others
 
-unbarring link is not transitive, but terminating
+originalOutput link is not transitive, but terminating
 so no cycle
+
+
+ console -> barPrinter -> outputPrinter -> defLogger -> console
 
 */
 
@@ -896,146 +679,85 @@ so no cycle
 
 consoleBar.defaults =
 {
-  outputLogger : null,
-  barLogger : null,
-  bar : 1,
+  outputPrinter : null,
+  barPrinter : null,
+  on : 1,
   verbose : 0,
-  outputLoggerWasChainedToConsole : null,
+  outputPrinterHadOutputs : null,
 }
 
 // --
-// test
+// checker
 // --
 
-function _hasInput( input,o )
+function hasInput( input, o )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( input ) || _.consoleIs( input ) || _.processIs( input ) );
-  _.routineOptions( _hasInput,o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  for( var d = 0 ; d < self.inputs.length ; d++ )
-  {
-    if( self.inputs[ d ].input === input )
-    {
-      if( o.ignoringUnbar && self.inputs[ d ].unbarring )
-      continue;
-      debugger;
-      return true;
-    }
-  }
-
-  if( o.deep )
-  for( var d = 0 ; d < self.inputs.length ; d++ )
-  {
-    var inputs = self.inputs[ d ].input.inputs;
-    if( o.ignoringUnbar && self.inputs[ d ].unbarring )
-    continue;
-    if( inputs && inputs.length )
-    {
-      if( _hasInput.call( self.inputs[ d ].input, input, o ) )
-      return true;
-    }
-  }
-
-  return false;
-}
-
-_hasInput.defaults =
-{
-  deep : 1,
-  ignoringUnbar : 1,
+  return chainer._hasInput( input, o );
 }
 
 //
 
-function hasInputNotDeep( input )
+function hasInputClose( input )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  return self._hasInput( input,{ deep : 0 } );
+  return chainer._hasInput( input,{ deep : 0 } );
 }
 
 //
 
 function hasInputDeep( input )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  return self._hasInput( input,{ deep : 1 } );
+  return chainer._hasInput( input,{ deep : 1 } );
 }
 
 //
 
-function _hasOutput( output,o )
+function hasOutput( output, o )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.mapIs( o ) );
-  _.assert( _.objectIs( output ) || _.consoleIs( output ) || _.processIs( output ));
-  //_.assert( _.objectIs( output ) );
-  _.routineOptions( _hasOutput,o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  for( var d = 0 ; d < self.outputs.length ; d++ )
-  {
-    if( self.outputs[ d ].output === output )
-    {
-      if( o.ignoringUnbar && self.outputs[ d ].unbarring )
-      continue;
-      // debugger;
-      return true;
-    }
-  }
-
-  if( o.deep )
-  for( var d = 0 ; d < self.outputs.length ; d++ )
-  {
-    var outputs = self.outputs[ d ].output.outputs;
-    if( o.ignoringUnbar && self.outputs[ d ].unbarring )
-    continue;
-    if( outputs && outputs.length )
-    {
-      if( _hasOutput.call( self.outputs[ d ].output, output, o ) )
-      return true;
-    }
-  }
-
-  return false;
-}
-
-_hasOutput.defaults =
-{
-  deep : 1,
-  ignoringUnbar : 1,
+  return chainer._hasOutput( output, o );
 }
 
 //
 
-function hasOutputNotDeep( output )
+function hasOutputClose( output )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  return self._hasOutput( output,{ deep : 0 } );
+  return chainer._hasOutput( output,{ deep : 0 } );
 }
 
 //
 
 function hasOutputDeep( output )
 {
-  var self = this;
+  let self = this;
+  let chainer = self.chainer;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  return self._hasOutput( output,{ deep : 1 } );
+  return chainer._hasOutput( output,{ deep : 1 } );
 }
 
 // --
@@ -1044,11 +766,16 @@ function hasOutputDeep( output )
 
 function _outputSet( output )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  self.outputTo( output,{ combining : 'rewrite' } );
+  if( output )
+  self.outputTo( output, { combining : 'rewrite' } );
+  else
+  self.outputUnchain();
+
+  // self.outputTo( output, { combining : 'rewrite' } );
 
 }
 
@@ -1056,159 +783,246 @@ function _outputSet( output )
 
 function _outputGet( output )
 {
-  var self = this;
-  _.assert( self.outputs );
-  return self.outputs.length ? self.outputs[ self.outputs.length-1 ].output : null;
+  let self = this;
+  _.assert( _.arrayIs( self.outputs ) );
+  return self.outputs.length ? self.outputs[ self.outputs.length-1 ].outputPrinter : null;
+}
+
+//
+
+function _outputsSet( outputs )
+{
+  let self = this;
+  _.assert( arguments.length === 1, 'expects single argument' );
+  self.outputTo( outputs, { combining : 'rewrite' } );
+}
+
+//
+
+function _outputsGet( outputs )
+{
+  let self = this;
+  let chainer = self[ chainerSymbol ];
+  _.assert( arguments.length === 0 );
+  return chainer.outputs;
+}
+
+//
+
+function _inputsGet()
+{
+  let self = this;
+  let chainer = self[ chainerSymbol ];
+  return chainer.inputs;
+}
+
+//
+
+function _inputsSet( inputs )
+{
+  let self = this;
+  _.assert( arguments.length === 1, 'expects single argument' );
+  self.inputFrom( inputs, { combining : 'rewrite' } );
+}
+
+//
+
+function _chainerGet()
+{
+  let self = this;
+  return self[ chainerSymbol ];
+}
+
+//
+
+function _chainerMakeFor( printer )
+{
+  let self = this;
+  _.assert( arguments.length === 1 );
+  return _.Chainer._chainerMakeFor( printer );
 }
 
 // --
-// var
+// fields
 // --
 
-var symbolForChainDescriptor = Symbol.for( 'chainDescriptor' );
-var symbolForLevel = Symbol.for( 'level' );
+let chainerSymbol = Symbol.for( 'chainer' );
+let levelSymbol = Symbol.for( 'level' );
 
-var outputWriteMethods =
-[
-  'log',
-  'error',
-  'info',
-  'warn',
-  'debug'
-];
+let ChainDescriptor = _.Chainer.ChainDescriptor;
+let Combining = _.Chainer.Combining;
+let Channel = _.Chainer.Channel;
 
-var outputChangeLevelMethods =
+let ChangeLevelMethods =
 [
   'up',
   'down',
 ];
 
 // --
-// relationships
+// relations
 // --
 
-var Composes =
+let Composes =
 {
 
   outputs : [],
   inputs : [],
 
-  isTerminal : 0,
-
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
 
   output : null,
 
 }
 
-var Statics =
+let Restricts =
+{
+  isPrinter : 1,
+}
+
+let Statics =
 {
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
 
-  // var
+  // fields
 
-  outputWriteMethods : outputWriteMethods,
-  outputChangeLevelMethods : outputChangeLevelMethods,
+  ChainDescriptor : ChainDescriptor,
+  Combining : Combining,
+  Channel : Channel,
 
-  unbarringConsoleOnError : 1
+  ChangeLevelMethods : ChangeLevelMethods,
+  unbarringConsoleOnError : 1,
 
+}
+
+let Forbids =
+{
+  format : 'format',
+  upAct : 'upAct',
+  downAct : 'downAct',
+}
+
+let Accessors =
+{
+  output : 'output',
+  outputs : 'outputs',
+  inputs : 'inputs',
+  chainer : 'chainer',
 }
 
 // --
 // define class
 // --
 
-var Supplement =
+let Functors =
 {
 
+  init : init,
+  finit : finit,
+
+}
+
+let Supplement =
+{
+
+  // write
+
   _writeToChannel : _writeToChannel,
+  _writeToChannelWithoutExclusion : _writeToChannelWithoutExclusion,
   _writeToChannelUp : _writeToChannelUp,
   _writeToChannelDown : _writeToChannelDown,
   _writeToChannelIn : _writeToChannelIn,
 
-  // routine
+  // init
 
   _initChainingMixin : _initChainingMixin,
-  __initChainingMixinChannel : __initChainingMixinChannel,
+  _initChainingMixinChannel : _initChainingMixinChannel,
 
 }
 
 //
 
-var Extend =
+let Extend =
 {
 
   // chaining
 
   outputTo : outputTo,
+
   outputUnchain : outputUnchain,
-  _outputToStream : _outputToStream,
 
   inputFrom : inputFrom,
+
   inputUnchain : inputUnchain,
-  _inputUnchainForeign : _inputUnchainForeign,
-  _inputFromStream : _inputFromStream,
 
   unchain : unchain,
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
 
-  // test
+  // checker
 
-  _hasInput : _hasInput,
-  hasInputNotDeep : hasInputNotDeep,
+  hasInput : hasInput,
+  hasInputClose : hasInputClose,
   hasInputDeep : hasInputDeep,
 
-  _hasOutput : _hasOutput,
-  hasOutputNotDeep : hasOutputNotDeep,
+  hasOutput : hasOutput,
+  hasOutputClose : hasOutputClose,
   hasOutputDeep : hasOutputDeep,
-
 
   // etc
 
   _outputSet : _outputSet,
   _outputGet : _outputGet,
 
+  _outputsSet : _outputsSet,
+  _outputsGet : _outputsGet,
 
-  // relationships
+  _inputsSet : _inputsSet,
+  _inputsGet : _inputsGet,
+
+  _chainerGet : _chainerGet,
+  _chainerMakeFor : _chainerMakeFor,
+
+  // relations
 
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
   Statics : Statics,
+  Forbids : Forbids,
+  Accessors : Accessors,
 
 }
 
 //
 
-var Self =
-{
-
-  supplement : Supplement,
+_.classMake
+({
+  cls : Self,
   extend : Extend,
-
-  _mixin : _mixin,
-
-  name : 'wPrinterChainingMixin',
-  nameShort : 'PrinterChainingMixin',
-
-}
-
-Self = _[ Self.nameShort ] = _.mixinMake( Self );
+  supplement : Supplement,
+  onMixinEnd : onMixinEnd,
+  functors : Functors,
+  withMixin : true,
+  withClass : true,
+});
 
 // --
 // export
 // --
+
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

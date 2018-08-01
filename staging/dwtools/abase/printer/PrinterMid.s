@@ -1,21 +1,16 @@
 (function _PrinterMid_s_() {
 
-'use strict'; 
+'use strict';
 
 if( typeof module !== 'undefined' )
 {
 
-  // if( typeof wPrinterMid !== 'undefined' )
-  // debugger;
-  // if( typeof wPrinterMid !== 'undefined' )
-  // return;
-
-  // if( !_global_.wPrinterBase )
   require( './PrinterBase.s' );
 
-  require( './aChainingMixin.s' )
+  var _ = _global_.wTools;
 
-  var _global = _global_; var _ = _global_.wTools;
+  require( './aChainer.s' );
+  require( './aChainingMixin.s' )
 
   _.include( 'wCopyable' );
 
@@ -39,7 +34,7 @@ var Self = function wPrinterMid( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'PrinterMid';
+Self.shortName = 'PrinterMid';
 
 // --
 // routines
@@ -48,7 +43,7 @@ Self.nameShort = 'PrinterMid';
 function init( o )
 {
   var self = this;
-  var o = o || {};
+  var o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
@@ -75,22 +70,54 @@ function levelSet( level )
   var level = self[ symbolForLevel ];
 
   self._prefix = _.strDup( self._dprefix || '',level );
-  self._postfix = _.strDup( self._dpostfix|| '',level );
+  self._postfix = _.strDup( self._dpostfix || '',level );
 
 }
 
 //
 
-function _writeBegin( args )
+function _transformBegin( o )
 {
   var self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
 
-  Parent.prototype._writeBegin.call( self,args );
+  if( self.onTransformBegin )
+  o = self.onTransformBegin( o );
 
-  self._minesDetonate();
+  if( !o )
+  return;
 
+  if( !self.verboseEnough() )
+  return;
+
+  o = Parent.prototype._transformBegin.call( self, o );
+
+  if( !o )
+  return;
+
+  self._laterActualize();
+
+  return o;
+}
+
+//
+
+function _transformEnd( o )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( self.onTransformEnd )
+  self.onTransformEnd( o );
+
+  o = Parent.prototype._transformEnd.call( self, o );
+
+  if( !o )
+  return;
+
+  return o;
 }
 
 // --
@@ -102,7 +129,7 @@ function _begin( key,val )
   var self = this;
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
-  _.assert( _.strIs( key ),'expects string ( key ), got',_.strTypeOf( key ) );
+  _.assert( _.strIs( key ),'expects string {-key-}, got',_.strTypeOf( key ) );
 
   if( val === undefined )
   {
@@ -110,9 +137,6 @@ function _begin( key,val )
     self._end( key,val );
     return self;
   }
-
-  // if( key === 'verbosity' )
-  // _.assert( val <= 0 );
 
   if( self.attributes[ key ] !== undefined )
   {
@@ -157,20 +181,11 @@ function _end( key,val )
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
 
-  // if( val === undefined )
-  // {
-  //   self._end( key,val );
-  //   return self;
-  // }
-
   if( val !== undefined )
   _.assert
   (
     val === self.attributes[ key ],
-    '( begin ) does not have complemented ( end )' +
-    '\nbegin : ' + _.toStr( self.attributes[ key ] ),
-    '\nend : ' + _.toStr( val ),
-    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
+    () => self._attributeError( key, self.attributes[ key ], val )
   );
 
   if( self._attributesStacks[ key ] )
@@ -208,6 +223,117 @@ function end()
   }
 
   return self;
+}
+
+//
+
+function _rbegin( key, val )
+{
+  var self = this;
+  var attribute = self.attributes[ key ];
+
+  if( attribute === undefined )
+  {
+    self._begin( key, 0 );
+    attribute = 0;
+  }
+
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( _.strIs( key ),'expects string {-key-}, got', () => _.strTypeOf( key ) );
+  _.assert( _.numberIs( val ),'expects number {-val-}, got', () => _.strTypeOf( val ) );
+  _.assert( _.numberIs( attribute ), () => _.args( 'expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
+
+  return self._begin( key, val + attribute )
+}
+
+//
+
+function rbegin()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var argument = arguments[ a ];
+
+    if( _.objectIs( argument ) )
+    {
+      for( var key in argument )
+      self._rbegin( key,argument[ key ] )
+      return;
+    }
+
+    self._rbegin( argument,1 );
+  }
+
+  return self;
+}
+
+//
+
+function _rend( key,val )
+{
+  var self = this;
+  var attributeStack = self._attributesStacks[ key ];
+
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+  _.assert( _.strIs( key ) );
+  _.assert( _.numberIs( val ) );
+
+  _.assert
+  (
+    _.arrayIs( attributeStack ) && _.numberIs( attributeStack[ attributeStack.length-1 ] ),
+    () => self._attributeError( key, undefined, val )
+  );
+
+  var attribute = attributeStack[ attributeStack.length-1 ];
+  var val = attribute + val;
+
+  self._end( key, val );
+
+  return self;
+}
+
+//
+
+function rend()
+{
+  var self = this;
+
+  for( var a = 0 ; a < arguments.length ; a++ )
+  {
+    var argument = arguments[ a ];
+
+    if( _.objectIs( argument ) )
+    {
+      for( var key in argument )
+      self._rend( key,argument[ key ] )
+      return;
+    }
+
+    self._rend( argument )
+  }
+
+  return self;
+}
+
+//
+
+function _attributeError( key, begin, end )
+{
+  var self = this;
+
+  debugger;
+
+  return _.err
+  (
+    '{-begin-} does not have complemented {-end-}' +
+    '\nkey : ' + _.toStr( key ) +
+    '\nbegin : ' + _.toStr( begin ) +
+    '\nend : ' + _.toStr( end ) +
+    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
+  );
+
 }
 
 // --
@@ -272,9 +398,11 @@ function _verbosityReserve()
 
 //
 
-function verboseEnough( args )
+function verboseEnough()
 {
   var self = this;
+
+  _.assert( arguments.length === 0 );
 
   if( !self.usingVerbosity )
   return true;
@@ -306,45 +434,45 @@ function _verbosityReport()
 }
 
 // --
-// mine
+// later
 // --
 
-function mine( name )
+function later( name )
 {
   var self = this;
-  var mine = Object.create( null );
+  var later = Object.create( null );
 
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( name ) );
 
-  mine.name = name;
-  mine.after = [];
-  mine.logger = self;
-  mine.autoFinit = 1;
-  mine.detonated = 0;
-  mine.log = function log()
+  later.name = name;
+  later.after = [];
+  later.logger = self;
+  later.autoFinit = 1;
+  later.detonated = 0;
+  later.log = function log()
   {
     if( this.logger.verboseEnough )
     this.after.push([ 'log',arguments ]);
   }
 
-  self._mines[ name ] = mine;
+  self._mines[ name ] = later;
 
-  return mine;
+  return later;
 }
 
 //
 
-function _minesDetonate()
+function _laterActualize()
 {
   var self = this;
   var result = Object.create( null );
 
   for( var m in self._mines )
   {
-    var mine = self._mines[ m ];
-    if( !mine.detonated )
-    self.mineDetonate( mine );
+    var later = self._mines[ m ];
+    if( !later.detonated )
+    self.laterActualize( later );
   }
 
   return result;
@@ -352,51 +480,51 @@ function _minesDetonate()
 
 //
 
-function mineDetonate( mine )
+function laterActualize( later )
 {
   var self = this;
 
-  if( _.strIs( mine ) )
-  mine = self._mines[ mine ];
+  if( _.strIs( later ) )
+  later = self._mines[ later ];
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.mapIs( mine ) );
+  _.assert( _.mapIs( later ) );
 
-  mine.detonated = 1;
+  later.detonated = 1;
 
-  for( var a = 0 ; a < mine.after.length ; a++ )
+  for( var a = 0 ; a < later.after.length ; a++ )
   {
-    var after = mine.after[ a ];
+    var after = later.after[ a ];
     self[ after[ 0 ] ].apply( self,after[ 1 ] );
   }
 
-  if( mine.autoFinit )
-  self.mineFinit( mine );
+  if( later.autoFinit )
+  self.laterFinit( later );
 
   return self;
 }
 
 //
 
-function mineFinit( mine )
+function laterFinit( later )
 {
   var self = this;
 
-  if( _.strIs( mine ) )
-  mine = self._mines[ mine ];
+  if( _.strIs( later ) )
+  later = self._mines[ later ];
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.mapIs( mine ) );
-  _.assert( self._mines[ mine.name ] === mine );
+  _.assert( _.mapIs( later ) );
+  _.assert( self._mines[ later.name ] === later );
 
-  Object.freeze( mine );
-  delete self._mines[ mine.name ];
+  Object.freeze( later );
+  delete self._mines[ later.name ];
 
   return self;
 }
 
 // --
-// relationships
+// relations
 // --
 
 var symbolForLevel = Symbol.for( 'level' );
@@ -404,19 +532,13 @@ var symbolForLevel = Symbol.for( 'level' );
 var Composes =
 {
 
-  _prefix : '',
-  _postfix : '',
-
-  _dprefix : '  ',
-  _dpostfix : '',
-
-  _verbosityStack : [],
   verbosity : null,
   usingVerbosity : 1,
 
-  _attributesStacks : {},
-  attributes : {},
-  _mines : {},
+  onTransformBegin : null,
+  onTransformEnd : null,
+
+  attributes : Object.create( null ),
 
 }
 
@@ -431,6 +553,28 @@ var Associates =
 {
 }
 
+var Restricts =
+{
+
+  _prefix : '',
+  _postfix : '',
+
+  _dprefix : '  ',
+  _dpostfix : '',
+
+  _verbosityStack : [],
+
+  _attributesStacks : Object.create( null ),
+  _mines : Object.create( null ),
+
+}
+
+var Forbids =
+{
+  format : 'format',
+  tags : 'tags',
+}
+
 // --
 // define class
 // --
@@ -442,12 +586,11 @@ var Proto =
 
   init : init,
 
-
   // etc
 
   levelSet : levelSet,
-  _writeBegin : _writeBegin,
-
+  _transformBegin : _transformBegin,
+  _transformEnd : _transformEnd,
 
   // attributing
 
@@ -456,6 +599,12 @@ var Proto =
   _end : _end,
   end : end,
 
+  _rbegin : _rbegin,
+  rbegin : rbegin,
+  _rend : _rend,
+  rend : rend,
+
+  _attributeError : _attributeError,
 
   // verbosity
 
@@ -467,21 +616,21 @@ var Proto =
   _verboseEnough : _verboseEnough,
   _verbosityReport : _verbosityReport,
 
+  // later
 
-  // mine
+  later : later,
+  _laterActualize : _laterActualize,
+  laterActualize : laterActualize,
+  laterFinit : laterFinit,
 
-  mine : mine,
-  _minesDetonate : _minesDetonate,
-  mineDetonate : mineDetonate,
-  mineFinit : mineFinit,
+  // relations
 
-
-  // relationships
-
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
+  Restricts : Restricts,
+  Forbids : Forbids,
 
 }
 
@@ -496,25 +645,11 @@ _.classMake
 
 _.assert( Self.prototype.init === init );
 
-//
-
-_.accessorForbid
-({
-  object : Self.prototype,
-  names :
-  {
-    format : 'format',
-    tags : 'tags',
-  }
-});
-
-//
-
-_[ Self.nameShort ] = Self;
-
 // --
 // export
 // --
+
+_[ Self.shortName ] = Self;
 
 if( typeof module !== 'undefined' )
 if( _global_.WTOOLS_PRIVATE )

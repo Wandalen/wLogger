@@ -1,6 +1,6 @@
 (function _Logger_s_() {
 
-'use strict'; 
+'use strict';
 
 /*
 
@@ -40,7 +40,7 @@ var Self = function wLogger( o )
   return Self.prototype.init.apply( this,arguments );
 }
 
-Self.nameShort = 'Logger';
+Self.shortName = 'Logger';
 
 //
 
@@ -55,7 +55,7 @@ function init( o )
 }
 
 // --
-// relationships
+// relations
 // --
 
 var Composes =
@@ -69,7 +69,8 @@ var Aggregates =
 
 var Associates =
 {
-  output : console,
+  // output : console,
+  output : null,
 }
 
 var Restricts =
@@ -89,9 +90,9 @@ var Proto =
 
   init : init,
 
-  // relationships
+  // relations
 
-  constructor : Self,
+  /* constructor * : * Self, */
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -111,10 +112,10 @@ _.classMake
 
 //
 
-_[ Self.nameShort ] = Self;
+_[ Self.shortName ] = Self;
 
-if( !_global_.logger || _.mapIs( _global_.logger ) )
-_global_.logger = _global_[ 'logger' ] = new Self(/* { coloring : 1 } */);
+if( !_global_.logger || !( _global_.logger instanceof Self ) )
+_global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'global' });
 
 // --
 // export
