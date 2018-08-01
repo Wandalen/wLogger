@@ -2698,6 +2698,50 @@ function consoleIs( test )
 
 //
 
+function clone( test )
+{
+  test.case = 'clone chainer';
+
+  var printer = new _.Logger({ name : 'printerA' });
+  var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter' });
+
+  printer.outputTo( outputPrinter );
+  printer.inputFrom( inputPrinter );
+
+  var chainer = printer.chainer;
+  var clonedChainer = chainer.clone();
+
+  test.will = 'chainers must have same printer'
+
+  test.identical( chainer.printer, clonedChainer.printer );
+  test.identical( chainer.name, clonedChainer.name );
+
+  test.will = 'chainers must have same inputs/outputs'
+
+  test.identical( chainer.inputs.length, 1 );
+  test.identical( chainer.outputs.length, 1 );
+
+  test.identical( clonedChainer.inputs.length, 1 );
+  test.identical( clonedChainer.outputs.length, 1 );
+
+  test.identical( chainer.inputs[ 0 ].inputPrinter , clonedChainer.inputs[ 0 ].inputPrinter );
+  test.identical( chainer.outputs[ 0 ].outputPrinter , clonedChainer.outputs[ 0 ].outputPrinter );
+
+  test.will = 'cloned chainer reflects changes';
+
+  printer.inputUnchain( inputPrinter );
+  printer.outputUnchain( outputPrinter );
+
+  test.identical( clonedChainer.inputs.length, 0 );
+  test.identical( clonedChainer.outputs.length, 0 );
+
+  test.identical( clonedChainer.outputs, chainer.outputs );
+  test.identical( clonedChainer.inputs, chainer.inputs );
+}
+
+//
+
 function finit( test )
 {
 
@@ -3150,6 +3194,7 @@ var Self =
     consoleBar : consoleBar,
     consoleIs : consoleIs,
 
+    clone : clone,
     finit : finit,
   },
 

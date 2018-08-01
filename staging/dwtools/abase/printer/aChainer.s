@@ -824,6 +824,9 @@ function _nameSet( src )
   if( src === null )
   return;
 
+  if( !self.printer )
+  return;
+
   self.printer.name = src
 }
 
