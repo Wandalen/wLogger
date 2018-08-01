@@ -155,7 +155,7 @@ function _chain( o )
 
     o.inputPrinter.forEach( ( inputPrinter ) =>
     {
-      debugger; xxx
+      // debugger; xxx
       var o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
       result += self._chain( o2 );

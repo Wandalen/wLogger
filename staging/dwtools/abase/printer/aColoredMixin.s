@@ -358,6 +358,8 @@ function _transformAct_browser( o )
       var foregroundColor = 'none';
       var backgroundColor = 'none';
 
+      /* qqq : make it working without _.color */
+
       if( output )
       {
         if( self.foregroundColor )
