@@ -87,6 +87,12 @@ function _chain( o )
   let result = 0;
 
   o = _.routineOptions( self._chain, arguments );
+
+  if( o.outputPrinter instanceof self.ChainDescriptor )
+  o.outputPrinter = o.outputPrinter.outputPrinter;
+  if( o.inputPrinter instanceof self.ChainDescriptor )
+  o.inputPrinter = o.inputPrinter.inputPrinter;
+
   _.assert( arguments.length === 1 );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
@@ -105,7 +111,7 @@ function _chain( o )
     }
     else if( o.inputCombining === 'rewrite' )
     {
-      debugger;
+      // debugger;
       self.outputUnchain();
     }
   }
@@ -133,7 +139,7 @@ function _chain( o )
 
     o.outputPrinter.forEach( ( outputPrinter ) =>
     {
-      debugger; xxx
+      // debugger; // qqq
       var o2 = _.mapExtend( null, o );
       o2.outputPrinter = outputPrinter;
       result += self._chain( o2 );
@@ -253,8 +259,8 @@ _chain.defaults =
 {
   outputPrinter : null,
   inputPrinter : null,
-  outputCombining : 'append', /*xxx*/
-  inputCombining : 'append', /*xxx*/
+  outputCombining : 'append',
+  inputCombining : 'append',
   originalOutput : 0,
   exclusiveOutput : 0,
 }
@@ -431,117 +437,6 @@ function outputTo( output, o )
   delete o2.combining;
 
   return self._chain( o2 );
-
-  // _.assert( arguments.length === 1 );
-  // _.assert( _.printerLike( output ) || output === null || _.arrayLike( output ) );
-  // _.assert( !o.combining || _.arrayHas( self.Combining, o.combining ), () => 'unknown combining mode ' + _.strQuote( o.combining ) );
-
-  // /* output */
-  //
-  // if( _.arrayLike( output ) )
-  // {
-  //
-  //   if( o.combining === 'rewrite' )
-  //   {
-  //     self.outputUnchain();
-  //     o = _.mapExtend( null, o );
-  //     o.combining = 'append';
-  //   }
-  //   output.forEach( ( output ) =>
-  //   {
-  //     self.outputTo( output );
-  //   });
-  //
-  // }
-  // else if( output === null )
-  // {
-  //
-  //   if( self.outputs.length )
-  //   {
-  //     if( o.combining === 'rewrite' )
-  //     return self.outputUnchain();
-  //     else _.assert( 0,'outputTo can remove outputs only if {-o.combining-} is "rewrite"' );
-  //   }
-  //
-  // }
-  // else
-  // {
-  //
-  //   _.assert( output, 'expects {-output-}' );
-  //   _.assert( self !== output, 'Output to itself is not correct chaining' );
-  //
-  //   if( Config.debug )
-  //   if( o.combining !== 'rewrite' )
-  //   if( self.hasOutputClose( output ) )
-  //   _.assert( 0, () => _.strConcat([ 'Close loop', _.toStrShort( self ), 'output to', _.toStrShort( output ) ]) );
-  //
-  //   /*
-  //     no need to check inputs if chaining is originalOutput
-  //   */
-  //
-  //   if( Config.debug )
-  //   if( !o.originalOutput )
-  //   if( self.inputs )
-  //   if( self.hasInputDeep( output ) )
-  //   _.assert( 0, () => _.strConcat([ 'Deep loop', _.toStrShort( self ), 'output to', _.toStrShort( output ) ]) );
-  //
-  //   // debugger;
-  //   // if( !output.inputs )
-  //   // output.inputs = [];
-  //
-  //   if( self.outputs.length )
-  //   {
-  //     if( o.combining === 'supplement' )
-  //     return false;
-  //     else if( o.combining === 'rewrite' )
-  //     self.outputs.splice( 0,self.outputs.length );
-  //   }
-  //
-  //   o.outputPrinter = output;
-  //   o.inputPrinter = self;
-  //
-  //   let cd = self._chainDescriptorMake( o );
-  //
-  //   if( !cd.combining )
-  //   _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
-  //
-  //   let inputChainer = self[ chainerSymbol ] || self._chainerMakeFor( self );
-  //   let outputChainer = output[ chainerSymbol ] || self._chainerMakeFor( output );
-  //
-  //   if( cd.combining === 'prepend' )
-  //   {
-  //     _.arrayPrependOnceStrictly( inputChainer.outputs, cd );
-  //     _.arrayPrependOnceStrictly( outputChainer.inputs, cd );
-  //   }
-  //   else
-  //   {
-  //     _.arrayAppendOnceStrictly( inputChainer.outputs, cd );
-  //     _.arrayAppendOnceStrictly( outputChainer.inputs, cd );
-  //   }
-  //
-  //   // if( output._inputFromAfter )
-  //   // {
-  //   //   output._inputFromAfter( cd );
-  //   // }
-  //   // else
-  //   // {
-  //   //   return self._inputFromConsole( cd );
-  //   // }
-  //
-  //   if( _.streamIs( output ) )
-  //   {
-  //     debugger; xxx
-  //     return self._outputToStream( cd );
-  //   }
-  //
-  //   // else if( cd.originalOutput )
-  //   // {
-  //   //   return _outputUnbarring( cd );
-  //   // }
-  //
-  // }
-  //
-  // return 1;
 }
 
 outputTo.defaults =
@@ -753,39 +648,6 @@ function inputUnchain( input )
   }
 
   return self._unchain({ inputPrinter : input, outputPrinter : self.printer });
-
-  // // debugger;
-  // // let chainer = input[ chainerSymbol ];
-  // // let cds = chainer.outputs;
-  // // let cd1 = _.arrayRemovedOnceElementStrictly( self.inputs, input, ( cd ) => cd.inputPrinter, ( e ) => e );
-  // // let cd2 = _.arrayRemovedOnceElementStrictly( cds, self, ( cd ) => cd.outputPrinter, ( e ) => e );
-  // // _.assert( cd1 === cd2 )
-  // // self._chainDescriptorFree( cd1 );
-  // //
-  // // if( cd1.exclusiveOutput )
-  // // {
-  // //   _.assert( chainer.exclusiveOutputPrinter === self )
-  // //   chainer.exclusiveOutputPrinter = null;
-  // // }
-  // //
-  // // /* xxx : only one instance */
-  //
-  // // for( let i = self.inputs.length-1 ; i >= 0  ; i-- )
-  // // if( self.inputs[ i ].inputPrinter === input || input === undefined )
-  // // {
-  // //   let ainput = self.inputs[ i ].inputPrinter;
-  // //
-  // //   if( _.routineIs( ainput.outputUnchain ) )
-  // //   {
-  // //     result += ainput.outputUnchain( self ); xxx
-  // //     continue;
-  // //   }
-  // //
-  // //   result += self._inputUnchainConsoleLike( ainput );
-  // //   self.inputs.splice( i, 1 );
-  // // }
-  //
-  // return result;
 }
 
 inputUnchain.defaults =
@@ -817,9 +679,9 @@ function _chainDescriptorMake( o )
 {
   var self = this;
   _.assert( arguments.length === 1 );
-  let r = Object.create( null );
+  let r = new ChainDescriptor();
 
-  Object.assign( r, self.ChainDescriptor );
+  Object.assign( r, self.ChainDescriptorFields );
 
   /* !!! : remove it later */
   _.accessorForbid
@@ -1104,18 +966,18 @@ function hasOutputDeep( output )
 
 let chainerSymbol = Symbol.for( 'chainer' );
 
-let ChainDescriptor =
+function ChainDescriptor(){};
+ChainDescriptor.prototype = Object.create( null );
+
+let ChainDescriptorFields =
 {
   exclusiveOutput : 0,
   originalOutput : 0,
   inputPrinter : null,
   outputPrinter : null,
-  // write : null,
-  freed : 0,
-
   inputCombining : null,
   outputCombining : null,
-
+  freed : 0,
 }
 
 let Combining = [ 'rewrite', 'supplement', 'append', 'prepend' ];
@@ -1159,10 +1021,10 @@ let Aggregates =
 let Associates =
 {
   printer : null,
-  inputs : _.define.multiple([]),
-  outputs : _.define.multiple([]),
-  originalWrite : _.define.multiple({}),
-  writeFromConsole : _.define.multiple({}),
+  inputs : _.define.own([]),
+  outputs : _.define.own([]),
+  originalWrite : _.define.own({}),
+  writeFromConsole : _.define.own({}),
   exclusiveOutputPrinter : null,
 }
 
@@ -1178,6 +1040,8 @@ let Statics =
   _chainerWriteToPrinter : _chainerWriteToPrinter,
 
   ChainDescriptor : ChainDescriptor,
+  ChainDescriptorFields : ChainDescriptorFields,
+
   Combining : Combining,
   Channel : Channel,
 
