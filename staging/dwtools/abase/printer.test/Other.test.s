@@ -24,20 +24,8 @@ var Parent = _.Tester;
 
 function currentColor( test )
 {
-  function fakelog()
-  {
-    return arguments;
-  }
 
-  var fakeConsole =
-  {
-    log : _.routineJoin( console,fakelog ),
-    error : _.routineJoin( console,console.error ),
-    info : _.routineJoin( console,console.info ),
-    warn : _.routineJoin( console,console.warn ),
-  }
-
-  var logger = new _.Logger( { output : fakeConsole } );
+  var logger = new _.Logger();
 
   test.case = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : dark red#' );
@@ -149,7 +137,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.case = 'case11 : setting colors from setter, unknown';
-  var logger = new _.Logger( { output : fakeConsole } );
+  var logger = new _.Logger();
   test.shouldThrowError( () =>
   {
     logger.foregroundColor = 'd';
@@ -255,9 +243,9 @@ function _colorsStack( test )
 function logUp( test )
 {
   var got;
-  function _onWrite( args ) { got = args.output[ 0 ] };
+  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, onTransformEnd : _onWrite, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   var msg = 'Up';
@@ -283,9 +271,9 @@ function logUp( test )
 function logDown( test )
 {
   var got;
-  function _onWrite( args ) { got = args.output[ 0 ] };
+  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, onTransformEnd : _onWrite, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   logger.up( 2 );

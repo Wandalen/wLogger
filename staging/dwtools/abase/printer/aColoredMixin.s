@@ -376,7 +376,7 @@ function _transformAct_browser( o )
       if( styled )
       {
         result[ 0 ] += '%c';
-        var style = `color:${ foregroundColor };background:${ backgroundColor }`;
+        var style = `color:${ foregroundColor };background:${ backgroundColor };`;
         result.push( style );
       }
 

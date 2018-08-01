@@ -1556,7 +1556,6 @@ function output( test )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin, onTransformEnd : onTransformEnd });
-  outputPrinter.inputFrom( console );
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1568,6 +1567,7 @@ function output( test )
   test.ge( consoleChainer.inputs.length, 1 );
   test.is( consoleChainer.hasInputClose( printerA ) );
   test.ge( consoleChainer.outputs.length, 0 );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   outputPrinter.inputUnchain( console );
   printerA.outputUnchain( console );
@@ -1583,7 +1583,6 @@ function output( test )
   var hooked = [];
   printerA.outputTo( outputPrinter );
   inputPrinter.outputTo( console );
-  outputPrinter.inputFrom( console );
   test.will = 'printer must have other input and output'
   test.is( printerA.hasOutputClose( outputPrinter ) );
   test.is( inputPrinter.hasOutputClose( console ) );
@@ -1596,6 +1595,7 @@ function output( test )
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   inputPrinter.outputUnchain( console );
   outputPrinter.inputUnchain( console );
@@ -1619,7 +1619,7 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ]
   test.is( consoleChainer.hasInputClose( printerA ) );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-  outputPrinter.inputFrom( console );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   outputPrinter.inputUnchain( console );
   printerA.outputUnchain( console );
@@ -1649,7 +1649,7 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-  outputPrinter.inputFrom( console );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   inputPrinter.outputUnchain( console );
   outputPrinter.inputUnchain( console );
@@ -1678,7 +1678,7 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ]
   test.is( consoleChainer.hasInputClose( printerA ) );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-  outputPrinter.inputFrom( console );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   outputPrinter.inputUnchain( console );
   printerA.outputUnchain( console );
@@ -1708,7 +1708,7 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
-  outputPrinter.inputFrom( console );
+  outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'for printer B' );
   inputPrinter.outputUnchain( console );
   outputPrinter.inputUnchain( console );
@@ -1865,13 +1865,13 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-  printerC.inputFrom( console );
+  printerC.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'A for printer B' );
-  test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
   test.will = 'unchain exclusive output, printerD now must get the message';
   printerC.inputUnchain( console );
   printerA.outputUnchain( printerB );
+  test.will = 'message from printerA must reach both of handlers';
+  test.identical( hooked, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
   hooked = [];
   printerA.log( 'A for printer C' );
   test.identical( hooked, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
@@ -1894,13 +1894,13 @@ function output( test )
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-  printerC.inputFrom( console );
+  printerC.inputFrom( console, { exclusiveOutput : 1 } );
   printerA.log( 'A for printer B' );
-  test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
   test.will = 'unchain exclusive output, printerD now must get the message';
   printerC.inputUnchain( console );
   printerA.outputUnchain( printerB );
+  test.will = 'message from printerA must reach both of handlers';
+  test.identical( hooked, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
   hooked = [];
   printerA.log( 'A for printer C' );
   test.identical( hooked, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );

@@ -2,21 +2,11 @@
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
-
-  _.include( 'wTesting' );
-
-}
-
 //
 
-var _global = _global_; var _ = _global_.wTools;
-var Parent = _.Tester;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = _.Tester;
 
 //
 
@@ -30,7 +20,7 @@ var _escaping = function( str )
 function colorConsole( test )
 {
   var got;
-  var onTransformEnd = function( args ){ console.log(args);got = args.outputForTerminal };
+  var onTransformEnd = function( args ){ got = args.outputForTerminal };
 
   var logger = new _.Logger( { output : null, onTransformEnd : onTransformEnd });
 
