@@ -76,7 +76,7 @@ function finit()
 
   self.unchainEverything();
 
-  _.Copyable.supplement.finit.call( self );
+  _.Copyable.prototype.finit.call( self );
 }
 
 //
