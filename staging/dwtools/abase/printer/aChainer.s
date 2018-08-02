@@ -105,7 +105,7 @@ function _chain( o )
   {
     if( o.inputCombining === 'supplement' )
     {
-      debugger; xxx
+      // debugger; xxx
       result = 0;
       return result;
     }
@@ -122,7 +122,7 @@ function _chain( o )
   {
     if( o.outputCombining === 'supplement' )
     {
-      debugger; xxx
+      // debugger; xxx
       result = 0;
       return result;
     }
@@ -155,7 +155,7 @@ function _chain( o )
 
     o.inputPrinter.forEach( ( inputPrinter ) =>
     {
-      debugger; xxx
+      // debugger; xxx
       var o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
       result += self._chain( o2 );
@@ -822,6 +822,9 @@ function _nameSet( src )
   var self = this;
 
   if( src === null )
+  return;
+
+  if( !self.printer )
   return;
 
   self.printer.name = src
