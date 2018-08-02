@@ -691,7 +691,7 @@ consoleBar.defaults =
 function chain( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( _.Chainer.prototype._chain, o )
+  _.routineOptions( chain, o )
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
 
@@ -703,6 +703,8 @@ function chain( o )
 
   return _.Chainer.prototype._chain.call( inputChainer, o );
 }
+
+var defaults = chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
 
 // --
 // checker
