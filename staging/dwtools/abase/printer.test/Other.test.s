@@ -654,7 +654,6 @@ function stateChangingValue( test )
 
 function coloringNoColor( test )
 {
-  /* _.color.strFormat is used by tester, can't disable color */
   var color = _.color;
   var fg = _.color.strFormatForeground;
   var bg = _.color.strFormatBackground;
@@ -761,7 +760,7 @@ var Self =
     diagnostic : diagnostic,
     stateChangingValue : stateChangingValue,
     clone : clone,
-    // coloringNoColor : coloringNoColor, /* needs fix */
+    coloringNoColor : coloringNoColor,
 
   },
 
