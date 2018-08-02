@@ -2,6 +2,8 @@
 
 'use strict';
 
+
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -700,7 +702,7 @@ var Self =
     emptyLines : emptyLines,
     diagnostic : diagnostic,
     stateChangingValue : stateChangingValue,
-    // coloringNoColor : coloringNoColor, /* needs fix */
+    // coloringNoColor : coloringNoColor, /* qqq : needs fix */
 
   },
 

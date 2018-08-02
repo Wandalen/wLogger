@@ -2,16 +2,6 @@
 
 'use strict';
 
-/*
-
-to run this test
-from the project directory run
-
-npm install
-node ./staging/dwtools/abase/z.test/Backend.test.s
-
-*/
-
 if( typeof module !== 'undefined' )
 {
 
