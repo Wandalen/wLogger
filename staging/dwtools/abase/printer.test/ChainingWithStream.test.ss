@@ -53,7 +53,7 @@ function readFromFile( test )
   _.fileProvider.fileWrite( filePath, data );
   var readStream = _.fileProvider.fileReadStream( filePath );
 
-  function onWrite( o )
+  function onTransformEnd( o )
   {
     got.push( o.input[ 0 ] );
   }
@@ -61,7 +61,7 @@ function readFromFile( test )
   var l = new _.Logger
   ({
     output : null,
-    onWrite : onWrite
+    onTransformEnd : onTransformEnd
   });
   l.inputFrom( readStream );
 
@@ -86,7 +86,7 @@ function writeToFile( test )
   var data = _.strDup( '1', 10 );
   var expected = [];
 
-  function onWrite( o )
+  function onTransformEnd( o )
   {
     expected.push( o.input[ 0 ] );
   }
@@ -94,7 +94,7 @@ function writeToFile( test )
   var l = new _.Logger
   ({
     output : null,
-    onWrite : onWrite
+    onTransformEnd : onTransformEnd
   });
 
   l.outputTo( writeStream );
@@ -120,6 +120,7 @@ var Self =
 
   name : 'ChainingWithStream',
   silencing : 1,
+  enabled : 0,
 
   onSuiteBegin : testDirMake,
   onSuiteEnd : testDirClean,

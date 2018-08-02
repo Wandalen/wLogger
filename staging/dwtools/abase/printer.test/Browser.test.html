@@ -8,57 +8,64 @@ wTools unit test
 
 <!--need to replace some sources with files from node_modules later-->
 
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer1/aFundamental.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer1/cDiagnostics.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer1/eFieldMapper.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer1/kArrayDescriptor.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer1/zSetup.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer2/fExecTools.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer2/fIncludeTools.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer2/fNameTools.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer2/fStringTools.s"></script>
-<script src="../../../../../node_modules/wTools/staging/dwtools/abase/layer4/aStringer.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/aFundamental.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/cDiagnostics.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/eFieldMapper.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/kArrayDescriptor.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/zSetup.s"></script>
+<script src="../../../../node_modules/wexectools/staging/dwtools/abase/layer3/ExecTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/bLookTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fIncludeTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fNameTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fStringTools.s"></script>
+<script src="../../../../node_modules/warraysorted/staging/dwtools/abase/layer4/ArraySorted.s"></script>
+<script src="../../../../node_modules/wstringsextra/staging/dwtools/amid/astring/StringsExtra.s"></script>
+<script src="../../../../node_modules/wstringer/staging/dwtools/abase/layer4/aStringer.s"></script>
 
-<script src="../../../../../node_modules/wProto/staging/dwtools/abase/layer3/Proto.s"></script>
-<script src="../../../../../node_modules/winstancing/staging/dwtools/abase/mixin/Instancing.s"></script>
-<script src="../../../../../node_modules/wPath/staging/dwtools/abase/layer3/aPathTools.s"></script>
-<script src="../../../../../node_modules/wcloner/staging/dwtools/abase/component/Cloner.s"></script>
-<script src="../../../../../node_modules/wCopyable/staging/dwtools/abase/mixin/Copyable.s"></script>
-<script src="../../../../../node_modules/wConsequence/staging/dwtools/abase/oclass/Consequence.s"></script>
-<script src="../../../../../node_modules/wColor/staging/dwtools/amid/color/Color.s"></script>
+<script src="../../../../node_modules/wProto/staging/dwtools/abase/layer3/Proto.s"></script>
+<script src="../../../../node_modules/winstancing/staging/dwtools/abase/mixin/Instancing.s"></script>
+<script src="../../../../node_modules/wPath/staging/dwtools/abase/layer3/aPathTools.s"></script>
+<script src="../../../../node_modules/wtraverser/staging/dwtools/abase/layer3/bTraverser.s"></script>
+<script src="../../../../node_modules/wcloner/staging/dwtools/abase/layer4/Cloner.s"></script>
+<script src="../../../../node_modules/wCopyable/staging/dwtools/abase/mixin/Copyable.s"></script>
+<script src="../../../../node_modules/wConsequence/staging/dwtools/abase/oclass/Consequence.s"></script>
+<script src="../../../../node_modules/wColor/staging/dwtools/amid/color/Color.s"></script>
 
-<script src="../printer/aChainingMixin.s">
-</script>
-<script src="../printer/aColoredMixin.s">
-</script>
-<script src="../printer/PrinterBase.s">
-</script>
-<script src="../printer/PrinterMid.s">
-</script>
-<script src="../printer/PrinterTop.s">
-</script>
-<script src="../printer/top/Logger.s">
-</script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/aChainer.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/aChainingMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/aColoredMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/PrinterBase.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/PrinterMid.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/PrinterTop.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/printer/top/Logger.s"></script>
 
 
-<script src="../../../../../node_modules/wTesting/staging/dwtools/abase/xtester/aTestSuit.debug.s"></script>
-<script src="../../../../../node_modules/wTesting/staging/dwtools/abase/xtester/bTestRoutine.debug.s"></script>
-<script src="../../../../../node_modules/wTesting/staging/dwtools/abase/xtester/cTester.debug.s"></script>
-
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/aBase.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/aTestSuite.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/bTestRoutine.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/cTester.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/abase/xtester/zLast.debug.s"></script>
 
 
 <script src="./Browser.test.js">
 </script>
 
+<script src="./Color.test.js">
+</script>
+
 <script src="./Other.test.s">
 </script>
+
+<!--
 <script src="./Chaining.test.s">
 </script>
 <script src="./Logger.test.s">
-</script>
+</script> -->
 
 <script>
-wTools.Tester.testAll();
+let _global = _global_;
+let _ = _global_.wTools;
+_.Tester.testAll();
 </script>
 
 </head>
