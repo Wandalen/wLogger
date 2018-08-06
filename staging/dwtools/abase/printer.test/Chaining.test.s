@@ -192,17 +192,15 @@ function chaining( test )
 
 //
 
-function consoleChaining( test )
+function _consoleChaining( o )
 {
-
-  var consoleWasBarred = false;
+  let test = o.test;
 
   if( _.Logger.consoleIsBarred( console ) )
   {
-    consoleWasBarred = true;
+    o.consoleWasBarred = true;
     debugger
-    _global_.wTester._barOptions.on = 0;
-    _.Logger.consoleBar( _global_.wTester._barOptions );
+    test.suite.consoleBar( 0 );
   }
 
   test.is( !_.Logger.consoleIsBarred( console ) );
@@ -373,9 +371,9 @@ function consoleChaining( test )
 
   //
 
-  if( consoleWasBarred )
+  if( o.consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -472,6 +470,30 @@ function consoleChaining( test )
   test.identical( received, [] )
 
   //
+}
+
+//
+
+function consoleChaining( test )
+{
+  var o =
+  {
+    test : test,
+    consoleWasBarred : false
+  }
+
+  try
+  {
+    _consoleChaining( o );
+  }
+  catch( err )
+  {
+    if( o.consoleWasBarred )
+    test.suite.consoleBar( 1 );
+
+    throw _.errLogOnce( err );
+  }
+
 }
 
 //
@@ -1294,8 +1316,10 @@ function inputUnchain( test )
 
 //
 
-function output( test )
+function _output( o )
 {
+  let test = o.test;
+
   /*
 
      combining:
@@ -1312,13 +1336,10 @@ function output( test )
     try to do multiple original/exclusive output in different order
   */
 
-  var consoleWasBarred = false;
-
   if( _.Logger.consoleIsBarred( console ) )
   {
-    consoleWasBarred = true;
-    _global_.wTester._barOptions.on = 0;
-    _.Logger.consoleBar( _global_.wTester._barOptions );
+    o.consoleWasBarred = true;
+    test.suite.consoleBar( 0 );
   }
 
   /* - */
@@ -2568,9 +2589,9 @@ function output( test )
   test.close( 'multiple original/exclusive output' );
 
 
-  if( consoleWasBarred )
+  if( o.consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -2596,15 +2617,38 @@ function output( test )
 
 //
 
-function input( test )
+function output( test )
 {
-  var consoleWasBarred = false;
+  var o =
+  {
+    test : test,
+    consoleWasBarred : false
+  }
+
+  try
+  {
+    _output( o );
+  }
+  catch( err )
+  {
+    if( o.consoleWasBarred )
+    test.suite.consoleBar( 1 );
+
+    throw _.errLogOnce( err );
+  }
+
+}
+
+//
+
+function _input( o )
+{
+  let test = o.test;
 
   if( _.Logger.consoleIsBarred( console ) )
   {
-    consoleWasBarred = true;
-    _global_.wTester._barOptions.on = 0;
-    _.Logger.consoleBar( _global_.wTester._barOptions );
+    o.consoleWasBarred = true;
+    test.suite.consoleBar( 0 );
   }
 
   /* - */
@@ -2644,9 +2688,9 @@ function input( test )
 
   /* - */
 
-  if( consoleWasBarred )
+  if( o.consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -2662,6 +2706,217 @@ function input( test )
     hooked.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
     return o;
   }
+
+}
+
+function input( test )
+{
+  var o =
+  {
+    test : test,
+    consoleWasBarred : false
+  }
+
+  try
+  {
+    _input( o );
+  }
+  catch( err )
+  {
+    if( o.consoleWasBarred )
+    test.suite.consoleBar( 1 );
+
+    throw _.errLogOnce( err );
+  }
+
+}
+
+
+//
+
+function chain( test )
+{
+  let chain  = _.Logger.chain;
+
+
+  /*
+    different inputCombining/outputCombining
+
+    one input - one output
+    one input - multiple outputs
+    multiple inputs - one output
+    multiple inputs - multiple outputs
+
+  */
+
+  /* - */
+
+  test.open( 'one input - one output' );
+
+  test.case = 'printer - printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = new _.Logger({ name : 'printerB' });
+  var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter' });
+
+  printerA.inputFrom( inputPrinter );
+  printerB.inputFrom( inputPrinter );
+
+  printerA.outputTo( outputPrinter );
+  printerB.outputTo( outputPrinter );
+
+  var result = chain
+  ({
+    inputPrinter : printerA,
+    outputPrinter : printerB,
+    inputCombining : 'rewrite',
+    outputCombining : 'rewrite',
+    originalOutput : 0,
+    exclusiveOutput : 0
+  });
+
+  test.identical( result, 1 );
+
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( printerB.hasInputClose( printerA ) );
+
+  test.identical( printerA.inputs.length, 1 );
+  test.identical( printerA.outputs.length, 1 );
+
+  test.identical( printerB.inputs.length, 1 );
+  test.identical( printerB.outputs.length, 1 );
+
+  test.identical( printerA.inputs[ 0 ].inputPrinter, inputPrinter );
+  test.identical( printerA.inputs[ 0 ].outputPrinter, printerA );
+  test.identical( printerA.inputs[ 0 ].inputCombining, 'append' );
+  test.identical( printerA.inputs[ 0 ].outputCombining, 'append' );
+  test.identical( printerA.inputs[ 0 ].originalOutput, 0 );
+  test.identical( printerA.inputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerA.outputs[ 0 ].inputPrinter, printerA );
+  test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+  test.identical( printerA.outputs[ 0 ].inputCombining, 'rewrite' );
+  test.identical( printerA.outputs[ 0 ].outputCombining, 'rewrite' );
+  test.identical( printerA.outputs[ 0 ].originalOutput, 0 );
+  test.identical( printerA.outputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
+  test.identical( printerB.inputs[ 0 ].outputPrinter, printerB );
+  test.identical( printerB.inputs[ 0 ].inputCombining, 'rewrite' );
+  test.identical( printerB.inputs[ 0 ].outputCombining, 'rewrite' );
+  test.identical( printerB.inputs[ 0 ].originalOutput, 0 );
+  test.identical( printerB.inputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerB.outputs[ 0 ].inputPrinter, printerB );
+  test.identical( printerB.outputs[ 0 ].outputPrinter, outputPrinter );
+  test.identical( printerB.outputs[ 0 ].inputCombining, 'append' );
+  test.identical( printerB.outputs[ 0 ].outputCombining, 'append' );
+  test.identical( printerB.outputs[ 0 ].originalOutput, 0 );
+  test.identical( printerB.outputs[ 0 ].exclusiveOutput, 0 );
+
+  //
+
+  test.case = 'printer - console, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  var printerA = new _.Logger({ name : 'printerA' });
+  var printerB = console;
+  var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter' });
+
+  printerA.inputFrom( inputPrinter );
+  printerA.outputTo( outputPrinter );
+
+  inputPrinter.outputTo( printerB );
+  outputPrinter.inputFrom( printerB );
+
+  var result = chain
+  ({
+    inputPrinter : printerA,
+    outputPrinter : printerB,
+    inputCombining : 'rewrite',
+    outputCombining : 'rewrite',
+    originalOutput : 0,
+    exclusiveOutput : 0
+  });
+
+  test.identical( result, 1 );
+
+  test.is( printerA.hasOutputClose( printerB ) );
+  test.is( printerB.hasInputClose( printerA ) );
+
+  test.identical( printerA.inputs.length, 1 );
+  test.identical( printerA.outputs.length, 1 );
+
+  test.identical( printerB.inputs.length, 1 );
+  test.identical( printerB.outputs.length, 1 );
+
+  test.identical( printerA.inputs[ 0 ].inputPrinter, inputPrinter );
+  test.identical( printerA.inputs[ 0 ].outputPrinter, printerA );
+  test.identical( printerA.inputs[ 0 ].inputCombining, 'append' );
+  test.identical( printerA.inputs[ 0 ].outputCombining, 'append' );
+  test.identical( printerA.inputs[ 0 ].originalOutput, 0 );
+  test.identical( printerA.inputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerA.outputs[ 0 ].inputPrinter, printerA );
+  test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+  test.identical( printerA.outputs[ 0 ].inputCombining, 'rewrite' );
+  test.identical( printerA.outputs[ 0 ].outputCombining, 'rewrite' );
+  test.identical( printerA.outputs[ 0 ].originalOutput, 0 );
+  test.identical( printerA.outputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
+  test.identical( printerB.inputs[ 0 ].outputPrinter, printerB );
+  test.identical( printerB.inputs[ 0 ].inputCombining, 'rewrite' );
+  test.identical( printerB.inputs[ 0 ].outputCombining, 'rewrite' );
+  test.identical( printerB.inputs[ 0 ].originalOutput, 0 );
+  test.identical( printerB.inputs[ 0 ].exclusiveOutput, 0 );
+
+  test.identical( printerB.outputs[ 0 ].inputPrinter, printerB );
+  test.identical( printerB.outputs[ 0 ].outputPrinter, outputPrinter );
+  test.identical( printerB.outputs[ 0 ].inputCombining, 'append' );
+  test.identical( printerB.outputs[ 0 ].outputCombining, 'append' );
+  test.identical( printerB.outputs[ 0 ].originalOutput, 0 );
+  test.identical( printerB.outputs[ 0 ].exclusiveOutput, 0 );
+
+  test.case = 'console - printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.close( 'one input - one output' );
+
+  /* - */
+
+  test.open( 'one input - multiple outputs' );
+
+  test.case = 'printer - multiple printers, no other chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'printer - multiple printers, have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.case = 'console - multiple printers, no other chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'console - multiple printers, have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.close( 'one input - multiple outputs' );
+
+  /* - */
+
+  test.open( 'multiple inputs - one output' );
+
+  test.case = 'multiple inputs - printer, no other chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'multiple inputs - printer, have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.case = 'multiple inputs - console, no other chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'multiple inputs - console, have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.close( 'multiple inputs - one output' );
+
+  /* - */
+
+  test.open( 'multiple inputs - multiple outputs' );
+
+  test.case = 'multiple inputs - multiple outputs, no other chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'multiple inputs - multiple outputs, have chains, inputCombining : rewrite, outputCombining : rewrite';
+
+  test.close( 'multiple inputs - multiple outputs' );
 
 }
 
@@ -2856,15 +3111,14 @@ function recursion( test )
 
 //
 
-function consoleBar( test )
+function _consoleBar( o )
 {
-  var consoleWasBarred = false;
+  let test = o.test;
 
   if( _.Logger.consoleIsBarred( console ) )
   {
-    consoleWasBarred = true;
-    _global_.wTester._barOptions.on = 0;
-    _.Logger.consoleBar( _global_.wTester._barOptions );
+    o.consoleWasBarred = true;
+    test.suite.consoleBar( 0 );
   }
 
   //
@@ -2934,7 +3188,7 @@ function consoleBar( test )
   {
     test.case = 'error if provided barPrinter has inputs/outputs'
     test.is( !_.Logger.consoleIsBarred( console ) );
-    var o =
+    let o =
     {
       outputPrinter : _.Tester.logger,
       barPrinter : new _.Logger({ output : console }),
@@ -2946,11 +3200,35 @@ function consoleBar( test )
 
   //
 
-  if( consoleWasBarred )
+  if( o.consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.consoleIsBarred( console ) );
   }
+}
+
+//
+
+function consoleBar( test )
+{
+  var o =
+  {
+    test : test,
+    consoleWasBarred : false
+  }
+
+  try
+  {
+    _consoleBar( o );
+  }
+  catch( err )
+  {
+    if( o.consoleWasBarred )
+    test.suite.consoleBar( 1 );
+
+    throw _.errLogOnce( err );
+  }
+
 }
 
 //
@@ -3015,7 +3293,7 @@ function clone( test )
 
 //
 
-function finit( test )
+function _finit( test )
 {
 
   /* +console -> ordinary -> self
@@ -3027,13 +3305,10 @@ function finit( test )
   +self -> original -> console
   +self -> original -> printer */
 
-  var consoleWasBarred = false;
-
   if( _.Logger.consoleIsBarred( console ) )
   {
-    consoleWasBarred = true;
-    _global_.wTester._barOptions.on = 0;
-    _.Logger.consoleBar( _global_.wTester._barOptions );
+    o.consoleWasBarred = true;
+    test.suite.consoleBar( 0 );
   }
 
 
@@ -3369,9 +3644,9 @@ function finit( test )
 
   /* - */
 
-  if( consoleWasBarred )
+  if( o.consoleWasBarred )
   {
-    _global_.wTester._barOptions = _.Logger.consoleBar({ outputPrinter : _global_.wTester.logger, on : 1 });
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.consoleIsBarred( console ) );
   }
 
@@ -3433,6 +3708,30 @@ function finit( test )
 
 //
 
+function finit( test )
+{
+  var o =
+  {
+    test : test,
+    consoleWasBarred : false
+  }
+
+  try
+  {
+    _consoleBar( o );
+  }
+  catch( err )
+  {
+    if( o.consoleWasBarred )
+    test.suite.consoleBar( 1 );
+
+    throw _.errLogOnce( err );
+  }
+
+}
+
+//
+
 var Self =
 {
 
@@ -3457,6 +3756,8 @@ var Self =
 
     output : output,
     input : input,
+
+    // chain : chain,
 
     hasInputDeep : hasInputDeep,
     hasOutputDeep : hasOutputDeep,
