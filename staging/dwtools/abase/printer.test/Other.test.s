@@ -2,6 +2,8 @@
 
 'use strict';
 
+
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {

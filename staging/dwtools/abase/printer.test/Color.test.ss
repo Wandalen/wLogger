@@ -2,15 +2,7 @@
 
 'use strict';
 
-/*
 
-to run this test
-from the project directory run
-
-npm install
-node ./staging/dwtools/abase/printer.test/Color.test.ss
-
-*/
 
 if( typeof module !== 'undefined' )
 {

@@ -51,12 +51,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wPrinterChainingMixin( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterChainingMixin';
