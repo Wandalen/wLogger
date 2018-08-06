@@ -162,11 +162,11 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/dwtools/abase/layer3/aPathTools.s' );
+  require( 'include/dwtools/abase/layer3/PathFundamentals.s' );
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
-  fileName = _.pathJoin( _.pathRealMainDir(),fileName );
+  fileName = _.path.pathJoin( _.path.pathRealMainDir(),fileName );
 
   console.log( 'hookConsoleToFile :',fileName );
 
@@ -345,11 +345,11 @@ function hookConsoleToServer( o )
 
   throw _.err( 'not tested' );
 
-  _.assertMapHasOnly( o,optionsDefault,_.urlStr.components );
+  _.assertMapHasOnly( o,optionsDefault,_.uri.uriStr.components );
   _.mapSupplement( o,optionsDefault );
 
   if( !o.url )
-  o.url = _.urlFor( o );
+  o.url = _.uri.uriFor( o );
 
   if( !o.id )
   o.id = _.numberRandomInt( 1 << 30 );
@@ -463,7 +463,7 @@ var Proto =
 
   // relations
 
-  /* constructor * : * Self, */
+  
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
