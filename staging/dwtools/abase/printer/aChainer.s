@@ -1024,10 +1024,10 @@ let Aggregates =
 let Associates =
 {
   printer : null,
-  inputs : _.define.own([]),
-  outputs : _.define.own([]),
-  originalWrite : _.define.own({}),
-  writeFromConsole : _.define.own({}),
+  inputs : _.define.own( [] ),
+  outputs : _.define.own( [] ),
+  originalWrite : _.define.own( {} ),
+  writeFromConsole : _.define.own( {} ),
   exclusiveOutputPrinter : null,
 }
 
@@ -1112,7 +1112,7 @@ let Extend =
 
   // relations
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -1125,7 +1125,7 @@ let Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

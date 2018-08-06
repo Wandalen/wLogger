@@ -1438,7 +1438,7 @@ let Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   extend : Extend,

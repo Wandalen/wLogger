@@ -881,8 +881,8 @@ let ChangeLevelMethods =
 let Composes =
 {
 
-  outputs : [],
-  inputs : [],
+  outputs : _.define.own( [] ),
+  inputs : _.define.own( [] ),
 
 }
 
@@ -1024,7 +1024,7 @@ let Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   extend : Extend,

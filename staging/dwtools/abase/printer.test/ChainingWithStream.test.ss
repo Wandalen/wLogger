@@ -44,7 +44,7 @@ function readFromFile( test )
 {
   var self = this;
 
-  var filePath = _.pathJoin( self.testDirPath, 'file.txt' )
+  var filePath = _.join( self.testDirPath, 'file.txt' )
 
   var data = _.strDup( '1', 10 );
   var got = [];
@@ -79,7 +79,7 @@ function writeToFile( test )
 {
   var self = this;
 
-  var filePath = _.pathJoin( self.testDirPath, 'file.txt' )
+  var filePath = _.join( self.testDirPath, 'file.txt' )
 
   var writeStream = _.fileProvider.fileWriteStream( filePath );
 

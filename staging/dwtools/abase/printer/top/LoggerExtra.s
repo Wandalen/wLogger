@@ -166,7 +166,7 @@ function hookConsoleToFile( fileName )
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
-  fileName = _.path.pathJoin( _.path.pathRealMainDir(),fileName );
+  fileName = _.path.join( _.path.realMainDir(),fileName );
 
   console.log( 'hookConsoleToFile :',fileName );
 

@@ -538,7 +538,7 @@ var Composes =
   onTransformBegin : null,
   onTransformEnd : null,
 
-  attributes : Object.create( null ),
+  attributes : _.define.own( {} ),
 
 }
 
@@ -562,10 +562,10 @@ var Restricts =
   _dprefix : '  ',
   _dpostfix : '',
 
-  _verbosityStack : [],
+  _verbosityStack : _.define.own( [] ),
 
-  _attributesStacks : Object.create( null ),
-  _mines : Object.create( null ),
+  _attributesStacks : _.define.own( {} ),
+  _mines : _.define.own( {} ),
 
 }
 
@@ -625,7 +625,7 @@ var Proto =
 
   // relations
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -636,7 +636,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,
