@@ -120,3 +120,4 @@ wLogger.consoleBar
 console.log( 'Message from console' );
 ```
 
+
