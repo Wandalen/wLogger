@@ -407,7 +407,7 @@ function _writeToChannelIn( channelName,args )
 function outputTo( output, o )
 {
   let self = this;
-  let chainer = self[ chainerSymbol ];
+  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -419,7 +419,8 @@ function outputTo( output, o )
   // o2.outputCombining = o.combining;
   delete o2.combining;
 
-  return chainer._chain( o2 );
+  // return chainer._chain( o2 );
+  return _.Chainer._chain( o2 );
 }
 
 var defaults = outputTo.defaults = Object.create( null );
@@ -508,7 +509,7 @@ function outputUnchain( output )
 function inputFrom( input, o )
 {
   let self = this;
-  let chainer = self[ chainerSymbol ];
+  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -520,7 +521,8 @@ function inputFrom( input, o )
   o2.outputCombining = o.combining;
   delete o2.combining;
 
-  return chainer._chain( o2 );
+  // return chainer._chain( o2 );
+  return _.Chainer._chain( o2 );
 }
 
 var defaults = inputFrom.defaults = Object.create( null );
@@ -690,13 +692,13 @@ function chain( o )
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
 
-  let inputChainer = _chainerGet.call( o.inputPrinter );
-  if( !inputChainer )
-  inputChainer = _.Chainer._chainerMakeFor( o.inputPrinter );
+  // let inputChainer = _chainerGet.call( o.inputPrinter );
+  // if( !inputChainer )
+  // inputChainer = _.Chainer._chainerMakeFor( o.inputPrinter );
 
-  _.assert( inputChainer instanceof _.Chainer );
+  // _.assert( inputChainer instanceof _.Chainer );
 
-  return _.Chainer.prototype._chain.call( inputChainer, o );
+  return _.Chainer._chain( o );
 }
 
 var defaults = chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
