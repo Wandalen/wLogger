@@ -14,7 +14,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPath' );
+  _.include( 'wPathFundamentals' );
 }
 
 //
@@ -27,7 +27,7 @@ var Parent = _.Tester;
 function testDirMake()
 {
   var self = this;
-  self.testDirPath = _.dirTempMake();
+  self.testDirPath = _.path.dirTempMake();
 }
 
 //
@@ -44,7 +44,7 @@ function readFromFile( test )
 {
   var self = this;
 
-  var filePath = _.join( self.testDirPath, 'file.txt' )
+  var filePath = _.path.join( self.testDirPath, 'file.txt' )
 
   var data = _.strDup( '1', 10 );
   var got = [];
@@ -79,7 +79,7 @@ function writeToFile( test )
 {
   var self = this;
 
-  var filePath = _.join( self.testDirPath, 'file.txt' )
+  var filePath = _.path.join( self.testDirPath, 'file.txt' )
 
   var writeStream = _.fileProvider.fileWriteStream( filePath );
 
@@ -120,7 +120,7 @@ var Self =
 
   name : 'ChainingWithStream',
   silencing : 1,
-  enabled : 0,
+  enabled : 1,
 
   onSuiteBegin : testDirMake,
   onSuiteEnd : testDirClean,

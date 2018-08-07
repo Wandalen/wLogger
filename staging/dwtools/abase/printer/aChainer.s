@@ -282,8 +282,8 @@ function _chain( o )
   o.inputPrinter = o.inputPrinter.inputPrinter;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
-  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
+  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
@@ -428,7 +428,7 @@ function _chain( o )
 
   if( _.streamIs( cd.outputPrinter ) )
   {
-    debugger; xxx
+    debugger; //xxx
     inputChainer._outputToStream( cd );
   }
   else if( _.consoleIs( cd.outputPrinter ) )
@@ -438,7 +438,7 @@ function _chain( o )
 
   if( _.streamIs( cd.inputPrinter ) )
   {
-    debugger; xxx
+    debugger; //xxx
     outputChainer._inputFromStream( cd );
   }
   else if( _.consoleIs( cd.inputPrinter ) )
@@ -519,11 +519,11 @@ function _outputToStream( cd )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    cd.write[ channel ] = function()
+    stream[ channel ] = function()
     {
       stream.write.apply( stream, arguments );
     }
-  })();
+  });
 
 }
 
@@ -534,6 +534,8 @@ function _inputFromStream( cd )
   let self = this;
 
   let outputChannel = 'log';
+  let stream = cd.inputPrinter;
+  let outputs = stream[ chainerSymbol ].outputs
 
   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
 
@@ -547,8 +549,8 @@ function _inputFromStream( cd )
       if( _.strEnds( data,'\n' ) )
       data = _.strRemoveEnd( data,'\n' );
 
-      for( let d = 0 ; d < stream.outputs.length ; d++ )
-      stream.outputs[ d ].outputPrinter[ outputChannel ].call( stream.outputs[ d ].outputPrinter, data );
+      for( let d = 0 ; d < outputs.length ; d++ )
+      outputs[ d ].outputPrinter[ outputChannel ].call( outputs[ d ].outputPrinter, data );
     })
     stream.onDataHandler = 1;
   }
@@ -929,12 +931,15 @@ function _chainerMakeFor( printer )
   let self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( printer ) );
+  _.assert( _.printerLike( printer ) || _.streamIs( printer ) );
   _.assert( !printer[ chainerSymbol ] );
 
   let chainer = new Self();
   chainer.printer = printer;
   printer[ chainerSymbol ] = chainer;
+
+  if( _.streamIs( printer ) )
+  return chainer;
 
   self.Channel.forEach( ( channel, c ) =>
   {
@@ -1054,7 +1059,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.printerLike( input ) || _.processIs( input ) );
+  _.assert( _.printerLike( input ) || _.processIs( input ) || _.streamIs( input ) );
   _.routineOptions( _hasInput, o );
 
   for( let d = 0 ; d < self.inputs.length ; d++ )
@@ -1119,7 +1124,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.printerLike( output ) || _.processIs( output ));
+  _.assert( _.printerLike( output ) || _.processIs( output ) || _.streamIs( output ) );
   _.routineOptions( _hasOutput,o );
 
   for( let d = 0 ; d < self.outputs.length ; d++ )
