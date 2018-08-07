@@ -1192,8 +1192,8 @@ let ChainDescriptorFields =
   originalOutput : 0,
   inputPrinter : null,
   outputPrinter : null,
-  // inputCombining : null,
-  // outputCombining : null,
+  inputCombining : null,
+  outputCombining : null,
   freed : 0,
 }
 
