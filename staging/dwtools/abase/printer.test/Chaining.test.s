@@ -2862,7 +2862,6 @@ function chain( test )
   chainerPrinterB.inputUnchain( printerA );
   chainerPrinterB.outputUnchain( outputPrinter );
 
-  //!!! problem here, chainerPrinterB.inputs[ 0 ] instanceof _.Chainer.ChainDescriptor gives false
   var result = chain
   ({
     inputPrinter : inputsPrinterB,
@@ -2902,96 +2901,95 @@ function chain( test )
     test.will = null;
   })
 
-  // test.case = 'console - printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'console - printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
 
-  // var printerA = console;
-  // var printerB = new _.Logger({ name : 'printerA' });
-  // var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  // var outputPrinter = new _.Logger({ name : 'outputPrinter' });
+  var printerA = console;
+  var printerB = new _.Logger({ name : 'printerA' });
+  var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter' });
 
-  // var chainerPrinterA = printerA[ Symbol.for( 'chainer' ) ];
-  // var outputsPrinterA = chainerPrinterA.outputs.slice();
+  var chainerPrinterA = printerA[ Symbol.for( 'chainer' ) ];
+  var outputsPrinterA = chainerPrinterA.outputs.slice();
 
-  // chainerPrinterA.inputFrom( inputPrinter );
-  // chainerPrinterA.outputTo( outputPrinter );
+  chainerPrinterA.inputFrom( inputPrinter );
+  chainerPrinterA.outputTo( outputPrinter );
 
-  // inputPrinter.outputTo( printerB );
-  // outputPrinter.inputFrom( printerB );
+  inputPrinter.outputTo( printerB );
+  outputPrinter.inputFrom( printerB );
 
-  // var result = chain
-  // ({
-  //   inputPrinter : printerA,
-  //   outputPrinter : printerB,
-  //   inputCombining : 'rewrite',
-  //   outputCombining : 'rewrite',
-  //   originalOutput : 0,
-  //   exclusiveOutput : 0
-  // });
+  var result = chain
+  ({
+    inputPrinter : printerA,
+    outputPrinter : printerB,
+    inputCombining : 'rewrite',
+    outputCombining : 'rewrite',
+    originalOutput : 0,
+    exclusiveOutput : 0
+  });
 
-  // test.identical( result, 1 );
+  test.identical( result, 1 );
 
-  // test.is( chainerPrinterA.hasOutputClose( printerB ) );
-  // test.is( printerB.hasInputClose( printerA ) );
+  test.is( chainerPrinterA.hasOutputClose( printerB ) );
+  test.is( printerB.hasInputClose( printerA ) );
 
-  // test.ge( chainerPrinterA.inputs.length, 1 );
-  // test.identical( chainerPrinterA.outputs.length, 1 );
+  test.ge( chainerPrinterA.inputs.length, 1 );
+  test.identical( chainerPrinterA.outputs.length, 1 );
 
-  // test.identical( printerB.inputs.length, 1 );
-  // test.identical( printerB.outputs.length, 1 );
+  test.identical( printerB.inputs.length, 1 );
+  test.identical( printerB.outputs.length, 1 );
 
-  // var inputsA = chainerPrinterA.inputs.slice();
-  // var outputsA = chainerPrinterA.outputs.slice();
+  var inputsA = chainerPrinterA.inputs.slice();
+  var outputsA = chainerPrinterA.outputs.slice();
 
-  // var inputsB = printerB.inputs.slice();
-  // var outputsB = printerB.outputs.slice();
+  var inputsB = printerB.inputs.slice();
+  var outputsB = printerB.outputs.slice();
 
-  // chainerPrinterA.inputUnchain( inputPrinter );
-  // chainerPrinterA.outputUnchain( printerB );
+  chainerPrinterA.inputUnchain( inputPrinter );
+  chainerPrinterA.outputUnchain( printerB );
 
-  // var result = chain
-  // ({
-  //   inputPrinter : printerA,
-  //   outputPrinter : outputsPrinterA,
-  //   inputCombining : 'append',
-  //   outputCombining : 'append',
-  //   originalOutput : 0,
-  //   exclusiveOutput : 0
-  // });
+  var result = chain
+  ({
+    inputPrinter : printerA,
+    outputPrinter : outputsPrinterA,
+    inputCombining : 'append',
+    outputCombining : 'append',
+    originalOutput : 0,
+    exclusiveOutput : 0
+  });
 
-  // test.identical( result, outputsPrinterA.length );
+  test.identical( result, outputsPrinterA.length );
 
-  // test.identical( inputsA[ inputsA.length - 1 ].inputPrinter, inputPrinter );
-  // test.identical( inputsA[ inputsA.length - 1 ].outputPrinter, printerA );
-  // test.identical( inputsA[ inputsA.length - 1 ].originalOutput, 0 );
-  // test.identical( inputsA[ inputsA.length - 1 ].exclusiveOutput, 0 );
+  test.identical( inputsA[ inputsA.length - 1 ].inputPrinter, inputPrinter );
+  test.identical( inputsA[ inputsA.length - 1 ].outputPrinter, printerA );
+  test.identical( inputsA[ inputsA.length - 1 ].originalOutput, 0 );
+  test.identical( inputsA[ inputsA.length - 1 ].exclusiveOutput, 0 );
 
-  // test.identical( outputsA[ 0 ].inputPrinter, printerA );
-  // test.identical( outputsA[ 0 ].outputPrinter, printerB );
-  // test.identical( outputsA[ 0 ].originalOutput, 0 );
-  // test.identical( outputsA[ 0 ].exclusiveOutput, 0 );
+  test.identical( outputsA[ 0 ].inputPrinter, printerA );
+  test.identical( outputsA[ 0 ].outputPrinter, printerB );
+  test.identical( outputsA[ 0 ].originalOutput, 0 );
+  test.identical( outputsA[ 0 ].exclusiveOutput, 0 );
 
-  // test.identical( inputsB[ 0 ].inputPrinter, printerA );
-  // test.identical( inputsB[ 0 ].outputPrinter, printerB );
-  // test.identical( inputsB[ 0 ].originalOutput, 0 );
-  // test.identical( inputsB[ 0 ].exclusiveOutput, 0 );
+  test.identical( inputsB[ 0 ].inputPrinter, printerA );
+  test.identical( inputsB[ 0 ].outputPrinter, printerB );
+  test.identical( inputsB[ 0 ].originalOutput, 0 );
+  test.identical( inputsB[ 0 ].exclusiveOutput, 0 );
 
-  // test.identical( outputsB[ 0 ].inputPrinter, printerB );
-  // test.identical( outputsB[ 0 ].outputPrinter, outputPrinter );
-  // test.identical( outputsB[ 0 ].originalOutput, 0 );
-  // test.identical( outputsB[ 0 ].exclusiveOutput, 0 );
+  test.identical( outputsB[ 0 ].inputPrinter, printerB );
+  test.identical( outputsB[ 0 ].outputPrinter, outputPrinter );
+  test.identical( outputsB[ 0 ].originalOutput, 0 );
+  test.identical( outputsB[ 0 ].exclusiveOutput, 0 );
 
-  // outputsPrinterA.forEach( ( cd ) =>
-  // {
-  //   test.will = 'console has ' + cd.outputPrinter.name + ' in outputs';
-  //   test.is( chainerPrinterA._hasOutput( cd.outputPrinter, { withoutOutputToOriginal : 0 }) );
-  //   test.will = null;
-  // })
+  outputsPrinterA.forEach( ( cd ) =>
+  {
+    test.will = 'console has ' + cd.outputPrinter.name + ' in outputs';
+    test.is( chainerPrinterA._hasOutput( cd.outputPrinter, { withoutOutputToOriginal : 0 }) );
+    test.will = null;
+  })
 
   // test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
 
 
   test.close( 'one input - one output' );
-  return ///!!! remove return later
 
   /* - */
 
@@ -4801,22 +4799,6 @@ function finit( test )
 
 //
 
-function experiment( test )
-{
-  /*
-    fails when launch from wtest:
-    wtest staging\dwtools\abase\printer.test\Chaining.test.s routine : experiment v : 7
-  */
-
-  var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-  var cd = consoleChainer.inputs[ 0 ];
-  console.log( 'cd.inputPrinter.name: ', cd.inputPrinter.name );
-  test.will = 'cd must be instance of _.Chainer.ChainDescriptor ';
-  test.is( cd instanceof _.Chainer.ChainDescriptor )
-}
-
-//
-
 var Self =
 {
 
@@ -4842,7 +4824,7 @@ var Self =
     output : output,
     input : input,
 
-    // chain : chain,
+    chain : chain,
 
     hasInputDeep : hasInputDeep,
     hasOutputDeep : hasOutputDeep,
@@ -4856,7 +4838,6 @@ var Self =
     clone : clone,
     finit : finit,
 
-    experiment : experiment,
   },
 
 }
