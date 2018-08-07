@@ -276,9 +276,9 @@ function _chain( o )
 
   o = _.routineOptions( self._chain, arguments );
 
-  if( o.outputPrinter instanceof self.ChainDescriptor )
+  if( self._chainDescriptorLike( o.outputPrinter ) )
   o.outputPrinter = o.outputPrinter.outputPrinter;
-  if( o.inputPrinter instanceof self.ChainDescriptor )
+  if( self._chainDescriptorLike( o.inputPrinter ) )
   o.inputPrinter = o.inputPrinter.inputPrinter;
 
   _.assert( arguments.length === 1 );
@@ -334,7 +334,7 @@ function _chain( o )
       var o2 = _.mapExtend( null, o );
       o2.outputPrinter = outputPrinter;
 
-      if( outputPrinter instanceof self.ChainDescriptor )
+      if( self._chainDescriptorLike( outputPrinter ) )
       {
         o2.originalOutput = outputPrinter.originalOutput;
         o2.exclusiveOutput = outputPrinter.exclusiveOutput;
@@ -358,7 +358,7 @@ function _chain( o )
       var o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
 
-      if( inputPrinter instanceof self.ChainDescriptor )
+      if( self._chainDescriptorLike( inputPrinter ) )
       {
         o2.originalOutput = inputPrinter.originalOutput;
         o2.exclusiveOutput = inputPrinter.exclusiveOutput;
@@ -1177,6 +1177,24 @@ function hasOutputDeep( output )
   return self._hasOutput( output,{ deep : 1 } );
 }
 
+function _chainDescriptorLike( src )
+{
+  let self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( src instanceof self.ChainDescriptor )
+  {
+    return true;
+  }
+  else if( _.objectLike( src ) )
+  {
+    return _.mapHasAll( src, self.ChainDescriptorFields );
+  }
+
+  return false;
+}
+
 // --
 // fields
 // --
@@ -1258,8 +1276,11 @@ let Statics =
   _chainerWriteToConsole : _chainerWriteToConsole,
   _chainerWriteToPrinter : _chainerWriteToPrinter,
 
+
   ChainDescriptor : ChainDescriptor,
   ChainDescriptorFields : ChainDescriptorFields,
+
+  _chainDescriptorLike : _chainDescriptorLike,
 
   Combining : Combining,
   Channel : Channel,
@@ -1323,6 +1344,8 @@ let Extend =
   _hasOutput : _hasOutput,
   hasOutputClose : hasOutputClose,
   hasOutputDeep : hasOutputDeep,
+
+  _chainDescriptorLike : _chainDescriptorLike,
 
   // relations
 
