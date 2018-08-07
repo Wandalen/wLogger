@@ -28,12 +28,7 @@ var _global = _global_; var _ = _global_.wTools;
 var Parent = _.PrinterTop;
 var Self = function wLogger( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'Logger';
