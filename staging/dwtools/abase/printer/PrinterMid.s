@@ -21,8 +21,8 @@ if( typeof module !== 'undefined' )
 /**
  * @class wPrinterMid
  */
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterBase;
 var Self = function wPrinterMid( o )
 {

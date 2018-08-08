@@ -10,16 +10,16 @@ if( typeof module !== 'undefined' )
   isBrowser = false;
 
   require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 
 //

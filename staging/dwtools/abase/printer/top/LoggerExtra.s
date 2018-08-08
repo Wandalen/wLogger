@@ -13,9 +13,8 @@ if( typeof module !== 'undefined' )
 }
 
 //
-
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterTop;
 var Self = _.Logger;
 

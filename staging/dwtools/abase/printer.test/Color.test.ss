@@ -8,16 +8,16 @@ if( typeof module !== 'undefined' )
 {
 
   require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 var isUnix = process.platform !== 'win32' ? true : false;
 
