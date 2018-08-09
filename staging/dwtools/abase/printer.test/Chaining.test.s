@@ -2844,15 +2844,6 @@ function chain( test )
 
   test.identical( result, 1 );
 
-  test.is( printerA.hasOutputClose( printerB ) );
-  test.is( chainerPrinterB.hasInputClose( printerA ) );
-
-  test.identical( printerA.inputs.length, 1 );
-  test.identical( printerA.outputs.length, 1 );
-
-  test.ge( chainerPrinterB.inputs.length, 1 );
-  test.ge( chainerPrinterB.outputs.length, 1 );
-
   var inputsA = printerA.inputs.slice();
   var outputsA = printerA.outputs.slice();
 
@@ -2986,7 +2977,7 @@ function chain( test )
     test.will = null;
   })
 
-  // test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
+  test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
 
 
   test.close( 'one input - one output' );
