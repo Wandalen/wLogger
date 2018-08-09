@@ -271,14 +271,14 @@ function _chain( o )
 
   o = _.routineOptions( self._chain, arguments );
 
-  if( o.outputPrinter instanceof self.ChainDescriptor )
+  if( self._chainDescriptorLike( o.outputPrinter ) )
   o.outputPrinter = o.outputPrinter.outputPrinter;
-  if( o.inputPrinter instanceof self.ChainDescriptor )
+  if( self._chainDescriptorLike( o.inputPrinter ) )
   o.inputPrinter = o.inputPrinter.inputPrinter;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
-  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
+  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
@@ -329,7 +329,7 @@ function _chain( o )
       var o2 = _.mapExtend( null, o );
       o2.outputPrinter = outputPrinter;
 
-      if( outputPrinter instanceof self.ChainDescriptor )
+      if( self._chainDescriptorLike( outputPrinter ) )
       {
         o2.originalOutput = outputPrinter.originalOutput;
         o2.exclusiveOutput = outputPrinter.exclusiveOutput;
@@ -353,7 +353,7 @@ function _chain( o )
       var o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
 
-      if( inputPrinter instanceof self.ChainDescriptor )
+      if( self._chainDescriptorLike( inputPrinter ) )
       {
         o2.originalOutput = inputPrinter.originalOutput;
         o2.exclusiveOutput = inputPrinter.exclusiveOutput;
@@ -423,7 +423,7 @@ function _chain( o )
 
   if( _.streamIs( cd.outputPrinter ) )
   {
-    debugger; xxx
+    debugger; //xxx
     inputChainer._outputToStream( cd );
   }
   else if( _.consoleIs( cd.outputPrinter ) )
@@ -433,7 +433,7 @@ function _chain( o )
 
   if( _.streamIs( cd.inputPrinter ) )
   {
-    debugger; xxx
+    debugger; //xxx
     outputChainer._inputFromStream( cd );
   }
   else if( _.consoleIs( cd.inputPrinter ) )
@@ -514,11 +514,11 @@ function _outputToStream( cd )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    cd.write[ channel ] = function()
+    stream[ channel ] = function()
     {
       stream.write.apply( stream, arguments );
     }
-  })();
+  });
 
 }
 
@@ -529,6 +529,8 @@ function _inputFromStream( cd )
   let self = this;
 
   let outputChannel = 'log';
+  let stream = cd.inputPrinter;
+  let outputs = stream[ chainerSymbol ].outputs
 
   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
 
@@ -542,8 +544,8 @@ function _inputFromStream( cd )
       if( _.strEnds( data,'\n' ) )
       data = _.strRemoveEnd( data,'\n' );
 
-      for( let d = 0 ; d < stream.outputs.length ; d++ )
-      stream.outputs[ d ].outputPrinter[ outputChannel ].call( stream.outputs[ d ].outputPrinter, data );
+      for( let d = 0 ; d < outputs.length ; d++ )
+      outputs[ d ].outputPrinter[ outputChannel ].call( outputs[ d ].outputPrinter, data );
     })
     stream.onDataHandler = 1;
   }
@@ -924,12 +926,15 @@ function _chainerMakeFor( printer )
   let self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( printer ) );
+  _.assert( _.printerLike( printer ) || _.streamIs( printer ) );
   _.assert( !printer[ chainerSymbol ] );
 
   let chainer = new Self();
   chainer.printer = printer;
   printer[ chainerSymbol ] = chainer;
+
+  if( _.streamIs( printer ) )
+  return chainer;
 
   self.Channel.forEach( ( channel, c ) =>
   {
@@ -1049,7 +1054,7 @@ function _hasInput( input,o )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.printerLike( input ) || _.processIs( input ) );
+  _.assert( _.printerLike( input ) || _.processIs( input ) || _.streamIs( input ) );
   _.routineOptions( _hasInput, o );
 
   for( let d = 0 ; d < self.inputs.length ; d++ )
@@ -1114,7 +1119,7 @@ function _hasOutput( output,o )
 
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.printerLike( output ) || _.processIs( output ));
+  _.assert( _.printerLike( output ) || _.processIs( output ) || _.streamIs( output ) );
   _.routineOptions( _hasOutput,o );
 
   for( let d = 0 ; d < self.outputs.length ; d++ )
@@ -1172,6 +1177,24 @@ function hasOutputDeep( output )
   return self._hasOutput( output,{ deep : 1 } );
 }
 
+function _chainDescriptorLike( src )
+{
+  let self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+
+  if( src instanceof self.ChainDescriptor )
+  {
+    return true;
+  }
+  else if( _.objectLike( src ) )
+  {
+    return _.mapHasAll( src, self.ChainDescriptorFields );
+  }
+
+  return false;
+}
+
 // --
 // fields
 // --
@@ -1187,8 +1210,8 @@ let ChainDescriptorFields =
   originalOutput : 0,
   inputPrinter : null,
   outputPrinter : null,
-  // inputCombining : null,
-  // outputCombining : null,
+  inputCombining : null,
+  outputCombining : null,
   freed : 0,
 }
 
@@ -1253,8 +1276,11 @@ let Statics =
   _chainerWriteToConsole : _chainerWriteToConsole,
   _chainerWriteToPrinter : _chainerWriteToPrinter,
 
+
   ChainDescriptor : ChainDescriptor,
   ChainDescriptorFields : ChainDescriptorFields,
+
+  _chainDescriptorLike : _chainDescriptorLike,
 
   Combining : Combining,
   Channel : Channel,
@@ -1318,6 +1344,8 @@ let Extend =
   _hasOutput : _hasOutput,
   hasOutputClose : hasOutputClose,
   hasOutputDeep : hasOutputDeep,
+
+  _chainDescriptorLike : _chainDescriptorLike,
 
   // relations
 

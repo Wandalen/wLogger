@@ -2988,6 +2988,7 @@ function chain( test )
 
   // test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
 
+
   test.close( 'one input - one output' );
 
   /* - */
@@ -4803,7 +4804,7 @@ var Self =
 
   name : 'Tools/base/printer/Chaining',
 
-  routineTimeOut : 999999,
+  // routineTimeOut : 999999,
 
   silencing : 1,
   /* verbosity : 1, */
@@ -4836,6 +4837,7 @@ var Self =
 
     clone : clone,
     finit : finit,
+
   },
 
 }
