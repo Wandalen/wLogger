@@ -939,7 +939,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Functors =

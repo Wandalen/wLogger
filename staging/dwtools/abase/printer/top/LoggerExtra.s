@@ -431,7 +431,7 @@ var Associates =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Proto =

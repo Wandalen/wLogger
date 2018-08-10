@@ -1298,7 +1298,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Extend =
