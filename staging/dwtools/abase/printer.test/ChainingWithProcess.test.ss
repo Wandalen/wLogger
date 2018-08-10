@@ -2,7 +2,7 @@
 
 'use strict';
 
-if( typeof module === 'undefined' )
+// if( typeof module === 'undefined' )
 return;
 
 if( typeof module === 'undefined' )
@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPath' );
+  _.include( 'wPathFundamentals' );
 }
 
 //
