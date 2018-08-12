@@ -344,11 +344,11 @@ function hookConsoleToServer( o )
 
   throw _.err( 'not tested' );
 
-  _.assertMapHasOnly( o,optionsDefault,_.uri.uriStr.components );
+  _.assertMapHasOnly( o,optionsDefault,uri.str.components );
   _.mapSupplement( o,optionsDefault );
 
   if( !o.url )
-  o.url = _.uri.uriFor( o );
+  o.url = _.uri.for( o );
 
   if( !o.id )
   o.id = _.numberRandomInt( 1 << 30 );
