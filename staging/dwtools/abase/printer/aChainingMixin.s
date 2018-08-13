@@ -244,16 +244,16 @@ function _writeToChannelWithoutExclusion( channelName, args )
     // if( inputChainer.exclusiveOutputPrinter )
     // return;
 
-    // if( cd.write && cd.write[ channelName ] )
-    // {
-    //   xxx
-    //   cd.write[ channelName ].apply( cd.outputPrinter,outputData );
-    // }
-    // else
-    // {
+    if( cd.write && cd.write[ channelName ] )
+    {
+      // debugger; xxx
+      cd.write[ channelName ].apply( cd.outputPrinter,outputData );
+    }
+    else
+    {
       _.assert( _.routineIs( cd.outputPrinter[ channelName ] ) );
       cd.outputPrinter[ channelName ].apply( cd.outputPrinter, outputData );
-    // }
+    }
 
   });
 

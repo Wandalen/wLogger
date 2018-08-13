@@ -423,7 +423,7 @@ function _chain( o )
 
   if( _.streamIs( cd.outputPrinter ) )
   {
-    debugger; //xxx
+    //debugger; //xxx
     inputChainer._outputToStream( cd );
   }
   else if( _.consoleIs( cd.outputPrinter ) )
@@ -433,7 +433,7 @@ function _chain( o )
 
   if( _.streamIs( cd.inputPrinter ) )
   {
-    debugger; //xxx
+    //debugger; //xxx
     outputChainer._inputFromStream( cd );
   }
   else if( _.consoleIs( cd.inputPrinter ) )
@@ -511,10 +511,13 @@ function _outputToStream( cd )
   let stream = cd.outputPrinter;
 
   _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
+  _.assert( cd.write === null );
+
+  cd.write = Object.create( null );
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    stream[ channel ] = function()
+    cd.write[ channel ] = function()
     {
       stream.write.apply( stream, arguments );
     }
@@ -530,25 +533,23 @@ function _inputFromStream( cd )
 
   let outputChannel = 'log';
   let stream = cd.inputPrinter;
-  let outputs = stream[ chainerSymbol ].outputs
+  let outputPrinter = cd.outputPrinter;
 
   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
+  _.assert( !cd.onDataHandler );
 
-  if( !stream.onDataHandler )
+  cd.onDataHandler = function ( data )
   {
-    stream.on( 'data', function( data )
-    {
-      if( _.bufferAnyIs( data ) )
-      data = _.bufferToStr( data );
+    if( _.bufferAnyIs( data ) )
+    data = _.bufferToStr( data );
 
-      if( _.strEnds( data,'\n' ) )
-      data = _.strRemoveEnd( data,'\n' );
+    if( _.strEnds( data,'\n' ) )
+    data = _.strRemoveEnd( data,'\n' );
 
-      for( let d = 0 ; d < outputs.length ; d++ )
-      outputs[ d ].outputPrinter[ outputChannel ].call( outputs[ d ].outputPrinter, data );
-    })
-    stream.onDataHandler = 1;
+    outputPrinter[ outputChannel ].call( outputPrinter, data );
   }
+
+  stream.on( 'data',cd.onDataHandler );
 }
 
 //
@@ -750,8 +751,8 @@ function _unchain( o )
   let self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( o.outputPrinter ) );
-  _.assert( _.printerLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
+  _.assert( _.printerLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
   _.assert( o.inputPrinter !== o.outputPrinter );
 
   let inputChainer = o.inputPrinter[ chainerSymbol ];
@@ -760,6 +761,13 @@ function _unchain( o )
   let cd2 = _.arrayRemovedOnceElementStrictly( outputChainer.inputs, o.inputPrinter, ( cd ) => cd.inputPrinter, ( e ) => e );
 
   _.assert( cd1 === cd2 );
+
+  if( _.streamIs( o.inputPrinter ) )
+  {
+    _.assert( _.routineIs( cd1.onDataHandler ) );
+    o.inputPrinter.removeListener( 'data', cd1.onDataHandler );
+    _.assert( o.inputPrinter.listeners( 'data' ).indexOf( cd1.onDataHandler ) === -1 );
+  }
 
   self._chainDescriptorFree( cd1 );
 
@@ -791,7 +799,7 @@ function outputUnchain( output )
   let self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.printerLike( output ) || output === undefined );
+  _.assert( _.printerLike( output ) || _.streamIs( output ) || output === undefined );
   // _.assert( self !== output, 'Can not remove outputPrinter from outputs' );
 
   if( output === undefined )
@@ -844,7 +852,7 @@ function inputUnchain( input )
   let self = this;
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  _.assert( _.printerLike( input ) || input === undefined );
+  _.assert( _.printerLike( input ) || _.streamIs( input ) || input === undefined );
 
   if( input === undefined )
   {
@@ -1213,6 +1221,8 @@ let ChainDescriptorFields =
   inputCombining : null,
   outputCombining : null,
   freed : 0,
+  write : null,
+  onDataHandler : null
 }
 
 let Combining = [ 'rewrite', 'supplement', 'append', 'prepend' ];

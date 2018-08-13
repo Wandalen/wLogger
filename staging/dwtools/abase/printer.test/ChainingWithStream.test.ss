@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   require( '../printer/top/Logger.s' );
 
-  var _global = _global_; var _ = _global_.wTools;
+  let _global = _global_; let _ = _global_.wTools;
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
@@ -19,96 +19,497 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
-var Parent = _.Tester;
+let _global = _global_; let _ = _global_.wTools;
+let Parent = _.Tester;
 
 //
 
-function testDirMake()
+function onSuiteBegin()
 {
-  var self = this;
+  let self = this;
   self.testDirPath = _.path.dirTempMake();
 }
 
 //
 
-function testDirClean()
+function onSuiteEnd()
 {
-  var self = this;
+  let self = this;
   _.fileProvider.filesDelete( self.testDirPath );
 }
 
 //
 
-function readFromFile( test )
+function input( test )
 {
-  var self = this;
+  let self = this;
 
-  var filePath = _.path.join( self.testDirPath, 'file.txt' )
+  let con = new _.Consequence().give()
 
-  var data = _.strDup( '1', 10 );
-  var got = [];
-  var expected = [ data ];
+  test.open( 'readStream -> multiple printers, chain/unchain in different ways' );
 
-  _.fileProvider.fileWrite( filePath, data );
-  var readStream = _.fileProvider.fileReadStream( filePath );
-
-  function onTransformEnd( o )
+  con
+  .ifNoErrorThen( () =>
   {
-    got.push( o.input[ 0 ] );
-  }
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
-  var l = new _.Logger
-  ({
-    output : null,
-    onTransformEnd : onTransformEnd
-  });
-  l.inputFrom( readStream );
+    let data = _.strDup( '1', 10 );
+    let got = [];
 
-  return _.timeOut( 1000, () =>
-  {
-    readStream.close();
-    test.identical( got, expected );
+    _.fileProvider.fileWrite( filePath, data );
+    let readStream = _.fileProvider.fileReadStream( filePath );
+
+    function onTransformEnd( o )
+    {
+      got.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    printerA.inputFrom( readStream );
+    printerB.inputFrom( readStream );
+
+    let expected =
+    [
+      'printerA : ' + data,
+      'printerB : ' + data,
+    ];
+
+    return _.timeOut( 1000, () =>
+    {
+      readStream.close();
+      test.identical( got, expected );
+
+      let cdPrinterA = printerA.inputs[ 0 ];
+      let cdPrinterB = printerB.inputs[ 0 ];
+      let onDataListeners = readStream.listeners( 'data' );
+      let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
+
+      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+
+      printerA.inputUnchain( readStream );
+      printerB.inputUnchain( readStream );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerReadStream.inputs.length, 0 );
+      test.identical( chainerReadStream.outputs.length, 0 );
+
+      onDataListeners = readStream.listeners( 'data' );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.identical( onDataListeners.length, 0 );
+    })
   })
 
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let got = [];
+
+    _.fileProvider.fileWrite( filePath, data );
+    let readStream = _.fileProvider.fileReadStream( filePath );
+
+    function onTransformEnd( o )
+    {
+      got.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    printerA.inputFrom( readStream );
+    printerB.inputFrom( readStream );
+
+    let expected =
+    [
+      'printerA : ' + data,
+      'printerB : ' + data,
+    ];
+
+    return _.timeOut( 1000, () =>
+    {
+      readStream.close();
+      test.identical( got, expected );
+
+      let cdPrinterA = printerA.inputs[ 0 ];
+      let cdPrinterB = printerB.inputs[ 0 ];
+      let onDataListeners = readStream.listeners( 'data' );
+      let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
+
+      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+
+      chainerReadStream.outputUnchain( printerA );
+      chainerReadStream.outputUnchain( printerB );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerReadStream.inputs.length, 0 );
+      test.identical( chainerReadStream.outputs.length, 0 );
+
+      onDataListeners = readStream.listeners( 'data' );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let got = [];
+
+    _.fileProvider.fileWrite( filePath, data );
+    let readStream = _.fileProvider.fileReadStream( filePath );
+    let chainerReadStream = _.Chainer._chainerMakeFor( readStream );
+
+    function onTransformEnd( o )
+    {
+      got.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    chainerReadStream.outputTo( printerA );
+    chainerReadStream.outputTo( printerB );
+
+    var expected =
+    [
+      'printerA : ' + data,
+      'printerB : ' + data,
+    ];
+
+    return _.timeOut( 1000, () =>
+    {
+      readStream.close();
+      test.identical( got, expected );
+
+      let cdPrinterA = printerA.inputs[ 0 ];
+      let cdPrinterB = printerB.inputs[ 0 ];
+      let onDataListeners = readStream.listeners( 'data' );
+
+      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+
+      chainerReadStream.outputUnchain( printerA );
+      chainerReadStream.outputUnchain( printerB );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerReadStream.inputs.length, 0 );
+      test.identical( chainerReadStream.outputs.length, 0 );
+
+      onDataListeners = readStream.listeners( 'data' );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let got = [];
+
+    _.fileProvider.fileWrite( filePath, data );
+    let readStream = _.fileProvider.fileReadStream( filePath );
+    let chainerReadStream = _.Chainer._chainerMakeFor( readStream );
+
+    function onTransformEnd( o )
+    {
+      got.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    chainerReadStream.outputTo( printerA );
+    chainerReadStream.outputTo( printerB );
+
+    var expected =
+    [
+      'printerA : ' + data,
+      'printerB : ' + data,
+    ];
+
+    return _.timeOut( 1000, () =>
+    {
+      readStream.close();
+      test.identical( got, expected );
+
+      let cdPrinterA = printerA.inputs[ 0 ];
+      let cdPrinterB = printerB.inputs[ 0 ];
+      let onDataListeners = readStream.listeners( 'data' );
+
+      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+
+      printerA.inputUnchain( readStream );
+      printerB.inputUnchain( readStream );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerReadStream.inputs.length, 0 );
+      test.identical( chainerReadStream.outputs.length, 0 );
+
+      onDataListeners = readStream.listeners( 'data' );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  test.close( 'readStream -> multiple printers, chain/unchain in different ways' );
+
+  return con;
 }
 
 //
 
-function writeToFile( test )
+function output( test )
 {
-  var self = this;
+  let self = this;
 
-  var filePath = _.path.join( self.testDirPath, 'file.txt' )
+  let con = new _.Consequence().give()
 
-  var writeStream = _.fileProvider.fileWriteStream( filePath );
+  test.open( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
-  var data = _.strDup( '1', 10 );
-  var expected = [];
-
-  function onTransformEnd( o )
+  con
+  .ifNoErrorThen( () =>
   {
-    expected.push( o.input[ 0 ] );
-  }
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
-  var l = new _.Logger
-  ({
-    output : null,
-    onTransformEnd : onTransformEnd
-  });
+    let data = _.strDup( '1', 10 );
+    let expected = [];
 
-  l.outputTo( writeStream );
+    let writeStream = _.fileProvider.fileWriteStream( filePath );
 
-  l.log( '1' );
-  l.log( '2' );
-  l.log( '3' );
+    function onTransformEnd( o )
+    {
+      expected.push( this.name + ' : ' + o.input[ 0 ] );
+    }
 
-  return _.timeOut( 1000, () =>
-  {
-    writeStream.close();
-    var file = _.fileProvider.fileRead( filePath );
-    test.identical( file, expected.join( '' ) );
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    printerA.outputTo( writeStream );
+    printerB.outputTo( writeStream );
+
+    return _.timeOut( 1000, () =>
+    {
+      writeStream.close();
+
+      var file = _.fileProvider.fileRead( filePath );
+      test.identical( file, expected.join( '' ) );
+
+      let onDataListeners = writeStream.listeners( 'data' );
+      let chainerwriteStream = writeStream[ Symbol.for( 'chainer' ) ];
+
+      test.identical( onDataListeners.length, 0 );
+
+      printerA.outputUnchain( writeStream );
+      printerB.outputUnchain( writeStream );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerwriteStream.inputs.length, 0 );
+      test.identical( chainerwriteStream.outputs.length, 0 );
+
+      onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+    })
   })
+
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let expected = [];
+
+    let writeStream = _.fileProvider.fileWriteStream( filePath );
+
+    function onTransformEnd( o )
+    {
+      expected.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    printerA.outputTo( writeStream );
+    printerB.outputTo( writeStream );
+
+    return _.timeOut( 1000, () =>
+    {
+      writeStream.close();
+
+      var file = _.fileProvider.fileRead( filePath );
+      test.identical( file, expected.join( '' ) );
+
+      let onDataListeners = writeStream.listeners( 'data' );
+      let chainerwriteStream = writeStream[ Symbol.for( 'chainer' ) ];
+
+      test.identical( onDataListeners.length, 0 );
+
+      chainerwriteStream.inputUnchain( printerA );
+      chainerwriteStream.inputUnchain( printerB );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerwriteStream.inputs.length, 0 );
+      test.identical( chainerwriteStream.outputs.length, 0 );
+
+      onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let expected = [];
+
+    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let chainerWriteStream = _.Chainer._chainerMakeFor( writeStream );
+
+    function onTransformEnd( o )
+    {
+      expected.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    chainerWriteStream.inputFrom( printerA );
+    chainerWriteStream.inputFrom( printerB );
+
+    return _.timeOut( 1000, () =>
+    {
+      writeStream.close();
+
+      var file = _.fileProvider.fileRead( filePath );
+      test.identical( file, expected.join( '' ) );
+
+      let onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+
+      chainerWriteStream.inputUnchain( printerA );
+      chainerWriteStream.inputUnchain( printerB );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerWriteStream.inputs.length, 0 );
+      test.identical( chainerWriteStream.outputs.length, 0 );
+
+      onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  //
+
+  .ifNoErrorThen( () =>
+  {
+    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+
+    let data = _.strDup( '1', 10 );
+    let expected = [];
+
+    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let chainerWriteStream = _.Chainer._chainerMakeFor( writeStream );
+
+    function onTransformEnd( o )
+    {
+      expected.push( this.name + ' : ' + o.input[ 0 ] );
+    }
+
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd : onTransformEnd });
+
+    chainerWriteStream.inputFrom( printerA );
+    chainerWriteStream.inputFrom( printerB );
+
+    return _.timeOut( 1000, () =>
+    {
+      writeStream.close();
+
+      var file = _.fileProvider.fileRead( filePath );
+      test.identical( file, expected.join( '' ) );
+
+      let onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+
+      printerA.outputUnchain( writeStream );
+      printerB.outputUnchain( writeStream );
+
+      test.identical( printerA.inputs.length, 0 );
+      test.identical( printerA.outputs.length, 0 );
+
+      test.identical( printerB.inputs.length, 0 );
+      test.identical( printerB.outputs.length, 0 );
+
+      test.identical( chainerWriteStream.inputs.length, 0 );
+      test.identical( chainerWriteStream.outputs.length, 0 );
+
+      onDataListeners = writeStream.listeners( 'data' );
+      test.identical( onDataListeners.length, 0 );
+    })
+  })
+
+  test.close( 'multiple printers -> writeStream, chain/unchain in different ways' );
+
+  return con;
 }
 
 // --
@@ -122,8 +523,8 @@ var Self =
   silencing : 1,
   enabled : 1,
 
-  onSuiteBegin : testDirMake,
-  onSuiteEnd : testDirClean,
+  onSuiteBegin : onSuiteBegin,
+  onSuiteEnd : onSuiteEnd,
 
   context :
   {
@@ -131,8 +532,8 @@ var Self =
   },
   tests :
   {
-    readFromFile : readFromFile,
-    writeToFile : writeToFile,
+    input : input,
+    output : output,
   },
 
 };
