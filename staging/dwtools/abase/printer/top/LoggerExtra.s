@@ -344,7 +344,7 @@ function hookConsoleToServer( o )
 
   throw _.err( 'not tested' );
 
-  _.assertMapHasOnly( o,optionsDefault,uri.str.components );
+  _.assertMapHasOnly( o,optionsDefault,_.uri.str.components );
   _.mapSupplement( o,optionsDefault );
 
   if( !o.url )
@@ -462,7 +462,7 @@ var Proto =
 
   // relations
 
-  
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
