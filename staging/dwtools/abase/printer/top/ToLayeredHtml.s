@@ -1,4 +1,4 @@
-(function _PrinterToLayeredHtml_s_() {
+(function _ToLayeredHtml_s_() {
 
 'use strict';
 
