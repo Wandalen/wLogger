@@ -21,7 +21,7 @@
     "production"
   ],
   "scripts": {
-    "test": "node sample/StylesExperiment.s",
+    "test": "wtest staging",
     "make_doc": "./doc.sh"
   },
   "repository": {
