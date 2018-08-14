@@ -2,42 +2,32 @@
 
 'use strict';
 
+
+
 var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
   require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 
 //
 
 function currentColor( test )
 {
-  function fakelog()
-  {
-    return arguments;
-  }
 
-  var fakeConsole =
-  {
-    log : _.routineJoin( console,fakelog ),
-    error : _.routineJoin( console,console.error ),
-    info : _.routineJoin( console,console.info ),
-    warn : _.routineJoin( console,console.warn ),
-  }
-
-  var logger = new _.Logger( { output : fakeConsole } );
+  var logger = new _.Logger();
 
   test.case = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : dark red#' );
@@ -149,7 +139,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.case = 'case11 : setting colors from setter, unknown';
-  var logger = new _.Logger( { output : fakeConsole } );
+  var logger = new _.Logger();
   test.shouldThrowError( () =>
   {
     logger.foregroundColor = 'd';
@@ -255,9 +245,9 @@ function _colorsStack( test )
 function logUp( test )
 {
   var got;
-  function _onWrite( args ) { got = args.output[ 0 ] };
+  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, onTransformEnd : _onWrite, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   var msg = 'Up';
@@ -283,9 +273,9 @@ function logUp( test )
 function logDown( test )
 {
   var got;
-  function _onWrite( args ) { got = args.output[ 0 ] };
+  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, onTransformEnd : _onWrite, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   logger.up( 2 );
@@ -666,7 +656,6 @@ function stateChangingValue( test )
 
 function coloringNoColor( test )
 {
-  /* _.color.strFormat is used by tester, can't disable color */
   var color = _.color;
   var fg = _.color.strFormatForeground;
   var bg = _.color.strFormatBackground;
@@ -692,6 +681,66 @@ function coloringNoColor( test )
 
 //
 
+function clone( test )
+{
+  test.case = 'clone printer';
+
+  var printer = new _.Logger({ name : 'printerA', onTransformEnd : onTransformEnd });
+  var inputPrinter = new _.Logger({ name : 'inputPrinter', onTransformEnd : onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformEnd : onTransformEnd });
+
+  printer.outputTo( outputPrinter );
+  printer.inputFrom( inputPrinter );
+
+  var clonedPrinter =  printer.clone();
+
+  clonedPrinter.name = 'clonedPrinter';
+
+  test.will = 'printers must have same inputs/outputs'
+
+  test.identical( printer.inputs.length, 1 );
+  test.identical( printer.outputs.length, 1 );
+
+  test.identical( clonedPrinter.inputs.length, 1 );
+  test.identical( clonedPrinter.outputs.length, 1 );
+
+  test.identical( outputPrinter.inputs.length, 2 );
+  test.identical( outputPrinter.inputs[ 0 ].inputPrinter , printer );
+  test.identical( outputPrinter.inputs[ 1 ].inputPrinter , clonedPrinter );
+
+  test.identical( inputPrinter.outputs.length, 2 );
+  test.identical( inputPrinter.outputs[ 0 ].outputPrinter , printer );
+  test.identical( inputPrinter.outputs[ 1 ].outputPrinter , clonedPrinter );
+
+  test.identical( printer.inputs[ 0 ].inputPrinter , clonedPrinter.inputs[ 0 ].inputPrinter );
+  test.identical( printer.outputs[ 0 ].outputPrinter , clonedPrinter.outputs[ 0 ].outputPrinter );
+
+  var hooked = [];
+  var expected =
+  [
+    'inputPrinter : for printers',
+
+    'printerA : for printers',
+    'outputPrinter : for printers',
+
+    'clonedPrinter : for printers',
+    'outputPrinter : for printers'
+  ]
+
+  inputPrinter.log( 'for printers' );
+
+  test.identical( hooked, expected );
+
+  function onTransformEnd( o )
+  {
+    hooked.push( this.name + ' : ' + o.input[ 0 ] );
+    return o;
+  }
+
+}
+
+//
+
 var Self =
 {
 
@@ -712,7 +761,8 @@ var Self =
     emptyLines : emptyLines,
     diagnostic : diagnostic,
     stateChangingValue : stateChangingValue,
-    // coloringNoColor : coloringNoColor, /* needs fix */
+    clone : clone,
+    coloringNoColor : coloringNoColor,
 
   },
 

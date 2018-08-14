@@ -1,13 +1,22 @@
 # wLogger [![Build Status](https://travis-ci.org/Wandalen/wLogger.svg?branch=master)](https://travis-ci.org/Wandalen/wLogger)
+
+Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.
+
 The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging.
 Logger writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
 Supports colorful output in browser and shell, multilevel output, chaining with other console-like objects to perform message transfering between multiple inputs/outputs.
-
 
 ## Installation
 ```terminal
 npm install wLogger
 ```
+
+## Try out
+```
+npm install
+node sample/Sample.s
+```
+
 ## Usage
 ### Options
 * output { object }[ optional, default : console ] - single output object for current logger.
@@ -110,106 +119,6 @@ wLogger.consoleBar
 
 console.log( 'Message from console' );
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

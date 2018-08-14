@@ -17,8 +17,8 @@ if( typeof _global_ === 'undefined' || !_global_.wBase )
   if( !toolsExternal )
   require( toolsPath );
 }
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 
 require( 'wConsequence' );
 require( 'wLogger' );

@@ -2,23 +2,9 @@
 
 'use strict';
 
-var isBrowser = true;
-if( typeof module !== 'undefined' )
-isBrowser = false;
-
-if( typeof module !== 'undefined' )
-{
-
-  require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
-
-  _.include( 'wTesting' );
-
-}
-
-var _global = _global_; var _ = _global_.wTools;
-var Parent = _.Tester;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = _.Tester;
 
 //
 
@@ -50,7 +36,7 @@ function simplest( test )
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Tools/base/printer/Browser',
@@ -66,7 +52,6 @@ var Self =
 
 //
 
-if( isBrowser )
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
 _.Tester.test( Self.name );

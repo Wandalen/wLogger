@@ -21,17 +21,12 @@ if( typeof module !== 'undefined' )
 /**
  * @class wPrinterMid
  */
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterBase;
 var Self = function wPrinterMid( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterMid';
@@ -538,7 +533,7 @@ var Composes =
   onTransformBegin : null,
   onTransformEnd : null,
 
-  attributes : Object.create( null ),
+  attributes : _.define.own( {} ),
 
 }
 
@@ -562,10 +557,10 @@ var Restricts =
   _dprefix : '  ',
   _dpostfix : '',
 
-  _verbosityStack : [],
+  _verbosityStack : _.define.own( [] ),
 
-  _attributesStacks : Object.create( null ),
-  _mines : Object.create( null ),
+  _attributesStacks : _.define.own( {} ),
+  _mines : _.define.own( {} ),
 
 }
 
@@ -576,7 +571,7 @@ var Forbids =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
@@ -625,7 +620,7 @@ var Proto =
 
   // relations
 
-  /* constructor * : * Self, */
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -636,7 +631,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

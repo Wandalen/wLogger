@@ -2,17 +2,13 @@
 
 'use strict';
 
-/*
-
- - problem !!!
-  logger.foregroundColor = 'blue';
-  logger.log( 'some\ntext' );
-
+/**
+  @module Tools/base/Logger - Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.
 */
 
-// require
-// if( typeof wLogger !== 'undefined' )
-// return;
+/**
+ * @file Logger.s.
+ */
 
 if( typeof module !== 'undefined' )
 {
@@ -27,17 +23,12 @@ if( typeof module !== 'undefined' )
 /**
  * @class wLogger
  */
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterTop;
 var Self = function wLogger( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'Logger';
@@ -82,7 +73,7 @@ var Statics =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
@@ -92,7 +83,7 @@ var Proto =
 
   // relations
 
-  /* constructor * : * Self, */
+  
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
@@ -103,7 +94,7 @@ var Proto =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   parent : Parent,

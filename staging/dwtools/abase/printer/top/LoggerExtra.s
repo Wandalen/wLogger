@@ -13,9 +13,8 @@ if( typeof module !== 'undefined' )
 }
 
 //
-
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.PrinterTop;
 var Self = _.Logger;
 
@@ -162,11 +161,11 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/dwtools/abase/layer3/aPathTools.s' );
+  require( 'include/dwtools/abase/layer3/Path.s' );
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
-  fileName = _.pathJoin( _.pathRealMainDir(),fileName );
+  fileName = _.path.join( _.path.realMainDir(),fileName );
 
   console.log( 'hookConsoleToFile :',fileName );
 
@@ -345,11 +344,11 @@ function hookConsoleToServer( o )
 
   throw _.err( 'not tested' );
 
-  _.assertMapHasOnly( o,optionsDefault,_.urlStr.components );
+  _.assertMapHasOnly( o,optionsDefault,_.uri.str.components );
   _.mapSupplement( o,optionsDefault );
 
   if( !o.url )
-  o.url = _.urlFor( o );
+  o.url = _.uri.for( o );
 
   if( !o.id )
   o.id = _.numberRandomInt( 1 << 30 );
@@ -432,7 +431,7 @@ var Associates =
 }
 
 // --
-// define class
+// declare
 // --
 
 var Proto =
@@ -463,7 +462,7 @@ var Proto =
 
   // relations
 
-  /* constructor * : * Self, */
+
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,

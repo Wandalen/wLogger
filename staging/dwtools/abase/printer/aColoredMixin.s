@@ -45,12 +45,7 @@ let Parent = null;
 let Self = function wPrinterColoredMixin( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterColoredMixin';
@@ -270,6 +265,60 @@ function _transformAct_nodejs( o )
 
 //
 
+// function _transformAct_browser( o )
+// {
+//   let self = this;
+
+//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( _.mapIs( o ) );
+//   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
+
+//   let result = [ '' ];
+//   let splitted = o.outputSplitted;
+
+//   if( splitted.length === 1 && !self._isStyled )
+//   {
+//     if( !_.arrayIs( splitted[ 0 ] ) )
+//     return splitted;
+//   }
+
+//   for( let i = 0; i < splitted.length; i++ )
+//   {
+//     if( _.arrayIs( splitted[ i ] ) )
+//     {
+//       self._directiveApply( splitted[ i ] );
+
+//       if( !self.foregroundColor && !self.backgroundColor )
+//       self._isStyled = 0;
+//       else if( !!self.foregroundColor | !!self.backgroundColor )
+//       self._isStyled = 1;
+//     }
+//     else
+//     {
+//       if( ( !i && !self._isStyled ) || self.outputGray )
+//       {
+//         result[ 0 ] += splitted[ i ];
+//       }
+//       else
+//       {
+//         let fg = self.foregroundColor || 'none';
+//         let bg = self.backgroundColor || 'none';
+
+//         result[ 0 ] += `%c${ splitted[ i ] }`;
+//         result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
+//         /* qqq : make it working without _.color */
+
+//       }
+//     }
+//   }
+
+//   o.outputForTerminal = result;
+
+//   return o;
+// }
+
+//
+
 function _transformAct_browser( o )
 {
   let self = this;
@@ -280,42 +329,58 @@ function _transformAct_browser( o )
 
   let result = [ '' ];
   let splitted = o.outputSplitted;
+  let styled = false;
 
-  if( splitted.length === 1 && !self._isStyled )
+  splitted.forEach( function( split )
   {
-    if( !_.arrayIs( splitted[ 0 ] ) )
-    return splitted;
-  }
+    let output = !!_.color;
 
-  for( let i = 0; i < splitted.length; i++ )
-  {
-    if( _.arrayIs( splitted[ i ] ) )
+    if( _.arrayIs( split ) )
     {
-      self._directiveApply( splitted[ i ] );
-
-      if( !self.foregroundColor && !self.backgroundColor )
-      self._isStyled = 0;
-      else if( !!self.foregroundColor | !!self.backgroundColor )
-      self._isStyled = 1;
+      self._directiveApply( split );
+      if( output && self.outputRaw )
+      output = 0;
+      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      output = 0;
     }
     else
     {
-      if( ( !i && !self._isStyled ) || self.outputGray )
-      {
-        result[ 0 ] += splitted[ i ];
-      }
-      else
-      {
-        let fg = self.foregroundColor || 'none';
-        let bg = self.backgroundColor || 'none';
-
-        result[ 0 ] += `%c${ splitted[ i ] }`;
-        result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
-        /* qqq : make it working without _.color */
-
-      }
+      output = output && !self.outputRaw && !self.outputGray;
     }
-  }
+
+    if( _.strIs( split ) )
+    {
+      var foregroundColor = 'none';
+      var backgroundColor = 'none';
+
+      /* qqq : make it working without _.color */
+
+      if( output )
+      {
+        if( self.foregroundColor )
+        {
+          foregroundColor = _.color.colorToRgbaHtml( self.foregroundColor);
+          styled = true;
+        }
+
+        if( self.backgroundColor )
+        {
+          backgroundColor = _.color.colorToRgbaHtml( self.backgroundColor);
+          styled = true;
+        }
+      }
+
+      if( styled )
+      {
+        result[ 0 ] += '%c';
+        var style = `color:${ foregroundColor };background:${ backgroundColor };`;
+        result.push( style );
+      }
+
+      result[ 0 ] += split;
+    }
+
+  });
 
   o.outputForTerminal = result;
 
@@ -1173,25 +1238,38 @@ let PoisonedColorCombination =
 
 /* qqq : light black? */
 
+  { fg : 'white', bg : 'yellow', platform : 'linux' },
   { fg : 'green', bg : 'cyan', platform : 'linux' },
+  { fg : 'yellow', bg : 'white', platform : 'linux' },
   { fg : 'blue', bg : 'magenta', platform : 'linux' },
-  { fg : 'blue', bg : 'light black', platform : 'linux' },
   { fg : 'cyan', bg : 'green', platform : 'linux' },
   { fg : 'magenta', bg : 'blue', platform : 'linux' },
-  { fg : 'magenta', bg : 'light black', platform : 'linux' },
-  { fg : 'light black', bg : 'blue', platform : 'linux' },
-  { fg : 'light black', bg : 'magenta', platform : 'linux' },
-  { fg : 'light red', bg : 'red', platform : 'linux' },
-  { fg : 'light yellow', bg : 'white', platform : 'linux' },
-  { fg : 'light blue', bg : 'cyan', platform : 'linux' },
-  { fg : 'light magenta', bg : 'cyan', platform : 'linux' },
-  { fg : 'light green', bg : 'light cyan', platform : 'linux' },
-  { fg : 'light cyan', bg : 'light green', platform : 'linux' },
-  { fg : 'white', bg : 'light yellow', platform : 'linux' },
-  { fg : 'red', bg : 'light red', platform : 'linux' },
-  { fg : 'yellow', bg : 'light green', platform : 'linux' },
-  // { fg : 'light white', bg : 'light cyan', platform : 'linux' },
-  { fg : 'light magenta', bg : 'light red', platform : 'linux' },
+  { fg : 'dark yellow', bg : 'blue', platform : 'linux' },
+  { fg : 'dark yellow', bg : 'magenta', platform : 'linux' },
+  { fg : 'dark cyan', bg : 'blue', platform : 'linux' },
+  { fg : 'dark green', bg : 'blue', platform : 'linux' },
+  { fg : 'dark green', bg : 'magenta', platform : 'linux' },
+  { fg : 'dark white', bg : 'green', platform : 'linux' },
+  { fg : 'dark white', bg : 'yellow', platform : 'linux' },
+  { fg : 'dark white', bg : 'cyan', platform : 'linux' },
+  { fg : 'white', bg : 'dark white', platform : 'linux' },
+  { fg : 'green', bg : 'dark white', platform : 'linux' },
+  { fg : 'yellow', bg : 'dark white', platform : 'linux' },
+  { fg : 'blue', bg : 'dark yellow', platform : 'linux' },
+  { fg : 'blue', bg : 'dark cyan', platform : 'linux' },
+  { fg : 'cyan', bg : 'dark white', platform : 'linux' },
+  { fg : 'magenta', bg : 'dark yellow', platform : 'linux' },
+  { fg : 'magenta', bg : 'dark cyan', platform : 'linux' },
+  { fg : 'magenta', bg : 'dark green', platform : 'linux' },
+  { fg : 'bright black', bg : 'dark magenta', platform : 'linux' },
+  { fg : 'bright black', bg : 'dark blue', platform : 'linux' },
+  { fg : 'dark magenta', bg : 'bright black', platform : 'linux' },
+  { fg : 'dark magenta', bg : 'dark blue', platform : 'linux' },
+  { fg : 'dark blue', bg : 'bright black', platform : 'linux' },
+  { fg : 'dark blue', bg : 'dark magenta', platform : 'linux' },
+  { fg : 'dark cyan', bg : 'dark green', platform : 'linux' },
+  { fg : 'dark green', bg : 'dark cyan', platform : 'linux' },
+
 
 ]
 
@@ -1273,7 +1351,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Functors =
@@ -1355,7 +1433,7 @@ let Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   extend : Extend,

@@ -1,17 +1,21 @@
 
 if( typeof module !== 'undefined' )
-require( 'wTools' );
+{
+  require( 'wTools' );
 
-let _ = _global_.wTools;
+  var _ = _global_.wTools;
 
-_.include( 'wLogger' );
-_.include( 'wColor' );
+  _.include( 'wLogger' );
+  _.include( 'wColor' );
+}
+
 
 let printer = new _.Logger({ output : console });
 
 /**/
 
 printer.log();
+debugger
 printer.log( 'Setting color through field:' );
 
 printer.foregroundColor = 'red'; /* sets foreground color to red */

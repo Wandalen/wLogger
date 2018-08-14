@@ -2,7 +2,7 @@
 
 'use strict';
 
-if( typeof module === 'undefined' )
+// if( typeof module === 'undefined' )
 return;
 
 if( typeof module === 'undefined' )
@@ -17,7 +17,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPath' );
+  _.include( 'wPathFundamentals' );
 }
 
 //
@@ -41,8 +41,8 @@ function onRoutineBegin( test,testFile )
 {
   var self = this;
   var c = Object.create( null );
-  c.tempDirPath = self.tempDirPath = _.pathNormalize( _.dirTempMake() );
-  c.testFilePath = _.pathNormalize( _.pathJoin( c.tempDirPath,testFile.name + '.s' ) );
+  c.tempDirPath = self.tempDirPath = _.normalize( _.dirTempMake() );
+  c.testFilePath = _.normalize( _.join( c.tempDirPath,testFile.name + '.s' ) );
   _.fileProvider.fileWrite( c.testFilePath,_.routineSourceGet({ routine : testFile, withWrap : 0 }) );
   return c;
 }

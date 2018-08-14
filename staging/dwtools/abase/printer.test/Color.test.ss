@@ -2,30 +2,22 @@
 
 'use strict';
 
-/*
 
-to run this test
-from the project directory run
-
-npm install
-node ./staging/dwtools/abase/printer.test/Color.test.ss
-
-*/
 
 if( typeof module !== 'undefined' )
 {
 
   require( '../printer/top/Logger.s' );
-
-  var _global = _global_; var _ = _global_.wTools;
+  var _global = _global_;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 var isUnix = process.platform !== 'win32' ? true : false;
 

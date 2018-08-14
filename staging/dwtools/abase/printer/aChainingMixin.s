@@ -51,12 +51,7 @@ let _ = _global_.wTools;
 let Parent = null;
 let Self = function wPrinterChainingMixin( o )
 {
-  if( !( this instanceof Self ) )
-  if( o instanceof Self )
-  return o;
-  else
-  return new( _.routineJoin( Self, Self, arguments ) );
-  return Self.prototype.init.apply( this,arguments );
+  return _.instanceConstructor( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterChainingMixin';
@@ -249,16 +244,16 @@ function _writeToChannelWithoutExclusion( channelName, args )
     // if( inputChainer.exclusiveOutputPrinter )
     // return;
 
-    // if( cd.write && cd.write[ channelName ] )
-    // {
-    //   xxx
-    //   cd.write[ channelName ].apply( cd.outputPrinter,outputData );
-    // }
-    // else
-    // {
+    if( cd.write && cd.write[ channelName ] )
+    {
+      // debugger; xxx
+      cd.write[ channelName ].apply( cd.outputPrinter,outputData );
+    }
+    else
+    {
       _.assert( _.routineIs( cd.outputPrinter[ channelName ] ) );
       cd.outputPrinter[ channelName ].apply( cd.outputPrinter, outputData );
-    // }
+    }
 
   });
 
@@ -412,7 +407,7 @@ function _writeToChannelIn( channelName,args )
 function outputTo( output, o )
 {
   let self = this;
-  let chainer = self[ chainerSymbol ];
+  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -424,7 +419,8 @@ function outputTo( output, o )
   // o2.outputCombining = o.combining;
   delete o2.combining;
 
-  return chainer._chain( o2 );
+  // return chainer._chain( o2 );
+  return _.Chainer._chain( o2 );
 }
 
 var defaults = outputTo.defaults = Object.create( null );
@@ -513,7 +509,7 @@ function outputUnchain( output )
 function inputFrom( input, o )
 {
   let self = this;
-  let chainer = self[ chainerSymbol ];
+  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.inputFrom,o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -525,7 +521,8 @@ function inputFrom( input, o )
   o2.outputCombining = o.combining;
   delete o2.combining;
 
-  return chainer._chain( o2 );
+  // return chainer._chain( o2 );
+  return _.Chainer._chain( o2 );
 }
 
 var defaults = inputFrom.defaults = Object.create( null );
@@ -685,6 +682,26 @@ consoleBar.defaults =
   verbose : 0,
   outputPrinterHadOutputs : null,
 }
+
+//
+
+function chain( o )
+{
+  _.assert( arguments.length === 1 );
+  _.routineOptions( chain, o )
+  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
+
+  // let inputChainer = _chainerGet.call( o.inputPrinter );
+  // if( !inputChainer )
+  // inputChainer = _.Chainer._chainerMakeFor( o.inputPrinter );
+
+  // _.assert( inputChainer instanceof _.Chainer );
+
+  return _.Chainer._chain( o );
+}
+
+var defaults = chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
 
 // --
 // checker
@@ -866,8 +883,8 @@ let ChangeLevelMethods =
 let Composes =
 {
 
-  outputs : [],
-  inputs : [],
+  outputs : _.define.own( [] ),
+  inputs : _.define.own( [] ),
 
 }
 
@@ -892,6 +909,8 @@ let Statics =
 
   consoleBar : consoleBar,
   consoleIsBarred : consoleIsBarred,
+
+  chain : chain,
 
   // fields
 
@@ -920,7 +939,7 @@ let Accessors =
 }
 
 // --
-// define class
+// declare
 // --
 
 let Functors =
@@ -1007,7 +1026,7 @@ let Extend =
 
 //
 
-_.classMake
+_.classDeclare
 ({
   cls : Self,
   extend : Extend,
