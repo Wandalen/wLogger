@@ -847,7 +847,7 @@ function _inputsSet( inputs )
 function _chainerGet()
 {
   let self = this;
-  return self[ chainerSymbol ];
+  return _.Chainer.Get( self );
 }
 
 //
@@ -856,7 +856,7 @@ function _chainerMakeFor( printer )
 {
   let self = this;
   _.assert( arguments.length === 1 );
-  return _.Chainer._chainerMakeFor( printer );
+  return _.Chainer.MakeFor( printer );
 }
 
 // --

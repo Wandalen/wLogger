@@ -1,4 +1,4 @@
-(function _PrinterToString_s_() {
+(function _ToString_s_() {
 
 'use strict';
 
