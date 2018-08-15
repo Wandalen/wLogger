@@ -3977,42 +3977,39 @@ function chain( test )
 
   test.close( 'multiple inputs - multiple outputs' );
 
+}
+
+//
+
+function chainWithEmptyConsole( test )
+{
   test.open( 'modify console by chaining' );
 
-  if( typeof process === 'undefined' )
-  return;
+  let consoleWasBarred = _.Logger.consoleIsBarred( console );
 
-  if( !console.Console )
-  return;
+  test.suite.consoleBar( 0 );
 
-  let consolePrinter = new console.Console( process.stdout, process.stderr );
+  let consolePrinter = console;
 
-  consolePrinter.debug = _.routineJoin( consolePrinter, console.debug );
+  let consoleChainer = consolePrinter[ Symbol.for( 'chainer' ) ] || _.Chainer.MakeFor( consolePrinter );
+  let originalWrite = consoleChainer.originalWrite;
 
-  _.assert( _.printerLike( consolePrinter ) )
-  let originalWrite = Object.create( null );
-  _.Chainer.Channel.forEach( ( c ) =>
-  {
-    originalWrite[ c ] = consolePrinter[ c ];
-  });
+  var consoleInputs = consoleChainer.inputs.slice();
+  var consoleOutputs = consoleChainer.outputs.slice();
 
+  consoleChainer.inputUnchain();
+  consoleChainer.outputUnchain();
 
   var printer = new _.Logger({ name : 'printerA' });
   printer.outputTo( consolePrinter );
 
   test.will = 'printers are chained';
 
-  let consoleChainer = consolePrinter[ Symbol.for( 'chainer' ) ];
+  let consoleInputs1 = consoleChainer.inputs.slice();
+  let consoleOutputs1 = consoleChainer.outputs.slice();
 
-  test.identical( consoleChainer.inputs.length, 1 );
-  test.identical( consoleChainer.outputs.length, 0 );
-  test.identical( consoleChainer.inputs[ 0 ].inputPrinter, printer );
-
-  test.identical( printer.inputs.length, 0 );
-  test.identical( printer.outputs.length, 1 );
-  test.identical( printer.outputs[ 0 ].outputPrinter, consolePrinter );
-
-  test.will = 'output to console, original write methods must be preserved';
+  let printerInputs1 =  printer.inputs.slice();
+  let printerOutputs1 =  printer.outputs.slice();
 
   var methodsPreserved = true;
   _.Chainer.Channel.forEach( ( c ) =>
@@ -4020,24 +4017,16 @@ function chain( test )
     if(  consolePrinter[ c ] !== originalWrite[ c ] )
     methodsPreserved = false;
   });
-  test.is( methodsPreserved );
 
   var printerB = new _.Logger({ name : 'printerB' });
 
   printerB.inputFrom( consolePrinter );
 
-  test.will = 'printers are chained';
+  let consoleInputs2 = consoleChainer.inputs.slice();
+  let consoleOutputs2 = consoleChainer.outputs.slice();
 
-  test.identical( consoleChainer.inputs.length, 1 );
-  test.identical( consoleChainer.outputs.length, 1 );
-  test.identical( consoleChainer.inputs[ 0 ].inputPrinter, printer );
-  test.identical( consoleChainer.outputs[ 0 ].outputPrinter, printerB );
-
-  test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
-  test.identical( printerB.inputs[ 0 ].inputPrinter, consolePrinter );
-
-  test.identical( printerB.inputs[ 0 ], consoleChainer.outputs[ 0 ] );
+  let printerInputs2 =  printerB.inputs.slice();
+  let printerOutputs2 =  printerB.outputs.slice();
 
   var methodsModified = true;
   _.Chainer.Channel.forEach( ( c ) =>
@@ -4047,20 +4036,13 @@ function chain( test )
     if(  consolePrinter[ c ] !== consoleChainer.writeFromConsole[ c ] )
     methodsModified = false;
   });
-  test.is( methodsModified );
 
   printerB.inputUnchain( consolePrinter );
 
-  test.identical( consoleChainer.inputs.length, 1 );
-  test.identical( consoleChainer.outputs.length, 0 );
-  test.identical( consoleChainer.inputs[ 0 ].inputPrinter, printer );
+  let consoleInputs3 = consoleChainer.inputs.slice();
+  let consoleOutputs3 = consoleChainer.outputs.slice();
 
-  test.identical( printer.inputs.length, 0 );
-  test.identical( printer.outputs.length, 1 );
-  test.identical( printer.outputs[ 0 ].outputPrinter, consolePrinter );
-
-  test.identical( printerB.inputs.length, 0 );
-  test.identical( printerB.outputs.length, 0 );
+  printer.outputUnchain( consolePrinter );
 
   var methodsRestored = true;
   _.Chainer.Channel.forEach( ( c ) =>
@@ -4068,6 +4050,50 @@ function chain( test )
     if(  consolePrinter[ c ] !== originalWrite[ c ] )
     methodsRestored = false;
   });
+
+  let printerInputs3 =  printerB.inputs.slice();
+  let printerOutputs3 =  printerB.outputs.slice();
+
+  consoleChainer.inputs = consoleInputs;
+  consoleChainer.outputs = consoleOutputs;
+
+  if( consoleWasBarred )
+  test.suite.consoleBar( 1 );
+
+  test.identical( consoleInputs1.length, 1 );
+  test.identical( consoleOutputs1.length, 0 );
+  test.identical( consoleInputs1[ 0 ].inputPrinter, printer );
+
+  test.identical( printerInputs1.length, 0 );
+  test.identical( printerOutputs1.length, 1 );
+  test.identical( printerOutputs1[ 0 ].outputPrinter, consolePrinter );
+
+  test.will = 'output to console, original write methods must be preserved';
+  test.is( methodsPreserved );
+
+  test.will = 'printers are chained';
+
+  test.identical( consoleInputs2.length, 1 );
+  test.identical( consoleOutputs2.length, 1 );
+  test.identical( consoleInputs2[ 0 ].inputPrinter, printer );
+  test.identical( consoleOutputs2[ 0 ].outputPrinter, printerB );
+
+  test.identical( printerInputs2.length, 1 );
+  test.identical( printerOutputs2.length, 0 );
+  test.identical( printerInputs2[ 0 ].inputPrinter, consolePrinter );
+
+  test.identical( printerInputs2[ 0 ], consoleOutputs2[ 0 ] );
+
+  test.is( methodsModified );
+
+  test.identical( consoleInputs3.length, 1 );
+  test.identical( consoleOutputs3.length, 0 );
+  test.identical( consoleInputs3[ 0 ].inputPrinter, printer );
+
+  test.identical( printerInputs3.length, 0 );
+  test.identical( printerOutputs3.length, 0 );
+
+
   test.is( methodsRestored );
 
   test.close( 'modify console by chaining' );
@@ -4911,6 +4937,7 @@ var Self =
     input : input,
 
     chain : chain,
+    chainWithEmptyConsole : chainWithEmptyConsole,
 
     hasInputDeep : hasInputDeep,
     hasOutputDeep : hasOutputDeep,
