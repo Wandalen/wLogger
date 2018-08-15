@@ -171,8 +171,8 @@ function finit()
 //   // if( !cd.combining )
 //   // _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
 
-//   let inputChainer = cd.inputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.inputPrinter );
-//   let outputChainer = cd.outputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.outputPrinter );
+//   let inputChainer = cd.inputPrinter[ chainerSymbol ] || self.MakeFor( cd.inputPrinter );
+//   let outputChainer = cd.outputPrinter[ chainerSymbol ] || self.MakeFor( cd.outputPrinter );
 
 //   /* output check */
 
@@ -376,8 +376,8 @@ function _chain( o )
   // if( !cd.combining )
   // _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
 
-  let inputChainer = cd.inputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.inputPrinter );
-  let outputChainer = cd.outputPrinter[ chainerSymbol ] || self._chainerMakeFor( cd.outputPrinter );
+  let inputChainer = cd.inputPrinter[ chainerSymbol ] || self.MakeFor( cd.inputPrinter );
+  let outputChainer = cd.outputPrinter[ chainerSymbol ] || self.MakeFor( cd.outputPrinter );
 
   /* output check */
 
@@ -466,7 +466,6 @@ _chain.defaults =
   originalOutput : 0,
   exclusiveOutput : 0,
 }
-
 
 //
 
@@ -929,7 +928,15 @@ function _chainDescriptorFree( cd )
 
 //
 
-function _chainerMakeFor( printer )
+function Get( printable )
+{
+  _.assert( arguments.length === 1 );
+  return printable[ chainerSymbol ];
+}
+
+//
+
+function MakeFor( printer )
 {
   let self = this;
 
@@ -1281,11 +1288,11 @@ let Statics =
 {
   _chain : _chain,
 
+  Get : Get,
+  MakeFor : MakeFor,
   _chainDescriptorMake : _chainDescriptorMake,
-  _chainerMakeFor : _chainerMakeFor,
   _chainerWriteToConsole : _chainerWriteToConsole,
   _chainerWriteToPrinter : _chainerWriteToPrinter,
-
 
   ChainDescriptor : ChainDescriptor,
   ChainDescriptorFields : ChainDescriptorFields,
@@ -1336,7 +1343,7 @@ let Extend =
 
   _chainDescriptorMake : _chainDescriptorMake,
   _chainDescriptorFree : _chainDescriptorFree,
-  _chainerMakeFor : _chainerMakeFor,
+  MakeFor : MakeFor,
   _chainerWriteToConsole : _chainerWriteToConsole,
   _chainerWriteToPrinter : _chainerWriteToPrinter,
 
@@ -1358,7 +1365,6 @@ let Extend =
   _chainDescriptorLike : _chainDescriptorLike,
 
   // relations
-
 
   Composes : Composes,
   Aggregates : Aggregates,
