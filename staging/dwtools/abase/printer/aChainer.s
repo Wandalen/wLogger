@@ -480,6 +480,12 @@ function _inputFromConsole( cd )
   _.assert( !cd.inputPrinter.isPrinter );
   _.assert( !!inputChainer );
 
+  self.Channel.forEach( ( channel, c ) =>
+  {
+    _.assert( _.routineIs( inputChainer.writeFromConsole[ channel ] ) );
+    cd.inputPrinter[ channel ] = inputChainer.writeFromConsole[ channel ];
+  });
+
 }
 
 //
@@ -495,9 +501,11 @@ function _outputToConsole( cd )
   _.assert( !cd.outputPrinter.isPrinter );
   _.assert( _.objectIs( outputChainer ) );
 
+  cd.write = Object.create( null );
+
   self.Channel.forEach( ( channel, c ) =>
   {
-    cd.outputPrinter[ channel ] = outputChainer.writeFromConsole[ channel ];
+    cd.write[ channel ] = outputChainer.writeFromConsole[ channel ];
   });
 
 }
@@ -768,6 +776,9 @@ function _unchain( o )
     _.assert( o.inputPrinter.listeners( 'data' ).indexOf( cd1.onDataHandler ) === -1 );
   }
 
+  if( _.consoleIs( o.inputPrinter ) && !inputChainer.outputs.length )
+  self._restoreOriginalWriteConsole( inputChainer );
+
   self._chainDescriptorFree( cd1 );
 
   if( cd1.exclusiveOutput )
@@ -886,6 +897,25 @@ function unchainEverything()
 
   return result;
 }
+
+//
+
+function _restoreOriginalWriteConsole( chainer )
+{
+  let self = this;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.objectIs( chainer ) );
+  _.assert( _.consoleIs( chainer.printer ) );
+  _.assert( !chainer.outputs.length, 'Can\'t restore original write methods when console has outputs' );
+
+  self.Channel.forEach( ( channel, c ) =>
+  {
+    chainer.printer[ channel ] = chainer.originalWrite[ channel ];
+  });
+
+}
+
 
 // --
 //
@@ -1338,6 +1368,8 @@ let Extend =
   outputUnchain : outputUnchain,
   inputUnchain : inputUnchain,
   unchainEverything : unchainEverything,
+
+  _restoreOriginalWriteConsole : _restoreOriginalWriteConsole,
 
   //
 
