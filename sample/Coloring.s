@@ -9,6 +9,7 @@ if( typeof module !== 'undefined' )
   _.include( 'wColor' );
 }
 
+var _ = _global_.wTools;
 
 let printer = new _.Logger({ output : console });
 
