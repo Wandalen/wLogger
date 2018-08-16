@@ -2,6 +2,26 @@
 
 'use strict';
 
+/*
+move:eol
+move:bol
+move:bos
+move:eos
+move:pl
+move:nl
+move:pc
+move:nc
+
+b = begin
+e = end
+l = line
+s = screen
+c = char
+p = prev
+n = next
+
+*/
+
 let isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -231,8 +251,29 @@ function _transformAct_nodejs( o )
       output = output && !self.outputRaw && !self.outputGray;
     }
 
+    let styling = !self.outputRaw;
+
     if( _.strIs( split ) )
     {
+      if( styling )
+      {
+        if( self.style === 'reset' )
+        {
+          result += `\x1b[0;0m`
+          self.style = null;
+        }
+
+        if( _.numberIs( self.cls ) )
+        {
+          result += `\x1b[${self.cls}J`;
+          if( self.cls === 2 )
+          result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
+          self.cls = null;
+        }
+
+        if( self.underline )
+        result += `\x1b[4m`;
+      }
 
       if( output )
       {
@@ -246,6 +287,12 @@ function _transformAct_nodejs( o )
       }
 
       result += split;
+
+      if( styling )
+      {
+        if( self.underline )
+        result += `\x1b[24m`;
+      }
 
       if( output )
       {
@@ -348,10 +395,37 @@ function _transformAct_browser( o )
       output = output && !self.outputRaw && !self.outputGray;
     }
 
+    let styling = !self.outputRaw;
+
     if( _.strIs( split ) )
     {
       var foregroundColor = 'none';
       var backgroundColor = 'none';
+      var textDecoration = 'none';
+
+      let style = [];
+
+      if( styling )
+      {
+        if( self.style === 'reset' )
+        {
+          self.style = null;
+          styled = true;
+        }
+
+        if( _.numberIs( self.cls ) )
+        {
+          if( _.routineIs( clear ) )
+          clear();
+          self.cls = null;
+        }
+
+        if( self.underline )
+        {
+          textDecoration = 'underline';
+          styled = true;
+        }
+      }
 
       /* qqq : make it working without _.color */
 
@@ -373,8 +447,12 @@ function _transformAct_browser( o )
       if( styled )
       {
         result[ 0 ] += '%c';
-        var style = `color:${ foregroundColor };background:${ backgroundColor };`;
-        result.push( style );
+
+        style.push( `color:${ foregroundColor }` );
+        style.push( `background:${ backgroundColor }` )
+        style.push( `text-decoration:${ textDecoration }` )
+
+        result.push( style.join( ';' ) );
       }
 
       result[ 0 ] += split;
@@ -610,6 +688,21 @@ function _directiveApply( directive )
   else if( name === 'outputRaw' )
   {
     self.outputRaw = _.boolFrom( value.trim() );
+    return true;
+  }
+  else if( name === 'underline' )
+  {
+    self.underline = _.boolFrom( value.trim() );
+    return true;
+  }
+  else if( name === 'cls' )
+  {
+    self.cls = value.trim();
+    return true;
+  }
+  else if( name === 'style' )
+  {
+    self.style = value.trim();
     return true;
   }
 
@@ -931,24 +1024,60 @@ function _colorSet( layer, color )
 
 //
 
-function styleSet( style )
+function styleSet( src )
 {
   let self = this;
 
   _.assert( arguments.length === 1, 'expects single argument' );
-  _.assert( _.strIs( style ) );
+  _.assert( _.strIs( src ) || src === null );
 
-  if( style === 'default' )
+  if( src === null )
   {
-    self.foregroundColor = 'default';
-    self.backgroundColor = 'default';
+    self[ styleSymbol ] = src;
     return;
   }
 
-  var style = _.color.strColorStyle( style );
+  let special = [ 'default', 'reset' ];
 
-  if( !style )
-  return;
+  if( _.arrayHas( special, src ) )
+  {
+    if( src === 'reset' || self._stylesStack.length < 2 )
+    {
+      self[ styleSymbol ] = 'reset';
+      return self._styleReset();
+    }
+    else
+    {
+      self._stylesStack.pop();
+      let style = self._stylesStack[ self._stylesStack.length - 1 ];
+      self[ styleSymbol ] = style;
+      return self._styleApply( style );
+    }
+  }
+
+  var style = _.color.strColorStyle( src );
+
+  _.assert( _.objectLike( style ), 'Unknown style:', src );
+
+  var _style = _.mapExtend( null, style );
+
+  self._styleApply( _style );
+  self._styleComplement( _style );
+
+  self[ styleSymbol ] = _style;
+
+  self._stylesStack.push( _style );
+
+}
+
+//
+
+function _styleApply( style )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.objectLike( style ) );
 
   if( style.fg )
   self.foregroundColor = style.fg;
@@ -956,6 +1085,41 @@ function styleSet( style )
   if( style.bg )
   self.backgroundColor = style.bg;
 
+  if( style.underline )
+  self.underline = style.underline;
+}
+
+//
+
+function _styleComplement( style )
+{
+  var self = this;
+
+  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( _.objectLike( style ) );
+
+  if( !style.fg )
+  style.fg = self.foregroundColor;
+
+  if( !style.bg )
+  style.bg = self.backgroundColor;
+
+  if( !style.underline )
+  style.underline = self.underline;
+
+}
+
+//
+
+function _styleReset()
+{
+  var self = this;
+
+  _.assert( arguments.length === 0 );
+
+  self[ symbolForForeground ] = null;
+  self[ symbolForBackground ] = null;
+  self[ underlineSymbol ] = 0;
 }
 
 //
@@ -1035,6 +1199,46 @@ function _outputRawSet( src )
   src = 0;
 
   self[ outputRawSymbol ] = src;
+
+}
+
+//
+
+function _underlineSet( src )
+{
+  let self = this;
+  _.assert( _.boolLike( src ) );
+
+  if( _.boolIs( src ) )
+  src = self.underline + ( src ? 1 : -1 );
+
+  if( src < 0 )
+  debugger;
+
+  if( src < 0 )
+  src = 0;
+
+  self[ underlineSymbol ] = src;
+
+}
+
+function _clsSet( src )
+{
+  let self = this;
+
+  _.assert( src !== undefined );
+
+  let clsValuesMap =
+  {
+    '' : 2,
+    left : 1,
+    right : 0,
+    null : null
+  }
+
+  let value = clsValuesMap[ src ];
+  _.assert( value !== undefined, 'Unknown value for directive "cls":', src );
+  self[ clsSymbol ] = value;
 
 }
 
@@ -1158,6 +1362,9 @@ let inputGraySymbol = Symbol.for( 'inputGray' );
 let outputGraySymbol = Symbol.for( 'outputGray' );
 let inputRawSymbol = Symbol.for( 'inputRaw' );
 let outputRawSymbol = Symbol.for( 'outputRaw' );
+let underlineSymbol = Symbol.for( 'underline' );
+let clsSymbol = Symbol.for( 'cls' );
+let styleSymbol = Symbol.for( 'style' );
 
 let shellColorCodes =
 {
@@ -1273,8 +1480,9 @@ let PoisonedColorCombination =
 
 ]
 
-let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw' ];
+let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style' ];
 let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
+let FieldsStyling = [ 'fg', 'bg', 'underline' ];
 
 // --
 // relations
@@ -1296,6 +1504,9 @@ let Composes =
   outputGray : 0,
   inputRaw : 0,
   outputRaw : 0,
+  underline : 0,
+  cls : null,
+  style : null
 
 }
 
@@ -1314,6 +1525,7 @@ let Restricts =
 
   _colorsStack : null,
   _diagnosingColorsStack : null, /* qqq : what for??? */
+  _stylesStack : _.define.own( [] ),
 
   _isStyled : 0,
   _cursorSaved : 0,
@@ -1328,6 +1540,7 @@ let Statics =
   PoisonedColorCombination : PoisonedColorCombination,
   Directive : Directive,
   DirectiveColoring : DirectiveColoring,
+  FieldsStyling : FieldsStyling
 }
 
 let Forbids =
@@ -1347,6 +1560,9 @@ let Accessors =
   outputGray : 'outputGray',
   inputRaw : 'inputRaw',
   outputRaw : 'outputRaw',
+  underline : 'underline',
+  cls : 'cls',
+  style : 'style'
 
 }
 
@@ -1398,7 +1614,14 @@ let Extend =
   _foregroundColorSet : _foregroundColorSet,
   _backgroundColorSet : _backgroundColorSet,
   _colorSet : _colorSet,
+  _underlineSet : _underlineSet,
+  _clsSet : _clsSet,
+
   styleSet : styleSet,
+  _styleSet : styleSet,
+  _styleApply :_styleApply,
+  _styleComplement : _styleComplement,
+  _styleReset : _styleReset,
 
   _inputGraySet : _inputGraySet,
   _outputGraySet : _outputGraySet,
