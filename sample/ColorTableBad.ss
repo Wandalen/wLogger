@@ -35,7 +35,7 @@ function prepareInfo()
 
   function shortColor( name )
   {
-    var parts = _.strSplitNonPreserving/**1**/({ src : name, preservingDelimeters : 0 });
+    var parts = _.strSplitNonPreserving({ src : name, preservingDelimeters : 0 });
 
     if( parts[ 0 ] === 'dark' )
     name = 'd.' + parts[ 1 ];
