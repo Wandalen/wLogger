@@ -2,6 +2,26 @@
 
 'use strict';
 
+/*
+move:eol
+move:bol
+move:bos
+move:eos
+move:pl
+move:nl
+move:pc
+move:nc
+
+b = begin
+e = end
+l = line
+s = screen
+c = char
+p = prev
+n = next
+
+*/
+
 let isBrowser = true;
 if( typeof module !== 'undefined' )
 {
