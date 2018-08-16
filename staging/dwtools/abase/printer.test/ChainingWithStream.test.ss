@@ -180,7 +180,7 @@ function input( test )
 
     _.fileProvider.fileWrite( filePath, data );
     let readStream = _.fileProvider.fileReadStream( filePath );
-    let chainerReadStream = _.Chainer._chainerMakeFor( readStream );
+    let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
     {
@@ -241,7 +241,7 @@ function input( test )
 
     _.fileProvider.fileWrite( filePath, data );
     let readStream = _.fileProvider.fileReadStream( filePath );
-    let chainerReadStream = _.Chainer._chainerMakeFor( readStream );
+    let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
     {
@@ -417,7 +417,7 @@ function output( test )
     let expected = [];
 
     let writeStream = _.fileProvider.fileWriteStream( filePath );
-    let chainerWriteStream = _.Chainer._chainerMakeFor( writeStream );
+    let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
     {
@@ -467,7 +467,7 @@ function output( test )
     let expected = [];
 
     let writeStream = _.fileProvider.fileWriteStream( filePath );
-    let chainerWriteStream = _.Chainer._chainerMakeFor( writeStream );
+    let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
     {
