@@ -245,6 +245,25 @@ function _transformAct_nodejs( o )
       output = 0;
       if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
+
+      if( !self.inputRaw && !self.outputRaw )
+      if( split[ 0 ] === 'cls' )
+      {
+        let clsValuesMap =
+        {
+          '' : 2,
+          left : 1,
+          right : 0,
+        }
+
+        let value = split[ 1 ].trim();
+        let cls = clsValuesMap[ value ];
+        _.assert( cls !== undefined, 'Unknown value for directive "cls":', value );
+
+        result += `\x1b[${cls}J`;
+        if( cls === 2 )
+        result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
+      }
     }
     else
     {
@@ -261,14 +280,6 @@ function _transformAct_nodejs( o )
         {
           result += `\x1b[0;0m`
           self.style = null;
-        }
-
-        if( _.numberIs( self.cls ) )
-        {
-          result += `\x1b[${self.cls}J`;
-          if( self.cls === 2 )
-          result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
-          self.cls = null;
         }
 
         if( self.underline )
@@ -693,11 +704,6 @@ function _directiveApply( directive )
   else if( name === 'underline' )
   {
     self.underline = _.boolFrom( value.trim() );
-    return true;
-  }
-  else if( name === 'cls' )
-  {
-    self.cls = value.trim();
     return true;
   }
   else if( name === 'style' )
@@ -1363,7 +1369,6 @@ let outputGraySymbol = Symbol.for( 'outputGray' );
 let inputRawSymbol = Symbol.for( 'inputRaw' );
 let outputRawSymbol = Symbol.for( 'outputRaw' );
 let underlineSymbol = Symbol.for( 'underline' );
-let clsSymbol = Symbol.for( 'cls' );
 let styleSymbol = Symbol.for( 'style' );
 
 let shellColorCodes =
@@ -1505,7 +1510,6 @@ let Composes =
   inputRaw : 0,
   outputRaw : 0,
   underline : 0,
-  cls : null,
   style : null
 
 }
@@ -1561,7 +1565,6 @@ let Accessors =
   inputRaw : 'inputRaw',
   outputRaw : 'outputRaw',
   underline : 'underline',
-  cls : 'cls',
   style : 'style'
 
 }
@@ -1615,7 +1618,6 @@ let Extend =
   _backgroundColorSet : _backgroundColorSet,
   _colorSet : _colorSet,
   _underlineSet : _underlineSet,
-  _clsSet : _clsSet,
 
   styleSet : styleSet,
   _styleSet : styleSet,
