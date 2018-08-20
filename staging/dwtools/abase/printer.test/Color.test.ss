@@ -72,7 +72,7 @@ function colorConsole( test )
   test.case = 'case5: unknown color ';
   test.shouldThrowError( () =>
   {
-    logger.log( _.color.strFormatForeground( 'text', 'xxx') );
+    logger.log( _.color.strFormatForeground( 'text', 'aa') );
   })
   test.identical( logger.foregroundColor, null );
 
@@ -122,11 +122,11 @@ function colorConsole( test )
   logger.backgroundColor = 'default';
   test.shouldThrowError( () =>
   {
-    logger.log( '#foreground : xxx#' );
+    logger.log( '#foreground : aa#' );
   })
   test.shouldThrowError( () =>
   {
-    logger.log( '#background : xxx#' );
+    logger.log( '#background : aa#' );
   })
   test.identical( logger.foregroundColor, null );
   test.identical( logger.foregroundColor, null );
@@ -153,7 +153,7 @@ function colorConsole( test )
   var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
   test.shouldThrowError( () =>
   {
-    logger.foregroundColor = 'xxx';
+    logger.foregroundColor = 'aa';
   })
   logger.backgroundColor = 'dark white';
   logger.log( 'text' );
@@ -170,11 +170,11 @@ function colorConsole( test )
   var logger = new _.Logger({ output : null, onTransformEnd : onTransformEnd });
   test.shouldThrowError( () =>
   {
-    logger.foregroundColor = 'xxx';
+    logger.foregroundColor = 'aa';
   })
   test.shouldThrowError( () =>
   {
-    logger.backgroundColor = 'xxx';
+    logger.backgroundColor = 'aa';
   })
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
