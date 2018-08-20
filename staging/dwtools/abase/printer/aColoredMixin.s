@@ -1250,7 +1250,7 @@ function colorFormat( src, format )
   _.assert( arguments.length === 2, 'expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormat )
   return src;
-  return _.color.strFormat( src, format );
+  return _.color.strFormatEach( src, format );
 }
 
 //
