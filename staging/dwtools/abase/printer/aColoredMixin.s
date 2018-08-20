@@ -245,6 +245,25 @@ function _transformAct_nodejs( o )
       output = 0;
       if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
+
+      if( !self.inputRaw && !self.outputRaw )
+      if( split[ 0 ] === 'cls' )
+      {
+        let clsValuesMap =
+        {
+          '' : 2,
+          left : 1,
+          right : 0,
+        }
+
+        let value = split[ 1 ].trim();
+        let cls = clsValuesMap[ value ];
+        _.assert( cls !== undefined, 'Unknown value for directive "cls":', value );
+
+        result += `\x1b[${cls}J`;
+        if( cls === 2 )
+        result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
+      }
     }
     else
     {
@@ -257,18 +276,10 @@ function _transformAct_nodejs( o )
     {
       if( styling )
       {
-        if( self.style === 'reset' )
+        if( self._resetStyle )
         {
           result += `\x1b[0;0m`
-          self.style = null;
-        }
-
-        if( _.numberIs( self.cls ) )
-        {
-          result += `\x1b[${self.cls}J`;
-          if( self.cls === 2 )
-          result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
-          self.cls = null;
+          self._resetStyle = false;
         }
 
         if( self.underline )
@@ -407,9 +418,9 @@ function _transformAct_browser( o )
 
       if( styling )
       {
-        if( self.style === 'reset' )
+        if( self._resetStyle )
         {
-          self.style = null;
+          self._resetStyle = false;
           styled = true;
         }
 
@@ -695,14 +706,9 @@ function _directiveApply( directive )
     self.underline = _.boolFrom( value.trim() );
     return true;
   }
-  else if( name === 'cls' )
-  {
-    self.cls = value.trim();
-    return true;
-  }
   else if( name === 'style' )
   {
-    self.style = value.trim();
+    self.styleSet( value.trim() );
     return true;
   }
 
@@ -1031,26 +1037,18 @@ function styleSet( src )
   _.assert( arguments.length === 1, 'expects single argument' );
   _.assert( _.strIs( src ) || src === null );
 
-  if( src === null )
-  {
-    self[ styleSymbol ] = src;
-    return;
-  }
-
   let special = [ 'default', 'reset' ];
 
   if( _.arrayHas( special, src ) )
   {
     if( src === 'reset' || self._stylesStack.length < 2 )
     {
-      self[ styleSymbol ] = 'reset';
       return self._styleReset();
     }
     else
     {
       self._stylesStack.pop();
       let style = self._stylesStack[ self._stylesStack.length - 1 ];
-      self[ styleSymbol ] = style;
       return self._styleApply( style );
     }
   }
@@ -1063,8 +1061,6 @@ function styleSet( src )
 
   self._styleApply( _style );
   self._styleComplement( _style );
-
-  self[ styleSymbol ] = _style;
 
   self._stylesStack.push( _style );
 
@@ -1116,6 +1112,8 @@ function _styleReset()
   var self = this;
 
   _.assert( arguments.length === 0 );
+
+  self._resetStyle = true;
 
   self[ symbolForForeground ] = null;
   self[ symbolForBackground ] = null;
@@ -1363,8 +1361,6 @@ let outputGraySymbol = Symbol.for( 'outputGray' );
 let inputRawSymbol = Symbol.for( 'inputRaw' );
 let outputRawSymbol = Symbol.for( 'outputRaw' );
 let underlineSymbol = Symbol.for( 'underline' );
-let clsSymbol = Symbol.for( 'cls' );
-let styleSymbol = Symbol.for( 'style' );
 
 let shellColorCodes =
 {
@@ -1482,7 +1478,6 @@ let PoisonedColorCombination =
 
 let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style' ];
 let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
-let FieldsStyling = [ 'fg', 'bg', 'underline' ];
 
 // --
 // relations
@@ -1505,8 +1500,6 @@ let Composes =
   inputRaw : 0,
   outputRaw : 0,
   underline : 0,
-  cls : null,
-  style : null
 
 }
 
@@ -1526,7 +1519,7 @@ let Restricts =
   _colorsStack : null,
   _diagnosingColorsStack : null, /* qqq : what for??? */
   _stylesStack : _.define.own( [] ),
-
+  _resetStyle : 0,
   _isStyled : 0,
   _cursorSaved : 0,
 
@@ -1540,7 +1533,6 @@ let Statics =
   PoisonedColorCombination : PoisonedColorCombination,
   Directive : Directive,
   DirectiveColoring : DirectiveColoring,
-  FieldsStyling : FieldsStyling
 }
 
 let Forbids =
@@ -1561,8 +1553,6 @@ let Accessors =
   inputRaw : 'inputRaw',
   outputRaw : 'outputRaw',
   underline : 'underline',
-  cls : 'cls',
-  style : 'style'
 
 }
 
@@ -1615,10 +1605,8 @@ let Extend =
   _backgroundColorSet : _backgroundColorSet,
   _colorSet : _colorSet,
   _underlineSet : _underlineSet,
-  _clsSet : _clsSet,
 
   styleSet : styleSet,
-  _styleSet : styleSet,
   _styleApply :_styleApply,
   _styleComplement : _styleComplement,
   _styleReset : _styleReset,

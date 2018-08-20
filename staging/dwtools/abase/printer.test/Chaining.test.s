@@ -3987,6 +3987,7 @@ function chainWithEmptyConsole( test )
 
   let consoleWasBarred = _.Logger.consoleIsBarred( console );
 
+  if( consoleWasBarred )
   test.suite.consoleBar( 0 );
 
   let consolePrinter = console;
@@ -4054,8 +4055,8 @@ function chainWithEmptyConsole( test )
   let printerInputs3 =  printerB.inputs.slice();
   let printerOutputs3 =  printerB.outputs.slice();
 
-  consoleChainer.inputs = consoleInputs;
-  consoleChainer.outputs = consoleOutputs;
+  consoleChainer.inputFrom( consoleInputs );
+  consoleChainer.outputTo( consoleOutputs );
 
   if( consoleWasBarred )
   test.suite.consoleBar( 1 );
