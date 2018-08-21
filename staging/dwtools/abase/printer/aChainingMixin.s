@@ -63,7 +63,7 @@ function onMixinEnd( mixinDescriptor, dstClass )
   let dstPrototype = dstClass.prototype;
 
   _.assert( dstPrototype._writeToChannelWithoutExclusion === _writeToChannelWithoutExclusion );
-  _.assert( arguments.length === 2, 'expects exactly two argument' );
+  _.assert( arguments.length === 2, 'expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
 
   dstPrototype._initChainingMixin( mixinDescriptor );
