@@ -750,6 +750,8 @@ function _directiveMoveApply( value )
   if( _.routineIs( code ) )
   code = code();
 
+  // for eos,eol, returns empty string if program can't get sizes of the terminal
+  if( code.length )
   code = `\x1b[${code}`;
 
   return code;
