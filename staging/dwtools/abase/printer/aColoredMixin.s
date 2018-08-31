@@ -2,26 +2,6 @@
 
 'use strict';
 
-/*
-move:eol
-move:bol
-move:bos
-move:eos
-move:pl
-move:nl
-move:pc
-move:nc
-
-b = begin
-e = end
-l = line
-s = screen
-c = char
-p = prev
-n = next
-
-*/
-
 let isBrowser = true;
 if( typeof module !== 'undefined' )
 {
@@ -248,22 +228,11 @@ function _transformAct_nodejs( o )
 
       if( !self.inputRaw && !self.outputRaw )
       if( split[ 0 ] === 'cls' )
-      {
-        let clsValuesMap =
-        {
-          '' : 2,
-          left : 1,
-          right : 0,
-        }
-
-        let value = split[ 1 ].trim();
-        let cls = clsValuesMap[ value ];
-        _.assert( cls !== undefined, 'Unknown value for directive "cls":', value );
-
-        result += `\x1b[${cls}J`;
-        if( cls === 2 )
-        result += '\x1b[H' //moves cursor to top left corner as terminal 'cls' does
-      }
+      result += self._directiveClsApply( split[ 1 ].trim() );
+      else if( split[ 0 ] === 'move' )
+      result += self._directiveMoveApply( split[ 1 ].trim() );
+      else if( split[ 0 ] === 'cll' )
+      result += `\x1b[K`;
     }
     else
     {
@@ -400,6 +369,13 @@ function _transformAct_browser( o )
       output = 0;
       if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
+
+      if( !self.inputRaw && !self.outputRaw )
+      if( split[ 0 ] === 'cls' )
+      {
+        if( _.routineIs( clear ) )
+        clear();
+      }
     }
     else
     {
@@ -422,13 +398,6 @@ function _transformAct_browser( o )
         {
           self._resetStyle = false;
           styled = true;
-        }
-
-        if( _.numberIs( self.cls ) )
-        {
-          if( _.routineIs( clear ) )
-          clear();
-          self.cls = null;
         }
 
         if( self.underline )
@@ -713,6 +682,102 @@ function _directiveApply( directive )
   }
 
   // _.assert( 0, 'Unknown logger directive', _.strQuote( name ) );
+}
+
+//
+
+/*
+move:eol
+move:bol
+move:bos
+move:eos
+move:pl
+move:nl
+move:pc
+move:nc
+
+b = begin
+e = end
+l = line
+s = screen
+c = char
+p = prev
+n = next
+
+*/
+
+function _directiveMoveApply( value )
+{
+  _.assert( Config.platform === 'nodejs' );
+
+  function eol()
+  {
+    let result = '';
+
+    if( !!process.stdout.columns )
+    result = `${process.stdout.columns}G`;
+
+    return result;
+  };
+
+  function eos()
+  {
+    let result = '';
+    let stdo = process.stdout;
+
+    if( !!stdo.rows && !!stdo.columns )
+    result = `${stdo.rows};${stdo.columns}H`;
+
+    return  result
+  };
+
+  let shellMoveDirectiveCodes =
+  {
+    'eol' : eol,
+    'bol' : '0G',
+    'eos' : eos,
+    'bos' : '1;1H',
+    'pl' : '1F',
+    'nl' : '1E',
+    'pc' : '1D',
+    'nc' : '1C'
+  }
+
+  let code = shellMoveDirectiveCodes[ value ];
+
+  _.assert( code !== undefined, 'Unknown value for directive move:', value );
+
+  if( _.routineIs( code ) )
+  code = code();
+
+  // for eos,eol, returns empty string if program can't get sizes of the terminal
+  if( code.length )
+  code = `\x1b[${code}`;
+
+  return code;
+}
+
+//
+
+function _directiveClsApply( value )
+{
+  _.assert( Config.platform === 'nodejs' );
+
+  let clsValuesMap =
+  {
+    '' : 2,
+    left : 1,
+    right : 0,
+  }
+
+  let cls = clsValuesMap[ value ];
+  _.assert( cls !== undefined, 'Unknown value for directive "cls":', value );
+
+  let code = `\x1b[${cls}J`;
+  if( cls === 2 )
+  code += `\x1b[H` //moves cursor to top left corner as terminal 'cls' does
+
+  return code;
 }
 
 //
@@ -1476,7 +1541,7 @@ let PoisonedColorCombination =
 
 ]
 
-let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style' ];
+let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style','move','cll' ];
 let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
 
 // --
@@ -1591,6 +1656,8 @@ let Extend =
   _split : _split,
   _splitHandle : _splitHandle,
   _directiveApply : _directiveApply,
+  _directiveMoveApply : _directiveMoveApply,
+  _directiveClsApply : _directiveClsApply,
 
   _rgbToCode_nodejs : _rgbToCode_nodejs,
   _diagnoseColorCheck : _diagnoseColorCheck,
