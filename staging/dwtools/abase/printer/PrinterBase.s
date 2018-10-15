@@ -119,7 +119,7 @@ function _transformAct( o )
 
   /* !!! remove later */
 
-  _.accessorForbid
+  _.accessor.forbid
   ({
     object : o,
     names :

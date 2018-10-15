@@ -932,7 +932,7 @@ function _chainDescriptorMake( o )
   Object.assign( r, self.ChainDescriptorFields );
 
   /* !!! : remove it later */
-  _.accessorForbid
+  _.accessor.forbid
   ({
     object : o,
     names :
