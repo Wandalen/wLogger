@@ -588,7 +588,7 @@ function consoleIsBarred( output )
   let self = this;
 
   _.assert( _.consoleIs( output ) );
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   let chainer = output[ chainerSymbol ]
   if( !chainer )
@@ -724,7 +724,7 @@ function hasInputClose( input )
   let self = this;
   let chainer = self.chainer;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return chainer._hasInput( input,{ deep : 0 } );
 }
@@ -736,7 +736,7 @@ function hasInputDeep( input )
   let self = this;
   let chainer = self.chainer;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return chainer._hasInput( input,{ deep : 1 } );
 }
@@ -760,7 +760,7 @@ function hasOutputClose( output )
   let self = this;
   let chainer = self.chainer;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return chainer._hasOutput( output,{ deep : 0 } );
 }
@@ -772,7 +772,7 @@ function hasOutputDeep( output )
   let self = this;
   let chainer = self.chainer;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return chainer._hasOutput( output,{ deep : 1 } );
 }
@@ -785,7 +785,7 @@ function _outputSet( output )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( output )
   self.outputTo( output, { combining : 'rewrite' } );
@@ -810,7 +810,7 @@ function _outputGet( output )
 function _outputsSet( outputs )
 {
   let self = this;
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   self.outputTo( outputs, { combining : 'rewrite' } );
 }
 
@@ -838,7 +838,7 @@ function _inputsGet()
 function _inputsSet( inputs )
 {
   let self = this;
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   self.inputFrom( inputs, { combining : 'rewrite' } );
 }
 

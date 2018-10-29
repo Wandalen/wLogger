@@ -99,7 +99,7 @@ transform.defaults =
 
 function _transformBegin( o )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   return o;
 }
 
@@ -109,7 +109,7 @@ function _transformAct( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.longIs( o.input ) );
 
@@ -135,7 +135,7 @@ function _transformAct( o )
 
 function _transformEnd( o )
 {
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   return o;
 }
 
@@ -245,7 +245,7 @@ function _strConcat( args )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
   return _.str.apply( _,args );
@@ -285,7 +285,7 @@ function _strConcat( args )
 // {
 //   var self = this;
 //
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.routineIs( src._print ) );
 //   _.assert( _.routineIs( src._print.makeIterator ) );
 //   _.assert( src._print.length === 2 );

@@ -75,7 +75,7 @@ function _transformBegin( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( self.onTransformBegin )
   o = self.onTransformBegin( o );
@@ -102,7 +102,7 @@ function _transformEnd( o )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( self.onTransformEnd )
   self.onTransformEnd( o );
@@ -124,7 +124,7 @@ function _begin( key,val )
   var self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'expects string {-key-}, got',_.strTypeOf( key ) );
+  _.assert( _.strIs( key ),'Expects string {-key-}, got',_.strTypeOf( key ) );
 
   if( val === undefined )
   {
@@ -234,9 +234,9 @@ function _rbegin( key, val )
   }
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'expects string {-key-}, got', () => _.strTypeOf( key ) );
-  _.assert( _.numberIs( val ),'expects number {-val-}, got', () => _.strTypeOf( val ) );
-  _.assert( _.numberIs( attribute ), () => _.args( 'expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
+  _.assert( _.strIs( key ),'Expects string {-key-}, got', () => _.strTypeOf( key ) );
+  _.assert( _.numberIs( val ),'Expects number {-val-}, got', () => _.strTypeOf( val ) );
+  _.assert( _.numberIs( attribute ), () => _.args( 'Expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
 
   return self._begin( key, val + attribute )
 }
@@ -342,7 +342,7 @@ function verbosityPush( src )
   if( !_.numberIs( src ) )
   src = src ? 1 : 0;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   self._verbosityStack.push( self.verbosity );
 
@@ -437,7 +437,7 @@ function later( name )
   var self = this;
   var later = Object.create( null );
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
 
   later.name = name;
@@ -482,7 +482,7 @@ function laterActualize( later )
   if( _.strIs( later ) )
   later = self._mines[ later ];
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( later ) );
 
   later.detonated = 1;
@@ -508,7 +508,7 @@ function laterFinit( later )
   if( _.strIs( later ) )
   later = self._mines[ later ];
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( later ) );
   _.assert( self._mines[ later.name ] === later );
 

@@ -163,7 +163,7 @@ function finit()
 
 //   /* */
 
-//   _.assert( !!o.outputPrinter, 'expects {-o.outputPrinter-}' );
+//   _.assert( !!o.outputPrinter, 'Expects {-o.outputPrinter-}' );
 //   _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
 
 //   let cd = self._chainDescriptorMake( o );
@@ -367,7 +367,7 @@ function _chain( o )
 
   /* */
 
-  _.assert( !!o.outputPrinter, 'expects {-o.outputPrinter-}' );
+  _.assert( !!o.outputPrinter, 'Expects {-o.outputPrinter-}' );
   _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
 
   let cd = self._chainDescriptorMake( o );
@@ -1140,7 +1140,7 @@ function hasInputClose( input )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return self._hasInput( input,{ deep : 0 } );
 }
@@ -1151,7 +1151,7 @@ function hasInputDeep( input )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return self._hasInput( input,{ deep : 1 } );
 }
@@ -1206,7 +1206,7 @@ function hasOutputClose( output )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return self._hasOutput( output,{ deep : 0 } );
 }
@@ -1217,7 +1217,7 @@ function hasOutputDeep( output )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   return self._hasOutput( output,{ deep : 1 } );
 }
@@ -1226,7 +1226,7 @@ function _chainDescriptorLike( src )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( src instanceof self.ChainDescriptor )
   {

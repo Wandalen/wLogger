@@ -95,7 +95,7 @@ function _transformActHtml( o )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
   _.assert( o.outputForPrinter.length === 1 );
@@ -207,7 +207,7 @@ function _transformAct_nodejs( o )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
@@ -296,7 +296,7 @@ function _transformAct_nodejs( o )
 // {
 //   let self = this;
 
-//   _.assert( arguments.length === 1, 'expects single argument' );
+//   _.assert( arguments.length === 1, 'Expects single argument' );
 //   _.assert( _.mapIs( o ) );
 //   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
@@ -350,7 +350,7 @@ function _transformAct_browser( o )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
@@ -452,7 +452,7 @@ function _transformActWithoutColors( o )
   let self = this;
   let result = '';
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
 
@@ -510,7 +510,7 @@ function _transformSplit( o )
   let self = this;
   let result = [ '' ];
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
   _.assert( !o.outputSplitted );
 
@@ -797,7 +797,7 @@ function _transformAct( original )
     _.assert( _.longIs( o.input ) );
     _.assert( _.longIs( o.outputForPrinter ) );
     _.assert( o.outputForPrinter.length === 1 )
-    _.assert( arguments.length === 1, 'expects single argument' );
+    _.assert( arguments.length === 1, 'Expects single argument' );
 
     if( !self.outputGray && _.color )
     self._transformColor( o );
@@ -1102,7 +1102,7 @@ function styleSet( src )
 {
   let self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( src ) || src === null );
 
   let special = [ 'default', 'reset' ];
@@ -1140,7 +1140,7 @@ function _styleApply( style )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectLike( style ) );
 
   if( style.fg )
@@ -1159,7 +1159,7 @@ function _styleComplement( style )
 {
   var self = this;
 
-  _.assert( arguments.length === 1, 'expects single argument' );
+  _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectLike( style ) );
 
   if( !style.fg )
