@@ -123,7 +123,7 @@ function _begin( key,val )
 {
   var self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( key ),'expects string {-key-}, got',_.strTypeOf( key ) );
 
   if( val === undefined )
@@ -233,7 +233,7 @@ function _rbegin( key, val )
     attribute = 0;
   }
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( key ),'expects string {-key-}, got', () => _.strTypeOf( key ) );
   _.assert( _.numberIs( val ),'expects number {-val-}, got', () => _.strTypeOf( val ) );
   _.assert( _.numberIs( attribute ), () => _.args( 'expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );

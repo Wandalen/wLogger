@@ -1005,22 +1005,12 @@ function _colorSet( layer, color )
     color = null;
   }
 
-  function _getColorName( map, color )
-  {
-    // if( color === 'light green' )
-    // debugger;
-    let keys = _.mapOwnKeys( map );
-    for( let i = 0; i < keys.length; i++ )
-    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
-    return keys[ i ];
-
-  }
-
   /* */
 
   if( color && color !== 'default' )
   {
     let originalName = color;
+
     if( isBrowser )
     {
       color = _.color.rgbaFromTry( color, null );
@@ -1089,6 +1079,19 @@ function _colorSet( layer, color )
     self._diagnosingColorsStack = { 'foreground' : [], 'background' : [] };
 
     self._diagnosingColorsStack[ layer ].push( diagnosticInfo );
+  }
+
+  /* */
+
+  function _getColorName( map, color )
+  {
+    // if( color === 'light green' )
+    // debugger;
+    let keys = _.mapOwnKeys( map );
+    for( let i = 0; i < keys.length; i++ )
+    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
+    return keys[ i ];
+
   }
 
 }
@@ -1312,7 +1315,7 @@ function _clsSet( src )
 function colorFormat( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormat )
   return src;
   return _.color.strFormatEach( src, format );
@@ -1323,7 +1326,7 @@ function colorFormat( src, format )
 function colorBg( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormatBackground )
   return src;
   return _.color.strFormatBackground( src, format );
@@ -1334,7 +1337,7 @@ function colorBg( src, format )
 function colorFg( src, format )
 {
   let self = this;
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   if( self.outputGray || !_.color || !_.color.strFormatForeground )
   return src;
   return _.color.strFormatForeground( src, format );

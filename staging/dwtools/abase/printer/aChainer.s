@@ -1097,7 +1097,7 @@ function _hasInput( input,o )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
   _.assert( _.printerLike( input ) || _.processIs( input ) || _.streamIs( input ) );
   _.routineOptions( _hasInput, o );
@@ -1162,7 +1162,7 @@ function _hasOutput( output,o )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
   _.assert( _.printerLike( output ) || _.processIs( output ) || _.streamIs( output ) );
   _.routineOptions( _hasOutput,o );

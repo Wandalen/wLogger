@@ -63,7 +63,7 @@ function onMixinEnd( mixinDescriptor, dstClass )
   let dstPrototype = dstClass.prototype;
 
   _.assert( dstPrototype._writeToChannelWithoutExclusion === _writeToChannelWithoutExclusion );
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
 
   dstPrototype._initChainingMixin( mixinDescriptor );
@@ -93,7 +93,7 @@ function _initChainingMixinChannel( mixinDescriptor, channel )
   // let mixin = proto.constructor.__mixin__;
 
   _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channel ) );
 
   if( proto[ channel ] )
@@ -191,7 +191,7 @@ function _writeToChannel( channelName, args )
   let self = this;
   let inputChainer = self[ chainerSymbol ];
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
@@ -212,7 +212,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
   let self = this;
   let inputChainer = self[ chainerSymbol ];
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
@@ -276,7 +276,7 @@ function _writeToChannelUp( channelName,args )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
@@ -294,7 +294,7 @@ function _writeToChannelDown( channelName,args )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
@@ -312,7 +312,7 @@ function _writeToChannelIn( channelName,args )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'expects exactly two arguments' );
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
   _.assert( args.length === 2 );
