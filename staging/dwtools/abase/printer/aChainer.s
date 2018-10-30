@@ -764,8 +764,9 @@ function _unchain( o )
 
   let inputChainer = o.inputPrinter[ chainerSymbol ];
   let outputChainer = o.outputPrinter[ chainerSymbol ];
-  let cd1 = _.arrayRemovedOnceElementStrictly( inputChainer.outputs, o.outputPrinter, ( cd ) => cd.outputPrinter, ( e ) => e );
-  let cd2 = _.arrayRemovedOnceElementStrictly( outputChainer.inputs, o.inputPrinter, ( cd ) => cd.inputPrinter, ( e ) => e );
+
+  let cd1 = _.arrayRemovedElementOnceStrictly( inputChainer.outputs, o.outputPrinter, ( cd ) => cd.outputPrinter, ( e ) => e );
+  let cd2 = _.arrayRemovedElementOnceStrictly( outputChainer.inputs, o.inputPrinter, ( cd ) => cd.inputPrinter, ( e ) => e );
 
   _.assert( cd1 === cd2 );
 
