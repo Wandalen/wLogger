@@ -161,7 +161,7 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/dwtools/abase/layer3/Path.s' );
+  require( 'include/dwtools/l3/Path.s' );
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
