@@ -4,7 +4,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.Tester;
+let Parent = /*_.*/wTester;
 
 //
 
@@ -54,6 +54,6 @@ let Self =
 
 Self = wTestSuite( Self );
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+/*_.*/wTester.test( Self.name );
 
 } )( );

@@ -19,7 +19,7 @@ if( typeof module !== 'undefined' )
 
 var _global = _global_;
 var _ = _global_.wTools;
-var Parent = _.Tester;
+var Parent = /*_.*/wTester;
 
 //
 
@@ -4306,7 +4306,7 @@ function _consoleBar( o )
   test.case = 'bar/unbar console'
   var barDescriptor = _.Logger.consoleBar
   ({
-    outputPrinter : _.Tester.logger,
+    outputPrinter : /*_.*/wTester.logger,
     barPrinter : null,
     on : 1,
   });
@@ -4319,7 +4319,7 @@ function _consoleBar( o )
     {
       _.Logger.consoleBar
       ({
-        outputPrinter : _.Tester.logger,
+        outputPrinter : /*_.*/wTester.logger,
         barPrinter : null,
         on : 1,
       })
@@ -4343,7 +4343,7 @@ function _consoleBar( o )
   test.is( !_.Logger.consoleIsBarred( console ) );
   var barDescriptor = _.Logger.consoleBar
   ({
-    outputPrinter : _.Tester.logger,
+    outputPrinter : /*_.*/wTester.logger,
     barPrinter : null,
     on : 1,
   });
@@ -4370,7 +4370,7 @@ function _consoleBar( o )
     test.is( !_.Logger.consoleIsBarred( console ) );
     let o =
     {
-      outputPrinter : _.Tester.logger,
+      outputPrinter : /*_.*/wTester.logger,
       barPrinter : new _.Logger({ output : console }),
       on : 1,
     }
@@ -4960,6 +4960,6 @@ var Self =
 
 Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+/*_.*/wTester.test( Self.name );
 
 } )( );
