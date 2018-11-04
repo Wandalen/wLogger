@@ -9,7 +9,7 @@ if( typeof module !== 'undefined' )
 {
   isBrowser = false;
 
-  require( '../printer/top/Logger.s' );
+  require( '../../l9/printer/top/Logger.s' );
   var _global = _global_;
   var _ = _global_.wTools;
 
