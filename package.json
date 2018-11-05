@@ -18,7 +18,7 @@
   "main": "proto/dwtools/abase/printer/top/Logger.s",
   "files": [
     "proto/dwtools/abase/printer",
-    "production"
+    "proto/dwtools/Tools.s", "production"
   ],
   "scripts": {
     "test": "wtest staging",
