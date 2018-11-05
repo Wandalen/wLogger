@@ -15,14 +15,14 @@
     }
   ],
   "license": "MIT",
-  "main": "staging/dwtools/abase/printer/top/Logger.s",
+  "main": "proto/dwtools/abase/printer/top/Logger.s",
   "files": [
-    "staging/dwtools/abase/printer",
+    "proto/dwtools/abase/printer",
     "production"
   ],
   "scripts": {
     "test": "wtest staging",
-    "make_doc": "./doc.sh"
+    "docgen": "wdocgen proto"
   },
   "repository": {
     "type": "git",
