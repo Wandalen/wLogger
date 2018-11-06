@@ -16,7 +16,7 @@ if( typeof module !== 'undefined' )
 //
 var _global = _global_;
 var _ = _global_.wTools;
-var Parent = /*_.*/wTester;
+var Parent = wTester;
 var isUnix = process.platform !== 'win32' ? true : false;
 
 //
@@ -60,6 +60,6 @@ var Self =
 
 Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-/*_.*/wTester.test( Self.name );
+wTester.test( Self.name );
 
 } )( );
