@@ -7,12 +7,13 @@ if( typeof module !== 'undefined' )
 
   require( './PrinterBase.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   require( './aChainer.s' );
   require( './aChainingMixin.s' )
 
   _.include( 'wCopyable' );
+  _.include( 'wEventHandler' );
 
 }
 
@@ -21,10 +22,10 @@ if( typeof module !== 'undefined' )
 /**
  * @class wPrinterMid
  */
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = _.PrinterBase;
-var Self = function wPrinterMid( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = _.PrinterBase;
+let Self = function wPrinterMid( o )
 {
   return _.instanceConstructor( Self, this, arguments );
 }
@@ -37,8 +38,8 @@ Self.shortName = 'PrinterMid';
 
 function init( o )
 {
-  var self = this;
-  var o = o || Object.create( null );
+  let self = this;
+  o = o || Object.create( null );
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
@@ -58,11 +59,11 @@ function init( o )
 
 function levelSet( level )
 {
-  var self = this;
+  let self = this;
 
   Parent.prototype.levelSet.call( self,level );
 
-  var level = self[ symbolForLevel ];
+  level = self[ levelSymbol ];
 
   self._prefix = _.strDup( self._dprefix || '',level );
   self._postfix = _.strDup( self._dpostfix || '',level );
@@ -73,7 +74,7 @@ function levelSet( level )
 
 function _transformBegin( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
@@ -100,7 +101,7 @@ function _transformBegin( o )
 
 function _transformEnd( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
@@ -121,7 +122,7 @@ function _transformEnd( o )
 
 function _begin( key,val )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( key ),'Expects string {-key-}, got',_.strTypeOf( key ) );
@@ -148,15 +149,15 @@ function _begin( key,val )
 
 function begin()
 {
-  var self = this;
+  let self = this;
 
-  for( var a = 0 ; a < arguments.length ; a++ )
+  for( let a = 0 ; a < arguments.length ; a++ )
   {
-    var argument = arguments[ a ];
+    let argument = arguments[ a ];
 
     if( _.objectIs( argument ) )
     {
-      for( var key in argument )
+      for( let key in argument )
       self._begin( key,argument[ key ] )
       return;
     }
@@ -171,7 +172,7 @@ function begin()
 
 function _end( key,val )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
@@ -201,15 +202,15 @@ function _end( key,val )
 
 function end()
 {
-  var self = this;
+  let self = this;
 
-  for( var a = 0 ; a < arguments.length ; a++ )
+  for( let a = 0 ; a < arguments.length ; a++ )
   {
-    var argument = arguments[ a ];
+    let argument = arguments[ a ];
 
     if( _.objectIs( argument ) )
     {
-      for( var key in argument )
+      for( let key in argument )
       self._end( key,argument[ key ] )
       return;
     }
@@ -224,8 +225,8 @@ function end()
 
 function _rbegin( key, val )
 {
-  var self = this;
-  var attribute = self.attributes[ key ];
+  let self = this;
+  let attribute = self.attributes[ key ];
 
   if( attribute === undefined )
   {
@@ -245,15 +246,15 @@ function _rbegin( key, val )
 
 function rbegin()
 {
-  var self = this;
+  let self = this;
 
-  for( var a = 0 ; a < arguments.length ; a++ )
+  for( let a = 0 ; a < arguments.length ; a++ )
   {
-    var argument = arguments[ a ];
+    let argument = arguments[ a ];
 
     if( _.objectIs( argument ) )
     {
-      for( var key in argument )
+      for( let key in argument )
       self._rbegin( key,argument[ key ] )
       return;
     }
@@ -266,10 +267,10 @@ function rbegin()
 
 //
 
-function _rend( key,val )
+function _rend( key, val )
 {
-  var self = this;
-  var attributeStack = self._attributesStacks[ key ];
+  let self = this;
+  let attributeStack = self._attributesStacks[ key ];
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
@@ -281,8 +282,8 @@ function _rend( key,val )
     () => self._attributeError( key, undefined, val )
   );
 
-  var attribute = attributeStack[ attributeStack.length-1 ];
-  var val = attribute + val;
+  let attribute = attributeStack[ attributeStack.length-1 ];
+  val = attribute + val;
 
   self._end( key, val );
 
@@ -293,15 +294,15 @@ function _rend( key,val )
 
 function rend()
 {
-  var self = this;
+  let self = this;
 
-  for( var a = 0 ; a < arguments.length ; a++ )
+  for( let a = 0 ; a < arguments.length ; a++ )
   {
-    var argument = arguments[ a ];
+    let argument = arguments[ a ];
 
     if( _.objectIs( argument ) )
     {
-      for( var key in argument )
+      for( let key in argument )
       self._rend( key,argument[ key ] )
       return;
     }
@@ -316,7 +317,7 @@ function rend()
 
 function _attributeError( key, begin, end )
 {
-  var self = this;
+  let self = this;
 
   debugger;
 
@@ -337,7 +338,9 @@ function _attributeError( key, begin, end )
 
 function verbosityPush( src )
 {
-  var self = this;
+  let self = this;
+
+  // debugger;
 
   if( !_.numberIs( src ) )
   src = src ? 1 : 0;
@@ -354,9 +357,11 @@ function verbosityPush( src )
 
 function verbosityPop()
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0 );
+
+  // debugger;
 
   self.verbosity = self._verbosityStack.pop();
 
@@ -366,7 +371,7 @@ function verbosityPop()
 
 function verbosityReserve( args )
 {
-  var self = this;
+  let self = this;
 
   if( !self.usingVerbosity )
   return Infinity;
@@ -378,24 +383,24 @@ function verbosityReserve( args )
 
 function _verbosityReserve()
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0 );
 
-  if( self.attributes.verbosity === undefined )
-  return Infinity;
+  // if( self.attributes.verbosity === undefined )
+  // return Infinity;
 
   if( self.verbosity === null )
   return Infinity;
 
-  return self.verbosity + self.attributes.verbosity + 1;
+  return self.verbosity + ( self.attributes.verbosity || 0 ) + 1;
 }
 
 //
 
 function verboseEnough()
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0 );
 
@@ -409,7 +414,7 @@ function verboseEnough()
 
 function _verboseEnough()
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0 );
 
@@ -420,12 +425,36 @@ function _verboseEnough()
 
 function _verbosityReport()
 {
-  var self = this;
+  let self = this;
 
   console.log( 'logger.verbosity',self.verbosity );
   console.log( 'logger.attributes.verbosity',self.attributes.verbosity );
   console.log( self.verboseEnough() ? 'Verbose enough!' : 'Not enough verbose!'  );
 
+}
+
+//
+
+function _verbositySet( src )
+{
+  let self = this;
+
+  if( _.boolIs( src ) )
+  src = src ? 1 : 0;
+
+  _.assert( arguments.length === 1 );
+  _.assert( _.numberIs( src ) );
+
+  src = _.numberClamp( src, 0, 9 );
+
+  let change = self[ verbositySymbol ] !== src;
+
+  self[ verbositySymbol ] = src;
+
+  if( change )
+  self.eventGive( 'verbosityChange' );
+
+  return src;
 }
 
 // --
@@ -434,8 +463,8 @@ function _verbosityReport()
 
 function later( name )
 {
-  var self = this;
-  var later = Object.create( null );
+  let self = this;
+  let later = Object.create( null );
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.strIs( name ) );
@@ -460,12 +489,12 @@ function later( name )
 
 function _laterActualize()
 {
-  var self = this;
-  var result = Object.create( null );
+  let self = this;
+  let result = Object.create( null );
 
-  for( var m in self._mines )
+  for( let m in self._mines )
   {
-    var later = self._mines[ m ];
+    let later = self._mines[ m ];
     if( !later.detonated )
     self.laterActualize( later );
   }
@@ -477,7 +506,7 @@ function _laterActualize()
 
 function laterActualize( later )
 {
-  var self = this;
+  let self = this;
 
   if( _.strIs( later ) )
   later = self._mines[ later ];
@@ -487,9 +516,9 @@ function laterActualize( later )
 
   later.detonated = 1;
 
-  for( var a = 0 ; a < later.after.length ; a++ )
+  for( let a = 0 ; a < later.after.length ; a++ )
   {
-    var after = later.after[ a ];
+    let after = later.after[ a ];
     self[ after[ 0 ] ].apply( self,after[ 1 ] );
   }
 
@@ -503,7 +532,7 @@ function laterActualize( later )
 
 function laterFinit( later )
 {
-  var self = this;
+  let self = this;
 
   if( _.strIs( later ) )
   later = self._mines[ later ];
@@ -522,16 +551,18 @@ function laterFinit( later )
 // relations
 // --
 
-var symbolForLevel = Symbol.for( 'level' );
+let levelSymbol = Symbol.for( 'level' );
+let verbositySymbol = Symbol.for( 'verbosity' );
 
-var Composes =
+let Composes =
 {
 
-  verbosity : null,
+  verbosity : 0,
   usingVerbosity : 1,
 
   onTransformBegin : null,
   onTransformEnd : null,
+  // onVerbosity : null,
 
   attributes : _.define.own( {} ),
 
@@ -540,15 +571,15 @@ var Composes =
 if( Config.debug )
 Composes.scriptStack = null;
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
 }
 
-var Restricts =
+let Restricts =
 {
 
   _prefix : '',
@@ -564,7 +595,17 @@ var Restricts =
 
 }
 
-var Forbids =
+let Events =
+{
+  verbosityChange : 'verbosityChange',
+}
+
+let Accessors =
+{
+  verbosity : 'verbosity',
+}
+
+let Forbids =
 {
   format : 'format',
   tags : 'tags',
@@ -574,7 +615,7 @@ var Forbids =
 // declare
 // --
 
-var Proto =
+let Proto =
 {
 
   // routine
@@ -610,6 +651,7 @@ var Proto =
   verboseEnough : verboseEnough,
   _verboseEnough : _verboseEnough,
   _verbosityReport : _verbosityReport,
+  _verbositySet : _verbositySet,
 
   // later
 
@@ -620,11 +662,12 @@ var Proto =
 
   // relations
 
-
   Composes : Composes,
   Aggregates : Aggregates,
   Associates : Associates,
   Restricts : Restricts,
+  Events : Events,
+  Accessors : Accessors,
   Forbids : Forbids,
 
 }
@@ -639,6 +682,7 @@ _.classDeclare
 });
 
 _.assert( Self.prototype.init === init );
+_.EventHandler.mixin( Self );
 
 // --
 // export
@@ -646,9 +690,9 @@ _.assert( Self.prototype.init === init );
 
 _[ Self.shortName ] = Self;
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
