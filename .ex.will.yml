@@ -1,10 +1,9 @@
 
-
 about :
 
   name : wLogger
   description : Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.
-  version : 0.5.135
+  version : 0.5.137
   enabled : 1
   interpreters :
   - nodejs >= 6.0.0
@@ -24,33 +23,27 @@ path :
   repository : git+https://github.com/Wandalen/wLogger.git
   bugs : https://github.com/Wandalen/wLogger/issues
 
+step :
+
+  export.proto :
+    inherit : export
+    export : path::proto
+    tar : 0
+    criterion :
+      debug : 1
+      proto : 1
+
 build :
 
-  debug.raw.export :
-    exportDirPath : path::out.debug
+  proto.export :
     criterion :
       default : 1
       debug : 1
       raw : 1
+      proto : 1
       export : 1
-      tar : 0
+      tar : 1
     steps :
-      # - build::.debug.raw
-      - step::export
-
-  release.compiled.export :
-    exportDirPath : path::out.release
-    criterion :
-      debug : 0
-      raw : 0
-      export : 1
-      tar : 0
-    steps :
-      - build::release.compiled
-      - step::export
-
-  export.all :
-    steps :
-      - build::debug.raw.export
-      - build::release.compiled.export
+      - build::debug.raw
+      - step::export.proto
 
