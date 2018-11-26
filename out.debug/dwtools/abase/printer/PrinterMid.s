@@ -125,7 +125,7 @@ function _begin( key,val )
   let self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'Expects string {-key-}, got',_.strTypeOf( key ) );
+  _.assert( _.strIs( key ),'Expects string {-key-}, got',_.strType( key ) );
 
   if( val === undefined )
   {
@@ -235,8 +235,8 @@ function _rbegin( key, val )
   }
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'Expects string {-key-}, got', () => _.strTypeOf( key ) );
-  _.assert( _.numberIs( val ),'Expects number {-val-}, got', () => _.strTypeOf( val ) );
+  _.assert( _.strIs( key ),'Expects string {-key-}, got', () => _.strType( key ) );
+  _.assert( _.numberIs( val ),'Expects number {-val-}, got', () => _.strType( val ) );
   _.assert( _.numberIs( attribute ), () => _.args( 'Expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
 
   return self._begin( key, val + attribute )

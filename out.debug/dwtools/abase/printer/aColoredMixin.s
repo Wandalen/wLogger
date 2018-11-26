@@ -841,7 +841,7 @@ function _diagnoseColorCheck()
 {
   let self = this;
 
-  if( isBrowser )
+  if( Config.platform === 'browser' )
   return;
 
   if( !self.foregroundColor || !self.backgroundColor )
@@ -1011,7 +1011,7 @@ function _colorSet( layer, color )
   {
     let originalName = color;
 
-    if( isBrowser )
+    if( Config.platform === 'browser' )
     {
       color = _.color.rgbaFromTry( color, null );
     }
@@ -1030,7 +1030,7 @@ function _colorSet( layer, color )
 
     if( color )
     {
-      if( isBrowser )
+      if( Config.platform === 'browser' )
       {
         color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
         currentName = _getColorName( _.color.ColorMap, color );
