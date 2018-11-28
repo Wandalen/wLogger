@@ -224,8 +224,8 @@ reflector:
       ./dwtools/abase/printer.test/Color.test.ss: true
       ./dwtools/abase/printer.test/Other.test.s: true
     srcFilter:
-      basePath: ./proto
-      prefixPath: .
+      basePath: .
+      prefixPath: proto
     dstFilter:
       basePath: .
       prefixPath: .
