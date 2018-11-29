@@ -8,7 +8,7 @@ return;
 if( typeof module !== 'undefined' )
 {
 
-  require( '../l9/printer/top/Logger.s' );
+  require( '../../l9/printer/top/Logger.s' );
 
   var _ = _global_.wTools;
 
@@ -20,7 +20,7 @@ if( typeof module !== 'undefined' )
 //
 
 var _global = _global_;
-let _ = _global_.wTools;
+var _ = _global_.wTools;
 var Parent = _.Tester;
 
 // --
