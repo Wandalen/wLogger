@@ -75,16 +75,16 @@ path:
       - ./dwtools/abase/l9/printer/top/ToLayeredHtml.s
       - ./dwtools/abase/l9/printer/top/ToString.s
       - ./dwtools/abase/l9.test
-      - ./dwtools/abase/l9.test/printer.test
-      - ./dwtools/abase/l9.test/printer.test/Backend.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Browser.test.html
-      - ./dwtools/abase/l9.test/printer.test/Browser.test.js
-      - ./dwtools/abase/l9.test/printer.test/Chaining.test.s
-      - ./dwtools/abase/l9.test/printer.test/ChainingWithProcess.test.ss
-      - ./dwtools/abase/l9.test/printer.test/ChainingWithStream.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Color.test.js
-      - ./dwtools/abase/l9.test/printer.test/Color.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Other.test.s
+      - ./dwtools/abase/l9.test/printer
+      - ./dwtools/abase/l9.test/printer/Backend.test.ss
+      - ./dwtools/abase/l9.test/printer/Browser.test.html
+      - ./dwtools/abase/l9.test/printer/Browser.test.js
+      - ./dwtools/abase/l9.test/printer/Chaining.test.s
+      - ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
+      - ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
+      - ./dwtools/abase/l9.test/printer/Color.test.js
+      - ./dwtools/abase/l9.test/printer/Color.test.ss
+      - ./dwtools/abase/l9.test/printer/Other.test.s
       - ./dwtools/amid
       - ./dwtools/atop
     criterion:
@@ -109,15 +109,15 @@ path:
       - ./dwtools/abase/l9/printer/top/LoggerExtra.s
       - ./dwtools/abase/l9/printer/top/ToLayeredHtml.s
       - ./dwtools/abase/l9/printer/top/ToString.s
-      - ./dwtools/abase/l9.test/printer.test/Backend.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Browser.test.html
-      - ./dwtools/abase/l9.test/printer.test/Browser.test.js
-      - ./dwtools/abase/l9.test/printer.test/Chaining.test.s
-      - ./dwtools/abase/l9.test/printer.test/ChainingWithProcess.test.ss
-      - ./dwtools/abase/l9.test/printer.test/ChainingWithStream.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Color.test.js
-      - ./dwtools/abase/l9.test/printer.test/Color.test.ss
-      - ./dwtools/abase/l9.test/printer.test/Other.test.s
+      - ./dwtools/abase/l9.test/printer/Backend.test.ss
+      - ./dwtools/abase/l9.test/printer/Browser.test.html
+      - ./dwtools/abase/l9.test/printer/Browser.test.js
+      - ./dwtools/abase/l9.test/printer/Chaining.test.s
+      - ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
+      - ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
+      - ./dwtools/abase/l9.test/printer/Color.test.js
+      - ./dwtools/abase/l9.test/printer/Color.test.ss
+      - ./dwtools/abase/l9.test/printer/Other.test.s
     criterion:
       default: 1
       debug: 1
@@ -212,15 +212,15 @@ reflector:
       ./dwtools/abase/l9/printer/top/LoggerExtra.s: true
       ./dwtools/abase/l9/printer/top/ToLayeredHtml.s: true
       ./dwtools/abase/l9/printer/top/ToString.s: true
-      ./dwtools/abase/l9.test/printer.test/Backend.test.ss: true
-      ./dwtools/abase/l9.test/printer.test/Browser.test.html: true
-      ./dwtools/abase/l9.test/printer.test/Browser.test.js: true
-      ./dwtools/abase/l9.test/printer.test/Chaining.test.s: true
-      ./dwtools/abase/l9.test/printer.test/ChainingWithProcess.test.ss: true
-      ./dwtools/abase/l9.test/printer.test/ChainingWithStream.test.ss: true
-      ./dwtools/abase/l9.test/printer.test/Color.test.js: true
-      ./dwtools/abase/l9.test/printer.test/Color.test.ss: true
-      ./dwtools/abase/l9.test/printer.test/Other.test.s: true
+      ./dwtools/abase/l9.test/printer/Backend.test.ss: true
+      ./dwtools/abase/l9.test/printer/Browser.test.html: true
+      ./dwtools/abase/l9.test/printer/Browser.test.js: true
+      ./dwtools/abase/l9.test/printer/Chaining.test.s: true
+      ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss: true
+      ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss: true
+      ./dwtools/abase/l9.test/printer/Color.test.js: true
+      ./dwtools/abase/l9.test/printer/Color.test.ss: true
+      ./dwtools/abase/l9.test/printer/Other.test.s: true
     srcFilter:
       basePath: .
       prefixPath: proto
@@ -356,15 +356,15 @@ exported:
         - ./dwtools/abase/l9/printer/top/LoggerExtra.s
         - ./dwtools/abase/l9/printer/top/ToLayeredHtml.s
         - ./dwtools/abase/l9/printer/top/ToString.s
-        - ./dwtools/abase/l9.test/printer.test/Backend.test.ss
-        - ./dwtools/abase/l9.test/printer.test/Browser.test.html
-        - ./dwtools/abase/l9.test/printer.test/Browser.test.js
-        - ./dwtools/abase/l9.test/printer.test/Chaining.test.s
-        - ./dwtools/abase/l9.test/printer.test/ChainingWithProcess.test.ss
-        - ./dwtools/abase/l9.test/printer.test/ChainingWithStream.test.ss
-        - ./dwtools/abase/l9.test/printer.test/Color.test.js
-        - ./dwtools/abase/l9.test/printer.test/Color.test.ss
-        - ./dwtools/abase/l9.test/printer.test/Other.test.s
+        - ./dwtools/abase/l9.test/printer/Backend.test.ss
+        - ./dwtools/abase/l9.test/printer/Browser.test.html
+        - ./dwtools/abase/l9.test/printer/Browser.test.js
+        - ./dwtools/abase/l9.test/printer/Chaining.test.s
+        - ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
+        - ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
+        - ./dwtools/abase/l9.test/printer/Color.test.js
+        - ./dwtools/abase/l9.test/printer/Color.test.ss
+        - ./dwtools/abase/l9.test/printer/Other.test.s
       criterion:
         default: 1
         debug: 1
