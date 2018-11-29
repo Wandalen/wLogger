@@ -15,9 +15,9 @@
     }
   ],
   "license": "MIT",
-  "main": "proto/dwtools/abase/printer/top/Logger.s",
+  "main": "proto/dwtools/abase/l9/printer/top/Logger.s",
   "files": [
-    "proto/dwtools/abase/printer",
+    "proto/dwtools/abase/l9/printer",
     "proto/dwtools/Tools.s",
     "production"
   ],
