@@ -1,9 +1,6 @@
-( function _ChainingWithProcess_test_ss( ) {
+( function _ChainingWithProcess_test_ss_( ) {
 
 'use strict';
-
-// if( typeof module === 'undefined' )
-return;
 
 if( typeof module === 'undefined' )
 return;
@@ -11,9 +8,9 @@ return;
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/top/Logger.s' );
+  require( '../l9/printer/top/Logger.s' );
 
-  var _global = _global_; var _ = _global_.wTools;
+  var _ = _global_.wTools;
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
@@ -22,7 +19,8 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_; var _ = _global_.wTools;
+var _global = _global_;
+let _ = _global_.wTools;
 var Parent = _.Tester;
 
 // --

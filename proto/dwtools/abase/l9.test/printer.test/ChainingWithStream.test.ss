@@ -1,4 +1,4 @@
-( function _ChainingWithStream_test_ss( ) {
+( function _ChainingWithStream_test_ss_( ) {
 
 'use strict';
 
@@ -8,9 +8,9 @@ return;
 if( typeof module !== 'undefined' )
 {
 
-  require( '../printer/top/Logger.s' );
+  require( '../l9/printer/top/Logger.s' );
 
-  let _global = _global_; let _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
@@ -19,7 +19,8 @@ if( typeof module !== 'undefined' )
 
 //
 
-let _global = _global_; let _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 let Parent = _.Tester;
 
 //
