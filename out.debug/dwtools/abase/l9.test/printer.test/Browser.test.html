@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>
+wTools unit test
+</title>
+
+
+
+<!--need to replace some sources with files from node_modules later-->
+
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/aFundamental.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/cDiagnostics.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/eFieldMapper.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/kArrayDescriptor.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer1/zSetup.s"></script>
+<script src="../../../../node_modules/wExternalFundamentals/staging/dwtools/abase/l4/External.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/bLookTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fIncludeTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fNameTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/dwtools/abase/layer2/fStringTools.s"></script>
+<script src="../../../../node_modules/warraysorted/staging/dwtools/abase/l4/ArraySorted.s"></script>
+<script src="../../../../node_modules/wstringsextra/staging/dwtools/abase/l5/StringTools.s"></script>
+<script src="../../../../node_modules/wstringer/staging/dwtools/abase/l4/aStringer.s"></script>
+
+<script src="../../../../node_modules/wProto/staging/dwtools/l3/Proto.s"></script>
+<script src="../../../../node_modules/winstancing/staging/dwtools/abase/l7_mixin/Instancing.s"></script>
+<script src="../../../../node_modules/wPathFundamentals/staging/dwtools/l3/Path.s"></script>
+<script src="../../../../node_modules/wtraverser/staging/dwtools/abase/l4/Traverser.s"></script>
+<script src="../../../../node_modules/wcloner/staging/dwtools/abase/l5/Cloner.s"></script>
+<script src="../../../../node_modules/wCopyable/staging/dwtools/abase/l7_mixin/Copyable.s"></script>
+<script src="../../../../node_modules/wConsequence/staging/dwtools/abase/l9/consequence/Consequence.s"></script>
+<script src="../../../../node_modules/wColor/staging/dwtools/amid/color/Color.s"></script>
+
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/aChainer.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/aChainingMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/aColoredMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/PrinterBase.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/PrinterMid.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/PrinterTop.s"></script>
+<script src="../../../../node_modules/wLogger/staging/dwtools/abase/l9/printer/top/Logger.s"></script>
+
+
+<script src="../../../../node_modules/wTesting/staging/dwtools/atop/tester/aBase.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/atop/tester/aTestSuite.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/atop/tester/bTestRoutine.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/atop/tester/cTester.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/dwtools/atop/tester/zLast.debug.s"></script>
+
+
+<script src="./Browser.test.js">
+</script>
+
+<script src="./Color.test.js">
+</script>
+
+<script src="./Other.test.s">
+</script>
+
+<!--
+<script src="./Chaining.test.s">
+</script>
+<script src="./Logger.test.s">
+</script> -->
+
+<script>
+let _global = _global_;
+let _ = _global_.wTools;
+wTester.testAll();
+</script>
+
+</head>
+<body>
+</body>
+</html>
