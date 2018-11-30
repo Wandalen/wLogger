@@ -30,7 +30,7 @@ var Parent = _.Tester;
 function testFile()
 {
 
-	console.log( 'slave : starting' );
+  console.log( 'slave : starting' );
 }
 
 //
