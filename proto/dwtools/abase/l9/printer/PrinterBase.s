@@ -5,25 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof _global_ === 'undefined' || !_global_.wBase )
-  {
-    let toolsPath = '../../../../dwtools/Base.s';
-    let _externalTools = 0;
-    try
-    {
-      toolsPath = require.resolve( toolsPath );
-    }
-    catch( err )
-    {
-      _externalTools = 1;
-      require( 'wTools' );
-    }
-    if( !_externalTools )
-    require( toolsPath );
-  }
-
-  var _global = _global_;
-  var _ = _global_.wTools;
+  let _ = require( '../../../Tools.s' );
 
   _.include( 'wCopyable' );
   _.include( 'wStringer' );

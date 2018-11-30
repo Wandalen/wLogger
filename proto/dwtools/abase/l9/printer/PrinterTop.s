@@ -21,14 +21,11 @@ self -> original -> printer
 
 */
 
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
 
-  if( typeof wPrinterTop !== 'undefined' )
-  return;
-
-  isBrowser = false;
+  // if( typeof wPrinterTop !== 'undefined' )
+  // return;
 
   if( typeof wPrinterMid === 'undefined' )
   require( './PrinterMid.s' )
