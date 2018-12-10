@@ -2,15 +2,11 @@
 
 'use strict';
 
-
-
-var isBrowser = true;
 if( typeof module !== 'undefined' )
 {
-  isBrowser = false;
 
   require( '../../l9/printer/top/Logger.s' );
-  var _global = _global_;
+
   var _ = _global_.wTools;
 
   _.include( 'wTesting' );
