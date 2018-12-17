@@ -21,14 +21,14 @@ if( typeof module !== 'undefined' )
 
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.Tester;
+let Parent = wTester;
 
 //
 
 function onSuiteBegin()
 {
   let self = this;
-  self.testDirPath = _.path.dirTempMake();
+  self.testDirPath = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
 }
 
 //
@@ -36,7 +36,7 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.fileProvider.filesDelete( self.testDirPath );
+  _.path.dirTempClose( self.testDirPath );
 }
 
 //
@@ -45,7 +45,7 @@ function input( test )
 {
   let self = this;
 
-  let con = new _.Consequence().take()
+  let con = new _.Consequence().take( null )
 
   test.open( 'readStream -> multiple printers, chain/unchain in different ways' );
 
@@ -58,7 +58,7 @@ function input( test )
     let got = [];
 
     _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.fileReadStream( filePath );
+    let readStream = _.fileProvider.streamRead( filePath );
 
     function onTransformEnd( o )
     {
@@ -106,6 +106,8 @@ function input( test )
       test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
       test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -119,7 +121,7 @@ function input( test )
     let got = [];
 
     _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.fileReadStream( filePath );
+    let readStream = _.fileProvider.streamRead( filePath );
 
     function onTransformEnd( o )
     {
@@ -167,6 +169,8 @@ function input( test )
       test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
       test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -180,7 +184,7 @@ function input( test )
     let got = [];
 
     _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.fileReadStream( filePath );
+    let readStream = _.fileProvider.streamRead( filePath );
     let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
@@ -228,6 +232,8 @@ function input( test )
       test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
       test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -241,7 +247,7 @@ function input( test )
     let got = [];
 
     _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.fileReadStream( filePath );
+    let readStream = _.fileProvider.streamRead( filePath );
     let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
@@ -289,6 +295,8 @@ function input( test )
       test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
       test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -303,7 +311,7 @@ function output( test )
 {
   let self = this;
 
-  let con = new _.Consequence().take()
+  let con = new _.Consequence().take( null )
 
   test.open( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
@@ -315,7 +323,7 @@ function output( test )
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let writeStream = _.fileProvider.streamWrite( filePath );
 
     function onTransformEnd( o )
     {
@@ -354,6 +362,8 @@ function output( test )
 
       onDataListeners = writeStream.listeners( 'data' );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -366,7 +376,7 @@ function output( test )
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let writeStream = _.fileProvider.streamWrite( filePath );
 
     function onTransformEnd( o )
     {
@@ -405,6 +415,8 @@ function output( test )
 
       onDataListeners = writeStream.listeners( 'data' );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -417,7 +429,7 @@ function output( test )
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let writeStream = _.fileProvider.streamWrite( filePath );
     let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
@@ -455,6 +467,8 @@ function output( test )
 
       onDataListeners = writeStream.listeners( 'data' );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -467,7 +481,7 @@ function output( test )
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.fileWriteStream( filePath );
+    let writeStream = _.fileProvider.streamWrite( filePath );
     let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
@@ -505,6 +519,8 @@ function output( test )
 
       onDataListeners = writeStream.listeners( 'data' );
       test.identical( onDataListeners.length, 0 );
+
+      return true;
     })
   })
 
@@ -520,7 +536,7 @@ function output( test )
 var Self =
 {
 
-  name : 'ChainingWithStream',
+  name : 'Tools/base/printer/ChainingWithStream',
   silencing : 1,
   enabled : 1,
 
@@ -541,6 +557,6 @@ var Self =
 
 Self = wTestSuite( Self )
 if( typeof module !== 'undefined' && !module.parent )
-_.Tester.test( Self.name );
+wTester.test( Self.name );
 
 })();
