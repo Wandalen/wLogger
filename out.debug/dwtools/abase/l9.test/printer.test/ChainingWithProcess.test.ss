@@ -82,7 +82,7 @@ function trivial( test )
   ];
   var got  = [];
   var result = _.shellNode( shell )
-  .doThen( function( err )
+  .finally( function( err )
   {
     console.log( 'shellNode : done' );
     if( err )

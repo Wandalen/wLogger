@@ -45,7 +45,7 @@ function input( test )
 {
   let self = this;
 
-  let con = new _.Consequence().give()
+  let con = new _.Consequence().take()
 
   test.open( 'readStream -> multiple printers, chain/unchain in different ways' );
 
@@ -303,7 +303,7 @@ function output( test )
 {
   let self = this;
 
-  let con = new _.Consequence().give()
+  let con = new _.Consequence().take()
 
   test.open( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
