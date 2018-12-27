@@ -43,10 +43,9 @@
     "wColor": ""
   },
   "devDependencies": {
-    "wTesting": "",
     "wFiles": "",
-    "wLogger": ".",
-    "cli-table2": ""
+    "cli-table2": "",
+    "wTesting": ""
   },
   "keywords": [
     "wTools",
