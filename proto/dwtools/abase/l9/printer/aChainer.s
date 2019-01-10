@@ -265,6 +265,8 @@ function _chain( o )
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
+  // debugger;
+
   /* */
 
   if( _.printerLike( o.inputPrinter ) && o.inputPrinter[ chainerSymbol ] )
