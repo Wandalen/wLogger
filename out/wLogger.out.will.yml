@@ -62,7 +62,6 @@ path:
       - ./dwtools/abase
       - ./dwtools/abase/l9
       - ./dwtools/abase/l9/printer
-      - ./dwtools/abase/l9/printer/.DS_Store
       - ./dwtools/abase/l9/printer/aChainer.s
       - ./dwtools/abase/l9/printer/aChainingMixin.s
       - ./dwtools/abase/l9/printer/aColoredMixin.s
@@ -98,7 +97,6 @@ path:
   exportedTerminals.0:
     path:
       - ./dwtools/Tools.s
-      - ./dwtools/abase/l9/printer/.DS_Store
       - ./dwtools/abase/l9/printer/aChainer.s
       - ./dwtools/abase/l9/printer/aChainingMixin.s
       - ./dwtools/abase/l9/printer/aColoredMixin.s
@@ -132,6 +130,8 @@ reflector:
     filePath:
       ./proto: ./out.release
     srcFilter:
+      filePath:
+        ./proto: ./out.release
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -155,6 +155,8 @@ reflector:
     filePath:
       ./proto: ./out.debug
     srcFilter:
+      filePath:
+        ./proto: ./out.debug
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -194,6 +196,7 @@ reflector:
   exported.0:
     filePath: ./proto
     srcFilter:
+      filePath: ./proto
       prefixPath: .
     dstFilter:
       prefixPath: .
@@ -201,7 +204,6 @@ reflector:
     recursive: 0
     filePath:
       ./dwtools/Tools.s: true
-      ./dwtools/abase/l9/printer/.DS_Store: true
       ./dwtools/abase/l9/printer/aChainer.s: true
       ./dwtools/abase/l9/printer/aChainingMixin.s: true
       ./dwtools/abase/l9/printer/aColoredMixin.s: true
@@ -222,6 +224,27 @@ reflector:
       ./dwtools/abase/l9.test/printer/Color.test.ss: true
       ./dwtools/abase/l9.test/printer/Other.test.s: true
     srcFilter:
+      filePath:
+        ./dwtools/Tools.s: true
+        ./dwtools/abase/l9/printer/aChainer.s: true
+        ./dwtools/abase/l9/printer/aChainingMixin.s: true
+        ./dwtools/abase/l9/printer/aColoredMixin.s: true
+        ./dwtools/abase/l9/printer/PrinterBase.s: true
+        ./dwtools/abase/l9/printer/PrinterMid.s: true
+        ./dwtools/abase/l9/printer/PrinterTop.s: true
+        ./dwtools/abase/l9/printer/top/Logger.s: true
+        ./dwtools/abase/l9/printer/top/LoggerExtra.s: true
+        ./dwtools/abase/l9/printer/top/ToLayeredHtml.s: true
+        ./dwtools/abase/l9/printer/top/ToString.s: true
+        ./dwtools/abase/l9.test/printer/Backend.test.ss: true
+        ./dwtools/abase/l9.test/printer/Browser.test.html: true
+        ./dwtools/abase/l9.test/printer/Browser.test.js: true
+        ./dwtools/abase/l9.test/printer/Chaining.test.s: true
+        ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss: true
+        ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss: true
+        ./dwtools/abase/l9.test/printer/Color.test.js: true
+        ./dwtools/abase/l9.test/printer/Color.test.ss: true
+        ./dwtools/abase/l9.test/printer/Other.test.s: true
       basePath: .
       prefixPath: proto
     dstFilter:
@@ -345,7 +368,6 @@ exported:
     exportedTerminalsPath:
       path:
         - ./dwtools/Tools.s
-        - ./dwtools/abase/l9/printer/.DS_Store
         - ./dwtools/abase/l9/printer/aChainer.s
         - ./dwtools/abase/l9/printer/aChainingMixin.s
         - ./dwtools/abase/l9/printer/aColoredMixin.s
