@@ -145,8 +145,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.test($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
       prefixPath: .
-    dstFilter:
-      prefixPath: .
     criterion:
       debug: 0
     inherit:
@@ -168,8 +166,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
       prefixPath: .
-    dstFilter:
-      prefixPath: .
     criterion:
       debug: 1
     inherit:
@@ -187,8 +183,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
       prefixPath: .
-    dstFilter:
-      prefixPath: .
     criterion:
       debug: 1
     inherit:
@@ -197,8 +191,6 @@ reflector:
     filePath: ./proto
     srcFilter:
       filePath: ./proto
-      prefixPath: .
-    dstFilter:
       prefixPath: .
   exportedFiles.0:
     recursive: 0
@@ -247,9 +239,6 @@ reflector:
         ./dwtools/abase/l9.test/printer/Other.test.s: true
       basePath: .
       prefixPath: proto
-    dstFilter:
-      basePath: .
-      prefixPath: .
 step:
   clean.out.0:
     criterion:
