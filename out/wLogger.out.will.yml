@@ -11,7 +11,7 @@ about:
     on the server side. Use the module to make your diagnostic code working on
     any platform you work with and to been able to redirect your output to/from
     any destination/source.
-  version: 0.5.160
+  version: 0.5.161
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -359,7 +359,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.5.160
+    version: 0.5.161
     criterion:
       default: 1
       debug: 1
