@@ -11,7 +11,7 @@ about:
     on the server side. Use the module to make your diagnostic code working on
     any platform you work with and to been able to redirect your output to/from
     any destination/source.
-  version: 0.5.161
+  version: 0.5.162
   enabled: 1
   interpreters:
     - nodejs >= 6.0.0
@@ -52,8 +52,6 @@ path:
       export: 1
       tar: 1
       public: 1
-  baseDir:
-    path: ..
   exportedFiles.0:
     path:
       - .
@@ -94,39 +92,9 @@ path:
       export: 1
       tar: 1
       public: 1
-  exportedTerminals.0:
-    path:
-      - ./dwtools/Tools.s
-      - ./dwtools/abase/l9/printer/aChainer.s
-      - ./dwtools/abase/l9/printer/aChainingMixin.s
-      - ./dwtools/abase/l9/printer/aColoredMixin.s
-      - ./dwtools/abase/l9/printer/PrinterBase.s
-      - ./dwtools/abase/l9/printer/PrinterMid.s
-      - ./dwtools/abase/l9/printer/PrinterTop.s
-      - ./dwtools/abase/l9/printer/top/Logger.s
-      - ./dwtools/abase/l9/printer/top/LoggerExtra.s
-      - ./dwtools/abase/l9/printer/top/ToLayeredHtml.s
-      - ./dwtools/abase/l9/printer/top/ToString.s
-      - ./dwtools/abase/l9.test/printer/Backend.test.ss
-      - ./dwtools/abase/l9.test/printer/Browser.test.html
-      - ./dwtools/abase/l9.test/printer/Browser.test.js
-      - ./dwtools/abase/l9.test/printer/Chaining.test.s
-      - ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
-      - ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
-      - ./dwtools/abase/l9.test/printer/Color.test.js
-      - ./dwtools/abase/l9.test/printer/Color.test.ss
-      - ./dwtools/abase/l9.test/printer/Other.test.s
-    criterion:
-      default: 1
-      debug: 1
-      raw: 1
-      proto: 1
-      export: 1
-      tar: 1
-      public: 1
 submodule: {}
 reflector:
-  reflect.proto.0:
+  reflect.proto.:
     filePath:
       ./proto: ./out.release
     srcFilter:
@@ -149,7 +117,7 @@ reflector:
       debug: 0
     inherit:
       - predefined.*
-  reflect.proto.1:
+  reflect.proto.debug:
     filePath:
       ./proto: ./out.debug
     srcFilter:
@@ -195,17 +163,25 @@ reflector:
   exportedFiles.0:
     recursive: 0
     filePath:
+      .: true
+      ./dwtools: true
       ./dwtools/Tools.s: true
+      ./dwtools/abase: true
+      ./dwtools/abase/l9: true
+      ./dwtools/abase/l9/printer: true
       ./dwtools/abase/l9/printer/aChainer.s: true
       ./dwtools/abase/l9/printer/aChainingMixin.s: true
       ./dwtools/abase/l9/printer/aColoredMixin.s: true
       ./dwtools/abase/l9/printer/PrinterBase.s: true
       ./dwtools/abase/l9/printer/PrinterMid.s: true
       ./dwtools/abase/l9/printer/PrinterTop.s: true
+      ./dwtools/abase/l9/printer/top: true
       ./dwtools/abase/l9/printer/top/Logger.s: true
       ./dwtools/abase/l9/printer/top/LoggerExtra.s: true
       ./dwtools/abase/l9/printer/top/ToLayeredHtml.s: true
       ./dwtools/abase/l9/printer/top/ToString.s: true
+      ./dwtools/abase/l9.test: true
+      ./dwtools/abase/l9.test/printer: true
       ./dwtools/abase/l9.test/printer/Backend.test.ss: true
       ./dwtools/abase/l9.test/printer/Browser.test.html: true
       ./dwtools/abase/l9.test/printer/Browser.test.js: true
@@ -215,19 +191,29 @@ reflector:
       ./dwtools/abase/l9.test/printer/Color.test.js: true
       ./dwtools/abase/l9.test/printer/Color.test.ss: true
       ./dwtools/abase/l9.test/printer/Other.test.s: true
+      ./dwtools/amid: true
+      ./dwtools/atop: true
     srcFilter:
       filePath:
+        .: true
+        ./dwtools: true
         ./dwtools/Tools.s: true
+        ./dwtools/abase: true
+        ./dwtools/abase/l9: true
+        ./dwtools/abase/l9/printer: true
         ./dwtools/abase/l9/printer/aChainer.s: true
         ./dwtools/abase/l9/printer/aChainingMixin.s: true
         ./dwtools/abase/l9/printer/aColoredMixin.s: true
         ./dwtools/abase/l9/printer/PrinterBase.s: true
         ./dwtools/abase/l9/printer/PrinterMid.s: true
         ./dwtools/abase/l9/printer/PrinterTop.s: true
+        ./dwtools/abase/l9/printer/top: true
         ./dwtools/abase/l9/printer/top/Logger.s: true
         ./dwtools/abase/l9/printer/top/LoggerExtra.s: true
         ./dwtools/abase/l9/printer/top/ToLayeredHtml.s: true
         ./dwtools/abase/l9/printer/top/ToString.s: true
+        ./dwtools/abase/l9.test: true
+        ./dwtools/abase/l9.test/printer: true
         ./dwtools/abase/l9.test/printer/Backend.test.ss: true
         ./dwtools/abase/l9.test/printer/Browser.test.html: true
         ./dwtools/abase/l9.test/printer/Browser.test.js: true
@@ -237,24 +223,26 @@ reflector:
         ./dwtools/abase/l9.test/printer/Color.test.js: true
         ./dwtools/abase/l9.test/printer/Color.test.ss: true
         ./dwtools/abase/l9.test/printer/Other.test.s: true
+        ./dwtools/amid: true
+        ./dwtools/atop: true
       basePath: .
       prefixPath: proto
 step:
-  clean.out.0:
+  clean.out.:
     criterion:
       debug: 0
     opts:
       filePath: 'path::out.debug'
     inherit:
       - predefined.delete
-  clean.out.1:
+  clean.out.debug:
     criterion:
       debug: 1
     opts:
       filePath: 'path::out.debug'
     inherit:
       - predefined.delete
-  reflect.proto.0:
+  reflect.proto.:
     criterion:
       debug: 0
       raw: 0
@@ -262,7 +250,7 @@ step:
       reflector: 'reflector::reflect.proto.*=1'
     inherit:
       - predefined.reflect
-  reflect.proto.1:
+  reflect.proto.debug:
     criterion:
       debug: 1
       raw: 0
@@ -270,7 +258,7 @@ step:
       reflector: 'reflector::reflect.proto.*=1'
     inherit:
       - predefined.reflect
-  reflect.proto.2:
+  reflect.proto.raw:
     criterion:
       debug: 0
       raw: 1
@@ -278,7 +266,7 @@ step:
       reflector: 'reflector::reflect.proto.*=1'
     inherit:
       - predefined.reflect
-  reflect.proto.3:
+  reflect.proto.debug.raw:
     criterion:
       debug: 1
       raw: 1
@@ -286,7 +274,7 @@ step:
       reflector: 'reflector::reflect.proto.*=1'
     inherit:
       - predefined.reflect
-  reflect.submodules.0:
+  reflect.submodules.:
     criterion:
       debug: 1
       raw: 0
@@ -294,7 +282,7 @@ step:
       reflector: 'reflector::reflect.submodules*=1'
     inherit:
       - predefined.reflect
-  reflect.submodules.1:
+  reflect.submodules.raw:
     criterion:
       debug: 1
       raw: 1
@@ -359,7 +347,7 @@ build:
       - 'step::export.proto'
 exported:
   proto.export:
-    version: 0.5.161
+    version: 0.5.162
     criterion:
       default: 1
       debug: 1
@@ -372,33 +360,3 @@ exported:
     exportedFilesReflector: 'reflector::exportedFiles.0'
     exportedDirPath: 'path::exportedDir.0'
     exportedFilesPath: 'path::exportedFiles.0'
-    exportedTerminalsPath:
-      path:
-        - ./dwtools/Tools.s
-        - ./dwtools/abase/l9/printer/aChainer.s
-        - ./dwtools/abase/l9/printer/aChainingMixin.s
-        - ./dwtools/abase/l9/printer/aColoredMixin.s
-        - ./dwtools/abase/l9/printer/PrinterBase.s
-        - ./dwtools/abase/l9/printer/PrinterMid.s
-        - ./dwtools/abase/l9/printer/PrinterTop.s
-        - ./dwtools/abase/l9/printer/top/Logger.s
-        - ./dwtools/abase/l9/printer/top/LoggerExtra.s
-        - ./dwtools/abase/l9/printer/top/ToLayeredHtml.s
-        - ./dwtools/abase/l9/printer/top/ToString.s
-        - ./dwtools/abase/l9.test/printer/Backend.test.ss
-        - ./dwtools/abase/l9.test/printer/Browser.test.html
-        - ./dwtools/abase/l9.test/printer/Browser.test.js
-        - ./dwtools/abase/l9.test/printer/Chaining.test.s
-        - ./dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
-        - ./dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
-        - ./dwtools/abase/l9.test/printer/Color.test.js
-        - ./dwtools/abase/l9.test/printer/Color.test.ss
-        - ./dwtools/abase/l9.test/printer/Other.test.s
-      criterion:
-        default: 1
-        debug: 1
-        raw: 1
-        proto: 1
-        export: 1
-        tar: 1
-        public: 1
