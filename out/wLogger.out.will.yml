@@ -100,6 +100,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -112,7 +113,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.debug($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.test($|\.|\/)/i
           - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/release
     criterion:
@@ -123,6 +123,7 @@ reflector:
     src:
       filePath:
         .: .
+      prefixPath: proto
       maskAll:
         excludeAny:
           - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
@@ -133,7 +134,6 @@ reflector:
           - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
           - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
           - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
-      prefixPath: proto
     dst:
       prefixPath: out/debug
     criterion:
@@ -159,7 +159,7 @@ reflector:
   exported.proto.export:
     src:
       filePath:
-        .: true
+        .: null
       prefixPath: proto
     criterion:
       default: 1
@@ -173,36 +173,36 @@ reflector:
     recursive: 0
     src:
       filePath:
-        .: true
-        dwtools: true
-        dwtools/Tools.s: true
-        dwtools/abase: true
-        dwtools/abase/l9: true
-        dwtools/abase/l9/printer: true
-        dwtools/abase/l9/printer/aChainer.s: true
-        dwtools/abase/l9/printer/aChainingMixin.s: true
-        dwtools/abase/l9/printer/aColoredMixin.s: true
-        dwtools/abase/l9/printer/PrinterBase.s: true
-        dwtools/abase/l9/printer/PrinterMid.s: true
-        dwtools/abase/l9/printer/PrinterTop.s: true
-        dwtools/abase/l9/printer/top: true
-        dwtools/abase/l9/printer/top/Logger.s: true
-        dwtools/abase/l9/printer/top/LoggerExtra.s: true
-        dwtools/abase/l9/printer/top/ToLayeredHtml.s: true
-        dwtools/abase/l9/printer/top/ToString.s: true
-        dwtools/abase/l9.test: true
-        dwtools/abase/l9.test/printer: true
-        dwtools/abase/l9.test/printer/Backend.test.ss: true
-        dwtools/abase/l9.test/printer/Browser.test.html: true
-        dwtools/abase/l9.test/printer/Browser.test.js: true
-        dwtools/abase/l9.test/printer/Chaining.test.s: true
-        dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss: true
-        dwtools/abase/l9.test/printer/ChainingWithStream.test.ss: true
-        dwtools/abase/l9.test/printer/Color.test.js: true
-        dwtools/abase/l9.test/printer/Color.test.ss: true
-        dwtools/abase/l9.test/printer/Other.test.s: true
-        dwtools/amid: true
-        dwtools/atop: true
+        .: null
+        dwtools: null
+        dwtools/Tools.s: null
+        dwtools/abase: null
+        dwtools/abase/l9: null
+        dwtools/abase/l9/printer: null
+        dwtools/abase/l9/printer/aChainer.s: null
+        dwtools/abase/l9/printer/aChainingMixin.s: null
+        dwtools/abase/l9/printer/aColoredMixin.s: null
+        dwtools/abase/l9/printer/PrinterBase.s: null
+        dwtools/abase/l9/printer/PrinterMid.s: null
+        dwtools/abase/l9/printer/PrinterTop.s: null
+        dwtools/abase/l9/printer/top: null
+        dwtools/abase/l9/printer/top/Logger.s: null
+        dwtools/abase/l9/printer/top/LoggerExtra.s: null
+        dwtools/abase/l9/printer/top/ToLayeredHtml.s: null
+        dwtools/abase/l9/printer/top/ToString.s: null
+        dwtools/abase/l9.test: null
+        dwtools/abase/l9.test/printer: null
+        dwtools/abase/l9.test/printer/Backend.test.ss: null
+        dwtools/abase/l9.test/printer/Browser.test.html: null
+        dwtools/abase/l9.test/printer/Browser.test.js: null
+        dwtools/abase/l9.test/printer/Chaining.test.s: null
+        dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss: null
+        dwtools/abase/l9.test/printer/ChainingWithStream.test.ss: null
+        dwtools/abase/l9.test/printer/Color.test.js: null
+        dwtools/abase/l9.test/printer/Color.test.ss: null
+        dwtools/abase/l9.test/printer/Other.test.s: null
+        dwtools/amid: null
+        dwtools/atop: null
       basePath: .
       prefixPath: proto
     criterion:
