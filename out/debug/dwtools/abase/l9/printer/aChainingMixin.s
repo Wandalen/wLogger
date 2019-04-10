@@ -26,6 +26,7 @@ if( typeof module !== 'undefined' )
 //
 
 /**
+ * @classdesc Extends printer with mechanism of message transfering between multiple inputs/outputs.
  * @class wPrinterChainingMixin
  */
 

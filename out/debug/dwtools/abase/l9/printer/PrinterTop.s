@@ -38,6 +38,11 @@ if( typeof module !== 'undefined' )
 
 //
 
+/**
+ * @classdesc Extends [wPrinterMid]{@link wPrinterMid} with printers chaining and output coloring mechanics.
+ * @class wPrinterTop
+ */
+
 var _global = _global_;
 var _ = _global_.wTools;
 var Parent = _.PrinterMid;
