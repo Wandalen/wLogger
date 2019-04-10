@@ -22,6 +22,7 @@ if( typeof module !== 'undefined' )
 //
 
 /**
+ * @classdesc Creates a logger for printing colorful and well formatted diagnostic code on server-side or in the browser. Based on [wPrinterTop]{@link wPrinterTop}.
  * @class wLogger
  */
 var _global = _global_;

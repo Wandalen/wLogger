@@ -14,6 +14,12 @@ if( typeof module !== 'undefined' )
 }
 
 //
+
+/**
+ * @classdesc Creates a printer that collects messages into a single string. Based on [wPrinterTop]{@link wPrinterTop}.
+ * @class wPrinterToString
+ */
+
 var _global = _global_;
 var _ = _global_.wTools;
 var Parent = _.PrinterTop;

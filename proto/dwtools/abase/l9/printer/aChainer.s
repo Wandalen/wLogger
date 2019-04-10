@@ -14,7 +14,8 @@ if( typeof module !== 'undefined' )
 //
 
 /**
- * @class wChainer
+ * @classdesc Encapsulates chainability of printers, loggers and consoles. Use it to construct a chain.
+   @class wChainer
  */
 
 var _global = _global_;

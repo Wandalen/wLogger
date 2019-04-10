@@ -16,6 +16,7 @@ if( typeof module !== 'undefined' )
 //
 
 /**
+ * @classdesc Describes basic abilities of the printer: input transformation, verbosity level change.
  * @class wPrinterBase
  */
 
