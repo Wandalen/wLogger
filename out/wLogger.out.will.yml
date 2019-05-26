@@ -1,0 +1,352 @@
+format: willfile-1.0.0
+about:
+  name: wLogger
+  description: >-
+    Class to log data consistently which supports colorful formatting, verbosity
+    control, chaining, combining several loggers/consoles into logging network.
+    Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and
+    multiple approaches to control verbosity. Logger may use
+    console/stream/process/file as input or output. Unlike alternatives,
+    colorful formatting is cross-platform and works similarly in the browser and
+    on the server side. Use the module to make your diagnostic code working on
+    any platform you work with and to been able to redirect your output to/from
+    any destination/source.
+  enabled: 1
+  version: 0.5.166
+  values:
+    enabled: 1
+    name: wLogger
+    interpreters:
+      - nodejs >= 6.0.0
+      - chrome >= 60.0.0
+      - firefox >= 60.0.0
+    keywords:
+      - wTools
+path:
+  module.willfiles:
+    path: out/wLogger.out.will.yml
+    criterion:
+      predefined: 1
+  module.original.willfiles:
+    path:
+      - .im.will.yml
+      - .ex.will.yml
+    criterion:
+      predefined: 1
+  module.dir:
+    path: out
+    criterion:
+      predefined: 1
+  local:
+    path: out
+    criterion:
+      predefined: 1
+  remote:
+    criterion:
+      predefined: 1
+  in:
+    path: ..
+  temp:
+    path: out
+  out:
+    path: out
+  out.debug:
+    path: ./out/debug
+    criterion:
+      debug: 1
+  out.release:
+    path: ./out/release
+    criterion:
+      debug: 0
+  proto:
+    path: ./proto
+  repository:
+    path: 'git+https:///github.com/Wandalen/wLogger.git'
+  bugs:
+    path: 'https:///github.com/Wandalen/wLogger/issues'
+  exported.dir.proto.export:
+    path: ./proto
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+  exported.files.proto.export:
+    path:
+      - proto
+      - proto/dwtools
+      - proto/dwtools/Tools.s
+      - proto/dwtools/abase
+      - proto/dwtools/abase/l9
+      - proto/dwtools/abase/l9/printer
+      - proto/dwtools/abase/l9/printer/.DS_Store
+      - proto/dwtools/abase/l9/printer/aChainer.s
+      - proto/dwtools/abase/l9/printer/aChainingMixin.s
+      - proto/dwtools/abase/l9/printer/aColoredMixin.s
+      - proto/dwtools/abase/l9/printer/PrinterBase.s
+      - proto/dwtools/abase/l9/printer/PrinterMid.s
+      - proto/dwtools/abase/l9/printer/PrinterTop.s
+      - proto/dwtools/abase/l9/printer/top
+      - proto/dwtools/abase/l9/printer/top/Logger.s
+      - proto/dwtools/abase/l9/printer/top/LoggerExtra.s
+      - proto/dwtools/abase/l9/printer/top/ToLayeredHtml.s
+      - proto/dwtools/abase/l9/printer/top/ToString.s
+      - proto/dwtools/abase/l9.test
+      - proto/dwtools/abase/l9.test/printer
+      - proto/dwtools/abase/l9.test/printer/Backend.test.ss
+      - proto/dwtools/abase/l9.test/printer/Browser.test.html
+      - proto/dwtools/abase/l9.test/printer/Browser.test.js
+      - proto/dwtools/abase/l9.test/printer/Chaining.test.s
+      - proto/dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
+      - proto/dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
+      - proto/dwtools/abase/l9.test/printer/Color.test.js
+      - proto/dwtools/abase/l9.test/printer/Color.test.ss
+      - proto/dwtools/abase/l9.test/printer/Other.test.s
+      - proto/dwtools/amid
+      - proto/dwtools/atop
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+submodule: {}
+reflector:
+  reflect.proto.:
+    src:
+      filePath:
+        .: .
+      prefixPath: proto
+      maskAll:
+        excludeAny:
+          - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
+          - !<tag:yaml.org,2002:js/regexp> /\.unique$/
+          - !<tag:yaml.org,2002:js/regexp> /\.git$/
+          - !<tag:yaml.org,2002:js/regexp> /\.svn$/
+          - !<tag:yaml.org,2002:js/regexp> /\.hg$/
+          - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
+          - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
+          - !<tag:yaml.org,2002:js/regexp> /\.debug($|\.|\/)/i
+          - !<tag:yaml.org,2002:js/regexp> /\.experiment($|\.|\/)/i
+    dst:
+      prefixPath: out/release
+    criterion:
+      debug: 0
+    mandatory: 1
+    inherit:
+      - predefined.*
+  reflect.proto.debug:
+    src:
+      filePath:
+        .: .
+      prefixPath: proto
+      maskAll:
+        excludeAny:
+          - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
+          - !<tag:yaml.org,2002:js/regexp> /\.unique$/
+          - !<tag:yaml.org,2002:js/regexp> /\.git$/
+          - !<tag:yaml.org,2002:js/regexp> /\.svn$/
+          - !<tag:yaml.org,2002:js/regexp> /\.hg$/
+          - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
+          - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
+          - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
+    dst:
+      prefixPath: out/debug
+    criterion:
+      debug: 1
+    mandatory: 1
+    inherit:
+      - predefined.*
+  reflect.submodules:
+    src:
+      maskAll:
+        excludeAny:
+          - !<tag:yaml.org,2002:js/regexp> /(\W|^)node_modules(\W|$)/
+          - !<tag:yaml.org,2002:js/regexp> /\.unique$/
+          - !<tag:yaml.org,2002:js/regexp> /\.git$/
+          - !<tag:yaml.org,2002:js/regexp> /\.svn$/
+          - !<tag:yaml.org,2002:js/regexp> /\.hg$/
+          - !<tag:yaml.org,2002:js/regexp> /\.DS_Store$/
+          - !<tag:yaml.org,2002:js/regexp> /(^|\/)-/
+          - !<tag:yaml.org,2002:js/regexp> /\.release($|\.|\/)/i
+    criterion:
+      debug: 1
+    mandatory: 1
+    inherit:
+      - predefined.*
+  exported.proto.export:
+    src:
+      filePath:
+        .: null
+      prefixPath: proto
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+    mandatory: 1
+  exported.files.proto.export:
+    src:
+      filePath: 'path::exported.files.proto.export'
+      basePath: .
+      prefixPath: 'path::exported.dir.proto.export'
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+    recursive: 0
+    mandatory: 1
+step:
+  clean.out.:
+    criterion:
+      debug: 0
+    opts:
+      filePath: 'path::out.debug'
+    inherit:
+      - predefined.delete
+  clean.out.debug:
+    criterion:
+      debug: 1
+    opts:
+      filePath: 'path::out.debug'
+    inherit:
+      - predefined.delete
+  reflect.proto.:
+    criterion:
+      debug: 0
+      raw: 0
+    opts:
+      reflector: 'reflector::reflect.proto.*=1'
+    inherit:
+      - predefined.reflect
+  reflect.proto.debug:
+    criterion:
+      debug: 1
+      raw: 0
+    opts:
+      reflector: 'reflector::reflect.proto.*=1'
+    inherit:
+      - predefined.reflect
+  reflect.proto.raw:
+    criterion:
+      debug: 0
+      raw: 1
+    opts:
+      reflector: 'reflector::reflect.proto.*=1'
+    inherit:
+      - predefined.reflect
+  reflect.proto.debug.raw:
+    criterion:
+      debug: 1
+      raw: 1
+    opts:
+      reflector: 'reflector::reflect.proto.*=1'
+    inherit:
+      - predefined.reflect
+  reflect.submodules.:
+    criterion:
+      debug: 1
+      raw: 0
+    opts:
+      reflector: 'reflector::reflect.submodules*=1'
+    inherit:
+      - predefined.reflect
+  reflect.submodules.raw:
+    criterion:
+      debug: 1
+      raw: 1
+    opts:
+      reflector: 'reflector::reflect.submodules*=1'
+    inherit:
+      - predefined.reflect
+  reflect.submodules:
+    criterion:
+      debug: 1
+    opts:
+      reflector: 'reflector::reflect.submodules*'
+    inherit:
+      - predefined.reflect
+  export.proto:
+    criterion:
+      debug: 1
+      proto: 1
+    opts:
+      export: 'path::proto'
+      tar: 0
+    inherit:
+      - module.export
+build:
+  debug.raw:
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+    steps:
+      - 'step::clean.out*=1'
+      - 'step::reflect.proto.*=1'
+  debug.compiled:
+    criterion:
+      debug: 1
+      raw: 0
+    steps:
+      - 'step::clean.out*=1'
+      - 'step::reflect.proto.*=1'
+  release.raw:
+    criterion:
+      debug: 0
+      raw: 1
+    steps:
+      - 'step::clean.out*=1'
+      - 'step::reflect.proto.*=1'
+  release.compiled:
+    criterion:
+      debug: 0
+      raw: 0
+    steps:
+      - 'step::clean.out*=1'
+      - 'step::reflect.proto.*=1'
+  all:
+    steps:
+      - 'build::debug.raw'
+      - 'build::release.compiled'
+  proto.export:
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+    steps:
+      - 'build::debug.raw'
+      - 'step::export.proto'
+exported:
+  proto.export:
+    version: 0.5.166
+    criterion:
+      default: 1
+      debug: 1
+      raw: 1
+      proto: 1
+      export: 1
+      tar: 1
+      public: 1
+    exportedReflector: 'reflector::exported.proto.export'
+    exportedFilesReflector: 'reflector::exported.files.proto.export'
+    exportedDirPath: 'path::exported.dir.proto.export'
+    exportedFilesPath: 'path::exported.files.proto.export'
+module:
+  wLogger.out: root
