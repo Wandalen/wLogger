@@ -1,0 +1,97 @@
+&ref_0
+format: willfile-1.0.0
+about:
+  name: wLogger
+  description: >-
+    Class to log data consistently which supports colorful formatting, verbosity
+    control, chaining, combining several loggers/consoles into logging network.
+    Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and
+    multiple approaches to control verbosity. Logger may use
+    console/stream/process/file as input or output. Unlike alternatives,
+    colorful formatting is cross-platform and works similarly in the browser and
+    on the server side. Use the module to make your diagnostic code working on
+    any platform you work with and to been able to redirect your output to/from
+    any destination/source.
+  enabled: 1
+  version: 0.5.166
+  values:
+    enabled: 1
+    name: wLogger
+    interpreters:
+      - nodejs >= 6.0.0
+      - chrome >= 60.0.0
+      - firefox >= 60.0.0
+    keywords:
+      - wTools
+path:
+  module.willfiles: *ref_0
+  module.original.willfiles: *ref_0
+  module.dir: *ref_0
+  local: *ref_0
+  remote: *ref_0
+  in: *ref_0
+  temp: *ref_0
+  out: *ref_0
+  out.debug: *ref_0
+  out.release: *ref_0
+  proto: *ref_0
+  repository: *ref_0
+  bugs: *ref_0
+  exported.dir.proto.export: *ref_0
+  exported.files.proto.export: *ref_0
+criterion:
+  default: 1
+  debug: 1
+  raw: 1
+  proto: 1
+  export: 1
+  tar: 1
+  public: 1
+submodule: {}
+src:
+  filePath: 'path::exported.files.proto.export'
+  basePath: .
+  prefixPath: 'path::exported.dir.proto.export'
+mandatory: 1
+inherit:
+  - module.export
+recursive: 0
+reflector:
+  reflect.proto.: *ref_0
+  reflect.proto.debug: *ref_0
+  reflect.submodules: *ref_0
+  exported.proto.export: *ref_0
+  exported.files.proto.export: *ref_0
+opts:
+  export: 'path::proto'
+  tar: 0
+step:
+  clean.out.: *ref_0
+  clean.out.debug: *ref_0
+  reflect.proto.: *ref_0
+  reflect.proto.debug: *ref_0
+  reflect.proto.raw: *ref_0
+  reflect.proto.debug.raw: *ref_0
+  reflect.submodules.: *ref_0
+  reflect.submodules.raw: *ref_0
+  reflect.submodules: *ref_0
+  export.proto: *ref_0
+steps:
+  - 'build::debug.raw'
+  - 'step::export.proto'
+build:
+  debug.raw: *ref_0
+  debug.compiled: *ref_0
+  release.raw: *ref_0
+  release.compiled: *ref_0
+  all: *ref_0
+  proto.export: *ref_0
+version: 0.5.166
+exportedReflector: 'reflector::exported.proto.export'
+exportedFilesReflector: 'reflector::exported.files.proto.export'
+exportedDirPath: 'path::exported.dir.proto.export'
+exportedFilesPath: 'path::exported.files.proto.export'
+exported:
+  proto.export: *ref_0
+module:
+  wLogger.out: root
