@@ -197,9 +197,10 @@ function _writeToChannelWithoutExclusion( channelName, args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
-  // args = args.filter( ( a ) => a !== undefined ); // yyy
-  // if( !args.length ) // yyy
-  // return;
+  debugger;
+  args = _.map( args, ( a ) => a ); // yyy
+  if( !args.length ) // yyy
+  return; // yyy
 
   let o = self.transform({ input : args, /*ttt*/channelName });
 
