@@ -106,7 +106,7 @@ function _transformActHtml( o )
       {
         color = _.color.rgbaFromTry( color, null );
         if( color )
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap })
+        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap : _.color.ColorMap })
       }
 
       if( style === 'foreground')
@@ -585,7 +585,7 @@ function _split( src )
   _.assert( _.strIs( src ) );
   let splitted = _.strExtractInlined
   ({
-    src : src,
+    /*ttt*/src,
     onInlined : self._splitHandle.bind( self ),
     preservingEmpty : 0,
     stripping : 0,
@@ -1017,12 +1017,12 @@ function _colorSet( layer, color )
     {
       if( Config.platform === 'browser' )
       {
-        color = _.color.colorNearestCustom({ color : color, colorMap : _.color.ColorMap });
+        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap : _.color.ColorMap });
         currentName = _getColorName( _.color.ColorMap, color );
       }
       else
       {
-        color = _.color.colorNearestCustom({ color : color, colorMap :  _.color.ColorMapShell });
+        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap :  _.color.ColorMapShell });
         currentName = _getColorName(  _.color.ColorMapShell, color );
       }
 
@@ -1030,9 +1030,9 @@ function _colorSet( layer, color )
 
       diagnosticInfo =
       {
-        originalValue : originalValue,
-        originalName : originalName,
-        currentName : currentName,
+        /*ttt*/originalValue,
+        /*ttt*/originalName,
+        /*ttt*/currentName,
         exact : !!_.color._colorDistance( color, originalValue )
       };
 
@@ -1583,9 +1583,9 @@ let Statics =
   rawAll : 0,
   diagnosingColor : 1, /* xxx */
   diagnosingColorCollapse : 1,
-  PoisonedColorCombination : PoisonedColorCombination,
-  Directive : Directive,
-  DirectiveColoring : DirectiveColoring,
+  /*ttt*/PoisonedColorCombination,
+  /*ttt*/Directive,
+  /*ttt*/DirectiveColoring,
 }
 
 let Forbids =
@@ -1616,7 +1616,7 @@ let Accessors =
 let Functors =
 {
 
-  _transformAct : _transformAct,
+  /*ttt*/_transformAct,
 
 }
 
@@ -1625,75 +1625,75 @@ let Extend =
 
   // stack
 
-  _stackPush : _stackPush,
-  _stackPop : _stackPop,
-  _stackIsNotEmpty : _stackIsNotEmpty,
+  /*ttt*/_stackPush,
+  /*ttt*/_stackPop,
+  /*ttt*/_stackIsNotEmpty,
 
   // transform
 
-  _transformActHtml : _transformActHtml,
-  _transformAct_nodejs : _transformAct_nodejs,
-  _transformAct_browser : _transformAct_browser,
-  _transformActWithoutColors : _transformActWithoutColors,
-  _transformColor : _transformColor,
-  _transformSplit : _transformSplit,
+  /*ttt*/_transformActHtml,
+  /*ttt*/_transformAct_nodejs,
+  /*ttt*/_transformAct_browser,
+  /*ttt*/_transformActWithoutColors,
+  /*ttt*/_transformColor,
+  /*ttt*/_transformSplit,
 
   //
 
-  _join : _join,
-  _split : _split,
-  _splitHandle : _splitHandle,
-  _directiveApply : _directiveApply,
-  _directiveMoveApply : _directiveMoveApply,
-  _directiveClsApply : _directiveClsApply,
+  /*ttt*/_join,
+  /*ttt*/_split,
+  /*ttt*/_splitHandle,
+  /*ttt*/_directiveApply,
+  /*ttt*/_directiveMoveApply,
+  /*ttt*/_directiveClsApply,
 
-  _rgbToCode_nodejs : _rgbToCode_nodejs,
-  _diagnoseColorCheck : _diagnoseColorCheck,
-  _diagnoseColorIll : _diagnoseColorIll,
-  _diagnoseColorCollapse : _diagnoseColorCollapse,
+  /*ttt*/_rgbToCode_nodejs,
+  /*ttt*/_diagnoseColorCheck,
+  /*ttt*/_diagnoseColorIll,
+  /*ttt*/_diagnoseColorCollapse,
 
   // accessor
 
-  _foregroundColorGet : _foregroundColorGet,
-  _backgroundColorGet : _backgroundColorGet,
-  _foregroundColorSet : _foregroundColorSet,
-  _backgroundColorSet : _backgroundColorSet,
-  _colorSet : _colorSet,
-  _underlineSet : _underlineSet,
+  /*ttt*/_foregroundColorGet,
+  /*ttt*/_backgroundColorGet,
+  /*ttt*/_foregroundColorSet,
+  /*ttt*/_backgroundColorSet,
+  /*ttt*/_colorSet,
+  /*ttt*/_underlineSet,
 
-  styleSet : styleSet,
+  /*ttt*/styleSet,
   _styleApply :_styleApply,
-  _styleComplement : _styleComplement,
-  _styleReset : _styleReset,
+  /*ttt*/_styleComplement,
+  /*ttt*/_styleReset,
 
-  _inputGraySet : _inputGraySet,
-  _outputGraySet : _outputGraySet,
-  _inputRawSet : _inputRawSet,
-  _outputRawSet : _outputRawSet,
+  /*ttt*/_inputGraySet,
+  /*ttt*/_outputGraySet,
+  /*ttt*/_inputRawSet,
+  /*ttt*/_outputRawSet,
 
   // string formatters
 
-  colorFormat : colorFormat,
-  colorBg : colorBg,
-  colorFg : colorFg,
-  escape : escape,
-  str : str,
+  /*ttt*/colorFormat,
+  /*ttt*/colorBg,
+  /*ttt*/colorFg,
+  /*ttt*/escape,
+  /*ttt*/str,
 
   // topic
 
-  topic : topic,
-  topicUp : topicUp,
-  topicDown : topicDown,
+  /*ttt*/topic,
+  /*ttt*/topicUp,
+  /*ttt*/topicDown,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Forbids : Forbids,
-  Accessors : Accessors,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Restricts,
+  /*ttt*/Statics,
+  /*ttt*/Forbids,
+  /*ttt*/Accessors,
 
 }
 

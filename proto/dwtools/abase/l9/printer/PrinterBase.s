@@ -324,37 +324,37 @@ var Proto =
 
   // routine
 
-  init : init,
+  /*ttt*/init,
 
   // transform
 
-  transform : transform,
-  _transformBegin : _transformBegin,
-  _transformAct : _transformAct,
-  _transformEnd : _transformEnd,
+  /*ttt*/transform,
+  /*ttt*/_transformBegin,
+  /*ttt*/_transformAct,
+  /*ttt*/_transformEnd,
 
   // leveling
 
-  up : up,
-  down : down,
-  levelSet : levelSet,
+  /*ttt*/up,
+  /*ttt*/down,
+  /*ttt*/levelSet,
 
   // etc
 
-  write : write,
-  _strConcat : _strConcat,
+  /*ttt*/write,
+  /*ttt*/_strConcat,
 
-  // canPrintFrom : canPrintFrom,
-  // printFrom : printFrom,
+  // /*ttt*/canPrintFrom,
+  // /*ttt*/printFrom,
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Accessors : Accessors,
-  Statics : Statics,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Accessors,
+  /*ttt*/Statics,
 
 }
 

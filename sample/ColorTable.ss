@@ -78,7 +78,7 @@ function prepareTableInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onTransformEnd : onTransformEnd,
+    /*ttt*/onTransformEnd,
   })
   silencedLogger.diagnosingColor = 0;
   for( var i = 0; i < colorNames.length; i++ )

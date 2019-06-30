@@ -2,9 +2,7 @@
 
 'use strict';
 
-/*
-
-qqq!
+/* principles :
 
   Printer could input / output from / to non-printer objects.
   Doing that printer preserves all fields of the object, but "chainerSymbol" field which got reference on chain decriptor.
@@ -182,7 +180,6 @@ function _writeToChannel( channelName, args )
   if( inputChainer.exclusiveOutputPrinter )
   {
     inputChainer.exclusiveOutputPrinter[ channelName ].apply( inputChainer.exclusiveOutputPrinter, args );
-    // if( !inputChainer.hasOriginalOutputs )
     return;
   }
 
@@ -200,14 +197,11 @@ function _writeToChannelWithoutExclusion( channelName, args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
-  // if( inputChainer.exclusiveOutputPrinter )
-  // {
-  //   inputChainer.exclusiveOutputPrinter[ channelName ].apply( inputChainer.exclusiveOutputPrinter, args );
-  //   if( !inputChainer.hasOriginalOutputs )
-  //   return;
-  // }
+  // args = args.filter( ( a ) => a !== undefined ); // yyy
+  // if( !args.length ) // yyy
+  // return;
 
-  let o = self.transform({ input : args, channelName : channelName });
+  let o = self.transform({ input : args, /*ttt*/channelName });
 
   if( !o )
   return;
@@ -219,18 +213,13 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
     _.assert( _.longIs( outputData ) );
 
-    // debugger;
     if( cd.originalOutput )
     {
       return outputChainer.originalWrite[ channelName ].apply( cd.outputPrinter, outputData );
     }
 
-    // if( inputChainer.exclusiveOutputPrinter )
-    // return;
-
     if( cd.write && cd.write[ channelName ] )
     {
-      // debugger; xxx
       cd.write[ channelName ].apply( cd.outputPrinter,outputData );
     }
     else
@@ -891,18 +880,18 @@ let Restricts =
 let Statics =
 {
 
-  consoleBar : consoleBar,
-  consoleIsBarred : consoleIsBarred,
+  /*ttt*/consoleBar,
+  /*ttt*/consoleIsBarred,
 
-  chain : chain,
+  /*ttt*/chain,
 
   // fields
 
-  ChainDescriptor : ChainDescriptor,
-  Combining : Combining,
-  Channel : Channel,
+  /*ttt*/ChainDescriptor,
+  /*ttt*/Combining,
+  /*ttt*/Channel,
 
-  ChangeLevelMethods : ChangeLevelMethods,
+  /*ttt*/ChangeLevelMethods,
   unbarringConsoleOnError : 1,
 
 }
@@ -929,8 +918,8 @@ let Accessors =
 let Functors =
 {
 
-  init : init,
-  finit : finit,
+  /*ttt*/init,
+  /*ttt*/finit,
 
 }
 
@@ -939,16 +928,16 @@ let Supplement =
 
   // write
 
-  _writeToChannel : _writeToChannel,
-  _writeToChannelWithoutExclusion : _writeToChannelWithoutExclusion,
-  _writeToChannelUp : _writeToChannelUp,
-  _writeToChannelDown : _writeToChannelDown,
-  _writeToChannelIn : _writeToChannelIn,
+  /*ttt*/_writeToChannel,
+  /*ttt*/_writeToChannelWithoutExclusion,
+  /*ttt*/_writeToChannelUp,
+  /*ttt*/_writeToChannelDown,
+  /*ttt*/_writeToChannelIn,
 
   // init
 
-  _initChainingMixin : _initChainingMixin,
-  _initChainingMixinChannel : _initChainingMixinChannel,
+  /*ttt*/_initChainingMixin,
+  /*ttt*/_initChainingMixinChannel,
 
 }
 
@@ -959,52 +948,52 @@ let Extend =
 
   // chaining
 
-  outputTo : outputTo,
+  /*ttt*/outputTo,
 
-  outputUnchain : outputUnchain,
+  /*ttt*/outputUnchain,
 
-  inputFrom : inputFrom,
+  /*ttt*/inputFrom,
 
-  inputUnchain : inputUnchain,
+  /*ttt*/inputUnchain,
 
-  unchain : unchain,
+  /*ttt*/unchain,
 
-  consoleBar : consoleBar,
-  consoleIsBarred : consoleIsBarred,
+  /*ttt*/consoleBar,
+  /*ttt*/consoleIsBarred,
 
   // checker
 
-  hasInput : hasInput,
-  hasInputClose : hasInputClose,
-  hasInputDeep : hasInputDeep,
+  /*ttt*/hasInput,
+  /*ttt*/hasInputClose,
+  /*ttt*/hasInputDeep,
 
-  hasOutput : hasOutput,
-  hasOutputClose : hasOutputClose,
-  hasOutputDeep : hasOutputDeep,
+  /*ttt*/hasOutput,
+  /*ttt*/hasOutputClose,
+  /*ttt*/hasOutputDeep,
 
   // etc
 
-  _outputSet : _outputSet,
-  _outputGet : _outputGet,
+  /*ttt*/_outputSet,
+  /*ttt*/_outputGet,
 
-  _outputsSet : _outputsSet,
-  _outputsGet : _outputsGet,
+  /*ttt*/_outputsSet,
+  /*ttt*/_outputsGet,
 
-  _inputsSet : _inputsSet,
-  _inputsGet : _inputsGet,
+  /*ttt*/_inputsSet,
+  /*ttt*/_inputsGet,
 
-  _chainerGet : _chainerGet,
-  _chainerMakeFor : _chainerMakeFor,
+  /*ttt*/_chainerGet,
+  /*ttt*/_chainerMakeFor,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Forbids : Forbids,
-  Accessors : Accessors,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Restricts,
+  /*ttt*/Statics,
+  /*ttt*/Forbids,
+  /*ttt*/Accessors,
 
 }
 
@@ -1015,7 +1004,7 @@ _.classDeclare
   cls : Self,
   extend : Extend,
   supplement : Supplement,
-  onMixinEnd : onMixinEnd,
+  /*ttt*/onMixinEnd,
   functors : Functors,
   withMixin : true,
   withClass : true,
@@ -1027,9 +1016,9 @@ _.classDeclare
 
 _[ Self.shortName ] = Self;
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

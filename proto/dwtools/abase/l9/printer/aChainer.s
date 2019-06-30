@@ -1303,21 +1303,21 @@ let Restricts =
 
 let Statics =
 {
-  _chain : _chain,
+  /*ttt*/_chain,
 
-  Get : Get,
-  MakeFor : MakeFor,
-  _chainDescriptorMake : _chainDescriptorMake,
-  _chainerWriteToConsole : _chainerWriteToConsole,
-  _chainerWriteToPrinter : _chainerWriteToPrinter,
+  /*ttt*/Get,
+  /*ttt*/MakeFor,
+  /*ttt*/_chainDescriptorMake,
+  /*ttt*/_chainerWriteToConsole,
+  /*ttt*/_chainerWriteToPrinter,
 
-  ChainDescriptor : ChainDescriptor,
-  ChainDescriptorFields : ChainDescriptorFields,
+  /*ttt*/ChainDescriptor,
+  /*ttt*/ChainDescriptorFields,
 
-  _chainDescriptorLike : _chainDescriptorLike,
+  /*ttt*/_chainDescriptorLike,
 
-  Combining : Combining,
-  Channel : Channel,
+  /*ttt*/Combining,
+  /*ttt*/Channel,
 
 }
 
@@ -1340,58 +1340,58 @@ let Extend =
 
   // inter
 
-  init : init,
-  finit : finit,
+  /*ttt*/init,
+  /*ttt*/finit,
 
-  _outputToConsole : _outputToConsole,
-  _inputFromConsole : _inputFromConsole,
-  _outputToStream : _outputToStream,
-  _inputFromStream : _inputFromStream,
+  /*ttt*/_outputToConsole,
+  /*ttt*/_inputFromConsole,
+  /*ttt*/_outputToStream,
+  /*ttt*/_inputFromStream,
 
-  outputTo : outputTo,
-  inputFrom : inputFrom,
+  /*ttt*/outputTo,
+  /*ttt*/inputFrom,
 
-  _unchain : _unchain,
-  outputUnchain : outputUnchain,
-  inputUnchain : inputUnchain,
-  unchainEverything : unchainEverything,
+  /*ttt*/_unchain,
+  /*ttt*/outputUnchain,
+  /*ttt*/inputUnchain,
+  /*ttt*/unchainEverything,
 
-  _restoreOriginalWriteConsole : _restoreOriginalWriteConsole,
-
-  //
-
-  _chainDescriptorMake : _chainDescriptorMake,
-  _chainDescriptorFree : _chainDescriptorFree,
-  MakeFor : MakeFor,
-  _chainerWriteToConsole : _chainerWriteToConsole,
-  _chainerWriteToPrinter : _chainerWriteToPrinter,
+  /*ttt*/_restoreOriginalWriteConsole,
 
   //
 
-  _nameGet : _nameGet,
-  _nameSet : _nameSet,
+  /*ttt*/_chainDescriptorMake,
+  /*ttt*/_chainDescriptorFree,
+  /*ttt*/MakeFor,
+  /*ttt*/_chainerWriteToConsole,
+  /*ttt*/_chainerWriteToPrinter,
+
+  //
+
+  /*ttt*/_nameGet,
+  /*ttt*/_nameSet,
 
   // checker
 
-  _hasInput : _hasInput,
-  hasInputClose : hasInputClose,
-  hasInputDeep : hasInputDeep,
+  /*ttt*/_hasInput,
+  /*ttt*/hasInputClose,
+  /*ttt*/hasInputDeep,
 
-  _hasOutput : _hasOutput,
-  hasOutputClose : hasOutputClose,
-  hasOutputDeep : hasOutputDeep,
+  /*ttt*/_hasOutput,
+  /*ttt*/hasOutputClose,
+  /*ttt*/hasOutputDeep,
 
-  _chainDescriptorLike : _chainDescriptorLike,
+  /*ttt*/_chainDescriptorLike,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
-  Forbids : Forbids,
-  Accessors : Accessors,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Restricts,
+  /*ttt*/Statics,
+  /*ttt*/Forbids,
+  /*ttt*/Accessors,
 
 }
 

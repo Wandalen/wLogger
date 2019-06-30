@@ -621,55 +621,55 @@ let Proto =
 
   // routine
 
-  init : init,
+  /*ttt*/init,
 
   // etc
 
-  levelSet : levelSet,
-  _transformBegin : _transformBegin,
-  _transformEnd : _transformEnd,
+  /*ttt*/levelSet,
+  /*ttt*/_transformBegin,
+  /*ttt*/_transformEnd,
 
   // attributing
 
-  _begin : _begin,
-  begin : begin,
-  _end : _end,
-  end : end,
+  /*ttt*/_begin,
+  /*ttt*/begin,
+  /*ttt*/_end,
+  /*ttt*/end,
 
-  _rbegin : _rbegin,
-  rbegin : rbegin,
-  _rend : _rend,
-  rend : rend,
+  /*ttt*/_rbegin,
+  /*ttt*/rbegin,
+  /*ttt*/_rend,
+  /*ttt*/rend,
 
-  _attributeError : _attributeError,
+  /*ttt*/_attributeError,
 
   // verbosity
 
-  verbosityPush : verbosityPush,
-  verbosityPop : verbosityPop,
-  verbosityReserve : verbosityReserve,
-  _verbosityReserve : _verbosityReserve,
-  verboseEnough : verboseEnough,
-  _verboseEnough : _verboseEnough,
-  _verbosityReport : _verbosityReport,
-  _verbositySet : _verbositySet,
+  /*ttt*/verbosityPush,
+  /*ttt*/verbosityPop,
+  /*ttt*/verbosityReserve,
+  /*ttt*/_verbosityReserve,
+  /*ttt*/verboseEnough,
+  /*ttt*/_verboseEnough,
+  /*ttt*/_verbosityReport,
+  /*ttt*/_verbositySet,
 
   // later
 
-  later : later,
-  _laterActualize : _laterActualize,
-  laterActualize : laterActualize,
-  laterFinit : laterFinit,
+  /*ttt*/later,
+  /*ttt*/_laterActualize,
+  /*ttt*/laterActualize,
+  /*ttt*/laterFinit,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Events : Events,
-  Accessors : Accessors,
-  Forbids : Forbids,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Restricts,
+  /*ttt*/Events,
+  /*ttt*/Accessors,
+  /*ttt*/Forbids,
 
 }
 

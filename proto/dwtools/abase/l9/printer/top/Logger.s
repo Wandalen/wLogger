@@ -81,16 +81,16 @@ var Statics =
 var Proto =
 {
 
-  init : init,
+  /*ttt*/init,
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
-  Restricts : Restricts,
-  Statics : Statics,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
+  /*ttt*/Restricts,
+  /*ttt*/Statics,
 
 }
 
@@ -114,9 +114,9 @@ _global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'gl
 // export
 // --
 
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
+// if( typeof module !== 'undefined' )
+// if( _global_.WTOOLS_PRIVATE )
+// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

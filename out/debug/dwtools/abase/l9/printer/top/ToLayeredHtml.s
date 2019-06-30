@@ -222,23 +222,23 @@ var Associates =
 var Proto =
 {
 
-  init : init,
+  /*ttt*/init,
 
-  write : write,
+  /*ttt*/write,
 
-  levelSet : levelSet,
+  /*ttt*/levelSet,
 
-  _makeBranchDom : _makeBranchDom,
-  _makeTerminalDom : _makeTerminalDom,
-  _makeNextLineDom : _makeNextLineDom,
+  /*ttt*/_makeBranchDom,
+  /*ttt*/_makeTerminalDom,
+  /*ttt*/_makeNextLineDom,
 
 
   // relations
 
   /* constructor * : * Self, */
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
 
 }
 

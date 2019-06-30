@@ -437,35 +437,35 @@ var Associates =
 var Proto =
 {
 
-  _wrapProtoHandler : _wrapProtoHandler,
-  wrapProto : wrapProto,
-  unwrapProto : unwrapProto,
+  /*ttt*/_wrapProtoHandler,
+  /*ttt*/wrapProto,
+  /*ttt*/unwrapProto,
 
-  _hookConsoleToFileHandler : _hookConsoleToFileHandler,
-  hookConsoleToFile : hookConsoleToFile,
+  /*ttt*/_hookConsoleToFileHandler,
+  /*ttt*/hookConsoleToFile,
 
-  _hookConsoleToAlertHandler : _hookConsoleToAlertHandler,
-  hookConsoleToAlert : hookConsoleToAlert,
+  /*ttt*/_hookConsoleToAlertHandler,
+  /*ttt*/hookConsoleToAlert,
 
-  _hookConsoleToDomHandler : _hookConsoleToDomHandler,
-  hookConsoleToDom : hookConsoleToDom,
+  /*ttt*/_hookConsoleToDomHandler,
+  /*ttt*/hookConsoleToDom,
 
-  _hookConsoleToServerSend : _hookConsoleToServerSend,
-  _hookConsoleToServerHandler : _hookConsoleToServerHandler,
-  hookConsoleToServer : hookConsoleToServer,
+  /*ttt*/_hookConsoleToServerSend,
+  /*ttt*/_hookConsoleToServerHandler,
+  /*ttt*/hookConsoleToServer,
 
-  unhookConsole : unhookConsole,
+  /*ttt*/unhookConsole,
 
   // var
 
-  _methods : _methods,
+  /*ttt*/_methods,
 
   // relations
 
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
 
 }
 

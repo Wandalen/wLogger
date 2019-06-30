@@ -87,7 +87,7 @@ function prepareInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onTransformEnd : onTransformEnd
+    /*ttt*/onTransformEnd
   })
 
   var result = [];

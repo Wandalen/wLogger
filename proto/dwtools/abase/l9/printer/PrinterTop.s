@@ -89,13 +89,13 @@ var Proto =
 
   // routine
 
-  init : init,
+  /*ttt*/init,
 
   // relations
 
-  Composes : Composes,
-  Aggregates : Aggregates,
-  Associates : Associates,
+  /*ttt*/Composes,
+  /*ttt*/Aggregates,
+  /*ttt*/Associates,
 
 }
 

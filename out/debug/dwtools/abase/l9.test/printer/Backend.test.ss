@@ -14,6 +14,7 @@ if( typeof module !== 'undefined' )
 }
 
 //
+
 var _global = _global_;
 var _ = _global_.wTools;
 var Parent = wTester;
@@ -51,7 +52,7 @@ var Self =
 
   tests :
   {
-    simplest : simplest,
+    /*ttt*/simplest,
   },
 
 }
