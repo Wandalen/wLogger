@@ -106,7 +106,7 @@ function _transformActHtml( o )
       {
         color = _.color.rgbaFromTry( color, null );
         if( color )
-        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap : _.color.ColorMap })
+        color = _.color.colorNearestCustom({ color, colorMap : _.color.ColorMap })
       }
 
       if( style === 'foreground')
@@ -585,7 +585,7 @@ function _split( src )
   _.assert( _.strIs( src ) );
   let splitted = _.strExtractInlined
   ({
-    /*ttt*/src,
+    src,
     onInlined : self._splitHandle.bind( self ),
     preservingEmpty : 0,
     stripping : 0,
@@ -1017,12 +1017,12 @@ function _colorSet( layer, color )
     {
       if( Config.platform === 'browser' )
       {
-        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap : _.color.ColorMap });
+        color = _.color.colorNearestCustom({ color, colorMap : _.color.ColorMap });
         currentName = _getColorName( _.color.ColorMap, color );
       }
       else
       {
-        color = _.color.colorNearestCustom({ /*ttt*/color, colorMap :  _.color.ColorMapShell });
+        color = _.color.colorNearestCustom({ color, colorMap :  _.color.ColorMapShell });
         currentName = _getColorName(  _.color.ColorMapShell, color );
       }
 
@@ -1030,9 +1030,9 @@ function _colorSet( layer, color )
 
       diagnosticInfo =
       {
-        /*ttt*/originalValue,
-        /*ttt*/originalName,
-        /*ttt*/currentName,
+        originalValue,
+        originalName,
+        currentName,
         exact : !!_.color._colorDistance( color, originalValue )
       };
 
@@ -1583,9 +1583,9 @@ let Statics =
   rawAll : 0,
   diagnosingColor : 1, /* xxx */
   diagnosingColorCollapse : 1,
-  /*ttt*/PoisonedColorCombination,
-  /*ttt*/Directive,
-  /*ttt*/DirectiveColoring,
+  PoisonedColorCombination,
+  Directive,
+  DirectiveColoring,
 }
 
 let Forbids =
@@ -1616,7 +1616,7 @@ let Accessors =
 let Functors =
 {
 
-  /*ttt*/_transformAct,
+  _transformAct,
 
 }
 
@@ -1625,75 +1625,75 @@ let Extend =
 
   // stack
 
-  /*ttt*/_stackPush,
-  /*ttt*/_stackPop,
-  /*ttt*/_stackIsNotEmpty,
+  _stackPush,
+  _stackPop,
+  _stackIsNotEmpty,
 
   // transform
 
-  /*ttt*/_transformActHtml,
-  /*ttt*/_transformAct_nodejs,
-  /*ttt*/_transformAct_browser,
-  /*ttt*/_transformActWithoutColors,
-  /*ttt*/_transformColor,
-  /*ttt*/_transformSplit,
+  _transformActHtml,
+  _transformAct_nodejs,
+  _transformAct_browser,
+  _transformActWithoutColors,
+  _transformColor,
+  _transformSplit,
 
   //
 
-  /*ttt*/_join,
-  /*ttt*/_split,
-  /*ttt*/_splitHandle,
-  /*ttt*/_directiveApply,
-  /*ttt*/_directiveMoveApply,
-  /*ttt*/_directiveClsApply,
+  _join,
+  _split,
+  _splitHandle,
+  _directiveApply,
+  _directiveMoveApply,
+  _directiveClsApply,
 
-  /*ttt*/_rgbToCode_nodejs,
-  /*ttt*/_diagnoseColorCheck,
-  /*ttt*/_diagnoseColorIll,
-  /*ttt*/_diagnoseColorCollapse,
+  _rgbToCode_nodejs,
+  _diagnoseColorCheck,
+  _diagnoseColorIll,
+  _diagnoseColorCollapse,
 
   // accessor
 
-  /*ttt*/_foregroundColorGet,
-  /*ttt*/_backgroundColorGet,
-  /*ttt*/_foregroundColorSet,
-  /*ttt*/_backgroundColorSet,
-  /*ttt*/_colorSet,
-  /*ttt*/_underlineSet,
+  _foregroundColorGet,
+  _backgroundColorGet,
+  _foregroundColorSet,
+  _backgroundColorSet,
+  _colorSet,
+  _underlineSet,
 
-  /*ttt*/styleSet,
+  styleSet,
   _styleApply :_styleApply,
-  /*ttt*/_styleComplement,
-  /*ttt*/_styleReset,
+  _styleComplement,
+  _styleReset,
 
-  /*ttt*/_inputGraySet,
-  /*ttt*/_outputGraySet,
-  /*ttt*/_inputRawSet,
-  /*ttt*/_outputRawSet,
+  _inputGraySet,
+  _outputGraySet,
+  _inputRawSet,
+  _outputRawSet,
 
   // string formatters
 
-  /*ttt*/colorFormat,
-  /*ttt*/colorBg,
-  /*ttt*/colorFg,
-  /*ttt*/escape,
-  /*ttt*/str,
+  colorFormat,
+  colorBg,
+  colorFg,
+  escape,
+  str,
 
   // topic
 
-  /*ttt*/topic,
-  /*ttt*/topicUp,
-  /*ttt*/topicDown,
+  topic,
+  topicUp,
+  topicDown,
 
   // relations
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
-  /*ttt*/Restricts,
-  /*ttt*/Statics,
-  /*ttt*/Forbids,
-  /*ttt*/Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Forbids,
+  Accessors,
 
 }
 
