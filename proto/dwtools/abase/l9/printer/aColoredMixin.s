@@ -893,7 +893,7 @@ function _diagnoseColorCollapse( fg, bg )
   let self = this;
   let collapse = false;
 
-  if( _.arrayIdentical( self.foregroundColor, self.backgroundColor ) )
+  if( _.arraysAreIdentical( self.foregroundColor, self.backgroundColor ) )
   {
     if( fg.originalName !== bg.originalName )
     {
@@ -1074,7 +1074,7 @@ function _colorSet( layer, color )
     // debugger;
     let keys = _.mapOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
-    if( _.arrayIdentical( map[ keys[ i ] ], color ) )
+    if( _.arraysAreIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
 
   }
