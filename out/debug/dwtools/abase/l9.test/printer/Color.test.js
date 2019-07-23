@@ -24,7 +24,7 @@ function colorConsole( test )
   var got;
   var onTransformEnd = function( args ){ got = args.outputForTerminal };
 
-  var logger = new _.Logger( { output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger( { output : null, onTransformEnd });
 
   test.case = 'case1';
   var msg = _.color.strFormatForeground( 'msg', 'black' );
@@ -78,7 +78,7 @@ var Self =
 
   tests :
   {
-    /*ttt*/colorConsole
+    colorConsole
   },
 
 }

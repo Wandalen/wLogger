@@ -99,7 +99,7 @@ function chaining( test )
 
   test.case = 'case1: l2 -> l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, /*ttt*/onTransformEnd } );
+  var l1 = new _.Logger( { output : null, onTransformEnd } );
   var l2 = new _.Logger( { output : l1 } );
   l2.log( '1' );
   l2.log( '2' );
@@ -108,8 +108,8 @@ function chaining( test )
 
   test.case = 'case2: l3 -> l2 -> l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, /*ttt*/onTransformEnd } );
-  var l2 = new _.Logger( { output : l1, /*ttt*/onTransformEnd } );
+  var l1 = new _.Logger( { output : null, onTransformEnd } );
+  var l2 = new _.Logger( { output : l1, onTransformEnd } );
   var l3 = new _.Logger( { output : l2 } );
   l2.log( 'l2' );
   l3.log( 'l3' );
@@ -118,10 +118,10 @@ function chaining( test )
 
   test.case = 'case3: l4->l3->l2->l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, /*ttt*/onTransformEnd } );
-  var l2 = new _.Logger( { output : l1, /*ttt*/onTransformEnd } );
-  var l3 = new _.Logger( { output : l2, /*ttt*/onTransformEnd } );
-  var l4 = new _.Logger( { output : l3, /*ttt*/onTransformEnd } );
+  var l1 = new _.Logger( { output : null, onTransformEnd } );
+  var l2 = new _.Logger( { output : l1, onTransformEnd } );
+  var l3 = new _.Logger( { output : l2, onTransformEnd } );
+  var l4 = new _.Logger( { output : l3, onTransformEnd } );
   l4.log( 'l4' );
   l3.log( 'l3' );
   l2.log( 'l2' );
@@ -135,10 +135,10 @@ function chaining( test )
 
   test.case = 'case4: l1 <- l2 <- l3 <- l4 ';
   var got = [];
-  var l1 = new _.Logger( { output : null, /*ttt*/onTransformEnd } );
-  var l2 = new _.Logger( { /*ttt*/onTransformEnd } );
-  var l3 = new _.Logger( { /*ttt*/onTransformEnd } );
-  var l4 = new _.Logger( { /*ttt*/onTransformEnd } );
+  var l1 = new _.Logger( { output : null, onTransformEnd } );
+  var l2 = new _.Logger( { onTransformEnd } );
+  var l3 = new _.Logger( { onTransformEnd } );
+  var l4 = new _.Logger( { onTransformEnd } );
   l3.inputFrom( l4 );
   l2.inputFrom( l3 );
   l1.inputFrom( l2 );
@@ -304,7 +304,7 @@ function _consoleChaining( o )
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l4 = new _.Logger({ output : null, onTransformEnd });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
   l2.log( 'l2' );
@@ -318,9 +318,9 @@ function _consoleChaining( o )
   test.is( !_.Logger.consoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
-  var l1 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l2 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l3 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l1 = new _.Logger({ output : null, onTransformEnd });
+  var l2 = new _.Logger({ output : null, onTransformEnd });
+  var l3 = new _.Logger({ output : null, onTransformEnd });
 
   l1.inputFrom( console, { combining : 'append' } );
   l2.inputFrom( console, { combining : 'append' } );
@@ -346,9 +346,9 @@ function _consoleChaining( o )
 
   /*outputs*/
 
-  var l4 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l5 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l6 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l4 = new _.Logger({ output : null, onTransformEnd });
+  var l5 = new _.Logger({ output : null, onTransformEnd });
+  var l6 = new _.Logger({ output : null, onTransformEnd });
 
   l4.inputFrom( console, { combining : 'append' } );
   l5.inputFrom( console, { combining : 'append' } );
@@ -385,7 +385,7 @@ function _consoleChaining( o )
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l4 = new _.Logger({ output : null, onTransformEnd });
   l4.inputFrom( console, { combining : 'append' } );
   l1.log( 'l1' );
   l2.log( 'l2' );
@@ -399,9 +399,9 @@ function _consoleChaining( o )
   test.is( _.Logger.consoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l2 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l3 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l1 = new _.Logger({ output : null, onTransformEnd });
+  var l2 = new _.Logger({ output : null, onTransformEnd });
+  var l3 = new _.Logger({ output : null, onTransformEnd });
 
   l1.inputFrom( console, { combining : 'append' } );
   l2.inputFrom( console, { combining : 'append' } );
@@ -429,9 +429,9 @@ function _consoleChaining( o )
 
   /*outputs*/
 
-  var l4 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l5 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
-  var l6 = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var l4 = new _.Logger({ output : null, onTransformEnd });
+  var l5 = new _.Logger({ output : null, onTransformEnd });
+  var l6 = new _.Logger({ output : null, onTransformEnd });
 
   l4.inputFrom( console, { combining : 'append' } );
   l5.inputFrom( console, { combining : 'append' } );
@@ -476,7 +476,7 @@ function consoleChaining( test )
 {
   var o =
   {
-    /*ttt*/test,
+    test,
     consoleWasBarred : false
   }
 
@@ -502,9 +502,9 @@ function chainingParallel( test )
 
   test.case = 'case1: 1 -> *';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd  });
-  var l2 = new _.Logger({ /*ttt*/onTransformEnd  });
-  var l3 = new _.Logger({ /*ttt*/onTransformEnd  });
+  var l1 = new _.Logger({ onTransformEnd  });
+  var l2 = new _.Logger({ onTransformEnd  });
+  var l3 = new _.Logger({ onTransformEnd  });
   var l4 = new _.Logger({ output : console });
   l4.outputTo( l3, { combining : 'append' } );
   l4.outputTo( l2, { combining : 'append' } );
@@ -516,7 +516,7 @@ function chainingParallel( test )
 
   test.case = 'case2: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd });
+  var l1 = new _.Logger({ onTransformEnd });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -532,7 +532,7 @@ function chainingParallel( test )
 
   test.case = 'case3: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd  });
+  var l1 = new _.Logger({ onTransformEnd  });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -549,10 +549,10 @@ function chainingParallel( test )
 
   test.case = 'case3: 1 logger to many loggers';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l2 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l3 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l4 = new _.Logger({ /*ttt*/onTransformEnd });
+  var l1 = new _.Logger({ onTransformEnd });
+  var l2 = new _.Logger({ onTransformEnd });
+  var l3 = new _.Logger({ onTransformEnd });
+  var l4 = new _.Logger({ onTransformEnd });
   l1.outputTo( l2, { combining : 'append' } );
   l1.outputTo( l3, { combining : 'append' } );
   l1.outputTo( l4, { combining : 'append' } );
@@ -563,10 +563,10 @@ function chainingParallel( test )
 
   test.case = 'case3: many loggers from 1 logger';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l2 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l3 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l4 = new _.Logger({ /*ttt*/onTransformEnd });
+  var l1 = new _.Logger({ onTransformEnd });
+  var l2 = new _.Logger({ onTransformEnd });
+  var l3 = new _.Logger({ onTransformEnd });
+  var l4 = new _.Logger({ onTransformEnd });
   l2.inputFrom( l1, { combining : 'append' } );
   l3.inputFrom( l1, { combining : 'append' } );
   l4.inputFrom( l1, { combining : 'append' } );
@@ -588,9 +588,9 @@ function chainingParallel( test )
   l1.inputFrom( l4, { combining : 'append' } );
 
   /* output */
-  var l5 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l6 = new _.Logger({ /*ttt*/onTransformEnd });
-  var l7 = new _.Logger({ /*ttt*/onTransformEnd });
+  var l5 = new _.Logger({ onTransformEnd });
+  var l6 = new _.Logger({ onTransformEnd });
+  var l7 = new _.Logger({ onTransformEnd });
 
   l1.outputTo( l5, { combining : 'append' } );
   l1.outputTo( l6, { combining : 'append' } );
@@ -606,7 +606,7 @@ function chainingParallel( test )
 
   test.case = 'case4: outputTo/inputFrom, remove some outputs ';
   var got = [];
-  var l1 = new _.Logger({ /*ttt*/onTransformEnd  });
+  var l1 = new _.Logger({ onTransformEnd  });
   var l2 = new _.Logger({ output : console });
   var l3 = new _.Logger({ output : console });
   var l4 = new _.Logger({ output : console });
@@ -657,8 +657,8 @@ function chainingParallel( test )
 
   // !!! needs silencing = false
   // test.case = 'case7: input from console twice ';
-  // var l1 = new _.Logger({ output : null,/*ttt*/onTransformEnd });
-  // var l2 = new _.Logger({ output : null,/*ttt*/onTransformEnd });
+  // var l1 = new _.Logger({ output : null,onTransformEnd });
+  // var l2 = new _.Logger({ output : null,onTransformEnd });
   // l1.inputFrom( console );
   // l2.inputFrom( console );
   // var got = [];
@@ -939,8 +939,8 @@ function outputUnchain( test )
 
   test.case = 'case1 delete l1 from l2 outputs, l2 still have one output';
   var got = [];
-  var l1 = new _.Logger( { /*ttt*/onTransformEnd  } );
-  var l2 = new _.Logger( { /*ttt*/onTransformEnd  } );
+  var l1 = new _.Logger( { onTransformEnd  } );
+  var l2 = new _.Logger( { onTransformEnd  } );
   l2.outputTo( l1, { combining : 'append' } );
   l2.outputUnchain( l1 )
   l2.log( 'msg' );
@@ -949,7 +949,7 @@ function outputUnchain( test )
 
   test.case = 'case2 delete l1 from l2 outputs, no msg transfered';
   var got = [];
-  var l1 = new _.Logger( { /*ttt*/onTransformEnd  } );
+  var l1 = new _.Logger( { onTransformEnd  } );
   var l2 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'rewrite' } );
   l2.outputUnchain( l1 );
@@ -959,8 +959,8 @@ function outputUnchain( test )
 
   test.case = 'case3: delete l1 from l2 outputs';
   var got = [];
-  var l1 = new _.Logger( { /*ttt*/onTransformEnd  } );
-  var l2 = new _.Logger( { /*ttt*/onTransformEnd  } );
+  var l1 = new _.Logger( { onTransformEnd  } );
+  var l2 = new _.Logger( { onTransformEnd  } );
   var l3 = new _.Logger({ output : console });
   l2.outputTo( l1, { combining : 'append' } );
   l3.outputTo( l2, { combining : 'append' } );
@@ -1077,7 +1077,7 @@ function inputFrom( test )
   //
   // test.case = 'case3: console as input';
   // var got = [];
-  // var l = new _.Logger( { output : null, /*ttt*/onTransformEnd } );
+  // var l = new _.Logger( { output : null, onTransformEnd } );
   // l.inputFrom( console );
   // l._prefix = '*';
   // console.log( 'abc' )
@@ -1087,7 +1087,7 @@ function inputFrom( test )
 
   test.case = 'case4: logger as input';
   var got = [];
-  var l = new _.Logger( { /*ttt*/onTransformEnd } );
+  var l = new _.Logger( { onTransformEnd } );
   var l2 = new _.Logger( );
   l.inputFrom( l2 );
   l._prefix = '--';
@@ -1223,7 +1223,7 @@ function inputUnchain( test )
 
   test.case = 'case3: remove console from input';
   var got = [];
-  var l = new _.Logger( { output : null,/*ttt*/onTransformEnd } );
+  var l = new _.Logger( { output : null,onTransformEnd } );
   l.inputFrom( console );
   l.inputUnchain( console );
   console.log( '1' );
@@ -1232,7 +1232,7 @@ function inputUnchain( test )
 
   test.case = 'case4: remove logger from input';
   var got = [];
-  var l1 = new _.Logger( { /*ttt*/onTransformEnd } );
+  var l1 = new _.Logger( { onTransformEnd } );
   var l2 = new _.Logger({ output : console });
   l1.inputFrom( l2 );
   l1.inputUnchain( l2 );
@@ -1412,7 +1412,7 @@ function _output( o )
   test.case = 'combining : rewrite, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1430,9 +1430,9 @@ function _output( o )
   test.case = 'combining : rewrite, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1458,7 +1458,7 @@ function _output( o )
   test.case = 'combining : append, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1476,9 +1476,9 @@ function _output( o )
   test.case = 'combining : append, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1510,7 +1510,7 @@ function _output( o )
   test.case = 'combining : prepend, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1528,9 +1528,9 @@ function _output( o )
   test.case = 'combining : prepend, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1564,7 +1564,7 @@ function _output( o )
   test.case = 'combining : supplement, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var hooked = [];
   var result = printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must  have printerB in outputs'
@@ -1584,9 +1584,9 @@ function _output( o )
   test.case = 'combining : prepend, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1624,7 +1624,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1648,7 +1648,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   inputPrinter.outputTo( console );
@@ -1677,7 +1677,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1700,7 +1700,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   inputPrinter.outputTo( console );
@@ -1736,7 +1736,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1759,7 +1759,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   inputPrinter.outputTo( console );
@@ -1796,7 +1796,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1821,7 +1821,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   inputPrinter.outputTo( console );
@@ -1855,8 +1855,8 @@ function _output( o )
   test.case = 'combining : rewrite';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( console );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
@@ -1884,8 +1884,8 @@ function _output( o )
   test.case = 'combining : append';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
@@ -1912,8 +1912,8 @@ function _output( o )
   test.case = 'combining : prepend';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
@@ -1940,8 +1940,8 @@ function _output( o )
   test.case = 'combining : supplement';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
@@ -1969,7 +1969,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
   var printerC = new _.Logger({ name : 'printerC' });
-  var printerD = new _.Logger({ name : 'printerD', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerD = new _.Logger({ name : 'printerD', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
@@ -1999,7 +1999,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
@@ -2028,7 +2028,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
@@ -2057,7 +2057,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
@@ -2081,7 +2081,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
@@ -2108,8 +2108,8 @@ function _output( o )
   test.case = 'combining : rewrite';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( console );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
@@ -2137,8 +2137,8 @@ function _output( o )
   test.case = 'combining : append';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
   printerA.outputTo( printerC );
@@ -2165,8 +2165,8 @@ function _output( o )
   test.case = 'combining : prepend';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
 
   printerA.outputTo( printerC );
@@ -2194,8 +2194,8 @@ function _output( o )
   test.case = 'combining : supplement, no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
@@ -2219,8 +2219,8 @@ function _output( o )
   test.case = 'combining : supplement';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
@@ -2251,7 +2251,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( console );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
@@ -2276,8 +2276,8 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var consoleHook = new _.Logger({ name : 'consoleHook', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var consoleHook = new _.Logger({ name : 'consoleHook', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
@@ -2306,8 +2306,8 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
-  var consoleHook = new _.Logger({ name : 'consoleHook', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var consoleHook = new _.Logger({ name : 'consoleHook', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } );
@@ -2336,7 +2336,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
@@ -2360,7 +2360,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = console;
-  var printerC = new _.Logger({ name : 'printerC', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
@@ -2391,7 +2391,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
   var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
 
   printerA.outputTo( printerO, { originalOutput : 1 } );
   printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
@@ -2420,7 +2420,7 @@ function _output( o )
   var printerA = console;
   var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
   var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
 
   printerO.inputFrom( printerA, { originalOutput : 1 } );
   printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
@@ -2451,7 +2451,7 @@ function _output( o )
   var printerA = console;
   var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
   var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
 
   printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
   printerO.inputFrom( printerA, { originalOutput : 1 } );
@@ -2476,7 +2476,7 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
   var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
 
   printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
   printerA.outputTo( printerO, { originalOutput : 1 } );
@@ -2506,7 +2506,7 @@ function _output( o )
   var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
   var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
   var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-  var printerE = new _.Logger({ name : 'printerE', /*ttt*/onTransformEnd });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
   printerA.outputTo( printerB, { exclusiveOutput : 1 } );
@@ -2527,7 +2527,7 @@ function _output( o )
   var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
   var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
   var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-  var printerE = new _.Logger({ name : 'printerE', /*ttt*/onTransformEnd });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
   printerA.outputTo( printerB, { originalOutput : 1 } );
@@ -2548,7 +2548,7 @@ function _output( o )
   var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
   var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
   var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-  var printerE = new _.Logger({ name : 'printerE', /*ttt*/onTransformEnd });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
   printerA.outputTo( printerB, { originalOutput : 1 } );
@@ -2569,7 +2569,7 @@ function _output( o )
   var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
   var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
   var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-  var printerE = new _.Logger({ name : 'printerE', /*ttt*/onTransformEnd });
+  var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
   printerA.outputTo( printerB, { exclusiveOutput : 1 } );
@@ -2619,7 +2619,7 @@ function output( test )
 {
   var o =
   {
-    /*ttt*/test,
+    test,
     consoleWasBarred : false
   }
 
@@ -2654,9 +2654,9 @@ function _input( o )
   test.case = 'exclusive input from console';
 
   var printerA = console;
-  var printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
   var hooked = [];
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformBegin, /*ttt*/onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
 
   /* chain input/output to console */
 
@@ -2711,7 +2711,7 @@ function input( test )
 {
   var o =
   {
-    /*ttt*/test,
+    test,
     consoleWasBarred : false
   }
 
@@ -4391,7 +4391,7 @@ function consoleBar( test )
 {
   var o =
   {
-    /*ttt*/test,
+    test,
     consoleWasBarred : false
   }
 
@@ -4890,7 +4890,7 @@ function finit( test )
 {
   var o =
   {
-    /*ttt*/test,
+    test,
     consoleWasBarred : false
   }
 
@@ -4923,32 +4923,32 @@ var Self =
   tests :
   {
 
-    /*ttt*/levelsTest,
-    /*ttt*/chaining,
-    /*ttt*/consoleChaining,
-    /*ttt*/chainingParallel,
-    // /*ttt*/outputTo,
-    // /*ttt*/outputUnchain,
-    // /*ttt*/inputFrom,
-    // /*ttt*/inputUnchain,
+    levelsTest,
+    chaining,
+    consoleChaining,
+    chainingParallel,
+    // outputTo,
+    // outputUnchain,
+    // inputFrom,
+    // inputUnchain,
 
-    /*ttt*/output,
-    /*ttt*/input,
+    output,
+    input,
 
-    /*ttt*/chain,
-    /*ttt*/chainWithEmptyConsole,
+    chain,
+    chainWithEmptyConsole,
 
-    /*ttt*/hasInputDeep,
-    /*ttt*/hasOutputDeep,
-    /*ttt*/_hasInput,
-    /*ttt*/_hasOutput,
-    /*ttt*/recursion,
+    hasInputDeep,
+    hasOutputDeep,
+    _hasInput,
+    _hasOutput,
+    recursion,
 
-    /*ttt*/consoleBar,
-    /*ttt*/consoleIs,
+    consoleBar,
+    consoleIs,
 
-    /*ttt*/clone,
-    /*ttt*/finit,
+    clone,
+    finit,
 
   },
 

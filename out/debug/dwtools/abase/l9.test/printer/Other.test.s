@@ -243,7 +243,7 @@ function logUp( test )
   var got;
   function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   var msg = 'Up';
@@ -271,7 +271,7 @@ function logDown( test )
   var got;
   function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd, outputGray : 1 });
+  var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   logger.up( 2 );
@@ -309,7 +309,7 @@ function coloredToHtml( test )
     got = o.outputForTerminal[ 0 ];
   }
 
-  var l = new _.Logger({ output : null, /*ttt*/onTransformEnd, writingToHtml : 1 })
+  var l = new _.Logger({ output : null, onTransformEnd, writingToHtml : 1 })
 
   test.case = 'default settings';
 
@@ -356,22 +356,22 @@ function coloredToHtml( test )
   // test.case = 'compact mode disabled';
 
   // var src = 'simple text';
-  // l.log({ /*ttt*/src, compact : false });
+  // l.log({ src, compact : false });
   // var expected = "<span>simple text</span>";
   // test.identical( got, expected );
 
   // var src = fg( 'red text', 'red' );
-  // l.log({ /*ttt*/src, compact : false });
+  // l.log({ src, compact : false });
   // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span>";
   // test.identical( got, expected );
 
   // var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ];
-  // l.log({ /*ttt*/src, compact : false });
+  // l.log({ src, compact : false });
   // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
   // test.identical( got, expected );
 
   // var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
-  // l.log({ /*ttt*/src, compact : false });
+  // l.log({ src, compact : false });
   // var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
   // test.identical( got, expected );
 }
@@ -386,7 +386,7 @@ function outputGray( test )
 
   function onTransformEnd( args ){ got = args.outputForTerminal };
 
-  var l = new _.Logger({ output : null, outputGray : false, /*ttt*/onTransformEnd });
+  var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
 
   test.case = 'wColor, outputGray : 0';
   l.log( _.color.strFormatForeground( 'text', 'dark red') );
@@ -412,7 +412,7 @@ function emptyLines( test )
   var got;
   var onTransformEnd = function( args ){ got = args.outputForTerminal[ 0 ]; };
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
 
 
   /* on directive#1 */
@@ -661,7 +661,7 @@ function coloringNoColor( test )
 
   function onTransformEnd( args ){ got = args.outputForTerminal[ 0 ] };
 
-  var l = new _.Logger({ output : null, outputGray : false, /*ttt*/onTransformEnd });
+  var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
 
   test.case = 'No wColor, outputGray : 0';
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
@@ -681,9 +681,9 @@ function clone( test )
 {
   test.case = 'clone printer';
 
-  var printer = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-  var inputPrinter = new _.Logger({ name : 'inputPrinter', /*ttt*/onTransformEnd });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', /*ttt*/onTransformEnd });
+  var printer = new _.Logger({ name : 'printerA', onTransformEnd });
+  var inputPrinter = new _.Logger({ name : 'inputPrinter', onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformEnd });
 
   printer.outputTo( outputPrinter );
   printer.inputFrom( inputPrinter );
@@ -748,17 +748,17 @@ var Self =
 
   tests :
   {
-    /*ttt*/currentColor,
-    /*ttt*/_colorsStack,
-    /*ttt*/logUp,
-    /*ttt*/logDown,
-    /*ttt*/coloredToHtml,
-    /*ttt*/outputGray,
-    /*ttt*/emptyLines,
-    /*ttt*/diagnostic,
-    /*ttt*/stateChangingValue,
-    /*ttt*/clone,
-    /*ttt*/coloringNoColor,
+    currentColor,
+    _colorsStack,
+    logUp,
+    logDown,
+    coloredToHtml,
+    outputGray,
+    emptyLines,
+    diagnostic,
+    stateChangingValue,
+    clone,
+    coloringNoColor,
 
   },
 

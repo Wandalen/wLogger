@@ -324,37 +324,37 @@ var Proto =
 
   // routine
 
-  /*ttt*/init,
+  init,
 
   // transform
 
-  /*ttt*/transform,
-  /*ttt*/_transformBegin,
-  /*ttt*/_transformAct,
-  /*ttt*/_transformEnd,
+  transform,
+  _transformBegin,
+  _transformAct,
+  _transformEnd,
 
   // leveling
 
-  /*ttt*/up,
-  /*ttt*/down,
-  /*ttt*/levelSet,
+  up,
+  down,
+  levelSet,
 
   // etc
 
-  /*ttt*/write,
-  /*ttt*/_strConcat,
+  write,
+  _strConcat,
 
-  // /*ttt*/canPrintFrom,
-  // /*ttt*/printFrom,
+  // canPrintFrom,
+  // printFrom,
 
   // relations
 
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
-  /*ttt*/Accessors,
-  /*ttt*/Statics,
+  Composes,
+  Aggregates,
+  Associates,
+  Accessors,
+  Statics,
 
 }
 
@@ -374,10 +374,6 @@ _.Copyable.mixin( Self );
 // --
 
 _[ Self.shortName ] = Self;
-
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

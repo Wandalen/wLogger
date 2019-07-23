@@ -222,23 +222,23 @@ var Associates =
 var Proto =
 {
 
-  /*ttt*/init,
+  init,
 
-  /*ttt*/write,
+  write,
 
-  /*ttt*/levelSet,
+  levelSet,
 
-  /*ttt*/_makeBranchDom,
-  /*ttt*/_makeTerminalDom,
-  /*ttt*/_makeNextLineDom,
+  _makeBranchDom,
+  _makeTerminalDom,
+  _makeNextLineDom,
 
 
   // relations
 
   /* constructor * : * Self, */
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
+  Composes,
+  Aggregates,
+  Associates,
 
 }
 
@@ -256,10 +256,6 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 // --
 // export
 // --
-
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

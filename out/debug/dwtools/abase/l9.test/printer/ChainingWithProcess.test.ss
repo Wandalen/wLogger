@@ -66,7 +66,7 @@ function trivial( test )
   {
     got.push( o.input[ 0 ] );
   }
-  var l = _.Logger({ /*ttt*/onWrite, output : null });
+  var l = _.Logger({ onWrite, output : null });
   var shell =
   {
     path : c.testFilePath,
@@ -108,14 +108,14 @@ var Self =
   name : 'ChainingWithProcess',
   silencing : 1,
   enabled : 0,
-  /*ttt*/onRoutineEnd,
+  onRoutineEnd,
   context :
   {
     tempDirPath : null,
   },
   tests :
   {
-    /*ttt*/trivial,
+    trivial,
   },
 
 };

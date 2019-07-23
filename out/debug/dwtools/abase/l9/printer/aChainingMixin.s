@@ -202,7 +202,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
   if( !args.length ) // yyy
   return; // yyy
 
-  let o = self.transform({ input : args, /*ttt*/channelName });
+  let o = self.transform({ input : args, channelName });
 
   if( !o )
   return;
@@ -881,18 +881,18 @@ let Restricts =
 let Statics =
 {
 
-  /*ttt*/consoleBar,
-  /*ttt*/consoleIsBarred,
+  consoleBar,
+  consoleIsBarred,
 
-  /*ttt*/chain,
+  chain,
 
   // fields
 
-  /*ttt*/ChainDescriptor,
-  /*ttt*/Combining,
-  /*ttt*/Channel,
+  ChainDescriptor,
+  Combining,
+  Channel,
 
-  /*ttt*/ChangeLevelMethods,
+  ChangeLevelMethods,
   unbarringConsoleOnError : 1,
 
 }
@@ -919,8 +919,8 @@ let Accessors =
 let Functors =
 {
 
-  /*ttt*/init,
-  /*ttt*/finit,
+  init,
+  finit,
 
 }
 
@@ -929,16 +929,16 @@ let Supplement =
 
   // write
 
-  /*ttt*/_writeToChannel,
-  /*ttt*/_writeToChannelWithoutExclusion,
-  /*ttt*/_writeToChannelUp,
-  /*ttt*/_writeToChannelDown,
-  /*ttt*/_writeToChannelIn,
+  _writeToChannel,
+  _writeToChannelWithoutExclusion,
+  _writeToChannelUp,
+  _writeToChannelDown,
+  _writeToChannelIn,
 
   // init
 
-  /*ttt*/_initChainingMixin,
-  /*ttt*/_initChainingMixinChannel,
+  _initChainingMixin,
+  _initChainingMixinChannel,
 
 }
 
@@ -949,52 +949,52 @@ let Extend =
 
   // chaining
 
-  /*ttt*/outputTo,
+  outputTo,
 
-  /*ttt*/outputUnchain,
+  outputUnchain,
 
-  /*ttt*/inputFrom,
+  inputFrom,
 
-  /*ttt*/inputUnchain,
+  inputUnchain,
 
-  /*ttt*/unchain,
+  unchain,
 
-  /*ttt*/consoleBar,
-  /*ttt*/consoleIsBarred,
+  consoleBar,
+  consoleIsBarred,
 
   // checker
 
-  /*ttt*/hasInput,
-  /*ttt*/hasInputClose,
-  /*ttt*/hasInputDeep,
+  hasInput,
+  hasInputClose,
+  hasInputDeep,
 
-  /*ttt*/hasOutput,
-  /*ttt*/hasOutputClose,
-  /*ttt*/hasOutputDeep,
+  hasOutput,
+  hasOutputClose,
+  hasOutputDeep,
 
   // etc
 
-  /*ttt*/_outputSet,
-  /*ttt*/_outputGet,
+  _outputSet,
+  _outputGet,
 
-  /*ttt*/_outputsSet,
-  /*ttt*/_outputsGet,
+  _outputsSet,
+  _outputsGet,
 
-  /*ttt*/_inputsSet,
-  /*ttt*/_inputsGet,
+  _inputsSet,
+  _inputsGet,
 
-  /*ttt*/_chainerGet,
-  /*ttt*/_chainerMakeFor,
+  _chainerGet,
+  _chainerMakeFor,
 
   // relations
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
-  /*ttt*/Restricts,
-  /*ttt*/Statics,
-  /*ttt*/Forbids,
-  /*ttt*/Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Forbids,
+  Accessors,
 
 }
 
@@ -1005,7 +1005,7 @@ _.classDeclare
   cls : Self,
   extend : Extend,
   supplement : Supplement,
-  /*ttt*/onMixinEnd,
+  onMixinEnd,
   functors : Functors,
   withMixin : true,
   withClass : true,
@@ -1016,10 +1016,6 @@ _.classDeclare
 // --
 
 _[ Self.shortName ] = Self;
-
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

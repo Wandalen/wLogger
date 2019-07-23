@@ -1303,21 +1303,21 @@ let Restricts =
 
 let Statics =
 {
-  /*ttt*/_chain,
+  _chain,
 
-  /*ttt*/Get,
-  /*ttt*/MakeFor,
-  /*ttt*/_chainDescriptorMake,
-  /*ttt*/_chainerWriteToConsole,
-  /*ttt*/_chainerWriteToPrinter,
+  Get,
+  MakeFor,
+  _chainDescriptorMake,
+  _chainerWriteToConsole,
+  _chainerWriteToPrinter,
 
-  /*ttt*/ChainDescriptor,
-  /*ttt*/ChainDescriptorFields,
+  ChainDescriptor,
+  ChainDescriptorFields,
 
-  /*ttt*/_chainDescriptorLike,
+  _chainDescriptorLike,
 
-  /*ttt*/Combining,
-  /*ttt*/Channel,
+  Combining,
+  Channel,
 
 }
 
@@ -1340,58 +1340,58 @@ let Extend =
 
   // inter
 
-  /*ttt*/init,
-  /*ttt*/finit,
+  init,
+  finit,
 
-  /*ttt*/_outputToConsole,
-  /*ttt*/_inputFromConsole,
-  /*ttt*/_outputToStream,
-  /*ttt*/_inputFromStream,
+  _outputToConsole,
+  _inputFromConsole,
+  _outputToStream,
+  _inputFromStream,
 
-  /*ttt*/outputTo,
-  /*ttt*/inputFrom,
+  outputTo,
+  inputFrom,
 
-  /*ttt*/_unchain,
-  /*ttt*/outputUnchain,
-  /*ttt*/inputUnchain,
-  /*ttt*/unchainEverything,
+  _unchain,
+  outputUnchain,
+  inputUnchain,
+  unchainEverything,
 
-  /*ttt*/_restoreOriginalWriteConsole,
-
-  //
-
-  /*ttt*/_chainDescriptorMake,
-  /*ttt*/_chainDescriptorFree,
-  /*ttt*/MakeFor,
-  /*ttt*/_chainerWriteToConsole,
-  /*ttt*/_chainerWriteToPrinter,
+  _restoreOriginalWriteConsole,
 
   //
 
-  /*ttt*/_nameGet,
-  /*ttt*/_nameSet,
+  _chainDescriptorMake,
+  _chainDescriptorFree,
+  MakeFor,
+  _chainerWriteToConsole,
+  _chainerWriteToPrinter,
+
+  //
+
+  _nameGet,
+  _nameSet,
 
   // checker
 
-  /*ttt*/_hasInput,
-  /*ttt*/hasInputClose,
-  /*ttt*/hasInputDeep,
+  _hasInput,
+  hasInputClose,
+  hasInputDeep,
 
-  /*ttt*/_hasOutput,
-  /*ttt*/hasOutputClose,
-  /*ttt*/hasOutputDeep,
+  _hasOutput,
+  hasOutputClose,
+  hasOutputDeep,
 
-  /*ttt*/_chainDescriptorLike,
+  _chainDescriptorLike,
 
   // relations
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
-  /*ttt*/Restricts,
-  /*ttt*/Statics,
-  /*ttt*/Forbids,
-  /*ttt*/Accessors,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Statics,
+  Forbids,
+  Accessors,
 
 }
 
@@ -1411,10 +1411,6 @@ _.Copyable.mixin( Self );
 // --
 
 _[ Self.shortName ] = Self;
-
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

@@ -45,7 +45,7 @@ let Self =
 
   tests :
   {
-    /*ttt*/simplest,
+    simplest,
   },
 
 }

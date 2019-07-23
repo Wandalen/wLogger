@@ -621,55 +621,55 @@ let Proto =
 
   // routine
 
-  /*ttt*/init,
+  init,
 
   // etc
 
-  /*ttt*/levelSet,
-  /*ttt*/_transformBegin,
-  /*ttt*/_transformEnd,
+  levelSet,
+  _transformBegin,
+  _transformEnd,
 
   // attributing
 
-  /*ttt*/_begin,
-  /*ttt*/begin,
-  /*ttt*/_end,
-  /*ttt*/end,
+  _begin,
+  begin,
+  _end,
+  end,
 
-  /*ttt*/_rbegin,
-  /*ttt*/rbegin,
-  /*ttt*/_rend,
-  /*ttt*/rend,
+  _rbegin,
+  rbegin,
+  _rend,
+  rend,
 
-  /*ttt*/_attributeError,
+  _attributeError,
 
   // verbosity
 
-  /*ttt*/verbosityPush,
-  /*ttt*/verbosityPop,
-  /*ttt*/verbosityReserve,
-  /*ttt*/_verbosityReserve,
-  /*ttt*/verboseEnough,
-  /*ttt*/_verboseEnough,
-  /*ttt*/_verbosityReport,
-  /*ttt*/_verbositySet,
+  verbosityPush,
+  verbosityPop,
+  verbosityReserve,
+  _verbosityReserve,
+  verboseEnough,
+  _verboseEnough,
+  _verbosityReport,
+  _verbositySet,
 
   // later
 
-  /*ttt*/later,
-  /*ttt*/_laterActualize,
-  /*ttt*/laterActualize,
-  /*ttt*/laterFinit,
+  later,
+  _laterActualize,
+  laterActualize,
+  laterFinit,
 
   // relations
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
-  /*ttt*/Restricts,
-  /*ttt*/Events,
-  /*ttt*/Accessors,
-  /*ttt*/Forbids,
+  Composes,
+  Aggregates,
+  Associates,
+  Restricts,
+  Events,
+  Accessors,
+  Forbids,
 
 }
 
@@ -690,10 +690,6 @@ _.EventHandler.mixin( Self );
 // --
 
 _[ Self.shortName ] = Self;
-
-// if( typeof module !== 'undefined' )
-// if( _global_.WTOOLS_PRIVATE )
-// { /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;

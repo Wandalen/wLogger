@@ -65,8 +65,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     printerA.inputFrom( readStream );
     printerB.inputFrom( readStream );
@@ -128,8 +128,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     printerA.inputFrom( readStream );
     printerB.inputFrom( readStream );
@@ -192,8 +192,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     chainerReadStream.outputTo( printerA );
     chainerReadStream.outputTo( printerB );
@@ -255,8 +255,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     chainerReadStream.outputTo( printerA );
     chainerReadStream.outputTo( printerB );
@@ -330,8 +330,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
@@ -383,8 +383,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
@@ -437,8 +437,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
@@ -489,8 +489,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', /*ttt*/onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', /*ttt*/onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
 
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
@@ -540,8 +540,8 @@ var Self =
   silencing : 1,
   enabled : 1,
 
-  /*ttt*/onSuiteBegin,
-  /*ttt*/onSuiteEnd,
+  onSuiteBegin,
+  onSuiteEnd,
 
   context :
   {
@@ -549,8 +549,8 @@ var Self =
   },
   tests :
   {
-    /*ttt*/input,
-    /*ttt*/output,
+    input,
+    output,
   },
 
 };

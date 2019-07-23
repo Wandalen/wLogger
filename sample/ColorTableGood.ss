@@ -75,7 +75,7 @@ function prepareTableInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    /*ttt*/onTransformEnd
+    onTransformEnd
   })
 
   var c = 0;
@@ -84,7 +84,7 @@ function prepareTableInfo()
   {
     colorNames.forEach( ( bg ) =>
     {
-      combinations.push({ /*ttt*/fg, /*ttt*/bg });
+      combinations.push({ fg, bg });
     })
   })
 

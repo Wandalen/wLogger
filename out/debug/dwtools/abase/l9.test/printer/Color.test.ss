@@ -39,7 +39,7 @@ function colorConsole( test )
     debugger;
     got = args.outputForTerminal[ 0 ];
   };
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
 
   test.case = 'case1: dark red text';
   logger.log( _.color.strFormatForeground( 'text', 'dark red') );
@@ -150,7 +150,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   test.shouldThrowError( () =>
   {
     logger.foregroundColor = 'aa';
@@ -167,7 +167,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   test.shouldThrowError( () =>
   {
     logger.foregroundColor = 'aa';
@@ -185,7 +185,7 @@ function colorConsole( test )
   //
 
   test.case = 'stacking colors';
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
 
   /**/
 
@@ -232,7 +232,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   logger.log( '#outputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#background : dark yellow#' );
@@ -248,7 +248,7 @@ function colorConsole( test )
 
   /* stacking colors even if outputGray is enabled */
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   logger.log( '#outputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#foreground : dark blue#' );
@@ -271,7 +271,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   logger.log( '#inputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#foreground : dark blue#' );
@@ -282,7 +282,7 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, /*ttt*/onTransformEnd });
+  var logger = new _.Logger({ output : null, onTransformEnd });
   logger.log( '#inputGray : 1#' );
   logger.log( '#foreground : dark red#' );
   logger.log( '#inputGray : 0#' );
@@ -312,7 +312,7 @@ function colorConsoleDirectives( test )
     // console.log( 'o.outputForPrinter', escape( o.outputForPrinter[ 0 ] ) )
   }
 
-  let l = new _.Logger({ output : null, /*ttt*/onTransformEnd  });
+  let l = new _.Logger({ output : null, onTransformEnd  });
 
   test.open( 'setting states as property' )
 
@@ -756,9 +756,9 @@ var Self =
 
   tests :
   {
-    /*ttt*/colorConsole,
-    /*ttt*/colorConsoleDirectives,
-    /*ttt*/shellColors,
+    colorConsole,
+    colorConsoleDirectives,
+    shellColors,
   },
 
 }

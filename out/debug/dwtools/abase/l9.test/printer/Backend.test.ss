@@ -52,7 +52,7 @@ var Self =
 
   tests :
   {
-    /*ttt*/simplest,
+    simplest,
   },
 
 }

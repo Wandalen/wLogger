@@ -437,50 +437,45 @@ var Associates =
 var Proto =
 {
 
-  /*ttt*/_wrapProtoHandler,
-  /*ttt*/wrapProto,
-  /*ttt*/unwrapProto,
+  _wrapProtoHandler,
+  wrapProto,
+  unwrapProto,
 
-  /*ttt*/_hookConsoleToFileHandler,
-  /*ttt*/hookConsoleToFile,
+  _hookConsoleToFileHandler,
+  hookConsoleToFile,
 
-  /*ttt*/_hookConsoleToAlertHandler,
-  /*ttt*/hookConsoleToAlert,
+  _hookConsoleToAlertHandler,
+  hookConsoleToAlert,
 
-  /*ttt*/_hookConsoleToDomHandler,
-  /*ttt*/hookConsoleToDom,
+  _hookConsoleToDomHandler,
+  hookConsoleToDom,
 
-  /*ttt*/_hookConsoleToServerSend,
-  /*ttt*/_hookConsoleToServerHandler,
-  /*ttt*/hookConsoleToServer,
+  _hookConsoleToServerSend,
+  _hookConsoleToServerHandler,
+  hookConsoleToServer,
 
-  /*ttt*/unhookConsole,
+  unhookConsole,
 
   // var
 
-  /*ttt*/_methods,
+  _methods,
 
   // relations
 
 
-  /*ttt*/Composes,
-  /*ttt*/Aggregates,
-  /*ttt*/Associates,
+  Composes,
+  Aggregates,
+  Associates,
 
 }
 
 //
 
-//debugger;
 _.classExtend( Self,Proto );
 
 // --
 // export
 // --
-
-if( typeof module !== 'undefined' )
-if( _global_.WTOOLS_PRIVATE )
-{ /* delete require.cache[ module.id ]; */ }
 
 if( typeof module !== 'undefined' && module !== null )
 module[ 'exports' ] = Self;
