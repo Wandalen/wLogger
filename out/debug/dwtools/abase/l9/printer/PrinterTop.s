@@ -48,7 +48,7 @@ var _ = _global_.wTools;
 var Parent = _.PrinterMid;
 var Self = function wPrinterTop( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterTop';

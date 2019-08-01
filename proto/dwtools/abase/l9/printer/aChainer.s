@@ -23,7 +23,7 @@ var _ = _global_.wTools;
 var Parent = null;
 var Self = function wChainer( o )
 {
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'Chainer';
@@ -36,7 +36,7 @@ function init( o )
 {
   var self = this;
 
-  _.instanceInit( self );
+  _.workpiece.initFields( self );
 
   Object.preventExtensions( self );
 

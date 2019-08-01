@@ -2,13 +2,22 @@
 
 'use strict';
 
-
-
 //
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = wTester;
+if( typeof module !== 'undefined' )
+{
+
+  require( '../../l9/printer/top/Logger.s' );
+  var _global = _global_;
+  var _ = _global_.wTools;
+
+  _.include( 'wTesting' );
+
+}
+
+var _global = _global_;
+var _ = _global_.wTools;
+var Parent = wTester;
 
 //
 
@@ -67,7 +76,6 @@ function colorConsole( test )
 
 }
 
-
 //
 
 var Self =
@@ -75,10 +83,11 @@ var Self =
 
   name : 'Tools/base/printer/Color/Browser',
   silencing : 1,
+  enabled : () => Config.platform !== 'nodejs',
 
   tests :
   {
-    colorConsole
+    colorConsole,
   },
 
 }

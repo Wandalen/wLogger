@@ -30,7 +30,7 @@ let Parent = null;
 let Self = function wPrinterColoredMixin( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1 );
-  return _.instanceConstructor( Self, this, arguments );
+  return _.workpiece.construct( Self, this, arguments );
 }
 
 Self.shortName = 'PrinterColoredMixin';

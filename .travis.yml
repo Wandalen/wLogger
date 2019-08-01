@@ -1,15 +1,15 @@
+
 sudo: false
 language: node_js
 os:
   - linux
   - osx
 node_js:
-  - '6'
-  - '7'
-  - 'node'
+  - '8'
+  - '9'
+  - 'lts/*'
 script:
   - npm test
-
 
 #cache:
 #  directories:
