@@ -14,7 +14,7 @@ if( typeof module !== 'undefined' )
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPathFundamentals' );
+  _.include( 'wPathBasic' );
 }
 
 //

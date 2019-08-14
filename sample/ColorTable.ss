@@ -20,7 +20,7 @@ var _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
-_.include( 'wExternalFundamentals' );
+_.include( 'wAppBasic' );
 
 var colorNames =
 [
