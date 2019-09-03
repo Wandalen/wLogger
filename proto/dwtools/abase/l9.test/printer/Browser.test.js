@@ -40,7 +40,7 @@ let Self =
 {
 
   name : 'Tools/base/printer/Browser',
-  enabled : () => Config.platform !== 'nodejs',
+  enabled : () => Config.interpreter !== 'njs',
   silencing : 1,
 
   tests :

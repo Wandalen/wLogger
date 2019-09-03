@@ -125,8 +125,8 @@ function drawTable()
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-  o.colWidths.push.apply( o.colWidths, _.arrayFillTimes( [] , colorNames.length / 2 , 6 ) )
-  o.rowAligns.push.apply( o.rowAligns, _.arrayFillTimes( [] , colorNames.length , 'center' ) );
+  o.colWidths.push.apply( o.colWidths, _.longFillTimes( [] , colorNames.length / 2 , 6 ) )
+  o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [] , colorNames.length , 'center' ) );
   o.colAligns = o.rowAligns;
 
   /**/

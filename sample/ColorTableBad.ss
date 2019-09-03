@@ -71,7 +71,7 @@ function prepareInfo()
     }
   })
 
-  var row = _.arrayFillTimes( [] , 3 , '-' );
+  var row = _.longFillTimes( [] , 3 , '-' );
   var currentPlatform;
 
   function onTransformEnd( data )
@@ -129,7 +129,7 @@ function prepareInfo()
   var bg = shortColor( combination[ 1 ] );
   newRow[ fg + splitter + bg ] = row;
   addToTable( newRow );
-  row = _.arrayFillTimes( [] , 3 , '-' );
+  row = _.longFillTimes( [] , 3 , '-' );
   })
 
 

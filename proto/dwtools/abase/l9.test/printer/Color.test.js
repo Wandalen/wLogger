@@ -83,7 +83,7 @@ var Self =
 
   name : 'Tools/base/printer/Color/Browser',
   silencing : 1,
-  enabled : () => Config.platform !== 'nodejs',
+  enabled : () => Config.interpreter !== 'njs',
 
   tests :
   {
