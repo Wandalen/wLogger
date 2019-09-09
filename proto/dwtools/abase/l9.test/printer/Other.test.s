@@ -27,7 +27,7 @@ function currentColor( test )
 
   test.case = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : dark red#' );
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
   var expected = [ 0.5, 0, 0 ];
@@ -35,7 +35,7 @@ function currentColor( test )
 
   test.case = 'case2 : next line color must be red too';
   logger.log( 'line' );
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
   var expected = [ 0.5, 0, 0 ];
@@ -48,7 +48,7 @@ function currentColor( test )
   test.case = 'case4 : setting two styles';
   logger.log( '#foreground : dark red##background : dark black#' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   var expected =
   [
     [ 1, 0, 0  ],
@@ -109,7 +109,7 @@ function currentColor( test )
   logger.foregroundColor = 'dark red';
   logger.backgroundColor = 'dark white';
   var got = [ logger.foregroundColor,logger.backgroundColor ];
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   var expected =
   [
     [ 1, 0, 0 ],
@@ -390,7 +390,7 @@ function outputGray( test )
 
   test.case = 'wColor, outputGray : 0';
   l.log( _.color.strFormatForeground( 'text', 'dark red') );
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
   else
   test.identical( got[ 0 ], '\u001b[31mtext\u001b[39;0m' );
@@ -444,7 +444,7 @@ function emptyLines( test )
 
 function diagnostic( test )
 {
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   {
     test.identical( 1, 1 );
     return;

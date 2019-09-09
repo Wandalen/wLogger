@@ -693,7 +693,7 @@ n = next
 
 function _directiveMoveApply( value )
 {
-  _.assert( Config.platform === 'nodejs' );
+  _.assert( Config.interpreter === 'njs' );
 
   function eol()
   {
@@ -746,7 +746,7 @@ function _directiveMoveApply( value )
 
 function _directiveClsApply( value )
 {
-  _.assert( Config.platform === 'nodejs' );
+  _.assert( Config.interpreter === 'njs' );
 
   let clsValuesMap =
   {
@@ -793,9 +793,9 @@ function _transformAct( original )
 
     if( self.writingToHtml )
     self._transformActHtml( o );
-    else if( Config.platform === 'nodejs' )
+    else if( Config.interpreter === 'njs' )
     self._transformAct_nodejs( o );
-    else if( Config.platform === 'browser' )
+    else if( Config.interpreter === 'browser' )
     self._transformAct_browser( o );
 
     _.assert( _.arrayIs( o.outputForPrinter ) );
@@ -826,7 +826,7 @@ function _diagnoseColorCheck()
 {
   let self = this;
 
-  if( Config.platform === 'browser' )
+  if( Config.interpreter === 'browser' )
   return;
 
   if( !self.foregroundColor || !self.backgroundColor )
@@ -996,7 +996,7 @@ function _colorSet( layer, color )
   {
     let originalName = color;
 
-    if( Config.platform === 'browser' )
+    if( Config.interpreter === 'browser' )
     {
       color = _.color.rgbaFromTry( color, null );
     }
@@ -1015,7 +1015,7 @@ function _colorSet( layer, color )
 
     if( color )
     {
-      if( Config.platform === 'browser' )
+      if( Config.interpreter === 'browser' )
       {
         color = _.color.colorNearestCustom({ color, colorMap : _.color.ColorMap });
         currentName = _getColorName( _.color.ColorMap, color );
