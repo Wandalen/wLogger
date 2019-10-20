@@ -136,11 +136,11 @@ function currentColor( test )
 
   test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger();
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'd';
   })
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.backgroundColor = 'd';
   })
@@ -257,7 +257,7 @@ function logUp( test )
   test.identical( got.length - msg.length, 6 );
 
   test.case = 'case3';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     logger.upAct();
   })
@@ -280,13 +280,13 @@ function logDown( test )
   test.identical( got.length - msg.length, 4 );
 
   test.case = 'case2';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     logger.downAct();
   })
 
   test.case = 'cant go below zero level';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.logDown();
@@ -641,7 +641,7 @@ function stateChangingValue( test )
     return
 
     test.case = state + ': ' + 'string';
-    test.shouldThrowError( () =>
+    test.shouldThrowErrorOfAnyKind( () =>
     {
       l[ state ] = '1';
     })
@@ -740,7 +740,7 @@ function clone( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/Other',
+  name : 'Tools.base.printer.Other',
   silencing : 1,
   /* verbosity : 1, */
 

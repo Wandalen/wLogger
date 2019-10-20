@@ -198,7 +198,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
   _.assert( _.longIs( args ) );
 
   // debugger;
-  // args = _.map( args, ( a ) => a ); // yyy
+  args = _.filter( args, ( a ) => a ); // yyy
   if( !args.length ) // yyy
   return; // yyy
 

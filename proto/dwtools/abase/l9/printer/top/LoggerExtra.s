@@ -351,7 +351,7 @@ function hookConsoleToServer( o )
   o.url = _.uri.for( o );
 
   if( !o.id )
-  o.id = _.numberRandomInt( 1 << 30 );
+  o.id = _.intRandom( 1 << 30 );
 
   console.log( 'hookConsoleToServer :',o.url );
 

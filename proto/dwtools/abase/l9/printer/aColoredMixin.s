@@ -565,7 +565,7 @@ function _join( splitted )
   _.assert( _.arrayIs( splitted ) );
 
   let result = '';
-  splitted.forEach( ( split,i ) =>
+  splitted.forEach( ( split, i ) =>
   {
     if( _.strIs( split ) )
     result += split
@@ -1662,7 +1662,7 @@ let Extend =
   _underlineSet,
 
   styleSet,
-  _styleApply :_styleApply,
+  _styleApply : _styleApply,
   _styleComplement,
   _styleReset,
 

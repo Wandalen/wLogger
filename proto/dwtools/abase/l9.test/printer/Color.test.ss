@@ -68,7 +68,7 @@ function colorConsole( test )
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case5: unknown color ';
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.log( _.color.strFormatForeground( 'text', 'aa') );
   })
@@ -118,11 +118,11 @@ function colorConsole( test )
 
   logger.foregroundColor = 'default';
   logger.backgroundColor = 'default';
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.log( '#foreground : aa#' );
   })
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.log( '#background : aa#' );
   })
@@ -149,7 +149,7 @@ function colorConsole( test )
   /**/
 
   var logger = new _.Logger({ output : null, onTransformEnd });
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'aa';
   })
@@ -166,11 +166,11 @@ function colorConsole( test )
   /**/
 
   var logger = new _.Logger({ output : null, onTransformEnd });
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'aa';
   })
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.backgroundColor = 'aa';
   })
@@ -749,7 +749,7 @@ function shellColors( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/Color/Shell',
+  name : 'Tools.base.printer.Color.Shell',
   silencing : 1,
 
   tests :

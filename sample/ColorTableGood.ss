@@ -132,7 +132,9 @@ function prepareTableInfo()
   {
     var c = map[ fg ];
     var obj1 = {};
-    obj1[ fg ] = _.longFillTimes( [], colorNames.length / 2, '-' );
+    debugger;
+    obj1[ fg ] = _.longFill( [], '-', colorNames.length / 2 );
+    // obj1[ fg ] = _.longFillTimes( [], colorNames.length / 2, '-' );
     row1 = obj1[ fg ];
 
     var obj2 = {};
@@ -175,8 +177,11 @@ function drawTable()
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-  o.colWidths.push.apply( o.colWidths, _.longFillTimes( [], colorNames.length / 2,  8 ) );
-  o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [], colorNames.length / 2, 'center' ) );
+  debugger;
+  o.colWidths.push.apply( o.colWidths, _.longFill( [], 8, colorNames.length / 2 ) );
+  o.rowAligns.push.apply( o.rowAligns, _.longFill( [], 'center', colorNames.length / 2 ) );
+  // o.colWidths.push.apply( o.colWidths, _.longFillTimes( [], colorNames.length / 2,  8 ) );
+  // o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [], colorNames.length / 2, 'center' ) );
   o.colAligns = o.rowAligns;
 
   /**/

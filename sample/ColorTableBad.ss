@@ -71,7 +71,9 @@ function prepareInfo()
     }
   })
 
-  var row = _.longFillTimes( [] , 3 , '-' );
+  debugger;
+  var row = _.longFill( [] , '-' , 3 );
+  // var row = _.longFillTimes( [] , 3 , '-' );
   var currentPlatform;
 
   function onTransformEnd( data )
@@ -123,13 +125,14 @@ function prepareInfo()
     {
       currentPlatform = c[ key ][ i ];
       silencedLogger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'TEXT TEXT TEXT', fg ) ,bg ));
-  }
-  var newRow = {};
-  var fg = shortColor( combination[ 0 ] );
-  var bg = shortColor( combination[ 1 ] );
-  newRow[ fg + splitter + bg ] = row;
-  addToTable( newRow );
-  row = _.longFillTimes( [] , 3 , '-' );
+    }
+    var newRow = {};
+    var fg = shortColor( combination[ 0 ] );
+    var bg = shortColor( combination[ 1 ] );
+    newRow[ fg + splitter + bg ] = row;
+    addToTable( newRow );
+    row = _.longFill( [] , '-' , 3 );
+    // row = _.longFillTimes( [] , 3 , '-' );
   })
 
 

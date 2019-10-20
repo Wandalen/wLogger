@@ -233,15 +233,32 @@ function _strConcat( args )
   if( !_.strConcat )
   return _.str.apply( _,args );
 
-  var optionsForStr =
+  var o2 =
   {
     linePrefix : self._prefix,
     linePostfix : self._postfix,
+    onToStr : onToStr,
   }
 
-  var result = _.strConcat( args, optionsForStr );
+  var result = _.strConcat( args, o2 );
 
   return result;
+
+  function onToStr( src, op )
+  {
+    if( _.errIs( src ) && _.color )
+    {
+      src = _.err( src );
+      // logger.log( 'attended', !!src.attended );
+      // logger.log( 'logged', !!src.logged );
+      let result = _.color.strFormat( src.stack, 'negative' );
+      // logger.log( 'attended', !!src.attended );
+      // logger.log( 'logged', !!src.logged );
+      // _global_.xxx = src;
+      return result;
+    }
+    return _.toStr( src, op.optionsForToStr );
+  }
 }
 
 //

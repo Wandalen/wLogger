@@ -28,7 +28,7 @@ let Parent = wTester;
 function onSuiteBegin()
 {
   let self = this;
-  self.testDirPath = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
+  self.testDirPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
 }
 
 //
@@ -36,7 +36,7 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.path.dirTempClose( self.testDirPath );
+  _.path.pathDirTempClose( self.testDirPath );
 }
 
 //
@@ -536,7 +536,7 @@ function output( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/ChainingWithStream',
+  name : 'Tools.base.printer.ChainingWithStream',
   silencing : 1,
   enabled : 1,
 

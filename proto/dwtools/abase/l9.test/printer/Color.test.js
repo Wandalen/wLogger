@@ -61,7 +61,7 @@ function colorConsole( test )
 
   test.case = 'case5: unknown color';
   var msg = _.color.strFormatForeground( 'msg', 'unknown')
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.log( msg );
   })
@@ -81,7 +81,7 @@ function colorConsole( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/Color/Browser',
+  name : 'Tools.base.printer.Color.Browser',
   silencing : 1,
   enabled : () => Config.interpreter !== 'njs',
 

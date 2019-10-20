@@ -563,7 +563,6 @@ let Composes =
 
   onTransformBegin : null,
   onTransformEnd : null,
-  // onVerbosity : null,
 
   attributes : _.define.own( {} ),
 
