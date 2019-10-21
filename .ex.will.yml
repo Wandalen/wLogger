@@ -29,7 +29,7 @@ about :
 path :
 
   repository : git+https:///github.com/Wandalen/wLogger.git
-  remotes :
+  origins :
    - git+https:///github.com/Wandalen/wLogger.git
    - npm:///wLogger
   bugtracker : https:///github.com/Wandalen/wLogger/issues
