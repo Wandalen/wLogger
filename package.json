@@ -20,13 +20,13 @@
   }, 
   "dependencies" : 
   {
-    "wTools" : "", 
-    "wCopyable" : "", 
-    "wEventHandler" : "", 
-    "wstringer" : "", 
-    "wstringsextra" : ""
+    "wTools" : "beta", 
+    "wCopyable" : "beta", 
+    "wEventHandler" : "beta", 
+    "wstringer" : "beta", 
+    "wstringsextra" : "beta"
   }, 
-  "optionalDependencies" : { "wColor" : "" }, 
-  "devDependencies" : { "wFiles" : "", "cli-table2" : "", "wTesting" : "" }, 
+  "optionalDependencies" : { "wColor" : "beta" }, 
+  "devDependencies" : { "wFiles" : "beta", "cli-table2" : "", "wTesting" : "beta" }, 
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }
