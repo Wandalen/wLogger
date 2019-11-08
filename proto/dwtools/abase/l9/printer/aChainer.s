@@ -75,8 +75,8 @@ function finit()
 //   _.assert( arguments.length === 1 );
 //   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
 //   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
-//   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
-//   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
+//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
+//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
 //   /* */
 
@@ -263,8 +263,8 @@ function _chain( o )
   _.assert( arguments.length === 1 );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
-  _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
-  _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
+  _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
+  _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
   // debugger;
 

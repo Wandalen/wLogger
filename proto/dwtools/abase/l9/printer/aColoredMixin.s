@@ -208,7 +208,7 @@ function _transformAct_nodejs( o )
       self._directiveApply( split );
       if( output && self.outputRaw )
       output = 0;
-      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      if( output && self.outputGray && _.longHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
 
       if( !self.inputRaw && !self.outputRaw )
@@ -352,7 +352,7 @@ function _transformAct_browser( o )
       self._directiveApply( split );
       if( output && self.outputRaw )
       output = 0;
-      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      if( output && self.outputGray && _.longHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
 
       if( !self.inputRaw && !self.outputRaw )
@@ -527,12 +527,12 @@ function _transformSplit( o )
     inputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
     else if( inputRaw )
     input = false;
-    else if( inputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    else if( inputGray && _.longHas( self.DirectiveColoring, directive ) )
     input = false;
 
     // if( outputRaw )
     // output = false;
-    // else if( outputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    // else if( outputGray && _.longHas( self.DirectiveColoring, directive ) )
     // output = false;
 
     if( !input )
@@ -602,7 +602,7 @@ function _splitHandle( split )
   if( parts.length === 2 )
   {
     parts[ 0 ] = parts[ 0 ].trim();
-    if( !_.arrayHas( self.Directive, parts[ 0 ] ) )
+    if( !_.longHas( self.Directive, parts[ 0 ] ) )
     return;
     return parts;
   }
@@ -893,7 +893,7 @@ function _diagnoseColorCollapse( fg, bg )
   let self = this;
   let collapse = false;
 
-  if( _.arraysAreIdentical( self.foregroundColor, self.backgroundColor ) )
+  if( _.longIdentical( self.foregroundColor, self.backgroundColor ) )
   {
     if( fg.originalName !== bg.originalName )
     {
@@ -1074,7 +1074,7 @@ function _colorSet( layer, color )
     // debugger;
     let keys = _.mapOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
-    if( _.arraysAreIdentical( map[ keys[ i ] ], color ) )
+    if( _.longIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
 
   }
@@ -1092,7 +1092,7 @@ function styleSet( src )
 
   let special = [ 'default', 'reset' ];
 
-  if( _.arrayHas( special, src ) )
+  if( _.longHas( special, src ) )
   {
     if( src === 'reset' || self._stylesStack.length < 2 )
     {
