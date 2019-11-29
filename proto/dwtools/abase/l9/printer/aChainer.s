@@ -996,6 +996,8 @@ function MakeFor( printer )
 
 function _chainerWriteToConsole( channel )
 {
+  _.assert( !!this, `Expects context` );
+
   let result;
   let console = this;
   let chainer = this[ chainerSymbol ];
