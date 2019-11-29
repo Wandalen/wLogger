@@ -15,9 +15,27 @@ if( typeof module !== 'undefined' )
 }
 
 //
-var _global = _global_;
+let _global = _global_;
 var _ = _global_.wTools;
-var Parent = wTester;
+let Parent = wTester;
+let fileProvider = _testerGlobal_.wTools.fileProvider;
+let path = fileProvider.path;
+
+function onSuiteBegin()
+{ 
+  let self = this;
+  self.suiteTempPath = path.pathDirTempOpen( path.join( __dirname, '../..'  ), 'PrinterOther' );
+  self.assetsOriginalSuitePath = path.join( __dirname, '_asset' );
+}
+
+//
+
+function onSuiteEnd()
+{
+  let self = this;
+  _.assert( _.strHas( self.suiteTempPath, '/PrinterOther-' ) )
+  path.pathDirTempClose( self.suiteTempPath );
+}
 
 //
 
@@ -763,14 +781,56 @@ function processWarning()
 
 //
 
-function consoleError( test )
+function consoleBarExperiment( test )
 {
-  test.mustNotThrowError( () => 
+  let context = this;
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
   {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Console is barred' ), 1 );
+    test.identical( _.strCount( op.output, 'Something wrong' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wLogger' );
+    
+    _.include( 'wLogger')
+    _.Logger.ConsoleBar();
+    if( _.Logger.ConsoleIsBarred( console ) )
+    console.log( 'Console is barred' )
     var message = 'Something wrong';
     console.error.call( undefined, [ message ] );
-  })
+  }
+
 }
+
+consoleBarExperiment.timeOut = 30000;
+consoleBarExperiment.description =
+`
+console is barred
+console.error works without context
+`
 
 //
 
@@ -782,6 +842,17 @@ var Self =
   /* verbosity : 1, */
 
   // routineTimeOut : 9999999,
+  
+  onSuiteBegin,
+  onSuiteEnd,
+  
+  
+  context : 
+  {
+    suiteTempPath : null,
+    assetsOriginalSuitePath : null,
+    defaultJsPath : null
+  },
 
   tests :
   {
@@ -797,7 +868,7 @@ var Self =
     clone,
     coloringNoColor,
     processWarning,
-    consoleError
+    consoleBarExperiment
 
   },
 
