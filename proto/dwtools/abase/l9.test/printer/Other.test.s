@@ -10,6 +10,7 @@ if( typeof module !== 'undefined' )
   var _ = _global_.wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wConsequence' );
 
 }
 
@@ -735,6 +736,25 @@ function clone( test )
 
 }
 
+function processWarning()
+{ 
+  let ready = new _.Consequence();
+  
+  var message = 'Something wrong';
+  process.emitWarning( 'Something wrong' );
+  process.on( 'warning', ( warning ) => 
+  {
+    ready.take( warning )
+  });
+  ready.then( ( got ) => 
+  {
+    test.identical( got.message, message );
+    return null;
+  })
+  
+  return ready;
+}
+
 //
 
 var Self =
@@ -759,6 +779,7 @@ var Self =
     stateChangingValue,
     clone,
     coloringNoColor,
+    processWarning
 
   },
 
