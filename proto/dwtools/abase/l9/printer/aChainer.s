@@ -983,7 +983,7 @@ function MakeFor( printer )
     }
 
     if( _.consoleIs( printer ) )
-    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel ] );
+    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel,printer ] );
     else
     chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToPrinter, [ channel ] );
 
@@ -994,15 +994,15 @@ function MakeFor( printer )
 
 //
 
-function _chainerWriteToConsole( channel )
+function _chainerWriteToConsole( channel,defaultConsole )
 {
   _.assert( !!this, `Expects context` );
 
   let result;
-  let console = this;
-  let chainer = this[ chainerSymbol ];
+  let console = this || defaultConsole;
+  let chainer = console[ chainerSymbol ];
   let cds = chainer.outputs;
-  let args = _.longSlice( arguments, 1 );
+  let args = _.longSlice( arguments, 2 );
 
   _.assert( _.arrayIs( cds ) );
   _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );
