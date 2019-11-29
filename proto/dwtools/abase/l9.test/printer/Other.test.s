@@ -738,6 +738,12 @@ function clone( test )
 
 function processWarning()
 { 
+  if( Config.interpreter !== 'njs' )
+  {
+    test.identical( 1,1 )
+    return
+  }
+  
   let ready = new _.Consequence();
   
   var message = 'Something wrong';
@@ -753,6 +759,17 @@ function processWarning()
   })
   
   return ready;
+}
+
+//
+
+function consoleError( test )
+{
+  test.mustNotThrowError( () => 
+  {
+    var message = 'Something wrong';
+    console.error.call( undefined, [ message ] );
+  })
 }
 
 //
@@ -779,7 +796,8 @@ var Self =
     stateChangingValue,
     clone,
     coloringNoColor,
-    processWarning
+    processWarning,
+    consoleError
 
   },
 
