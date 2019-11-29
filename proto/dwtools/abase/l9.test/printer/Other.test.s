@@ -814,8 +814,6 @@ program();
   {
     let _ = require( toolsPath );
     _.include( 'wLogger' );
-    
-    _.include( 'wLogger')
     _.Logger.ConsoleBar();
     if( _.Logger.ConsoleIsBarred( console ) )
     console.log( 'Console is barred' )
