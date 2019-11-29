@@ -242,7 +242,7 @@ function hookConsoleToDom( o )
   var o = o || {};
   var $ = jQuery;
 
-  _.timeReady( function()
+  _.time.ready( function()
   {
 
     if( !o.dom )

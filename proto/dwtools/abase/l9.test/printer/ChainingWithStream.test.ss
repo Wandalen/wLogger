@@ -77,7 +77,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -140,7 +140,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -204,7 +204,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -267,7 +267,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -336,7 +336,7 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -389,7 +389,7 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -443,7 +443,7 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -495,7 +495,7 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 

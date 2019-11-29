@@ -58,7 +58,7 @@ function _initChainingMixin( mixinDescriptor )
 {
   let proto = this;
 
-  _.assert( Object.hasOwnProperty.call( proto,'constructor' ) );
+  _.assert( Object.hasOwnProperty.call( proto, 'constructor' ) );
 
   proto.Channel.forEach( ( channel, c ) =>
   {
@@ -74,7 +74,7 @@ function _initChainingMixinChannel( mixinDescriptor, channel )
   let proto = this;
   // let mixin = proto.constructor.__mixin__;
 
-  _.assert( Object.hasOwnProperty.call( proto,'constructor' ) )
+  _.assert( Object.hasOwnProperty.call( proto, 'constructor' ) )
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channel ) );
 
@@ -221,7 +221,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
     if( cd.write && cd.write[ channelName ] )
     {
-      cd.write[ channelName ].apply( cd.outputPrinter,outputData );
+      cd.write[ channelName ].apply( cd.outputPrinter, outputData );
     }
     else
     {
@@ -246,7 +246,7 @@ function write()
 
 //
 
-function _writeToChannelUp( channelName,args )
+function _writeToChannelUp( channelName, args )
 {
   let self = this;
 
@@ -264,7 +264,7 @@ function _writeToChannelUp( channelName,args )
 
 //
 
-function _writeToChannelDown( channelName,args )
+function _writeToChannelDown( channelName, args )
 {
   let self = this;
 
@@ -273,7 +273,7 @@ function _writeToChannelDown( channelName,args )
   _.assert( _.longIs( args ) );
 
   self.begin( 'tail' );
-  self._writeToChannel( channelName,args );
+  self._writeToChannel( channelName, args );
   self.end( 'tail' );
 
   self.down();
@@ -282,7 +282,7 @@ function _writeToChannelDown( channelName,args )
 
 //
 
-function _writeToChannelIn( channelName,args )
+function _writeToChannelIn( channelName, args )
 {
   let self = this;
 
@@ -296,7 +296,7 @@ function _writeToChannelIn( channelName,args )
   tag[ args[ 0 ] ] = args[ 1 ];
 
   self.begin( tag );
-  self._writeToChannel( channelName,[ args[ 1 ] ] );
+  self._writeToChannel( channelName, [ args[ 1 ] ] );
   self.end( tag );
 
 }
@@ -485,7 +485,7 @@ function inputFrom( input, o )
   let self = this;
   // let chainer = self[ chainerSymbol ];
 
-  o = _.routineOptions( self.inputFrom,o );
+  o = _.routineOptions( self.inputFrom, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
   let o2 = _.mapExtend( null, o );
@@ -557,7 +557,7 @@ function unchain()
 
 //
 
-function consoleIsBarred( output )
+function ConsoleIsBarred( output )
 {
   let self = this;
 
@@ -573,22 +573,27 @@ function consoleIsBarred( output )
 
 //
 
-function consoleBar( o )
+/*
+qqq : extend test coverage, write doc. ask how
+qqq : implement, test, doc method consoleBar
+*/
+
+function ConsoleBar( o )
 {
   let self = this;
-  o = _.routineOptions( consoleBar, arguments );
-
-  if( !o.barPrinter )
-  o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
-  if( !o.outputPrinter && this.instanceIs() )
-  o.outputPrinter = this;
-  if( !o.outputPrinter )
-  o.outputPrinter = new self.Self();
+  o = _.routineOptions( ConsoleBar, arguments );
 
   /* */
 
   if( o.on )
   {
+
+    if( !o.barPrinter )
+    o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
+    if( !o.outputPrinter && self.instanceIs() )
+    o.outputPrinter = self;
+    if( !o.outputPrinter )
+    o.outputPrinter = new self.Self();
 
     if( o.verbose )
     {
@@ -602,21 +607,37 @@ function consoleBar( o )
     _.assert( !o.outputPrinterHadOutputs );
 
     o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
-
     o.outputPrinter.outputUnchain();
-
-    o.outputPrinter.outputTo( console,{ originalOutput : 1, combining : 'rewrite' } );
+    o.outputPrinter.outputTo( console, { originalOutput : 1, combining : 'rewrite' } );
 
     o.barPrinter.permanentStyle = 'exclusiveOutput.neutral';
-    o.barPrinter.inputFrom( console,{ exclusiveOutput : 1 } );
+    o.barPrinter.inputFrom( console, { exclusiveOutput : 1 } );
     o.barPrinter.outputTo( o.outputPrinter );
+
+    console[ barSymbol ] = o;
 
   }
   else
   {
 
-    o.barPrinter.unchain();
+    let bar = console[ barSymbol ];
 
+    if( bar )
+    {
+      if( !o.outputPrinter )
+      o.outputPrinter = bar.outputPrinter;
+      if( !o.barPrinter )
+      o.barPrinter = bar.barPrinter;
+      if( !o.outputPrinterHadOutputs )
+      o.outputPrinterHadOutputs = bar.outputPrinterHadOutputs;
+    }
+
+    _.assert( !!bar );
+    _.assert( bar.barPrinter === o.barPrinter );
+    _.assert( bar.outputPrinter === o.outputPrinter );
+    _.assert( bar.outputPrinterHadOutputs === o.outputPrinterHadOutputs );
+
+    o.barPrinter.unchain();
     o.outputPrinter.outputUnchain( console );
 
     _.assert( !!o.outputPrinterHadOutputs );
@@ -626,6 +647,8 @@ function consoleBar( o )
       let outputOptions = o.outputPrinterHadOutputs[ t ];
       o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly( outputOptions, o.outputPrinter.outputTo.defaults ) );
     }
+
+    delete console[ barSymbol ];
 
   }
 
@@ -648,34 +671,28 @@ so no cycle
   return o;
 }
 
-consoleBar.defaults =
+ConsoleBar.defaults =
 {
   outputPrinter : null,
   barPrinter : null,
+  outputPrinterHadOutputs : null,
   on : 1,
   verbose : 0,
-  outputPrinterHadOutputs : null,
 }
 
 //
 
-function chain( o )
+function Chain( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( chain, o )
+  _.routineOptions( Chain, o )
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
-
-  // let inputChainer = _chainerGet.call( o.inputPrinter );
-  // if( !inputChainer )
-  // inputChainer = _.Chainer._chainerMakeFor( o.inputPrinter );
-
-  // _.assert( inputChainer instanceof _.Chainer );
 
   return _.Chainer._chain( o );
 }
 
-var defaults = chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
+var defaults = Chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
 
 // --
 // checker
@@ -700,7 +717,7 @@ function hasInputClose( input )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return chainer._hasInput( input,{ deep : 0 } );
+  return chainer._hasInput( input, { deep : 0 } );
 }
 
 //
@@ -712,7 +729,7 @@ function hasInputDeep( input )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return chainer._hasInput( input,{ deep : 1 } );
+  return chainer._hasInput( input, { deep : 1 } );
 }
 
 //
@@ -736,7 +753,7 @@ function hasOutputClose( output )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return chainer._hasOutput( output,{ deep : 0 } );
+  return chainer._hasOutput( output, { deep : 0 } );
 }
 
 //
@@ -748,7 +765,7 @@ function hasOutputDeep( output )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return chainer._hasOutput( output,{ deep : 1 } );
+  return chainer._hasOutput( output, { deep : 1 } );
 }
 
 // --
@@ -837,6 +854,7 @@ function _chainerMakeFor( printer )
 // fields
 // --
 
+let barSymbol = Symbol.for( 'bar' );
 let chainerSymbol = Symbol.for( 'chainer' );
 let levelSymbol = Symbol.for( 'level' );
 
@@ -881,10 +899,9 @@ let Restricts =
 let Statics =
 {
 
-  consoleBar,
-  consoleIsBarred,
-
-  chain,
+  ConsoleBar,
+  ConsoleIsBarred,
+  Chain,
 
   // fields
 
@@ -959,8 +976,8 @@ let Extend =
 
   unchain,
 
-  consoleBar,
-  consoleIsBarred,
+  ConsoleBar,
+  ConsoleIsBarred,
 
   // checker
 

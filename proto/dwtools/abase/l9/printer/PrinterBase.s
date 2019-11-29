@@ -248,13 +248,10 @@ function _strConcat( args )
   {
     if( _.errIs( src ) && _.color )
     {
+      // debugger;
       src = _.err( src );
-      // logger.log( 'attended', !!src.attended );
-      // logger.log( 'logged', !!src.logged );
+      // debugger;
       let result = _.color.strFormat( src.stack, 'negative' );
-      // logger.log( 'attended', !!src.attended );
-      // logger.log( 'logged', !!src.logged );
-      // _global_.xxx = src;
       return result;
     }
     return _.toStr( src, op.optionsForToStr );
