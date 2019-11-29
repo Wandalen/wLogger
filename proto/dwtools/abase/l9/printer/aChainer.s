@@ -994,12 +994,13 @@ function MakeFor( printer )
 
 //
 
-function _chainerWriteToConsole( channel,defaultConsole )
+function _chainerWriteToConsole( channel, defaultConsole )
 {
-  _.assert( !!this, `Expects context` );
-
   let result;
   let console = this || defaultConsole;
+
+  _.assert( !!console, `Expects context` );
+
   let chainer = console[ chainerSymbol ];
   let cds = chainer.outputs;
   let args = _.longSlice( arguments, 2 );
