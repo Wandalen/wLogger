@@ -49,7 +49,7 @@ function currentColor( test )
   if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
-  var expected = [ 0.5, 0, 0 ];
+  var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
 
   test.case = 'case2 : next line color must be red too';
@@ -57,7 +57,7 @@ function currentColor( test )
   if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
-  var expected = [ 0.5, 0, 0 ];
+  var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
 
   test.case = 'case3 : setting color to default';
@@ -76,7 +76,7 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 0.5, 0, 0  ],
+    [ 0.5, 0, 0, 1  ],
     [ 0, 0, 0  ]
   ]
 
@@ -137,8 +137,8 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 0.5, 0, 0 ],
-    [ 0.9, 0.9, 0.9 ]
+    [ 0.5, 0, 0, 1 ],
+    [ 0.9, 0.9, 0.9, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -148,8 +148,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -177,8 +177,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -188,8 +188,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -199,8 +199,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 }
@@ -217,8 +217,8 @@ function _colorsStack( test )
   var got = [ logger._colorsStack[ 'foreground' ], logger.foregroundColor ];
   var expected =
   [
-    [ [ 1, 0, 0 ] ],
-    [ 1, 1, 1 ]
+    [ [ 1, 0, 0, 1 ] ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -228,8 +228,8 @@ function _colorsStack( test )
   var got = [ logger._colorsStack[ 'background' ], logger.backgroundColor ];
   var expected =
   [
-    [ [ 1, 0, 0 ] ],
-    [ 1, 1, 1 ]
+    [ [ 1, 0, 0, 1 ] ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -239,7 +239,7 @@ function _colorsStack( test )
   var expected =
   [
     [ ],
-    [ 1, 0, 0 ]
+    [ 1, 0, 0, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -249,7 +249,7 @@ function _colorsStack( test )
   var expected =
   [
     [ ],
-    [ 1, 0, 0 ]
+    [ 1, 0, 0, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -754,7 +754,7 @@ function clone( test )
 
 }
 
-function processWarning()
+function processWarning( test )
 { 
   if( Config.interpreter !== 'njs' )
   {
