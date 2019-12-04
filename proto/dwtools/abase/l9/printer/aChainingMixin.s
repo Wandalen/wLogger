@@ -581,6 +581,7 @@ qqq : implement, test, doc method consoleBar
 function ConsoleBar( o )
 {
   let self = this;
+
   o = _.routineOptions( ConsoleBar, arguments );
 
   /* */
@@ -648,6 +649,7 @@ function ConsoleBar( o )
       o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly( outputOptions, o.outputPrinter.outputTo.defaults ) );
     }
 
+    o.outputPrinterHadOutputs = null;
     delete console[ barSymbol ];
 
   }
@@ -662,7 +664,6 @@ function ConsoleBar( o )
 
 originalOutput link is not transitive, but terminating
 so no cycle
-
 
  console -> barPrinter -> outputPrinter -> defLogger -> console
 
