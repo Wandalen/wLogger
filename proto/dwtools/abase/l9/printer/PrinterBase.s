@@ -248,10 +248,9 @@ function _strConcat( args )
   {
     if( _.errIs( src ) && _.color )
     {
-      // debugger;
       src = _.err( src );
-      // debugger;
-      let result = _.color.strFormat( src.stack, 'negative' );
+      let result = src.stack;
+      result = _.color.strFormat( result, 'negative' );
       return result;
     }
     return _.toStr( src, op.optionsForToStr );
