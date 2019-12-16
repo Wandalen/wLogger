@@ -161,7 +161,7 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/dwtools/l3/PathBasic.s' );
+  require( 'include/dwtools/l2/PathBasic.s' );
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
@@ -189,7 +189,7 @@ function _hookConsoleToAlertHandler( wasMethod, methodName )
   return function()
   {
 
-    var args = _.arrayAppendArrays( [], [ arguments,_.diagnosticStack() ] );
+    var args = _.arrayAppendArrays( [], [ arguments,_.introspector.stack() ] );
 
     wasMethod.apply( console,args );
     alert( args.join( '\n' ) );

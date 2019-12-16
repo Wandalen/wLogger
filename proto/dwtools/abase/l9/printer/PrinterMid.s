@@ -46,7 +46,7 @@ function init( o )
 
   if( Config.debug )
   if( o.scriptStack === undefined )
-  o.scriptStack = _.diagnosticStack([ 1, Infinity ]);
+  o.scriptStack = _.introspector.stack([ 1, Infinity ]);
 
   Parent.prototype.init.call( self,o );
 
