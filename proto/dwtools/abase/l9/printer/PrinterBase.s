@@ -231,7 +231,7 @@ function _strConcat( args )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
-  return _.str.apply( _,args );
+  return _.toStrSimple.apply( _,args );
 
   var o2 =
   {

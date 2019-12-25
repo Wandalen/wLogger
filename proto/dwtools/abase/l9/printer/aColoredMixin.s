@@ -1344,7 +1344,7 @@ function escape( src )
 function str()
 {
   debugger;
-  return _.str.apply( _, arguments );
+  return _.toStrSimple.apply( _, arguments );
 }
 
 // --
