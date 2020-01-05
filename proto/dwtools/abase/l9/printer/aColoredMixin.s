@@ -35,7 +35,7 @@ let Self = function wPrinterColoredMixin( o )
 
 Self.shortName = 'PrinterColoredMixin';
 
-_.assert( _.routineIs( _.strExtractInlined ) );
+_.assert( _.routineIs( _.strSplitInlined ) );
 
 // --
 // stack
@@ -464,15 +464,15 @@ function _transformColor( o )
 
   if( self.permanentStyle )
   {
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], self.permanentStyle );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], self.permanentStyle );
   }
 
   if( self.coloringConnotation )
   {
     if( self.attributes.connotation === 'positive' )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'positive' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'positive' );
     else if( self.attributes.connotation === 'negative' )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'negative' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'negative' );
   }
 
   if( self.coloringHeadAndTail )
@@ -481,9 +481,9 @@ function _transformColor( o )
   {
     let reserve = self.verbosityReserve();
     if( self.attributes.head && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'head' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'head' );
     else if( self.attributes.tail && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'tail' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'tail' );
   }
 
 }
@@ -583,7 +583,7 @@ function _split( src )
 {
   let self = this;
   _.assert( _.strIs( src ) );
-  let splitted = _.strExtractInlined
+  let splitted = _.strSplitInlined
   ({
     src,
     onInlined : self._splitHandle.bind( self ),
@@ -695,6 +695,33 @@ function _directiveMoveApply( value )
 {
   _.assert( Config.interpreter === 'njs' );
 
+  let shellMoveDirectiveCodes =
+  {
+    'eol' : eol,
+    'bol' : '0G',
+    'eos' : eos,
+    'bos' : '1;1H',
+    'pl' : '1F',
+    'nl' : '1E',
+    'pc' : '1D',
+    'nc' : '1C'
+  }
+
+  let code = shellMoveDirectiveCodes[ value ];
+
+  _.assert( code !== undefined, 'Unknown value for directive move:', value );
+
+  if( _.routineIs( code ) )
+  code = code();
+
+  // for eos, eol returns empty string if program can't get sizes of the terminal
+  if( code.length )
+  code = `\x1b[${code}`;
+
+  return code;
+
+  /* */
+
   function eol()
   {
     let result = '';
@@ -716,30 +743,6 @@ function _directiveMoveApply( value )
     return  result
   };
 
-  let shellMoveDirectiveCodes =
-  {
-    'eol' : eol,
-    'bol' : '0G',
-    'eos' : eos,
-    'bos' : '1;1H',
-    'pl' : '1F',
-    'nl' : '1E',
-    'pc' : '1D',
-    'nc' : '1C'
-  }
-
-  let code = shellMoveDirectiveCodes[ value ];
-
-  _.assert( code !== undefined, 'Unknown value for directive move:', value );
-
-  if( _.routineIs( code ) )
-  code = code();
-
-  // for eos,eol, returns empty string if program can't get sizes of the terminal
-  if( code.length )
-  code = `\x1b[${code}`;
-
-  return code;
 }
 
 //
@@ -1301,9 +1304,9 @@ function colorFormat( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormat )
+  if( self.outputGray || !_.color || !_.ct.formatFinal )
   return src;
-  return _.color.strFormatEach( src, format );
+  return _.ct.formatFinal( src, format );
 }
 
 //
@@ -1312,9 +1315,9 @@ function colorBg( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormatBackground )
+  if( self.outputGray || !_.color || !_.ct.bg )
   return src;
-  return _.color.strFormatBackground( src, format );
+  return _.ct.bg( src, format );
 }
 
 //
@@ -1323,9 +1326,9 @@ function colorFg( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormatForeground )
+  if( self.outputGray || !_.color || !_.ct.fg )
   return src;
-  return _.color.strFormatForeground( src, format );
+  return _.ct.fg( src, format );
 }
 
 //
@@ -1334,9 +1337,9 @@ function escape( src )
 {
   let self = this;
   _.assert( arguments.length === 1 );
-  if( /*self.outputGray ||*/ !_.color || !_.color.strFormatForeground )
+  if( /*self.outputGray ||*/ !_.color || !_.ct.fg )
   return src;
-  return _.color.strEscape( src );
+  return _.ct.escape( src );
 }
 
 //
@@ -1358,7 +1361,7 @@ function topic()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.up' );
+  result = _.ct.formatFinal( result, 'topic.up' );
 
   this.log();
   this.log( result );
@@ -1375,7 +1378,7 @@ function topicUp()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.up' );
+  result = _.ct.formatFinal( result, 'topic.up' );
 
   this.log();
   this.logUp( result );
@@ -1392,7 +1395,7 @@ function topicDown()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.down' );
+  result = _.ct.formatFinal( result, 'topic.down' );
 
   this.log();
   this.logDown( result );
