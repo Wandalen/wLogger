@@ -318,8 +318,8 @@ function logDown( test )
 function coloredToHtml( test )
 {
 
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
 
   var got;
 
@@ -347,7 +347,7 @@ function coloredToHtml( test )
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
-  var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ].join( '' );
+  var src = [ 'some text',_.ct.fg( 'text','red' ),_.ct.bg( 'text','yellow' ),'some text' ].join( '' );
   l.log( src );
   var expected = "some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text";
   test.identical( got, expected );
@@ -367,7 +367,7 @@ function coloredToHtml( test )
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
-  var src = _.color.strFormatBackground( 'red' + _.color.strFormatBackground( 'blue','blue' ) + 'red','red' );
+  var src = _.ct.bg( 'red' + _.ct.bg( 'blue','blue' ) + 'red','red' );
   l.log( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
@@ -389,7 +389,7 @@ function coloredToHtml( test )
   // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
   // test.identical( got, expected );
 
-  // var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
+  // var src = [ 'some text',_.ct.fg( 'text','red' ),_.ct.bg( 'text','yellow' ),'some text' ];
   // l.log({ src, compact : false });
   // var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
   // test.identical( got, expected );
@@ -400,15 +400,15 @@ function coloredToHtml( test )
 function outputGray( test )
 {
   var got;
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
 
   function onTransformEnd( args ){ got = args.outputForTerminal };
 
   var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
 
   test.case = 'wColor, outputGray : 0';
-  l.log( _.color.strFormatForeground( 'text', 'dark red') );
+  l.log( _.ct.fg( 'text', 'dark red') );
   if( Config.interpreter === 'browser' )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
   else
@@ -672,8 +672,8 @@ function stateChangingValue( test )
 function coloringNoColor( test )
 {
   var color = _.color;
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
   _.color = null;
 
   var got;

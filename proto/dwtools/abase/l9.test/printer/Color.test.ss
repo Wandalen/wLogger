@@ -40,19 +40,19 @@ function colorConsole( test )
   var logger = new _.Logger({ output : null, onTransformEnd });
 
   test.case = 'case1: dark red text';
-  logger.log( _.color.strFormatForeground( 'text', 'dark red') );
+  logger.log( _.ct.fg( 'text', 'dark red') );
   var expected = '\u001b[31mtext\u001b[39;0m';
   test.identical( logger.foregroundColor, null );
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case2: dark yellow background';
-  logger.log( _.color.strFormatBackground( 'text', 'dark yellow') );
+  logger.log( _.ct.bg( 'text', 'dark yellow') );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[43mtext\u001b[49;0m';
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case3: dark red text on dark yellow background';
-  logger.log( _.color.strFormatBackground( _.color.strFormatForeground( 'text', 'dark red'), 'dark yellow') );
+  logger.log( _.ct.bg( _.ct.fg( 'text', 'dark red'), 'dark yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
@@ -61,7 +61,7 @@ function colorConsole( test )
   debugger;
 
   test.case = 'case4: dark yellow text on dark red background  + not styled text';
-  logger.log( 'text' + _.color.strFormatForeground( _.color.strFormatBackground( 'text', 'dark red'), 'dark yellow') + 'text' );
+  logger.log( 'text' + _.ct.fg( _.ct.bg( 'text', 'dark red'), 'dark yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   var expected = 'text\u001b[33m\u001b[41mtext\u001b[49;0m\u001b[39;0mtext';
@@ -70,7 +70,7 @@ function colorConsole( test )
   test.case = 'case5: unknown color ';
   test.shouldThrowErrorOfAnyKind( () =>
   {
-    logger.log( _.color.strFormatForeground( 'text', 'aa') );
+    logger.log( _.ct.fg( 'text', 'aa') );
   })
   test.identical( logger.foregroundColor, null );
 
@@ -299,8 +299,8 @@ function colorConsole( test )
 function colorConsoleDirectives( test )
 {
   let got;
-  let fg = _.color.strFormatForeground;
-  let bg = _.color.strFormatBackground;
+  let fg = _.ct.fg;
+  let bg = _.ct.bg;
 
   function onTransformEnd( o )
   {

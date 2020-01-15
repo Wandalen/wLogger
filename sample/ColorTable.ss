@@ -90,7 +90,7 @@ function prepareTableInfo()
     {
       c++;
       bg = colorNames[ j ];
-      var coloredLine = _.color.strFormatBackground( _.color.strFormatForeground( 'xYz', fg ), bg );
+      var coloredLine = _.ct.bg( _.ct.fg( 'xYz', fg ), bg );
       silencedLogger.log( coloredLine );
     }
     table1.push( row1 );
