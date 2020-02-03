@@ -1167,7 +1167,7 @@ function _styleReset()
 {
   var self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self._resetStyle = true;
 

@@ -363,7 +363,7 @@ function verbosityPop()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   // debugger;
 
@@ -389,7 +389,7 @@ function _verbosityReserve()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   // if( self.attributes.verbosity === undefined )
   // return Infinity;
@@ -406,7 +406,7 @@ function verboseEnough()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( !self.usingVerbosity )
   return true;
@@ -420,7 +420,7 @@ function _verboseEnough()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   return self._verbosityReserve() > 0;
 }

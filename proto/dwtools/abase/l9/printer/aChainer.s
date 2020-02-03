@@ -710,7 +710,7 @@ function inputsUnchainAll()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self.inputs.forEach( ( input ) =>
   {
@@ -727,7 +727,7 @@ function outputsUnchainAll()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self.inputs.forEach( ( input ) =>
   {
@@ -877,7 +877,7 @@ function unchainEverything()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   result += self.outputUnchain();
   result += self.inputUnchain();

@@ -812,7 +812,7 @@ function _outputsGet( outputs )
 {
   let self = this;
   let chainer = self[ chainerSymbol ];
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
   return chainer.outputs;
 }
 
