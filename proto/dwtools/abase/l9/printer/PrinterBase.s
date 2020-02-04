@@ -231,17 +231,30 @@ function _strConcat( args )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
-  return _.str.apply( _,args );
+  return _.toStrSimple.apply( _,args );
 
-  var optionsForStr =
+  var o2 =
   {
     linePrefix : self._prefix,
     linePostfix : self._postfix,
+    onToStr : onToStr,
   }
 
-  var result = _.strConcat( args, optionsForStr );
+  var result = _.strConcat( args, o2 );
 
   return result;
+
+  function onToStr( src, op )
+  {
+    if( _.errIs( src ) && _.color )
+    {
+      src = _.err( src );
+      let result = src.stack;
+      result = _.color.strFormat( result, 'negative' );
+      return result;
+    }
+    return _.toStr( src, op.optionsForToStr );
+  }
 }
 
 //

@@ -81,7 +81,7 @@ function trivial( test )
     'slave : starting',
   ];
   var got  = [];
-  var result = _.shellNode( shell )
+  var result = _.process.startNode( shell )
   .finally( function( err )
   {
     console.log( 'shellNode : done' );

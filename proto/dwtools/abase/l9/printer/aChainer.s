@@ -75,8 +75,8 @@ function finit()
 //   _.assert( arguments.length === 1 );
 //   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
 //   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
-//   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
-//   _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
+//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
+//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
 //   /* */
 
@@ -263,8 +263,8 @@ function _chain( o )
   _.assert( arguments.length === 1 );
   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
-  _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
-  _.assert( _.arrayHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
+  _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
+  _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
   // debugger;
 
@@ -710,7 +710,7 @@ function inputsUnchainAll()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self.inputs.forEach( ( input ) =>
   {
@@ -727,7 +727,7 @@ function outputsUnchainAll()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self.inputs.forEach( ( input ) =>
   {
@@ -877,7 +877,7 @@ function unchainEverything()
   let self = this;
   let result = 0;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   result += self.outputUnchain();
   result += self.inputUnchain();
@@ -983,7 +983,7 @@ function MakeFor( printer )
     }
 
     if( _.consoleIs( printer ) )
-    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel ] );
+    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel,printer ] );
     else
     chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToPrinter, [ channel ] );
 
@@ -994,13 +994,16 @@ function MakeFor( printer )
 
 //
 
-function _chainerWriteToConsole( channel )
+function _chainerWriteToConsole( channel, defaultConsole )
 {
   let result;
-  let console = this;
-  let chainer = this[ chainerSymbol ];
+  let console = this || defaultConsole;
+
+  _.assert( !!console, `Expects context` );
+
+  let chainer = console[ chainerSymbol ];
   let cds = chainer.outputs;
-  let args = _.longSlice( arguments, 1 );
+  let args = _.longSlice( arguments, 2 );
 
   _.assert( _.arrayIs( cds ) );
   _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );

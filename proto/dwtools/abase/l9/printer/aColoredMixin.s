@@ -35,7 +35,7 @@ let Self = function wPrinterColoredMixin( o )
 
 Self.shortName = 'PrinterColoredMixin';
 
-_.assert( _.routineIs( _.strExtractInlined ) );
+_.assert( _.routineIs( _.strSplitInlined ) );
 
 // --
 // stack
@@ -208,7 +208,7 @@ function _transformAct_nodejs( o )
       self._directiveApply( split );
       if( output && self.outputRaw )
       output = 0;
-      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      if( output && self.outputGray && _.longHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
 
       if( !self.inputRaw && !self.outputRaw )
@@ -352,7 +352,7 @@ function _transformAct_browser( o )
       self._directiveApply( split );
       if( output && self.outputRaw )
       output = 0;
-      if( output && self.outputGray && _.arrayHas( self.DirectiveColoring, split[ 0 ] ) )
+      if( output && self.outputGray && _.longHas( self.DirectiveColoring, split[ 0 ] ) )
       output = 0;
 
       if( !self.inputRaw && !self.outputRaw )
@@ -464,15 +464,15 @@ function _transformColor( o )
 
   if( self.permanentStyle )
   {
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], self.permanentStyle );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], self.permanentStyle );
   }
 
   if( self.coloringConnotation )
   {
     if( self.attributes.connotation === 'positive' )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'positive' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'positive' );
     else if( self.attributes.connotation === 'negative' )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'negative' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'negative' );
   }
 
   if( self.coloringHeadAndTail )
@@ -481,9 +481,9 @@ function _transformColor( o )
   {
     let reserve = self.verbosityReserve();
     if( self.attributes.head && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'head' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'head' );
     else if( self.attributes.tail && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.color.strFormat( o.outputForPrinter[ 0 ], 'tail' );
+    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'tail' );
   }
 
 }
@@ -527,12 +527,12 @@ function _transformSplit( o )
     inputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
     else if( inputRaw )
     input = false;
-    else if( inputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    else if( inputGray && _.longHas( self.DirectiveColoring, directive ) )
     input = false;
 
     // if( outputRaw )
     // output = false;
-    // else if( outputGray && _.arrayHas( self.DirectiveColoring, directive ) )
+    // else if( outputGray && _.longHas( self.DirectiveColoring, directive ) )
     // output = false;
 
     if( !input )
@@ -565,7 +565,7 @@ function _join( splitted )
   _.assert( _.arrayIs( splitted ) );
 
   let result = '';
-  splitted.forEach( ( split,i ) =>
+  splitted.forEach( ( split, i ) =>
   {
     if( _.strIs( split ) )
     result += split
@@ -583,7 +583,7 @@ function _split( src )
 {
   let self = this;
   _.assert( _.strIs( src ) );
-  let splitted = _.strExtractInlined
+  let splitted = _.strSplitInlined
   ({
     src,
     onInlined : self._splitHandle.bind( self ),
@@ -602,7 +602,7 @@ function _splitHandle( split )
   if( parts.length === 2 )
   {
     parts[ 0 ] = parts[ 0 ].trim();
-    if( !_.arrayHas( self.Directive, parts[ 0 ] ) )
+    if( !_.longHas( self.Directive, parts[ 0 ] ) )
     return;
     return parts;
   }
@@ -695,6 +695,33 @@ function _directiveMoveApply( value )
 {
   _.assert( Config.interpreter === 'njs' );
 
+  let shellMoveDirectiveCodes =
+  {
+    'eol' : eol,
+    'bol' : '0G',
+    'eos' : eos,
+    'bos' : '1;1H',
+    'pl' : '1F',
+    'nl' : '1E',
+    'pc' : '1D',
+    'nc' : '1C'
+  }
+
+  let code = shellMoveDirectiveCodes[ value ];
+
+  _.assert( code !== undefined, 'Unknown value for directive move:', value );
+
+  if( _.routineIs( code ) )
+  code = code();
+
+  // for eos, eol returns empty string if program can't get sizes of the terminal
+  if( code.length )
+  code = `\x1b[${code}`;
+
+  return code;
+
+  /* */
+
   function eol()
   {
     let result = '';
@@ -716,30 +743,6 @@ function _directiveMoveApply( value )
     return  result
   };
 
-  let shellMoveDirectiveCodes =
-  {
-    'eol' : eol,
-    'bol' : '0G',
-    'eos' : eos,
-    'bos' : '1;1H',
-    'pl' : '1F',
-    'nl' : '1E',
-    'pc' : '1D',
-    'nc' : '1C'
-  }
-
-  let code = shellMoveDirectiveCodes[ value ];
-
-  _.assert( code !== undefined, 'Unknown value for directive move:', value );
-
-  if( _.routineIs( code ) )
-  code = code();
-
-  // for eos,eol, returns empty string if program can't get sizes of the terminal
-  if( code.length )
-  code = `\x1b[${code}`;
-
-  return code;
 }
 
 //
@@ -893,7 +896,7 @@ function _diagnoseColorCollapse( fg, bg )
   let self = this;
   let collapse = false;
 
-  if( _.arraysAreIdentical( self.foregroundColor, self.backgroundColor ) )
+  if( _.longIdentical( self.foregroundColor, self.backgroundColor ) )
   {
     if( fg.originalName !== bg.originalName )
     {
@@ -1074,7 +1077,7 @@ function _colorSet( layer, color )
     // debugger;
     let keys = _.mapOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
-    if( _.arraysAreIdentical( map[ keys[ i ] ], color ) )
+    if( _.longIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
 
   }
@@ -1092,7 +1095,7 @@ function styleSet( src )
 
   let special = [ 'default', 'reset' ];
 
-  if( _.arrayHas( special, src ) )
+  if( _.longHas( special, src ) )
   {
     if( src === 'reset' || self._stylesStack.length < 2 )
     {
@@ -1164,7 +1167,7 @@ function _styleReset()
 {
   var self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   self._resetStyle = true;
 
@@ -1301,9 +1304,9 @@ function colorFormat( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormat )
+  if( self.outputGray || !_.color || !_.ct.formatFinal )
   return src;
-  return _.color.strFormatEach( src, format );
+  return _.ct.formatFinal( src, format );
 }
 
 //
@@ -1312,9 +1315,9 @@ function colorBg( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormatBackground )
+  if( self.outputGray || !_.color || !_.ct.bg )
   return src;
-  return _.color.strFormatBackground( src, format );
+  return _.ct.bg( src, format );
 }
 
 //
@@ -1323,9 +1326,9 @@ function colorFg( src, format )
 {
   let self = this;
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  if( self.outputGray || !_.color || !_.color.strFormatForeground )
+  if( self.outputGray || !_.color || !_.ct.fg )
   return src;
-  return _.color.strFormatForeground( src, format );
+  return _.ct.fg( src, format );
 }
 
 //
@@ -1334,9 +1337,9 @@ function escape( src )
 {
   let self = this;
   _.assert( arguments.length === 1 );
-  if( /*self.outputGray ||*/ !_.color || !_.color.strFormatForeground )
+  if( /*self.outputGray ||*/ !_.color || !_.ct.fg )
   return src;
-  return _.color.strEscape( src );
+  return _.ct.escape( src );
 }
 
 //
@@ -1344,7 +1347,7 @@ function escape( src )
 function str()
 {
   debugger;
-  return _.str.apply( _, arguments );
+  return _.toStrSimple.apply( _, arguments );
 }
 
 // --
@@ -1358,7 +1361,7 @@ function topic()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.up' );
+  result = _.ct.formatFinal( result, 'topic.up' );
 
   this.log();
   this.log( result );
@@ -1375,7 +1378,7 @@ function topicUp()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.up' );
+  result = _.ct.formatFinal( result, 'topic.up' );
 
   this.log();
   this.logUp( result );
@@ -1392,7 +1395,7 @@ function topicDown()
   let result = _.strConcat( arguments );
 
   if( !self.outputGray )
-  result = _.color.strFormat( result, 'topic.down' );
+  result = _.ct.formatFinal( result, 'topic.down' );
 
   this.log();
   this.logDown( result );
@@ -1662,7 +1665,7 @@ let Extend =
   _underlineSet,
 
   styleSet,
-  _styleApply :_styleApply,
+  _styleApply : _styleApply,
   _styleComplement,
   _styleReset,
 

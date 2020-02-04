@@ -161,7 +161,7 @@ function hookConsoleToFile( fileName )
 {
   var self = this;
 
-  require( 'include/dwtools/l3/PathBasic.s' );
+  require( 'include/dwtools/l2/PathBasic.s' );
   require( 'include/dwtools/UseMid.s' );
 
   fileName = fileName || 'log.txt';
@@ -189,7 +189,7 @@ function _hookConsoleToAlertHandler( wasMethod, methodName )
   return function()
   {
 
-    var args = _.arrayAppendArrays( [], [ arguments,_.diagnosticStack() ] );
+    var args = _.arrayAppendArrays( [], [ arguments,_.introspector.stack() ] );
 
     wasMethod.apply( console,args );
     alert( args.join( '\n' ) );
@@ -242,7 +242,7 @@ function hookConsoleToDom( o )
   var o = o || {};
   var $ = jQuery;
 
-  _.timeReady( function()
+  _.time.ready( function()
   {
 
     if( !o.dom )
@@ -351,7 +351,7 @@ function hookConsoleToServer( o )
   o.url = _.uri.for( o );
 
   if( !o.id )
-  o.id = _.numberRandomInt( 1 << 30 );
+  o.id = _.intRandom( 1 << 30 );
 
   console.log( 'hookConsoleToServer :',o.url );
 

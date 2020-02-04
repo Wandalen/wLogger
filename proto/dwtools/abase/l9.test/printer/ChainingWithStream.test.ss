@@ -28,7 +28,7 @@ let Parent = wTester;
 function onSuiteBegin()
 {
   let self = this;
-  self.testDirPath = _.path.dirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
+  self.testDirPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
 }
 
 //
@@ -36,7 +36,7 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.path.dirTempClose( self.testDirPath );
+  _.path.pathDirTempClose( self.testDirPath );
 }
 
 //
@@ -77,7 +77,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -87,8 +87,8 @@ function input( test )
       let onDataListeners = readStream.listeners( 'data' );
       let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
 
-      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       printerA.inputUnchain( readStream );
       printerB.inputUnchain( readStream );
@@ -103,8 +103,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -140,7 +140,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -150,8 +150,8 @@ function input( test )
       let onDataListeners = readStream.listeners( 'data' );
       let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
 
-      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       chainerReadStream.outputUnchain( printerA );
       chainerReadStream.outputUnchain( printerB );
@@ -166,8 +166,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -204,7 +204,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -213,8 +213,8 @@ function input( test )
       let cdPrinterB = printerB.inputs[ 0 ];
       let onDataListeners = readStream.listeners( 'data' );
 
-      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       chainerReadStream.outputUnchain( printerA );
       chainerReadStream.outputUnchain( printerB );
@@ -229,8 +229,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -267,7 +267,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -276,8 +276,8 @@ function input( test )
       let cdPrinterB = printerB.inputs[ 0 ];
       let onDataListeners = readStream.listeners( 'data' );
 
-      test.is( _.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       printerA.inputUnchain( readStream );
       printerB.inputUnchain( readStream );
@@ -292,8 +292,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.arrayHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -336,7 +336,7 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -389,7 +389,7 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -443,7 +443,7 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -495,7 +495,7 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.timeOut( 1000, () =>
+    return _.time.out( 1000, () =>
     {
       writeStream.close();
 
@@ -536,7 +536,7 @@ function output( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/ChainingWithStream',
+  name : 'Tools.base.printer.ChainingWithStream',
   silencing : 1,
   enabled : 1,
 

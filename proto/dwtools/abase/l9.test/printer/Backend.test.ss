@@ -46,7 +46,7 @@ function simplest( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/Backend',
+  name : 'Tools.base.printer.Backend',
   /* verbosity : 1, */
   silencing : 1,
 

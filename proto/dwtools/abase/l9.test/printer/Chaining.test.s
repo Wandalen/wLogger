@@ -80,7 +80,7 @@ function levelsTest( test )
   if( Config.debug )
   {
     test.case = 'level cant be less then zero';
-    test.shouldThrowError( function( )
+    test.shouldThrowErrorOfAnyKind( function( )
     {
       l.down( 10 );
     })
@@ -194,21 +194,21 @@ function _consoleChaining( o )
 {
   let test = o.test;
 
-  if( _.Logger.consoleIsBarred( console ) )
+  if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
     debugger
     test.suite.consoleBar( 0 );
   }
 
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   test.case = 'inputFrom console that exists in outputs';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.inputFrom( console ) );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
 
   //
@@ -217,7 +217,7 @@ function _consoleChaining( o )
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
   test.is( l.hasInputClose( console ) );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
   l.inputUnchain( console );
   test.is( !l.hasInputClose( console ) );
 
@@ -225,7 +225,7 @@ function _consoleChaining( o )
 
   test.case = 'inputFrom console that exists in outputs, exclusiveOutput on';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.inputFrom( console, { exclusiveOutput : 1  } ) );
+  test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1  } ) );
 
   //
 
@@ -233,10 +233,10 @@ function _consoleChaining( o )
   var l = new _.Logger({ output : null });
   l.inputFrom( console, { exclusiveOutput : 1 } );
   test.is( l.hasInputClose( console ) );
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   l.inputUnchain( console );
   test.is( !l.hasInputClose( console ) );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   debugger
 
@@ -248,38 +248,38 @@ function _consoleChaining( o )
     var l = new _.Logger({ output : null });
     l.inputFrom( console, { exclusiveOutput : 1 } );
     test.is( l.hasInputClose( console ) );
-    test.is( _.Logger.consoleIsBarred( console ) );
-    test.shouldThrowError( () => l.inputFrom( console, { exclusiveOutput : 1 } ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1 } ) );
     l.inputUnchain( console );
     test.is( !l.hasInputClose( console ) );
-    test.is( !_.Logger.consoleIsBarred( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
   }
 
   //
 
   test.case = 'outputTo console that exists in outputs';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.outputTo( console ) );
+  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console ) );
   test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   test.case = 'outputTo console that exists in outputs, originalOutput on';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () => l.outputTo( console, { originalOutput : 1 } ) );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 1 } ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   test.case = 'outputTo console that exists in inputs, originalOutput off';
   var l = new _.Logger({ output : null });
   l.inputFrom( console );
-  test.shouldThrowError( () => l.outputTo( console, { originalOutput : 0 } ) );
+  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 0 } ) );
   test.is( !l.hasOutputClose( console ) );
   l.inputUnchain( console );
   test.is( !l.hasInputClose( console ) );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
@@ -293,12 +293,12 @@ function _consoleChaining( o )
   l.outputUnchain( console );
   test.is( !l.hasInputClose( console ) && !l.inputs.length );
   test.is( !l.hasOutputClose( console ) && !l.outputs.length );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   test.case = 'console is not excluded, several inputs for console';
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
   var l1 = new _.Logger({ output : console });
@@ -315,7 +315,7 @@ function _consoleChaining( o )
   //
 
   test.case = 'console is not excluded, several outputs from console';
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
   var l1 = new _.Logger({ output : null, onTransformEnd });
@@ -334,7 +334,7 @@ function _consoleChaining( o )
   //
 
   test.case = 'console is not excluded, several outputs/inputs';
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
 
@@ -372,14 +372,14 @@ function _consoleChaining( o )
   if( o.consoleWasBarred )
   {
     test.suite.consoleBar( 1 );
-    test.is( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
 
   //
 
   test.case = 'console is excluded, several inputs for console';
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : console });
@@ -396,7 +396,7 @@ function _consoleChaining( o )
   //
 
   test.case = 'console is excluded, several outputs from console';
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
   var l1 = new _.Logger({ output : null, onTransformEnd });
@@ -417,7 +417,7 @@ function _consoleChaining( o )
   //
 
   test.case = 'console is excluded, several outputs/inputs';
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
 
@@ -453,7 +453,7 @@ function _consoleChaining( o )
   //
 
   test.case = 'if console is excluded, other console outputs must be omitted';
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
@@ -464,7 +464,7 @@ function _consoleChaining( o )
   test.is( l.hasInputClose( console ) );
   console.log( 'message' );
   l.inputUnchain( console );
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   test.identical( received, [] )
 
   //
@@ -677,7 +677,7 @@ function outputTo( test )
   test.case = 'output already exist';
 
   test.identical( got, expected );
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     var l1 = new _.Logger({ output : console });
@@ -725,7 +725,7 @@ function outputTo( test )
 
   test.case = 'empty output';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     l.outputTo( null, { combining : 'rewrite' } );
   })
@@ -733,7 +733,7 @@ function outputTo( test )
 
   test.case = 'empty output';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     l.outputTo( {}, { combining : 'rewrite' } );
   })
@@ -776,7 +776,7 @@ function outputTo( test )
   var l = new _.Logger({ output : console });
   var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'append' } );
-  test.shouldThrowError(function()
+  test.shouldThrowErrorOfAnyKind(function()
   {
     l.outputTo( l1, { combining : 'append' } );
   })
@@ -794,7 +794,7 @@ function outputTo( test )
   var l = new _.Logger({ output : console });
   var l1 = new _.Logger({ output : console });
   l.outputTo( l1, { combining : 'prepend' } );
-  test.shouldThrowError(function()
+  test.shouldThrowErrorOfAnyKind(function()
   {
 
     l.outputTo( l1, { combining : 'prepend' } );
@@ -853,7 +853,7 @@ function outputTo( test )
   //
 
   test.case = 'no args';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo();
   });
@@ -861,7 +861,7 @@ function outputTo( test )
   //
 
   test.case = 'output is not a Object';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( 'output', { combining : 'rewrite' } );
   });
@@ -869,19 +869,19 @@ function outputTo( test )
   //
 
   test.case = 'not allowed combining mode';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( console, { combining : 'mode' } );
   });
 
   // test.case = 'not allowed leveling mode';
-  // test.shouldThrowError( function()
+  // test.shouldThrowErrorOfAnyKind( function()
   // {
   //   l.outputTo( console, { combining : 'rewrite', leveling : 'mode' } );
   // });
 
   test.case = 'empty call';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( )
   });
@@ -889,7 +889,7 @@ function outputTo( test )
   //
 
   test.case = 'invalid output type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( '1' )
   });
@@ -897,7 +897,7 @@ function outputTo( test )
   //
 
   test.case = 'invalid combining type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( console, { combining : 'invalid' } );
   });
@@ -905,7 +905,7 @@ function outputTo( test )
   //
 
   test.case = 'invalid leveling type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( console, { leveling : 'invalid' } );
   });
@@ -913,7 +913,7 @@ function outputTo( test )
   //
 
   test.case = 'combining off, outputs not empty';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.outputTo( console );
   });
@@ -923,7 +923,7 @@ function outputTo( test )
   test.case = ' ';
   var l1 = new _.Logger({ output : null });
   var l2 = new _.Logger({ output : console });
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l1.inputFrom( console );
     l1.outputTo( l2, { combining : 'append' } )
@@ -1021,7 +1021,7 @@ function outputUnchain( test )
 
 
   test.case = 'output is not a object';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     l.outputUnchain( 1 );
@@ -1033,7 +1033,7 @@ function outputUnchain( test )
   test.identical( got, false )
 
   test.case = 'try to remove itself';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     l.outputUnchain( l );
@@ -1043,7 +1043,7 @@ function outputUnchain( test )
   return;
 
   test.case = 'incorrect type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     l.outputUnchain( '1' );
@@ -1057,7 +1057,7 @@ function inputFrom( test )
   var onTransformEnd = function( args ){ got.push( args.output[ 0 ] ) };
 
   test.case = 'case1: input already exist';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : l1 });
@@ -1065,7 +1065,7 @@ function inputFrom( test )
   });
 
   test.case = 'case2: input already exist';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     var l1 = new _.Logger({ output : console });
@@ -1100,14 +1100,14 @@ function inputFrom( test )
   test.case = 'try to add existing input';
   var l = new _.Logger({ output : console });
   var l1 = new _.Logger({ output : l });
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.inputFrom( l1 );
   });
 
   test.case = 'try to add console that exists in output';
   var l = new _.Logger({ output : console });
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.inputFrom( console );
   });
@@ -1127,21 +1127,21 @@ function inputFrom( test )
   test.identical( got, expected );
 
   test.case = 'try to add itself';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     l.inputFrom( l );
   });
 
   test.case = 'try to add null';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     l.inputFrom( null );
   });
 
   test.case = 'simple recursion';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : console });
     var l1 = new _.Logger({ output : console });
@@ -1150,7 +1150,7 @@ function inputFrom( test )
   });
 
   test.case = 'l1->l2,l2->l3,l3->l1';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
@@ -1163,7 +1163,7 @@ function inputFrom( test )
   test.case = 'console->l1->l2->console';
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : null });
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l2.inputFrom( console );
     l1.inputFrom( l2 );
@@ -1180,7 +1180,7 @@ function inputFrom( test )
   //
 
   test.case = 'no args';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.inputFrom();
   });
@@ -1188,7 +1188,7 @@ function inputFrom( test )
   //
 
   test.case = 'incorrect type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.inputFrom( '1' );
   });
@@ -1196,7 +1196,7 @@ function inputFrom( test )
   //
 
   test.case = 'console exists as output';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     l.inputFrom( console );
   });
@@ -1305,7 +1305,7 @@ function inputUnchain( test )
   return;
 
   test.case = 'incorrect type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.inputUnchain( '1' );
@@ -1334,7 +1334,7 @@ function _output( o )
     try to do multiple original/exclusive output in different order
   */
 
-  if( _.Logger.consoleIsBarred( console ) )
+  if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
     test.suite.consoleBar( 0 );
@@ -1347,26 +1347,26 @@ function _output( o )
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = new _.Logger({ name : 'printerB' });
 
-  test.shouldThrowError( () => printerA.outputTo( printerB, { combining : 'unknown' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerB, { combining : 'unknown' } ) );
 
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } ) );
 
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } ) );
 
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } ) );
 
   printerA.outputTo( printerB );
-  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
 
-  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
-  test.shouldThrowError( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
 
   test.close( 'output exists' );
 
@@ -1381,11 +1381,11 @@ function _output( o )
 
   printerA.outputTo( printerB );
 
-  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
-  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
 
-  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
-  test.shouldThrowError( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerB.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerB.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
 
   test.case = 'deep';
 
@@ -1396,11 +1396,11 @@ function _output( o )
   printerA.outputTo( printerB );
   printerB.outputTo( printerC );
 
-  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
-  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } ) );
 
-  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
-  test.shouldThrowError( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerC.outputTo( printerA, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } ) );
+  test.shouldThrowErrorOfAnyKind( () => printerC.outputTo( printerA, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } ) );
 
   test.close( 'close/deep loop' );
 
@@ -2590,7 +2590,7 @@ function _output( o )
   if( o.consoleWasBarred )
   {
     test.suite.consoleBar( 1 );
-    test.is( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
   function onTransformBegin2( o )
@@ -2643,7 +2643,7 @@ function _input( o )
 {
   let test = o.test;
 
-  if( _.Logger.consoleIsBarred( console ) )
+  if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
     test.suite.consoleBar( 0 );
@@ -2689,7 +2689,7 @@ function _input( o )
   if( o.consoleWasBarred )
   {
     test.suite.consoleBar( 1 );
-    test.is( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
 
@@ -2734,7 +2734,7 @@ function input( test )
 
 function chain( test )
 {
-  let chain  = _.Logger.chain;
+  let chain  = _.Logger.Chain;
 
   /*
     different inputCombining/outputCombining
@@ -3983,7 +3983,7 @@ function chainWithEmptyConsole( test )
 {
   test.open( 'modify console by chaining' );
 
-  let consoleWasBarred = _.Logger.consoleIsBarred( console );
+  let consoleWasBarred = _.Logger.ConsoleIsBarred( console );
 
   if( consoleWasBarred )
   test.suite.consoleBar( 0 );
@@ -4116,7 +4116,7 @@ function hasInputDeep( test )
   test.identical( got, expected );
 
   test.case = 'no args';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.hasInputDeep();
@@ -4142,14 +4142,14 @@ function hasOutputDeep( test )
   test.identical( got, expected );
 
   test.case = 'no args';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.hasOutputDeep();
   });
 
   test.case = 'incorrect type';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.hasOutputDeep( 1 );
@@ -4214,14 +4214,14 @@ function _hasOutput( test )
 function recursion( test )
 {
   test.case = 'add own object to outputs';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l = new _.Logger({ output : null });
     l.outputTo( l );
   });
 
   test.case = 'l1->l2->l1';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : null });
     var l2 = new _.Logger({ output : null });
@@ -4230,7 +4230,7 @@ function recursion( test )
   });
 
   test.case = 'l1->l2->l1';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
@@ -4239,7 +4239,7 @@ function recursion( test )
   });
 
   test.case = 'multiple inputs, try to add existing input to output';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
@@ -4252,7 +4252,7 @@ function recursion( test )
   });
 
   test.case = 'l3->l2,l2->l1,l1->l3';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
@@ -4263,7 +4263,7 @@ function recursion( test )
   });
 
   test.case = 'console->a->b->console';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var a = new _.Logger({ output : null });
     var b = new _.Logger({ output : null });
@@ -4273,14 +4273,14 @@ function recursion( test )
   });
 
   test.case = 'input from existing output';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var a = new _.Logger({ output : console });
     a.inputFrom( console );
   });
 
   test.case = 'add existing output';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var a = new _.Logger({ output : console });
     a.outputTo( console, { combining : 'append' } );
@@ -4293,7 +4293,7 @@ function _consoleBar( o )
 {
   let test = o.test;
 
-  if( _.Logger.consoleIsBarred( console ) )
+  if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
     test.suite.consoleBar( 0 );
@@ -4302,20 +4302,20 @@ function _consoleBar( o )
   //
 
   test.case = 'bar/unbar console'
-  var barDescriptor = _.Logger.consoleBar
+  var barDescriptor = _.Logger.ConsoleBar
   ({
     outputPrinter : wTester.logger,
     barPrinter : null,
     on : 1,
   });
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
 
   if( Config.debug )
   {
     //try to on console again
-    test.shouldThrowError( () =>
+    test.shouldThrowErrorOfAnyKind( () =>
     {
-      _.Logger.consoleBar
+      _.Logger.ConsoleBar
       ({
         outputPrinter : wTester.logger,
         barPrinter : null,
@@ -4323,29 +4323,29 @@ function _consoleBar( o )
       })
     });
 
-    var consoleIsBarred = _.Logger.consoleIsBarred( console );
+    var ConsoleIsBarred = _.Logger.ConsoleIsBarred( console );
 
     // if( _.Logger.unbarringConsoleOnError )
-    // test.is( !consoleIsBarred );
+    // test.is( !ConsoleIsBarred );
     // else
-    test.is( consoleIsBarred );
+    test.is( ConsoleIsBarred );
   }
 
   barDescriptor.on = 0;
-  _.Logger.consoleBar( barDescriptor );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  _.Logger.ConsoleBar( barDescriptor );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   test.case = 'excluded console forwards message only to on logger';
-  test.is( !_.Logger.consoleIsBarred( console ) );
-  var barDescriptor = _.Logger.consoleBar
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
+  var barDescriptor = _.Logger.ConsoleBar
   ({
     outputPrinter : wTester.logger,
     barPrinter : null,
     on : 1,
   });
-  test.is( _.Logger.consoleIsBarred( console ) );
+  test.is( _.Logger.ConsoleIsBarred( console ) );
   var received = [];
   var l = new _.Logger
   ({
@@ -4356,24 +4356,24 @@ function _consoleBar( o )
   console.log( 'message' );
   l.inputUnchain( console );
   barDescriptor.on = 0;
-  _.Logger.consoleBar( barDescriptor );
+  _.Logger.ConsoleBar( barDescriptor );
   test.identical( received, [] );
-  test.is( !_.Logger.consoleIsBarred( console ) );
+  test.is( !_.Logger.ConsoleIsBarred( console ) );
 
   //
 
   if( Config.debug )
   {
     test.case = 'error if provided barPrinter has inputs/outputs'
-    test.is( !_.Logger.consoleIsBarred( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
     let o =
     {
       outputPrinter : wTester.logger,
       barPrinter : new _.Logger({ output : console }),
       on : 1,
     }
-    test.shouldThrowError( () => _.Logger.consoleBar( o ) );
-    test.is( !_.Logger.consoleIsBarred( console ) );
+    test.shouldThrowErrorOfAnyKind( () => _.Logger.ConsoleBar( o ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
   }
 
   //
@@ -4381,13 +4381,13 @@ function _consoleBar( o )
   if( o.consoleWasBarred )
   {
     test.suite.consoleBar( 1 );
-    test.is( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 }
 
 //
 
-function consoleBar( test )
+function ConsoleBar( test )
 {
   var o =
   {
@@ -4422,7 +4422,7 @@ function consoleIs( test )
   if( !Config.debug )
   return;
 
-  test.shouldThrowError( () => _.consoleIs() );
+  test.shouldThrowErrorOfAnyKind( () => _.consoleIs() );
 }
 
 //
@@ -4483,7 +4483,7 @@ function _finit( test )
   +self -> original -> console
   +self -> original -> printer */
 
-  if( _.Logger.consoleIsBarred( console ) )
+  if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
     test.suite.consoleBar( 0 );
@@ -4825,7 +4825,7 @@ function _finit( test )
   if( o.consoleWasBarred )
   {
     test.suite.consoleBar( 1 );
-    test.is( _.Logger.consoleIsBarred( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
 
@@ -4913,7 +4913,7 @@ function finit( test )
 var Self =
 {
 
-  name : 'Tools/base/printer/Chaining',
+  name : 'Tools.base.printer.Chaining',
 
   // routineTimeOut : 999999,
 
@@ -4944,7 +4944,7 @@ var Self =
     _hasOutput,
     recursion,
 
-    consoleBar,
+    ConsoleBar,
     consoleIs,
 
     clone,

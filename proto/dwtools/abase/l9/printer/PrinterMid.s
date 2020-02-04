@@ -46,7 +46,7 @@ function init( o )
 
   if( Config.debug )
   if( o.scriptStack === undefined )
-  o.scriptStack = _.diagnosticStack([ 2, Infinity ]);
+  o.scriptStack = _.introspector.stack([ 1, Infinity ]);
 
   Parent.prototype.init.call( self,o );
 
@@ -178,12 +178,15 @@ function _end( key,val )
   _.assert( arguments.length === 1 || arguments.length === 2 );
   _.assert( _.strIs( key ) );
 
+  if( Config.debug )
   if( val !== undefined )
-  _.assert
-  (
-    val === self.attributes[ key ],
-    () => self._attributeError( key, self.attributes[ key ], val )
-  );
+  if( val !== self.attributes[ key ] )
+  throw self._attributeError( key, self.attributes[ key ], val );
+  // _.assert
+  // (
+  //   val === self.attributes[ key ],
+  //   () => self._attributeError( key, self.attributes[ key ], val )
+  // );
 
   if( self._attributesStacks[ key ] )
   {
@@ -360,7 +363,7 @@ function verbosityPop()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   // debugger;
 
@@ -386,7 +389,7 @@ function _verbosityReserve()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   // if( self.attributes.verbosity === undefined )
   // return Infinity;
@@ -403,7 +406,7 @@ function verboseEnough()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   if( !self.usingVerbosity )
   return true;
@@ -417,7 +420,7 @@ function _verboseEnough()
 {
   let self = this;
 
-  _.assert( arguments.length === 0 );
+  _.assert( arguments.length === 0, 'Expects no arguments' );
 
   return self._verbosityReserve() > 0;
 }
@@ -563,7 +566,6 @@ let Composes =
 
   onTransformBegin : null,
   onTransformEnd : null,
-  // onVerbosity : null,
 
   attributes : _.define.own( {} ),
 

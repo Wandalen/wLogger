@@ -10,13 +10,32 @@ if( typeof module !== 'undefined' )
   var _ = _global_.wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wConsequence' );
 
 }
 
 //
-var _global = _global_;
+let _global = _global_;
 var _ = _global_.wTools;
-var Parent = wTester;
+let Parent = wTester;
+let fileProvider = _testerGlobal_.wTools.fileProvider;
+let path = fileProvider.path;
+
+function onSuiteBegin()
+{ 
+  let self = this;
+  self.suiteTempPath = path.pathDirTempOpen( path.join( __dirname, '../..'  ), 'PrinterOther' );
+  self.assetsOriginalSuitePath = path.join( __dirname, '_asset' );
+}
+
+//
+
+function onSuiteEnd()
+{
+  let self = this;
+  _.assert( _.strHas( self.suiteTempPath, '/PrinterOther-' ) )
+  path.pathDirTempClose( self.suiteTempPath );
+}
 
 //
 
@@ -30,7 +49,7 @@ function currentColor( test )
   if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
-  var expected = [ 0.5, 0, 0 ];
+  var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
 
   test.case = 'case2 : next line color must be red too';
@@ -38,7 +57,7 @@ function currentColor( test )
   if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0 ];
   else
-  var expected = [ 0.5, 0, 0 ];
+  var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
 
   test.case = 'case3 : setting color to default';
@@ -57,7 +76,7 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 0.5, 0, 0  ],
+    [ 0.5, 0, 0, 1  ],
     [ 0, 0, 0  ]
   ]
 
@@ -118,8 +137,8 @@ function currentColor( test )
   else
   var expected =
   [
-    [ 0.5, 0, 0 ],
-    [ 0.9, 0.9, 0.9 ]
+    [ 0.5, 0, 0, 1 ],
+    [ 0.9, 0.9, 0.9, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -129,18 +148,18 @@ function currentColor( test )
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
   test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger();
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'd';
   })
-  test.shouldThrowError( () =>
+  test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.backgroundColor = 'd';
   })
@@ -158,8 +177,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -169,8 +188,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -180,8 +199,8 @@ function currentColor( test )
   var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 0, 0, 1 ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 }
@@ -198,8 +217,8 @@ function _colorsStack( test )
   var got = [ logger._colorsStack[ 'foreground' ], logger.foregroundColor ];
   var expected =
   [
-    [ [ 1, 0, 0 ] ],
-    [ 1, 1, 1 ]
+    [ [ 1, 0, 0, 1 ] ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -209,8 +228,8 @@ function _colorsStack( test )
   var got = [ logger._colorsStack[ 'background' ], logger.backgroundColor ];
   var expected =
   [
-    [ [ 1, 0, 0 ] ],
-    [ 1, 1, 1 ]
+    [ [ 1, 0, 0, 1 ] ],
+    [ 1, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -220,7 +239,7 @@ function _colorsStack( test )
   var expected =
   [
     [ ],
-    [ 1, 0, 0 ]
+    [ 1, 0, 0, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -230,7 +249,7 @@ function _colorsStack( test )
   var expected =
   [
     [ ],
-    [ 1, 0, 0 ]
+    [ 1, 0, 0, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -257,7 +276,7 @@ function logUp( test )
   test.identical( got.length - msg.length, 6 );
 
   test.case = 'case3';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     logger.upAct();
   })
@@ -280,13 +299,13 @@ function logDown( test )
   test.identical( got.length - msg.length, 4 );
 
   test.case = 'case2';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     logger.downAct();
   })
 
   test.case = 'cant go below zero level';
-  test.shouldThrowError( function()
+  test.shouldThrowErrorOfAnyKind( function()
   {
     var logger = new _.Logger({ output : console });
     logger.logDown();
@@ -299,8 +318,8 @@ function logDown( test )
 function coloredToHtml( test )
 {
 
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
 
   var got;
 
@@ -328,7 +347,7 @@ function coloredToHtml( test )
   var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>";
   test.identical( got, expected );
 
-  var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ].join( '' );
+  var src = [ 'some text',_.ct.fg( 'text','red' ),_.ct.bg( 'text','yellow' ),'some text' ].join( '' );
   l.log( src );
   var expected = "some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text";
   test.identical( got, expected );
@@ -348,7 +367,7 @@ function coloredToHtml( test )
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
 
-  var src = _.color.strFormatBackground( 'red' + _.color.strFormatBackground( 'blue','blue' ) + 'red','red' );
+  var src = _.ct.bg( 'red' + _.ct.bg( 'blue','blue' ) + 'red','red' );
   l.log( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
@@ -370,7 +389,7 @@ function coloredToHtml( test )
   // var expected = "<span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>red text</span><span style='color:transparent;background:rgba( 255, 0, 0, 1 );'>red background</span>";
   // test.identical( got, expected );
 
-  // var src = [ 'some text',_.color.strFormatForeground( 'text','red' ),_.color.strFormatBackground( 'text','yellow' ),'some text' ];
+  // var src = [ 'some text',_.ct.fg( 'text','red' ),_.ct.bg( 'text','yellow' ),'some text' ];
   // l.log({ src, compact : false });
   // var expected = "<span>some text</span><span style='color:rgba( 255, 0, 0, 1 );background:transparent;'>text</span><span style='color:transparent;background:rgba( 255, 255, 0, 1 );'>text</span><span>some text</span>";
   // test.identical( got, expected );
@@ -381,15 +400,15 @@ function coloredToHtml( test )
 function outputGray( test )
 {
   var got;
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
 
   function onTransformEnd( args ){ got = args.outputForTerminal };
 
   var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
 
   test.case = 'wColor, outputGray : 0';
-  l.log( _.color.strFormatForeground( 'text', 'dark red') );
+  l.log( _.ct.fg( 'text', 'dark red') );
   if( Config.interpreter === 'browser' )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
   else
@@ -641,7 +660,7 @@ function stateChangingValue( test )
     return
 
     test.case = state + ': ' + 'string';
-    test.shouldThrowError( () =>
+    test.shouldThrowErrorOfAnyKind( () =>
     {
       l[ state ] = '1';
     })
@@ -653,8 +672,8 @@ function stateChangingValue( test )
 function coloringNoColor( test )
 {
   var color = _.color;
-  var fg = _.color.strFormatForeground;
-  var bg = _.color.strFormatBackground;
+  var fg = _.ct.fg;
+  var bg = _.ct.bg;
   _.color = null;
 
   var got;
@@ -735,16 +754,103 @@ function clone( test )
 
 }
 
+function processWarning( test )
+{ 
+  if( Config.interpreter !== 'njs' )
+  {
+    test.identical( 1,1 )
+    return
+  }
+  
+  let ready = new _.Consequence();
+  
+  var message = 'Something wrong';
+  process.emitWarning( 'Something wrong' );
+  process.on( 'warning', ( warning ) => 
+  {
+    ready.take( warning )
+  });
+  ready.then( ( got ) => 
+  {
+    test.identical( got.message, message );
+    return null;
+  })
+  
+  return ready;
+}
+
+//
+
+function consoleBarExperiment( test )
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../Tools.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    test.identical( _.strCount( op.output, 'Console is barred' ), 1 );
+    test.identical( _.strCount( op.output, 'Something wrong' ), 1 );
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wLogger' );
+    _.Logger.ConsoleBar();
+    if( _.Logger.ConsoleIsBarred( console ) )
+    console.log( 'Console is barred' )
+    var message = 'Something wrong';
+    console.error.call( undefined, [ message ] );
+  }
+
+}
+
+consoleBarExperiment.timeOut = 30000;
+consoleBarExperiment.description =
+`
+console is barred
+console.error works without context
+`
+
 //
 
 var Self =
 {
 
-  name : 'Tools/base/printer/Other',
+  name : 'Tools.base.printer.Other',
   silencing : 1,
   /* verbosity : 1, */
 
   // routineTimeOut : 9999999,
+  
+  onSuiteBegin,
+  onSuiteEnd,
+  
+  
+  context : 
+  {
+    suiteTempPath : null,
+    assetsOriginalSuitePath : null,
+    execJsPath : null
+  },
 
   tests :
   {
@@ -759,6 +865,8 @@ var Self =
     stateChangingValue,
     clone,
     coloringNoColor,
+    processWarning,
+    consoleBarExperiment
 
   },
 
