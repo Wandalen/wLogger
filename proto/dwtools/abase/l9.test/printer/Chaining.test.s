@@ -4413,16 +4413,10 @@ function ConsoleBar( test )
 
 function consoleIs( test )
 {
-  test.case = 'consoleIs';
-
-  test.is( _.consoleIs( console ) );
-  test.is( !_.consoleIs( [] ) );
-  test.is( !_.consoleIs( Object.create( null ) ) );
-
-  if( !Config.debug )
-  return;
-
-  test.shouldThrowErrorOfAnyKind( () => _.consoleIs() );
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.consoleIs( src );
+  test.identical( got, false );
 }
 
 //
@@ -4945,7 +4939,7 @@ var Self =
     recursion,
 
     ConsoleBar,
-    consoleIs,
+    consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
 
     clone,
     finit,
