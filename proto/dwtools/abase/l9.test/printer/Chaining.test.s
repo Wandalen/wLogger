@@ -4421,6 +4421,16 @@ function consoleIs( test )
 
 //
 
+function loggerIs( test )
+{
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.loggerIs( src );
+  test.identical( got, true );
+}
+
+//
+
 function clone( test )
 {
   test.case = 'clone chainer';
@@ -4940,6 +4950,7 @@ var Self =
 
     ConsoleBar,
     consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
+    loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
 
     clone,
     finit,
