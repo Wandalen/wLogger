@@ -4461,6 +4461,31 @@ function printerIs( test )
 
 //
 
+function printerLike( test )
+{
+  test.case = 'PrinterBase';
+  var src = _.PrinterBase;
+  var got = _.printerLike( src );
+  test.identical( got, true );
+
+  test.case = 'PrinterMid';
+  var src = _.PrinterMid;
+  var got = _.printerLike( src );
+  test.identical( got, true );
+
+  test.case = 'PrinterTop';
+  var src = _.PrinterTop;
+  var got = _.printerLike( src );
+  test.identical( got, true );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.printerLike( src );
+  test.identical( got, true );
+}
+
+//
+
 function loggerIs( test )
 {
   test.case = 'PrinterBase';
@@ -5006,6 +5031,7 @@ var Self =
     ConsoleBar,
     consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
     printerIs, // Dmytro : the second part of routine printerIs in module wTools
+    printerLike, // Dmytro : the second part of routine printerLike in module wTools
     loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
 
     clone,
