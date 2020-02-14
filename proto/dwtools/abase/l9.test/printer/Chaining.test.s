@@ -4413,6 +4413,21 @@ function ConsoleBar( test )
 
 function consoleIs( test )
 {
+  test.case = 'PrinterBase';
+  var src = _.PrinterBase;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
+  test.case = 'PrinterMid';
+  var src = _.PrinterMid;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
+  test.case = 'PrinterTop';
+  var src = _.PrinterTop;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
   test.case = 'instance of Logger';
   var src = new _.Logger();
   var got = _.consoleIs( src );
@@ -4421,8 +4436,48 @@ function consoleIs( test )
 
 //
 
+function printerIs( test )
+{
+  test.case = 'PrinterBase';
+  var src = _.PrinterBase;
+  var got = _.printerIs( src );
+  test.identical( got, true );
+
+  test.case = 'PrinterMid';
+  var src = _.PrinterMid;
+  var got = _.printerIs( src );
+  test.identical( got, true );
+
+  test.case = 'PrinterTop';
+  var src = _.PrinterTop;
+  var got = _.printerIs( src );
+  test.identical( got, true );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.printerIs( src );
+  test.identical( got, true );
+}
+
+//
+
 function loggerIs( test )
 {
+  test.case = 'PrinterBase';
+  var src = _.PrinterBase;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
+  test.case = 'PrinterMid';
+  var src = _.PrinterMid;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
+  test.case = 'PrinterTop';
+  var src = _.PrinterTop;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
   test.case = 'instance of Logger';
   var src = new _.Logger();
   var got = _.loggerIs( src );
@@ -4950,6 +5005,7 @@ var Self =
 
     ConsoleBar,
     consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
+    printerIs, // Dmytro : the second part of routine printerIs in module wTools
     loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
 
     clone,
