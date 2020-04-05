@@ -796,7 +796,7 @@ program();
   /* */
 
   a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.jsNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  a.appStartNonThrowing({ execPath : a.abs( 'Program.js' ) })
   .then( ( op ) =>
   {
     test.identical( op.exitCode, 0 );
@@ -849,7 +849,7 @@ var Self =
   {
     suiteTempPath : null,
     assetsOriginalSuitePath : null,
-    execJsPath : null
+    appJsPath : null
   },
 
   tests :
