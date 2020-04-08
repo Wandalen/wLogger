@@ -22,6 +22,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Extends [wPrinterBase]{@link wPrinterBase} with input transforming, attributing and verbosity control mechanics.
  * @class wPrinterMid
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 let _global = _global_;
 let _ = _global_.wTools;

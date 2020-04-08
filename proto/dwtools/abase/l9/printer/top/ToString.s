@@ -18,6 +18,7 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Creates a printer that collects messages into a single string. Based on [wPrinterTop]{@link wPrinterTop}.
  * @class wPrinterToString
+ * @module Tools/base/Logger
  */
 
 var _global = _global_;

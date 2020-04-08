@@ -18,6 +18,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Describes basic abilities of the printer: input transformation, verbosity level change.
  * @class wPrinterBase
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 var _global = _global_;
@@ -141,7 +143,9 @@ function _transformEnd( o )
  * @method up
  * @throws { Exception } If more then one argument specified.
  * @throws { Exception } If( dLevel ) is not a finite number.
- * @memberof wPrinterBase
+ * @class wPrinterBase
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 function up( dLevel )
@@ -175,7 +179,9 @@ function up( dLevel )
  * @method down
  * @throws { Exception } If more then one argument specified.
  * @throws { Exception } If( dLevel ) is not a finite number.
- * @memberof wPrinterBase
+ * @class wPrinterBase
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 function down( dLevel )
