@@ -19,6 +19,8 @@ return;
 /**
  * @classdesc Creates a printer that writes messages into a DOM container. Based on [wPrinterTop]{@link wPrinterTop}.
  * @class wPrinterToLayeredHtml
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 var $ = jQuery;
