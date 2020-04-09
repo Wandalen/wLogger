@@ -26,6 +26,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Extends printer with mechanism of message transfering between multiple inputs/outputs.
  * @class wPrinterChainingMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 let _global = _global_;
@@ -374,7 +376,9 @@ function _writeToChannelIn( channelName, args )
  * @throws { Exception } If specified combining mode is not allowed.
  * @throws { Exception } If specified leveling mode is not allowed.
  * @throws { Exception } If combining mode is disabled and output list has multiple elements.
- * @memberof wPrinterMid
+ * @class wPrinterChainingMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
@@ -434,7 +438,9 @@ defaults.originalOutput = 0;
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( output ) is not a Object.
  * @throws { Exception } If outputs list is empty.
- * @memberof wPrinterMid
+ * @class wPrinterChainingMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
@@ -476,7 +482,9 @@ function outputUnchain( output )
  * @method inputFrom
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterMid
+ * @class wPrinterChainingMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
@@ -532,7 +540,9 @@ defaults.originalOutput = 0;
  * @method inputUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterMid
+ * @class wPrinterChainingMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 

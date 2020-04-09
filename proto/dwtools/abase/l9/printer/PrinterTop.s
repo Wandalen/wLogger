@@ -41,6 +41,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Extends [wPrinterMid]{@link wPrinterMid} with printers chaining and output coloring mechanics.
  * @class wPrinterTop
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 var _global = _global_;

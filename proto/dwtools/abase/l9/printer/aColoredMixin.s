@@ -22,6 +22,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Extends printer with mechanism of message coloring. Works on server-side and in the browser. Supports colors stacking, output styling, ill colors and color collapse diagnosting.
  * @class wPrinterColoredMixin
+ * @namespace Tools
+ * @module Tools/base/Logger
  */
 
 let _global = _global_;

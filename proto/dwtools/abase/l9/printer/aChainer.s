@@ -16,6 +16,8 @@ if( typeof module !== 'undefined' )
 /**
  * @classdesc Encapsulates chainability of printers, loggers and consoles. Use it to construct a chain.
    @class wChainer
+   @namespace Tools
+   @module Tools/base/Logger
  */
 
 var _global = _global_;
@@ -616,7 +618,9 @@ function _inputFromStream( cd )
  * @throws { Exception } If specified combining mode is not allowed.
  * @throws { Exception } If specified leveling mode is not allowed.
  * @throws { Exception } If combining mode is disabled and output list has multiple elements.
- * @memberof wPrinterMid
+ * @class wChainer
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
@@ -674,7 +678,9 @@ outputTo.defaults =
  * @method inputFrom
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterMid
+ * @class wChainer
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
@@ -840,7 +846,9 @@ function outputUnchain( output )
  * @method inputUnchain
  * @throws { Exception } If no arguments provided.
  * @throws { Exception } If( input ) is not a Object.
- * @memberof wPrinterMid
+ * @class wChainer
+ * @namespace Tools
+ * @module Tools/base/Logger
  *
  */
 
