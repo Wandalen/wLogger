@@ -1,32 +1,32 @@
 {
-  "name" : "wLogger", 
-  "version" : "0.5.275", 
-  "engine" : "node >= 8.0.0", 
-  "description" : "Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.", 
-  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>", 
-  "contributors" : 
+  "name" : "wLogger",
+  "version" : "0.5.276",
+  "engine" : "node >= 8.0.0",
+  "description" : "Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.",
+  "author" : "Kostiantyn Wandalen <wanalen@willbe.so>",
+  "contributors" :
   [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" }, 
+    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@willbe.so" },
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
-  ], 
-  "license" : "MIT", 
-  "main" : "proto/dwtools/abase/l9/printer/top/Logger.s", 
-  "files" : [ "proto/dwtools/abase/l9/printer", "proto/dwtools/Tools.s", "out" ], 
-  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" }, 
-  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wLogger.git" }, 
-  "bugs" : 
+  ],
+  "license" : "MIT",
+  "main" : "proto/dwtools/abase/l9/printer/top/Logger.s",
+  "files" : [ "proto/dwtools/abase/l9/printer", "proto/dwtools/Tools.s", "out" ],
+  "scripts" : { "test" : "wtest .run proto/**", "docgen" : "wdocgen proto" },
+  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wLogger.git" },
+  "bugs" :
   {
     "url" : "https://github.com/Wandalen/wLogger/issues"
-  }, 
-  "dependencies" : 
+  },
+  "dependencies" :
   {
-    "wTools" : "alpha", 
-    "wCopyable" : "alpha", 
-    "wEventHandler" : "alpha", 
-    "wstringer" : "alpha", 
-    "wstringsextra" : "alpha"
-  }, 
-  "optionalDependencies" : { "wColor" : "alpha" }, 
-  "devDependencies" : { "wFiles" : "alpha", "cli-table2" : "0.2.0", "wTesting" : "alpha" }, 
+    "wTools" : "gamma",
+    "wCopyable" : "gamma",
+    "wEventHandler" : "gamma",
+    "wstringer" : "gamma",
+    "wstringsextra" : "gamma"
+  },
+  "optionalDependencies" : { "wColor" : "gamma" },
+  "devDependencies" : { "wFiles" : "gamma", "cli-table2" : "0.2.0", "wTesting" : "gamma" },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }
