@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wLogger.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wLogger.out.will.yml: &ref_0
+    hash: c8ba9ee51275a5198eb97149f3db683f
+    size: 43050
+  ../.ex.will.yml: &ref_1
     hash: 7b92fef0815092f758664878e4955f7f
     size: 2360
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: ba0137dda2b63d03cfae81bd9d013aca
     size: 5561
 module:
@@ -25,11 +28,11 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 8.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - wTools
         - logger
         - logging
@@ -38,11 +41,11 @@ module:
         - multilevel log
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wLogger
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -774,6 +777,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          reflector: 'reflector::exported.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          reflector: 'reflector::exported.files.proto.export*'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -862,8 +883,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wLogger.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wLogger
@@ -880,13 +902,26 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 8.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - wTools
+        - logger
+        - logging
+        - log
+        - colorful log
+        - multilevel log
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wLogger
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1601,3 +1636,6 @@ module:
       ../.im.will.yml:
         hash: ba0137dda2b63d03cfae81bd9d013aca
         size: 5561
+      wLogger.out.will.yml:
+        hash: c8ba9ee51275a5198eb97149f3db683f
+        size: 43050
