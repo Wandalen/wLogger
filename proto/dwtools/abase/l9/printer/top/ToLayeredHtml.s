@@ -133,7 +133,7 @@ function _makeBranchDom( )
   var result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
-  _.domAttrs( result,self.attributes );
+  _.dom.s.attr( result,self.attributes );
 
   self.currentDom.append( result );
   result.addClass( self.branchCssClass );
@@ -157,7 +157,7 @@ function _makeTerminalDom()
   var result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
-  _.domAttrs( result,self.attributes );
+  _.dom.s.attr( result,self.attributes );
 
   self.currentDom.append( result );
   result.addClass( self.terminalCssClass );
