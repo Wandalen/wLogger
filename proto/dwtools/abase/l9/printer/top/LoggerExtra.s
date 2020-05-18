@@ -471,7 +471,7 @@ var Proto =
 
 //
 
-_.classExtend( Self,Proto );
+_.classExtend( Self, Proto );
 
 // --
 // export
