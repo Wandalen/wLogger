@@ -1045,7 +1045,7 @@ _.classDeclare
 
 _[ Self.shortName ] = Self;
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();

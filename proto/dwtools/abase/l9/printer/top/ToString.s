@@ -115,7 +115,7 @@ _global_[ Self.name ] = _[ Self.shortName ] = Self;
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 _global_[ Self.name ] = _[ Self.shortName ] = Self;
 

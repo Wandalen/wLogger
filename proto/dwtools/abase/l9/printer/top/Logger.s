@@ -116,7 +116,7 @@ _global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'gl
 // export
 // --
 
-if( typeof module !== 'undefined' && module !== null )
+if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 
 })();
