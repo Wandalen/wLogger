@@ -174,7 +174,6 @@ module:
           - ../proto/dwtools/abase
           - ../proto/dwtools/abase/l9
           - ../proto/dwtools/abase/l9/printer
-          - ../proto/dwtools/abase/l9/printer/.DS_Store
           - ../proto/dwtools/abase/l9/printer/aChainer.s
           - ../proto/dwtools/abase/l9/printer/aChainingMixin.s
           - ../proto/dwtools/abase/l9/printer/aColoredMixin.s
@@ -197,7 +196,6 @@ module:
           - ../proto/dwtools/abase/l9.test/printer/Color.test.js
           - ../proto/dwtools/abase/l9.test/printer/Color.test.ss
           - ../proto/dwtools/abase/l9.test/printer/Other.test.s
-          - ../proto/dwtools/abase/tmp.tmp
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
     submodule:
