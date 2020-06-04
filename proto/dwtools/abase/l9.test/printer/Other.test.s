@@ -25,7 +25,7 @@ function onSuiteBegin()
 { 
   let self = this;
   self.suiteTempPath = path.pathDirTempOpen( path.join( __dirname, '../..'  ), 'PrinterOther' );
-  self.assetsOriginalSuitePath = path.join( __dirname, '_asset' );
+  self.assetsOriginalPath = path.join( __dirname, '_asset' );
 }
 
 //
@@ -848,7 +848,7 @@ var Self =
   context : 
   {
     suiteTempPath : null,
-    assetsOriginalSuitePath : null,
+    assetsOriginalPath : null,
     appJsPath : null
   },
 
