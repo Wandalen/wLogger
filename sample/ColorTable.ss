@@ -5,7 +5,7 @@ var _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
-_.include( 'wAppBasic' );
+_.include( 'wProcess' );
 
 var colorNames =
 [

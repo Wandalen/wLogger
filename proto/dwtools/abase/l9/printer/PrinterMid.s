@@ -28,7 +28,8 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = _.PrinterBase;
-let Self = function wPrinterMid( o )
+let Self = wPrinterMid;
+function wPrinterMid( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
