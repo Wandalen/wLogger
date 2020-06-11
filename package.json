@@ -12,7 +12,7 @@
   "license" : "MIT",
   "main" : "proto/dwtools/abase/l9/printer/top/Logger.s",
   "files" : [ "proto/dwtools/abase/l9/printer", "proto/dwtools/Tools.s", "out" ],
-  "scripts" : { "test" : "wtest .run 'proto/**'", "docgen" : "wdocgen proto" },
+  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wLogger.git" },
   "bugs" :
   {
