@@ -19,8 +19,6 @@ submodule :
   wColor :
     path : npm:///wColor
     enabled : 0 # submodule
-    criterion :
-      optional : 1
   wLogger :
     path : hd://.
     enabled : 0 # submodule
