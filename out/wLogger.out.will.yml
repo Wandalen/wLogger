@@ -2,10 +2,13 @@ format: outwillfile-2.0
 root:
   - wLogger.out
 consistency:
-  ../.ex.will.yml: &ref_0
+  wLogger.out.will.yml: &ref_0
+    hash: 8683eba681fe45dcd9c93ab83cbcf8ee
+    size: 41908
+  ../.ex.will.yml: &ref_1
     hash: be93875ee4d54fb2042d369c70a12f7f
     size: 2361
-  ../.im.will.yml: &ref_1
+  ../.im.will.yml: &ref_2
     hash: b1fd1a48d65c380356df50d0e8e31401
     size: 5526
 module:
@@ -25,11 +28,11 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: &ref_2
+      interpreters:
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords: &ref_3
+      keywords:
         - wTools
         - logger
         - logging
@@ -38,11 +41,11 @@ module:
         - multilevel log
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors:
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wLogger
-      npm.scripts: &ref_5
+      npm.scripts:
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -170,29 +173,72 @@ module:
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
           - ../proto/dwtools/abase/l9
-          - ../proto/dwtools/abase/l9/printer
-          - ../proto/dwtools/abase/l9/printer/aChainer.s
-          - ../proto/dwtools/abase/l9/printer/aChainingMixin.s
-          - ../proto/dwtools/abase/l9/printer/aColoredMixin.s
-          - ../proto/dwtools/abase/l9/printer/PrinterBase.s
-          - ../proto/dwtools/abase/l9/printer/PrinterMid.s
-          - ../proto/dwtools/abase/l9/printer/PrinterTop.s
-          - ../proto/dwtools/abase/l9/printer/top
-          - ../proto/dwtools/abase/l9/printer/top/Logger.s
-          - ../proto/dwtools/abase/l9/printer/top/LoggerExtra.s
-          - ../proto/dwtools/abase/l9/printer/top/ToLayeredHtml.s
-          - ../proto/dwtools/abase/l9/printer/top/ToString.s
+          - ../proto/dwtools/abase/l9/-printer
+          - ../proto/dwtools/abase/l9/-printer/aChainer.s
+          - ../proto/dwtools/abase/l9/-printer/aChainingMixin.s
+          - ../proto/dwtools/abase/l9/-printer/aColoredMixin.s
+          - ../proto/dwtools/abase/l9/-printer/PrinterBase.s
+          - ../proto/dwtools/abase/l9/-printer/PrinterMid.s
+          - ../proto/dwtools/abase/l9/-printer/PrinterTop.s
+          - ../proto/dwtools/abase/l9/-printer/top
+          - ../proto/dwtools/abase/l9/-printer/top/Logger.s
+          - ../proto/dwtools/abase/l9/-printer/top/LoggerExtra.s
+          - ../proto/dwtools/abase/l9/-printer/top/ToLayeredHtml.s
+          - ../proto/dwtools/abase/l9/-printer/top/ToString.s
+          - ../proto/dwtools/abase/l9/logger
+          - ../proto/dwtools/abase/l9/logger/-entry
+          - ../proto/dwtools/abase/l9/logger/-include
+          - ../proto/dwtools/abase/l9/logger/entry
+          - ../proto/dwtools/abase/l9/logger/entry/Logger.s
+          - ../proto/dwtools/abase/l9/logger/include
+          - ../proto/dwtools/abase/l9/logger/include/Basic.s
+          - ../proto/dwtools/abase/l9/logger/include/Mid.s
+          - ../proto/dwtools/abase/l9/logger/l1
+          - ../proto/dwtools/abase/l9/logger/l1/LoggerBasic.s
+          - ../proto/dwtools/abase/l9/logger/l3
+          - ../proto/dwtools/abase/l9/logger/l3/Chainer.s
+          - ../proto/dwtools/abase/l9/logger/l3/ChainingMixin.s
+          - ../proto/dwtools/abase/l9/logger/l3/ColoredMixin.s
+          - ../proto/dwtools/abase/l9/logger/l3/LoggerMid.s
+          - ../proto/dwtools/abase/l9/logger/l5
+          - ../proto/dwtools/abase/l9/logger/l5/LoggerTop.s
+          - ../proto/dwtools/abase/l9/logger/l7
+          - ../proto/dwtools/abase/l9/logger/l7/-FromAnsiToCss.s
+          - ../proto/dwtools/abase/l9/logger/l7/-LoggerExtra.s
+          - ../proto/dwtools/abase/l9/logger/l7/-ToFile.s
+          - ../proto/dwtools/abase/l9/logger/l7/-ToJs.s
+          - ../proto/dwtools/abase/l9/logger/l7/Logger.s
+          - ../proto/dwtools/abase/l9/logger/l7/ToLayeredHtml.s
+          - ../proto/dwtools/abase/l9/logger/l7/ToString.s
           - ../proto/dwtools/abase/l9.test
-          - ../proto/dwtools/abase/l9.test/printer
-          - ../proto/dwtools/abase/l9.test/printer/Backend.test.ss
-          - ../proto/dwtools/abase/l9.test/printer/Browser.test.html
-          - ../proto/dwtools/abase/l9.test/printer/Browser.test.js
-          - ../proto/dwtools/abase/l9.test/printer/Chaining.test.s
-          - ../proto/dwtools/abase/l9.test/printer/ChainingWithProcess.test.ss
-          - ../proto/dwtools/abase/l9.test/printer/ChainingWithStream.test.ss
-          - ../proto/dwtools/abase/l9.test/printer/Color.test.js
-          - ../proto/dwtools/abase/l9.test/printer/Color.test.ss
-          - ../proto/dwtools/abase/l9.test/printer/Other.test.s
+          - ../proto/dwtools/abase/l9.test/-printer
+          - ../proto/dwtools/abase/l9.test/-printer/Backend.test.ss
+          - ../proto/dwtools/abase/l9.test/-printer/Browser.test.html
+          - ../proto/dwtools/abase/l9.test/-printer/Browser.test.js
+          - ../proto/dwtools/abase/l9.test/-printer/Chaining.test.s
+          - ../proto/dwtools/abase/l9.test/-printer/ChainingWithProcess.test.ss
+          - ../proto/dwtools/abase/l9.test/-printer/ChainingWithStream.test.ss
+          - ../proto/dwtools/abase/l9.test/-printer/Color.test.js
+          - ../proto/dwtools/abase/l9.test/-printer/Color.test.ss
+          - ../proto/dwtools/abase/l9.test/-printer/Other.test.s
+          - ../proto/dwtools/abase/l9.test/logger
+          - ../proto/dwtools/abase/l9.test/logger/-FromAnsiToCss.test.s
+          - ../proto/dwtools/abase/l9.test/logger/-ToFile.test.s
+          - ../proto/dwtools/abase/l9.test/logger/-ToFile.test.ss
+          - ../proto/dwtools/abase/l9.test/logger/-ToJs.test.s
+          - ../proto/dwtools/abase/l9.test/logger/Backend.test.ss
+          - ../proto/dwtools/abase/l9.test/logger/Browser.test.html
+          - ../proto/dwtools/abase/l9.test/logger/Browser.test.js
+          - ../proto/dwtools/abase/l9.test/logger/Chaining.test.s
+          - ../proto/dwtools/abase/l9.test/logger/ChainingWithProcess.test.ss
+          - ../proto/dwtools/abase/l9.test/logger/ChainingWithStream.test.ss
+          - ../proto/dwtools/abase/l9.test/logger/Color.test.js
+          - ../proto/dwtools/abase/l9.test/logger/Color.test.ss
+          - ../proto/dwtools/abase/l9.test/logger/ColorTable.ss
+          - ../proto/dwtools/abase/l9.test/logger/ColorTableBad.ss
+          - ../proto/dwtools/abase/l9.test/logger/ColorTableGood.ss
+          - ../proto/dwtools/abase/l9.test/logger/Other.test.s
+          - ../proto/dwtools/abase/l9.test/logger/ToString.test.s
           - ../proto/dwtools/amid
           - ../proto/dwtools/atop
     submodule:
@@ -751,6 +797,24 @@ module:
           content: prime
         inherit:
           - files.transpile
+      exported.proto.export:
+        opts:
+          filePath: 'reflector::exported.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
+      exported.files.proto.export:
+        opts:
+          filePath: 'reflector::exported.files.proto.export'
+        criterion:
+          generated: 1
+          content: proto
+          export: 1
+        inherit:
+          - files.reflect
     build:
       proto.export:
         steps:
@@ -839,8 +903,9 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      wLogger.out.will.yml: *ref_0
+      ../.ex.will.yml: *ref_1
+      ../.im.will.yml: *ref_2
   ../:
     about:
       name: wLogger
@@ -857,13 +922,26 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: *ref_2
-      keywords: *ref_3
+      interpreters:
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      keywords:
+        - wTools
+        - logger
+        - logging
+        - log
+        - colorful log
+        - multilevel log
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
+      contributors:
+        - Kostiantyn Wandalen <wanalen@01.school>
+        - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wLogger
-      npm.scripts: *ref_5
+      npm.scripts:
+        test: wtest .run proto/**
+        docgen: wdocgen .build proto
     path:
       module.willfiles:
         criterion:
@@ -1558,3 +1636,6 @@ module:
       ../.im.will.yml:
         hash: b1fd1a48d65c380356df50d0e8e31401
         size: 5526
+      wLogger.out.will.yml:
+        hash: 8683eba681fe45dcd9c93ab83cbcf8ee
+        size: 41908
