@@ -29,11 +29,6 @@ submodule :
     enabled : 0 # submodule
     criterion :
       development : 1
-  cli-table2 :
-    path : npm:///cli-table2
-    enabled : 0 # submodule
-    criterion :
-      development : 1
   wTesting :
     path : npm:///wTesting
     enabled : 0 # submodule
@@ -79,7 +74,7 @@ path :
       content : prime
 
   entry.proto.no.tests :
-    path : proto/dwtools/abase/l9/printer/top/Logger.s
+    path : proto/dwtools/abase/l9/logger/top/Logger.s
     criterion :
       tests : 'no.tests'
   entry.proto.only.tests :
@@ -91,7 +86,7 @@ path :
   # npm.files : proto
 
   entry.out.raw.debug :
-    path : '{path::out.*=1}/source/dwtools/abase/l9/printer/top/Logger.s'
+    path : '{path::out.*=1}/source/dwtools/abase/l9/logger/top/Logger.s'
     criterion :
       debug : [ debug, release ]
       raw : raw
