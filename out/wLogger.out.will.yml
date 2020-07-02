@@ -2,15 +2,12 @@ format: outwillfile-2.0
 root:
   - wLogger.out
 consistency:
-  wLogger.out.will.yml: &ref_0
-    hash: 8683eba681fe45dcd9c93ab83cbcf8ee
-    size: 41908
-  ../.ex.will.yml: &ref_1
+  ../.ex.will.yml: &ref_0
     hash: be93875ee4d54fb2042d369c70a12f7f
     size: 2361
-  ../.im.will.yml: &ref_2
-    hash: b1fd1a48d65c380356df50d0e8e31401
-    size: 5526
+  ../.im.will.yml: &ref_1
+    hash: 1cbef44edbebb41ac78a1be3ccce7862
+    size: 5414
 module:
   wLogger.out:
     about:
@@ -28,11 +25,11 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters:
+      interpreters: &ref_2
         - njs >= 10.0.0
         - chrome >= 60.0.0
         - firefox >= 60.0.0
-      keywords:
+      keywords: &ref_3
         - wTools
         - logger
         - logging
@@ -41,11 +38,11 @@ module:
         - multilevel log
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
+      contributors: &ref_4
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
       npm.name: wLogger
-      npm.scripts:
+      npm.scripts: &ref_5
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -274,12 +271,6 @@ module:
           development: 1
       wFiles:
         path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      cli-table2:
-        path: 'npm:///cli-table2'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -797,24 +788,6 @@ module:
           content: prime
         inherit:
           - files.transpile
-      exported.proto.export:
-        opts:
-          filePath: 'reflector::exported.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
-      exported.files.proto.export:
-        opts:
-          filePath: 'reflector::exported.files.proto.export'
-        criterion:
-          generated: 1
-          content: proto
-          export: 1
-        inherit:
-          - files.reflect
     build:
       proto.export:
         steps:
@@ -903,9 +876,8 @@ module:
           content: proto
           export: 1
     consistency:
-      wLogger.out.will.yml: *ref_0
-      ../.ex.will.yml: *ref_1
-      ../.im.will.yml: *ref_2
+      ../.ex.will.yml: *ref_0
+      ../.im.will.yml: *ref_1
   ../:
     about:
       name: wLogger
@@ -922,26 +894,13 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters:
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords:
-        - wTools
-        - logger
-        - logging
-        - log
-        - colorful log
-        - multilevel log
+      interpreters: *ref_2
+      keywords: *ref_3
       license: MIT
       author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors:
-        - Kostiantyn Wandalen <wanalen@01.school>
-        - Volodymyr M. <volodymyr.migdal@gmail.com>
+      contributors: *ref_4
       npm.name: wLogger
-      npm.scripts:
-        test: wtest .run proto/**
-        docgen: wdocgen .build proto
+      npm.scripts: *ref_5
     path:
       module.willfiles:
         criterion:
@@ -1083,12 +1042,6 @@ module:
           development: 1
       wFiles:
         path: 'npm:///wFiles'
-        autoExporting: 0
-        enabled: 0
-        criterion:
-          development: 1
-      cli-table2:
-        path: 'npm:///cli-table2'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1634,8 +1587,5 @@ module:
         hash: be93875ee4d54fb2042d369c70a12f7f
         size: 2361
       ../.im.will.yml:
-        hash: b1fd1a48d65c380356df50d0e8e31401
-        size: 5526
-      wLogger.out.will.yml:
-        hash: 8683eba681fe45dcd9c93ab83cbcf8ee
-        size: 41908
+        hash: 1cbef44edbebb41ac78a1be3ccce7862
+        size: 5414
