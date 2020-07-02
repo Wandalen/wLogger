@@ -2,23 +2,6 @@
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  let _ = require( '../../../../dwtools/Tools.s' );
-
-  try
-  {
-    _.include( 'wColor' );
-  }
-  catch( err )
-  {
-  }
-
-}
-
-//
-
 /**
  * @classdesc Extends printer with mechanism of message coloring. Works on server-side and in the browser. Supports colors stacking, output styling, ill colors and color collapse diagnosting.
  * @class wPrinterColoredMixin
@@ -91,7 +74,7 @@ function _transformActHtml( o )
   // _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
   // _.assert( _.routineIs( o.onInlined ) );
 
-  var options = _.mapOnly( o, _transformActHtml.defaults );
+  let options = _.mapOnly( o, _transformActHtml.defaults );
   _.routineOptions( _transformActHtml, options );
 
   let result = '';
@@ -103,7 +86,7 @@ function _transformActHtml( o )
     if( _.arrayIs( splitted[ i ] ) )
     {
       let style = splitted[ i ][ 0 ];
-      var color = splitted[ i ][ 1 ].trim();
+      let color = splitted[ i ][ 1 ].trim();
 
       if( color && color !== 'default' )
       {
@@ -374,9 +357,9 @@ function _transformAct_browser( o )
 
     if( _.strIs( split ) )
     {
-      var foregroundColor = 'none';
-      var backgroundColor = 'none';
-      var textDecoration = 'none';
+      let foregroundColor = 'none';
+      let backgroundColor = 'none';
+      let textDecoration = 'none';
 
       let style = [];
 
@@ -1016,8 +999,8 @@ function _colorSet( layer, color )
     if( !color )
     throw _.err( 'Can\'t set', layer, 'color.', 'Unknown color name:', _.strQuote( originalName ) );
 
-    var originalValue = color;
-    var currentName;
+    let originalValue = color;
+    let currentName;
 
     if( color )
     {
@@ -1112,11 +1095,11 @@ function styleSet( src )
     }
   }
 
-  var style = _.color.strColorStyle( src );
+  let style = _.color.strColorStyle( src );
 
   _.assert( _.objectLike( style ), 'Unknown style:', src );
 
-  var _style = _.mapExtend( null, style );
+  let _style = _.mapExtend( null, style );
 
   self._styleApply( _style );
   self._styleComplement( _style );
@@ -1129,7 +1112,7 @@ function styleSet( src )
 
 function _styleApply( style )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectLike( style ) );
@@ -1148,7 +1131,7 @@ function _styleApply( style )
 
 function _styleComplement( style )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.objectLike( style ) );
@@ -1168,7 +1151,7 @@ function _styleComplement( style )
 
 function _styleReset()
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 0, 'Expects no arguments' );
 
@@ -1411,7 +1394,7 @@ function topicDown()
 // fields
 // --
 
-let symbolForLevel = Symbol.for( 'level' );
+let levelSymbol = Symbol.for( 'level' );
 let symbolForForeground = Symbol.for( 'foregroundColor' );
 let symbolForBackground = Symbol.for( 'backgroundColor' );
 
@@ -1719,7 +1702,6 @@ _.classDeclare
 // --
 
 _[ Self.shortName ] = Self;
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 

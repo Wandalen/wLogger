@@ -1,40 +1,24 @@
-(function _PrinterMid_s_() {
+(function _LoggerMid_s_() {
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  require( './PrinterBase.s' );
-
-  let _ = _global_.wTools;
-
-  require( './aChainer.s' );
-  require( './aChainingMixin.s' )
-
-  _.include( 'wCopyable' );
-  _.include( 'wEventHandler' );
-
-}
-
-//
-
 /**
- * @classdesc Extends [wPrinterBase]{@link wPrinterBase} with input transforming, attributing and verbosity control mechanics.
- * @class wPrinterMid
+ * @classdesc Extends [wLoggerBasic]{@link wLoggerBasic} with input transforming, attributing and verbosity control mechanics.
+ * @class wLoggerMid
  * @namespace Tools
  * @module Tools/base/Logger
  */
+
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.PrinterBase;
-let Self = wPrinterMid;
-function wPrinterMid( o )
+let Parent = _.LoggerBasic;
+let Self = wLoggerMid;
+function wLoggerMid( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'PrinterMid';
+Self.shortName = 'LoggerMid';
 
 // --
 // routines
@@ -661,7 +645,7 @@ let Proto =
 
   // later
 
-  later,
+  later, /* xxx : remove? */
   _laterActualize,
   laterActualize,
   laterFinit,

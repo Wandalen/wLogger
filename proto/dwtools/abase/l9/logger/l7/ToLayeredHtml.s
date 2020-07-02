@@ -2,14 +2,14 @@
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  let _ = require( '../../../../../dwtools/Tools.s' );
-
-  _.include( 'wLogger' );
-
-}
+// if( typeof module !== 'undefined' )
+// {
+//
+//   let _ = require( '../../../../../dwtools/Tools.s' );
+//
+//   _.include( 'wLogger' );
+//
+// }
 
 if( !_global_.jQuery )
 return;
@@ -17,17 +17,17 @@ return;
 //
 
 /**
- * @classdesc Creates a printer that writes messages into a DOM container. Based on [wPrinterTop]{@link wPrinterTop}.
+ * @classdesc Creates a printer that writes messages into a DOM container. Based on [wLoggerTop]{@link wLoggerTop}.
  * @class wPrinterToLayeredHtml
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
-var $ = jQuery;
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = _.PrinterTop;
-var Self = function wPrinterToLayeredHtml( o )
+let $ = jQuery;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = _.LoggerTop;
+let Self = function wPrinterToLayeredHtml( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -38,7 +38,7 @@ Self.shortName = 'PrinterToLayeredHtml';
 
 function init( o )
 {
-  var self = this;
+  let self = this;
 
   Parent.prototype.init.call( self,o );
 
@@ -60,7 +60,7 @@ function init( o )
 
 function write()
 {
-  var self = this;
+  let self = this;
 
   /* */
 
@@ -73,7 +73,7 @@ function write()
 
   /* */
 
-  var o = _.PrinterBase.prototype.write.apply( self,arguments );
+  let o = _.LoggerBasic.prototype.write.apply( self,arguments );
 
   if( !o )
   return;
@@ -83,14 +83,14 @@ function write()
 
   /* */
 
-  var data = _.strConcat.apply( {},arguments );
+  let data = _.strConcat.apply( {},arguments );
   data = data.split( '\n' );
 
-  for( var d = 0 ; d < data.length ; d ++ )
+  for( let d = 0 ; d < data.length ; d ++ )
   {
     if( d > 0 )
     self._makeNextLineDom();
-    var terminal = self._makeTerminalDom();
+    let terminal = self._makeTerminalDom();
     terminal.text( data[ d ] );
   }
 
@@ -103,23 +103,23 @@ function write()
 
 function levelSet( level )
 {
-  var self = this;
+  let self = this;
 
   _.assert( level >= 0, 'level cant go below zero level to',level );
   _.assert( isFinite( level ) );
 
-  var dLevel = level - self[ symbolForLevel ];
+  let dLevel = level - self[ levelSymbol ];
 
   Parent.prototype.levelSet.call( self,level );
 
   if( dLevel > 0 )
   {
-    for( var l = 0 ; l < dLevel ; l++ )
+    for( let l = 0 ; l < dLevel ; l++ )
     self.currentDom = self._makeBranchDom();
   }
   else if( dLevel < 0 )
   {
-    for( var l = 0 ; l < -dLevel ; l++ )
+    for( let l = 0 ; l < -dLevel ; l++ )
     self.currentDom = self.currentDom.parent();
   }
 
@@ -129,8 +129,8 @@ function levelSet( level )
 
 function _makeBranchDom( )
 {
-  var self = this;
-  var result = $( '<' + self.elementCssTag + '>' );
+  let self = this;
+  let result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
   _.dom.s.attr( result,self.attributes );
@@ -140,7 +140,7 @@ function _makeBranchDom( )
 
   if( self.usingRandomColor )
   {
-    var color = _.color.randomRgbWithSl( 0.5,0.5 );
+    let color = _.color.randomRgbWithSl( 0.5,0.5 );
     color[ 3 ] = self.opacity;
     // color = [ 0.75,1,1,0.5 ];
     result.css( 'background-color',_.color.colorToRgbaHtml( color ) );
@@ -153,8 +153,8 @@ function _makeBranchDom( )
 
 function _makeTerminalDom()
 {
-  var self = this;
-  var result = $( '<' + self.elementCssTag + '>' );
+  let self = this;
+  let result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
   _.dom.s.attr( result,self.attributes );
@@ -169,12 +169,12 @@ function _makeTerminalDom()
 
 function _makeNextLineDom()
 {
-  var self = this;
+  let self = this;
 
   if( !self.usingNextLineDom )
   return;
 
-  var result = $( '<' + self.elementCssTag + '>' );
+  let result = $( '<' + self.elementCssTag + '>' );
   result.text( ' ' );
 
   result.addClass( self.nextLineCssClass );
@@ -187,9 +187,9 @@ function _makeNextLineDom()
 // relations
 // --
 
-var symbolForLevel = Symbol.for( 'level' );
+let levelSymbol = Symbol.for( 'level' );
 
-var Composes =
+let Composes =
 {
 
   contentCssClass : 'layered-log-content',
@@ -207,11 +207,11 @@ var Composes =
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
   containerDom : null,
   currentDom : null,
@@ -221,7 +221,7 @@ var Associates =
 // prototype
 // --
 
-var Proto =
+let Proto =
 {
 
   init,

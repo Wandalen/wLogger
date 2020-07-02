@@ -4,25 +4,23 @@
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/printer/top/Logger.s' );
-
-  var _ = _global_.wTools;
+  let _ = require( '../../l9/logger/entry/Logger.s' );
 
   _.include( 'wTesting' );
   _.include( 'wConsequence' );
 
 }
 
-//
 let _global = _global_;
 var _ = _global_.wTools;
 let Parent = wTester;
 let fileProvider = _testerGlobal_.wTools.fileProvider;
 let path = fileProvider.path;
 
+//
+
 function onSuiteBegin()
-{ 
+{
   let self = this;
   self.suiteTempPath = path.pathDirTempOpen( path.join( __dirname, '../..'  ), 'PrinterOther' );
   self.assetsOriginalPath = path.join( __dirname, '_asset' );
@@ -755,27 +753,27 @@ function clone( test )
 }
 
 function processWarning( test )
-{ 
+{
   if( Config.interpreter !== 'njs' )
   {
     test.identical( 1,1 )
     return
   }
-  
+
   let ready = new _.Consequence();
-  
+
   var message = 'Something wrong';
   process.emitWarning( 'Something wrong' );
-  process.on( 'warning', ( warning ) => 
+  process.on( 'warning', ( warning ) =>
   {
     ready.take( warning )
   });
-  ready.then( ( got ) => 
+  ready.then( ( got ) =>
   {
     test.identical( got.message, message );
     return null;
   })
-  
+
   return ready;
 }
 
@@ -840,12 +838,12 @@ var Self =
   /* verbosity : 1, */
 
   // routineTimeOut : 9999999,
-  
+
   onSuiteBegin,
   onSuiteEnd,
-  
-  
-  context : 
+
+
+  context :
   {
     suiteTempPath : null,
     assetsOriginalPath : null,
@@ -867,7 +865,6 @@ var Self =
     coloringNoColor,
     processWarning,
     consoleBarExperiment
-
   },
 
 }

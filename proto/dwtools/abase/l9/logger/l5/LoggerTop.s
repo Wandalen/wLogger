@@ -1,4 +1,4 @@
-(function _PrinterTop_s_() {
+(function _LoggerTop_s_() {
 
 'use strict';
 
@@ -21,39 +21,22 @@ self -> original -> printer
 
 */
 
-if( typeof module !== 'undefined' )
-{
-
-  // if( typeof wPrinterTop !== 'undefined' )
-  // return;
-
-  if( typeof wPrinterMid === 'undefined' )
-  require( './PrinterMid.s' )
-
-  require( './aColoredMixin.s' )
-
-  var _ = _global_.wTools;
-
-}
-
-//
-
 /**
- * @classdesc Extends [wPrinterMid]{@link wPrinterMid} with printers chaining and output coloring mechanics.
- * @class wPrinterTop
+ * @classdesc Extends [wLoggerMid]{@link wLoggerMid} with printers chaining and output coloring mechanics.
+ * @class wLoggerTop
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = _.PrinterMid;
-var Self = function wPrinterTop( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = _.LoggerMid;
+let Self = function wLoggerTop( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'PrinterTop';
+Self.shortName = 'LoggerTop';
 
 // --
 //
@@ -61,7 +44,7 @@ Self.shortName = 'PrinterTop';
 
 function init( o )
 {
-  var self = this;
+  let self = this;
   Parent.prototype.init.call( self,o );
 }
 
@@ -69,16 +52,15 @@ function init( o )
 // relations
 // --
 
-var Composes =
-{
-  // outputGray : 1,
-}
-
-var Aggregates =
+let Composes =
 {
 }
 
-var Associates =
+let Aggregates =
+{
+}
+
+let Associates =
 {
 }
 
@@ -86,7 +68,7 @@ var Associates =
 // declare
 // --
 
-var Proto =
+let Proto =
 {
 
   // routine
@@ -114,6 +96,9 @@ _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
 
 _[ Self.shortName ] = Self;
+
+_.assert( _.routineIs( _.PrinterChainingMixin.prototype._writeAct ) );
+_.assert( Self.prototype._writeAct === _.PrinterChainingMixin.prototype._writeAct );
 
 // --
 // export

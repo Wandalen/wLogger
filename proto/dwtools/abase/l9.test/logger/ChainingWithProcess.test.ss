@@ -8,7 +8,7 @@ return;
 if( typeof module !== 'undefined' )
 {
 
-  require( '../../l9/printer/top/Logger.s' );
+  require( '../../l9/logger/entry/Logger.s' );
 
   var _ = _global_.wTools;
 

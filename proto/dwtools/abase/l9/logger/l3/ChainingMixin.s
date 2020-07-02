@@ -10,19 +10,6 @@
 
 */
 
-if( typeof module !== 'undefined' )
-{
-
-  let _ = require( '../../../../dwtools/Tools.s' );
-
-  _.include( 'wProto' );
-
-  require( './aChainer.s' );
-
-}
-
-//
-
 /**
  * @classdesc Extends printer with mechanism of message transfering between multiple inputs/outputs.
  * @class wPrinterChainingMixin
@@ -50,8 +37,12 @@ function onMixinEnd( mixinDescriptor, dstClass )
   _.assert( dstPrototype._writeToChannelWithoutExclusion === _writeToChannelWithoutExclusion );
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.routineIs( dstClass ) );
+  _.assert( _.routineIs( dstClass ) );
 
   dstPrototype._initChainingMixin( mixinDescriptor );
+
+  _.assert( _.routineIs( Self.prototype._writeAct ) );
+  _.assert( dstPrototype._writeAct === Self.prototype._writeAct );
 
 }
 
@@ -75,14 +66,13 @@ function _initChainingMixin( mixinDescriptor )
 function _initChainingMixinChannel( mixinDescriptor, channel )
 {
   let proto = this;
-  // let mixin = proto.constructor.__mixin__;
 
   _.assert( Object.hasOwnProperty.call( proto, 'constructor' ) )
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channel ) );
 
-  if( proto[ channel ] )
-  return;
+  // if( proto[ channel ] )
+  // return;
 
   /* */
 
@@ -91,16 +81,12 @@ function _initChainingMixinChannel( mixinDescriptor, channel )
   proto[ channel + 'Down' ] = writeDown;
   proto[ channel + 'In' ] = writeIn;
 
-  // this.extend[ channel ] = proto[ channel ] = write;
-  // this.extend[ channel + 'Up' ] = proto[ channel + 'Up' ] = writeUp;
-  // this.extend[ channel + 'Down' ] = proto[ channel + 'Down' ] = writeDown;
-  // this.extend[ channel + 'In' ] = proto[ channel + 'In' ] = writeIn;
-
   /* */
 
   function write()
   {
-    this._writeToChannel( channel, _.longSlice( arguments ) );
+    this._writeAct( channel, arguments );
+    // this._writeAct( channel, _.longSlice( arguments ) ); /* yyy */
     return this;
   }
 
@@ -171,7 +157,7 @@ function finit( original )
 // write
 // --
 
-function _writeToChannel( channelName, args )
+function _writeAct( channelName, args )
 {
   let self = this;
   let inputChainer = self[ chainerSymbol ];
@@ -234,6 +220,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
   });
 
+  return o;
 }
 
 //
@@ -242,7 +229,7 @@ function write()
 {
   let self = this;
 
-  self._writeToChannel( channelName, arguments );
+  self._writeAct( channelName, arguments );
 
   return self;
 }
@@ -260,7 +247,7 @@ function _writeToChannelUp( channelName, args )
   self.up();
 
   self.begin( 'head' );
-  self._writeToChannel( channelName, args );
+  self._writeAct( channelName, args );
   self.end( 'head' );
 
 }
@@ -276,7 +263,7 @@ function _writeToChannelDown( channelName, args )
   _.assert( _.longIs( args ) );
 
   self.begin( 'tail' );
-  self._writeToChannel( channelName, args );
+  self._writeAct( channelName, args );
   self.end( 'tail' );
 
   self.down();
@@ -299,7 +286,7 @@ function _writeToChannelIn( channelName, args )
   tag[ args[ 0 ] ] = args[ 1 ];
 
   self.begin( tag );
-  self._writeToChannel( channelName, [ args[ 1 ] ] );
+  self._writeAct( channelName, [ args[ 1 ] ] );
   self.end( tag );
 
 }
@@ -451,6 +438,11 @@ function outputUnchain( output )
 {
   let self = this;
   let inputChainer = self[ chainerSymbol ];
+
+  if( !inputChainer )
+  return;
+
+  _.assert( !!inputChainer );
   _.assert( arguments.length === 0 || arguments.length === 1 );
   inputChainer.outputUnchain( output );
 }
@@ -833,6 +825,7 @@ function _inputsGet()
 {
   let self = this;
   let chainer = self[ chainerSymbol ];
+  debugger;
   return chainer.inputs;
 }
 
@@ -956,9 +949,29 @@ let Functors =
 let Supplement =
 {
 
+  // // write
+  //
+  // _writeAct,
+  // _writeToChannelWithoutExclusion,
+  // _writeToChannelUp,
+  // _writeToChannelDown,
+  // _writeToChannelIn,
+  //
+  // // init
+  //
+  // _initChainingMixin,
+  // _initChainingMixinChannel,
+
+}
+
+//
+
+let Extend =
+{
+
   // write
 
-  _writeToChannel,
+  _writeAct,
   _writeToChannelWithoutExclusion,
   _writeToChannelUp,
   _writeToChannelDown,
@@ -968,13 +981,6 @@ let Supplement =
 
   _initChainingMixin,
   _initChainingMixinChannel,
-
-}
-
-//
-
-let Extend =
-{
 
   // chaining
 

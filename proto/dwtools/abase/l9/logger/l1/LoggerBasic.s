@@ -1,36 +1,23 @@
-(function _PrinterBase_s_() {
+(function _LoggerBasic_s_() {
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  let _ = require( '../../../../dwtools/Tools.s' );
-
-  _.include( 'wCopyable' );
-  _.include( 'wStringer' );
-  _.include( 'wStringsExtra' );
-
-}
-
-//
-
 /**
  * @classdesc Describes basic abilities of the printer: input transformation, verbosity level change.
- * @class wPrinterBase
+ * @class wLoggerBasic
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wPrinterBase( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wLoggerBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'PrinterBase';
+Self.shortName = 'LoggerBasic';
 
 // --
 // inter
@@ -38,9 +25,12 @@ Self.shortName = 'PrinterBase';
 
 function init( o )
 {
-  var self = this;
+  let self = this;
 
   _.workpiece.initFields( self );
+
+  if( self[ chainerSymbol ] === undefined )
+  self[ chainerSymbol ] = null;
 
   Object.preventExtensions( self );
 
@@ -56,7 +46,7 @@ function init( o )
 
 function transform( o )
 {
-  var self = this;
+  let self = this;
 
   _.assertMapHasAll( o, transform.defaults );
 
@@ -92,7 +82,7 @@ function _transformBegin( o )
 
 function _transformAct( o )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
@@ -128,7 +118,7 @@ function _transformEnd( o )
 // leveling
 // --
 
-// !!! poor description
+/* qqq : poor description */
 
 /**
  * Increases value of logger level property by( dLevel ).
@@ -136,21 +126,21 @@ function _transformEnd( o )
  * If argument( dLevel ) is not specified, increases by one.
  *
  * @example
- * var l = new _.Logger({ output : console });
+ * let l = new _.Logger({ output : console });
  * l.up( 2 );
  * console.log( l.level )
  * //returns 2
  * @method up
  * @throws { Exception } If more then one argument specified.
  * @throws { Exception } If( dLevel ) is not a finite number.
- * @class wPrinterBase
+ * @class wLoggerBasic
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
 function up( dLevel )
 {
-  var self = this;
+  let self = this;
 
   if( dLevel === undefined )
   dLevel = 1;
@@ -164,14 +154,12 @@ function up( dLevel )
 
 //
 
-// !!! poor description
-
 /**
  * Decreases value of logger level property by( dLevel ).
  * If argument( dLevel ) is not specified, decreases by one.
  *
  * @example
- * var l = new _.Logger({ output : console });
+ * let l = new _.Logger({ output : console });
  * l.up( 2 );
  * l.down( 2 );
  * console.log( l.level )
@@ -179,14 +167,16 @@ function up( dLevel )
  * @method down
  * @throws { Exception } If more then one argument specified.
  * @throws { Exception } If( dLevel ) is not a finite number.
- * @class wPrinterBase
+ * @class wLoggerBasic
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
+/* qqq : poor description */
+
 function down( dLevel )
 {
-  var self = this;
+  let self = this;
 
   if( dLevel === undefined )
   dLevel = 1;
@@ -202,14 +192,14 @@ function down( dLevel )
 
 function levelSet( level )
 {
-  var self = this;
+  let self = this;
 
   _.assert( level >= 0, 'levelSet : cant go below zero level to',level );
   _.assert( isFinite( level ) );
 
-  var dLevel = level - self[ symbolForLevel ];
+  let dLevel = level - self[ levelSymbol ];
 
-  self[ symbolForLevel ] = level ;
+  self[ levelSymbol ] = level ;
 
 }
 
@@ -217,36 +207,48 @@ function levelSet( level )
 // etc
 // --
 
-function write()
+function _writeAct( channelName, args )
 {
-  var self = this;
+  let self = this;
 
-  var o = self.transform({ input : arguments });
+  let o = self.transform({ input : args, channelName });
 
   _.assert( o.outputForPrinter );
 
-  return self;
+  return o;
+  // return self;
 }
+
+// function write()
+// {
+//   let self = this;
+//
+//   let o = self.transform({ input : arguments });
+//
+//   _.assert( o.outputForPrinter );
+//
+//   return self;
+// }
 
 //
 
 function _strConcat( args )
 {
-  var self = this;
+  let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
   return _.toStrSimple.apply( _,args );
 
-  var o2 =
+  let o2 =
   {
     linePrefix : self._prefix,
     linePostfix : self._postfix,
-    onToStr : onToStr,
+    onToStr,
   }
 
-  var result = _.strConcat( args, o2 );
+  let result = _.strConcat( args, o2 );
 
   return result;
 
@@ -256,7 +258,7 @@ function _strConcat( args )
     {
       src = _.err( src );
       let result = src.stack;
-      result = _.color.strFormat( result, 'negative' );
+      result = _.ct.format( result, 'negative' );
       return result;
     }
     return _.toStr( src, op.optionsForToStr );
@@ -264,51 +266,47 @@ function _strConcat( args )
 }
 
 //
-//
-// function canPrintFrom( src )
-// {
-//   var self = this;
-//
-//   if( !_.objectIs( src ) )
-//   return false;
-//
-//   if( _.routineIs( src._print ) && _.routineIs( src._print.makeIterator ) )
-//   return true;
-//
-//   // if( _.routineIs( src.print ) )
-//   // return true;
-//
-//   return false;
-// }
-//
-// //
-//
-// function printFrom( src )
-// {
-//   var self = this;
-//
-//   _.assert( arguments.length === 1, 'Expects single argument' );
-//   _.assert( _.routineIs( src._print ) );
-//   _.assert( _.routineIs( src._print.makeIterator ) );
-//   _.assert( src._print.length === 2 );
-//
-//   var iterator = src._print.makeIterator({ printer : self });
-//   var iteration = iterator.iterationNew();
-//
-//   Object.preventExtensions( iterator );
-//   Object.preventExtensions( iteration );
-//
-//   src._print( iteration,iterator );
-//
-// }
+
+function Init()
+{
+  let cls = this;
+
+  _.assert( cls.Channel.length > 0 );
+
+  for( let i = 0 ; i < cls.Channel.length ; i++ )
+  channelDeclare( cls.Channel[ i ] );
+
+  function channelDeclare( channel )
+  {
+    let r =
+    {
+      [ channel ] : function()
+      {
+        this._writeAct( channel, arguments );
+      }
+    }
+    cls.prototype[ channel ] = r[ channel ];
+  }
+
+}
 
 // --
 // relations
 // --
 
-var symbolForLevel = Symbol.for( 'level' );
+let levelSymbol = Symbol.for( 'level' );
+let chainerSymbol = Symbol.for( 'chainer' );
 
-var Composes =
+let Channel =
+[
+  'log',
+  'error',
+  'info',
+  'warn',
+  'debug'
+];
+
+let Composes =
 {
 
   name : '',
@@ -316,29 +314,31 @@ var Composes =
 
 }
 
-var Aggregates =
+let Aggregates =
 {
 }
 
-var Associates =
+let Associates =
 {
 }
 
-var Accessors =
+let Accessors =
 {
   level : 'level',
 }
 
-var Statics =
+let Statics =
 {
   MetaType : 'Printer',
+  Channel,
+  Init,
 }
 
 // --
 // declare
 // --
 
-var Proto =
+let Proto =
 {
 
   // routine
@@ -360,14 +360,10 @@ var Proto =
 
   // etc
 
-  write,
+  _writeAct,
   _strConcat,
 
-  // canPrintFrom,
-  // printFrom,
-
   // relations
-
 
   Composes,
   Aggregates,
@@ -387,13 +383,13 @@ _.classDeclare
 });
 
 _.Copyable.mixin( Self );
+Self.Init();
 
 // --
 // export
 // --
 
 _[ Self.shortName ] = Self;
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 

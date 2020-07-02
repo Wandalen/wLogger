@@ -2,17 +2,6 @@
 
 'use strict';
 
-if( typeof module !== 'undefined' )
-{
-
-  let _ = require( '../../../../dwtools/Tools.s' );
-
-  _.include( 'wProto' );
-
-}
-
-//
-
 /**
  * @classdesc Encapsulates chainability of printers, loggers and consoles. Use it to construct a chain.
    @class wChainer
@@ -20,10 +9,10 @@ if( typeof module !== 'undefined' )
    @module Tools/base/Logger
  */
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = null;
-var Self = function wChainer( o )
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = null;
+let Self = function wChainer( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -36,7 +25,7 @@ Self.shortName = 'Chainer';
 
 function init( o )
 {
-  var self = this;
+  let self = this;
 
   _.workpiece.initFields( self );
 
@@ -52,7 +41,7 @@ function init( o )
 
 function finit()
 {
-  var self = this;
+  let self = this;
   // debugger;xxx
 
   self.unchainEverything();
@@ -122,7 +111,7 @@ function finit()
 //     o.outputPrinter.forEach( ( outputPrinter ) =>
 //     {
 //       // debugger; // qqq
-//       var o2 = _.mapExtend( null, o );
+//       let o2 = _.mapExtend( null, o );
 //       o2.outputPrinter = outputPrinter;
 //       result += self._chain( o2 );
 //     });
@@ -139,7 +128,7 @@ function finit()
 //     o.inputPrinter.forEach( ( inputPrinter ) =>
 //     {
 //       // debugger; xxx
-//       var o2 = _.mapExtend( null, o );
+//       let o2 = _.mapExtend( null, o );
 //       o2.inputPrinter = inputPrinter;
 //       result += self._chain( o2 );
 //     });
@@ -314,7 +303,7 @@ function _chain( o )
     o.outputPrinter.forEach( ( outputPrinter ) =>
     {
       // debugger; // qqq
-      var o2 = _.mapExtend( null, o );
+      let o2 = _.mapExtend( null, o );
       o2.outputPrinter = outputPrinter;
 
       if( self._chainDescriptorLike( outputPrinter ) )
@@ -338,7 +327,7 @@ function _chain( o )
     o.inputPrinter.forEach( ( inputPrinter ) =>
     {
       // debugger; xxx
-      var o2 = _.mapExtend( null, o );
+      let o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
 
       if( self._chainDescriptorLike( inputPrinter ) )
@@ -704,7 +693,7 @@ function inputFrom( input, o )
   return Self._chain( o2 );
 }
 
-let defaults = inputFrom.defaults = Object.create( null );
+var defaults = inputFrom.defaults = Object.create( null );
 
 defaults.combining = 'append';
 defaults.exclusiveOutput = 0;
@@ -918,11 +907,11 @@ function _restoreOriginalWriteConsole( chainer )
 
 function _chainDescriptorMake( o )
 {
-  var self = this;
+  let self = this;
   _.assert( arguments.length === 1 );
   let r = new ChainDescriptor();
 
-  var options = _.mapOnly( o, self.ChainDescriptorFields );
+  let options = _.mapOnly( o, self.ChainDescriptorFields );
 
   Object.assign( r, self.ChainDescriptorFields );
 
@@ -971,7 +960,7 @@ function MakeFor( printer )
 
   let chainer = new Self();
   chainer.printer = printer;
-  printer[ chainerSymbol ] = chainer;
+  printer[ chainerSymbol ] = chainer; /* qqq xxx : instead of writing the field use HashMap */
 
   if( _.streamIs( printer ) )
   return chainer;
@@ -1068,7 +1057,7 @@ function _chainerWriteToPrinter( channel )
 
 function _nameGet()
 {
-  var self = this;
+  let self = this;
   return self.printer.name;
 }
 
@@ -1076,7 +1065,7 @@ function _nameGet()
 
 function _nameSet( src )
 {
-  var self = this;
+  let self = this;
 
   if( src === null )
   return;
@@ -1262,27 +1251,16 @@ let ChainDescriptorFields =
 
 let Combining = [ 'rewrite', 'supplement', 'append', 'prepend' ];
 
-let Channel =
-[
-  'log',
-  'error',
-  'info',
-  'warn',
-  'debug'
-];
-
-// let ChainDescriptor =
-// {
-//
-//   exclusiveOutput : 0,
-//   originalOutput : 0,
-//   combining : null,
-//   inputPrinter : null,
-//   outputPrinter : null,
-//   write : null,
-//   freed : 0,
-//
-// }
+let Channel = _.LoggerBasic.Channel;
+_.assert( Channel.length > 0 );
+// let Channel =
+// [
+//   'log',
+//   'error',
+//   'info',
+//   'warn',
+//   'debug'
+// ];
 
 // --
 // relations

@@ -5,7 +5,7 @@
 if( typeof module !== 'undefined' )
 {
 
-  require( '../../l9/printer/top/Logger.s' );
+  require( '../../l9/logger/entry/Logger.s' );
 
   var _ = _global_.wTools;
 
@@ -4413,18 +4413,18 @@ function ConsoleBar( test )
 
 function consoleIs( test )
 {
-  test.case = 'PrinterBase';
-  var src = _.PrinterBase;
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
   var got = _.consoleIs( src );
   test.identical( got, false );
 
-  test.case = 'PrinterMid';
-  var src = _.PrinterMid;
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
   var got = _.consoleIs( src );
   test.identical( got, false );
 
-  test.case = 'PrinterTop';
-  var src = _.PrinterTop;
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
   var got = _.consoleIs( src );
   test.identical( got, false );
 
@@ -4438,18 +4438,18 @@ function consoleIs( test )
 
 function printerIs( test )
 {
-  test.case = 'PrinterBase';
-  var src = _.PrinterBase;
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
   var got = _.printerIs( src );
   test.identical( got, true );
 
-  test.case = 'PrinterMid';
-  var src = _.PrinterMid;
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
   var got = _.printerIs( src );
   test.identical( got, true );
 
-  test.case = 'PrinterTop';
-  var src = _.PrinterTop;
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
   var got = _.printerIs( src );
   test.identical( got, true );
 
@@ -4463,18 +4463,18 @@ function printerIs( test )
 
 function printerLike( test )
 {
-  test.case = 'PrinterBase';
-  var src = _.PrinterBase;
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
   var got = _.printerLike( src );
   test.identical( got, true );
 
-  test.case = 'PrinterMid';
-  var src = _.PrinterMid;
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
   var got = _.printerLike( src );
   test.identical( got, true );
 
-  test.case = 'PrinterTop';
-  var src = _.PrinterTop;
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
   var got = _.printerLike( src );
   test.identical( got, true );
 
@@ -4488,18 +4488,18 @@ function printerLike( test )
 
 function loggerIs( test )
 {
-  test.case = 'PrinterBase';
-  var src = _.PrinterBase;
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
   var got = _.loggerIs( src );
   test.identical( got, false );
 
-  test.case = 'PrinterMid';
-  var src = _.PrinterMid;
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
   var got = _.loggerIs( src );
   test.identical( got, false );
 
-  test.case = 'PrinterTop';
-  var src = _.PrinterTop;
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
   var got = _.loggerIs( src );
   test.identical( got, false );
 
