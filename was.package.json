@@ -27,6 +27,6 @@
     "wstringsextra" : "",
     "wColor" : ""
   },
-  "devDependencies" : { "wFiles" : "", "wTesting" : "" },
+  "devDependencies" : { "wFiles" : "", "wTesting" : "", "wLogger" : "file:." },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }
