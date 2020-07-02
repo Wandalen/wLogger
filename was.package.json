@@ -10,7 +10,7 @@
     { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
   ],
   "license" : "MIT",
-  "main" : "proto/dwtools/abase/l9/logger/Logger.s",
+  "main" : "proto/dwtools/abase/l9/logger/entry/Logger.s",
   "files" : [ "proto/dwtools/abase/l9/logger", "proto/dwtools/Tools.s", "out" ],
   "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-3", "docgen" : "wdocgen proto" },
   "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wLogger.git" },
