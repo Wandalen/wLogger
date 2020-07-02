@@ -127,7 +127,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l9/logger/top/Logger.s
+        path: ../proto/dwtools/abase/l9/logger/Logger.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -137,13 +137,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/top/Logger.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/Logger.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/top/Logger.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/Logger.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -1015,7 +1015,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l9/logger/top/Logger.s
+        path: proto/dwtools/abase/l9/logger/Logger.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1025,13 +1025,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/top/Logger.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/Logger.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/top/Logger.s'
+        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/Logger.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
