@@ -173,18 +173,6 @@ module:
           - ../proto/dwtools/Tools.s
           - ../proto/dwtools/abase
           - ../proto/dwtools/abase/l9
-          - ../proto/dwtools/abase/l9/-printer
-          - ../proto/dwtools/abase/l9/-printer/aChainer.s
-          - ../proto/dwtools/abase/l9/-printer/aChainingMixin.s
-          - ../proto/dwtools/abase/l9/-printer/aColoredMixin.s
-          - ../proto/dwtools/abase/l9/-printer/PrinterBase.s
-          - ../proto/dwtools/abase/l9/-printer/PrinterMid.s
-          - ../proto/dwtools/abase/l9/-printer/PrinterTop.s
-          - ../proto/dwtools/abase/l9/-printer/top
-          - ../proto/dwtools/abase/l9/-printer/top/Logger.s
-          - ../proto/dwtools/abase/l9/-printer/top/LoggerExtra.s
-          - ../proto/dwtools/abase/l9/-printer/top/ToLayeredHtml.s
-          - ../proto/dwtools/abase/l9/-printer/top/ToString.s
           - ../proto/dwtools/abase/l9/logger
           - ../proto/dwtools/abase/l9/logger/-entry
           - ../proto/dwtools/abase/l9/logger/-include
@@ -201,26 +189,17 @@ module:
           - ../proto/dwtools/abase/l9/logger/l3/ColoredMixin.s
           - ../proto/dwtools/abase/l9/logger/l3/LoggerMid.s
           - ../proto/dwtools/abase/l9/logger/l5
-          - ../proto/dwtools/abase/l9/logger/l5/LoggerTop.s
+          - ../proto/dwtools/abase/l9/logger/l5/-LoggerTop.s
+          - ../proto/dwtools/abase/l9/logger/l5/Logger.s
           - ../proto/dwtools/abase/l9/logger/l7
           - ../proto/dwtools/abase/l9/logger/l7/-FromAnsiToCss.s
           - ../proto/dwtools/abase/l9/logger/l7/-LoggerExtra.s
           - ../proto/dwtools/abase/l9/logger/l7/-ToFile.s
           - ../proto/dwtools/abase/l9/logger/l7/-ToJs.s
-          - ../proto/dwtools/abase/l9/logger/l7/Logger.s
+          - ../proto/dwtools/abase/l9/logger/l7/LoggerPrime.s
           - ../proto/dwtools/abase/l9/logger/l7/ToLayeredHtml.s
           - ../proto/dwtools/abase/l9/logger/l7/ToString.s
           - ../proto/dwtools/abase/l9.test
-          - ../proto/dwtools/abase/l9.test/-printer
-          - ../proto/dwtools/abase/l9.test/-printer/Backend.test.ss
-          - ../proto/dwtools/abase/l9.test/-printer/Browser.test.html
-          - ../proto/dwtools/abase/l9.test/-printer/Browser.test.js
-          - ../proto/dwtools/abase/l9.test/-printer/Chaining.test.s
-          - ../proto/dwtools/abase/l9.test/-printer/ChainingWithProcess.test.ss
-          - ../proto/dwtools/abase/l9.test/-printer/ChainingWithStream.test.ss
-          - ../proto/dwtools/abase/l9.test/-printer/Color.test.js
-          - ../proto/dwtools/abase/l9.test/-printer/Color.test.ss
-          - ../proto/dwtools/abase/l9.test/-printer/Other.test.s
           - ../proto/dwtools/abase/l9.test/logger
           - ../proto/dwtools/abase/l9.test/logger/-FromAnsiToCss.test.s
           - ../proto/dwtools/abase/l9.test/logger/-ToFile.test.s
