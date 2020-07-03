@@ -33,15 +33,16 @@ function _writeAct( channel, args )
 {
   let self = this;
 
-  debugger;
   let o = _.LoggerBasic.prototype._writeAct.apply( self, arguments );
-  debugger;
 
   // _.assert( _.arrayIs( o.output ) );
   // _.assert( o.output.length === 1 );
   _.assert( _.strIs( o.pure ) );
 
-  self.outputData += o.pure + self.eol;
+  if( self.outputData )
+  self.outputData += self.eol + o.pure;
+  else
+  self.outputData += o.pure;
 
   return o;
 }

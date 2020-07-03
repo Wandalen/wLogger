@@ -22,7 +22,7 @@ function basic( test )
   var logger1 = new _.LoggerToString();
   logger1.log( 'abc' );
   logger1.log( 'xyz' );
-  var exp = 'abc\nxyz\n';
+  var exp = 'abc\nxyz';
   test.identical( logger1.outputData, exp );
 
   test.case = 'output to loggerToString';
@@ -32,7 +32,7 @@ function basic( test )
   logger1.outputTo( console );
   logger1.log( 'abc' );
   logger1.log( 'xyz' );
-  var exp = 'abc\nxyz\n';
+  var exp = 'abc\nxyz';
   test.identical( logger2.outputData, exp );
 
 }
