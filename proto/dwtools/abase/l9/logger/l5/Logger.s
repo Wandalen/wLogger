@@ -1,6 +1,7 @@
-(function _LoggerTop_s_() {
+(function _Logger_s_() {
 
 'use strict';
+
 
 /*
 
@@ -22,8 +23,8 @@ self -> original -> printer
 */
 
 /**
- * @classdesc Extends [wLoggerMid]{@link wLoggerMid} with printers chaining and output coloring mechanics.
- * @class wLoggerTop
+ * @classdesc Creates a logger for printing colorful and well formatted diagnostic code on server-side or in the browser. Based on [wLoggerTop]{@link wLoggerTop}.
+ * @class wLogger
  * @namespace Tools
  * @module Tools/base/Logger
  */
@@ -36,7 +37,7 @@ let Self = function wLoggerTop( o )
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'LoggerTop';
+Self.shortName = 'Logger';
 
 // --
 //
@@ -45,7 +46,8 @@ Self.shortName = 'LoggerTop';
 function init( o )
 {
   let self = this;
-  Parent.prototype.init.call( self,o );
+  _.assert( arguments.length === 0 | arguments.length === 1 );
+  Parent.prototype.init.call( self, o );
 }
 
 // --
@@ -54,6 +56,7 @@ function init( o )
 
 let Composes =
 {
+  name : '',
 }
 
 let Aggregates =
@@ -61,6 +64,15 @@ let Aggregates =
 }
 
 let Associates =
+{
+  output : null,
+}
+
+let Restricts =
+{
+}
+
+let Statics =
 {
 }
 
@@ -71,15 +83,16 @@ let Associates =
 let Proto =
 {
 
-  // routine
-
   init,
 
   // relations
 
+
   Composes,
   Aggregates,
   Associates,
+  Restricts,
+  Statics,
 
 }
 
@@ -92,18 +105,22 @@ _.classDeclare
   extend : Proto,
 });
 
+//
+
 _.PrinterChainingMixin.mixin( Self );
 _.PrinterColoredMixin.mixin( Self );
 
-_[ Self.shortName ] = Self;
-
 _.assert( _.routineIs( _.PrinterChainingMixin.prototype._writeAct ) );
 _.assert( Self.prototype._writeAct === _.PrinterChainingMixin.prototype._writeAct );
+
+if( !_global_.logger || !( _global_.logger instanceof Self ) )
+_global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'global' });
 
 // --
 // export
 // --
 
+_[ Self.shortName ] = Self;
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 

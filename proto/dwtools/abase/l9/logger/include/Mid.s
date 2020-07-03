@@ -16,9 +16,10 @@ if( typeof module !== 'undefined' )
   require( '../l3/ColoredMixin.s' );
   require( '../l3/LoggerMid.s' );
 
-  require( '../l5/LoggerTop.s' );
+  // require( '../l5/LoggerTop.s' );
+  require( '../l5/Logger.s' );
 
-  require( '../l7/Logger.s' );
+  require( '../l7/LoggerPrime.s' );
   require( '../l7/ToLayeredHtml.s' );
   require( '../l7/ToString.s' );
 

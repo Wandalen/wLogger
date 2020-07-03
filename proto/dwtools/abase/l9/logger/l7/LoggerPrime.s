@@ -1,33 +1,23 @@
-(function _Logger_s_() {
+(function _LoggerPrime_s_() {
 
 'use strict';
 
-// if( typeof module !== 'undefined' )
-// {
-//
-//   if( typeof wLoggerTop === 'undefined' )
-//   require( '../LoggerTop.s' );
-//
-// }
-
-//
-
 /**
  * @classdesc Creates a logger for printing colorful and well formatted diagnostic code on server-side or in the browser. Based on [wLoggerTop]{@link wLoggerTop}.
- * @class wLogger
+ * @class wLoggerPrime
  * @namespace Tools
  * @module Tools/base/Logger
  */
 
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.LoggerTop;
-let Self = function wLogger( o )
+let Parent = _.Logger;
+let Self = function wLoggerPrime( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
 
-Self.shortName = 'Logger';
+Self.shortName = 'LoggerPrime';
 
 //
 
@@ -37,7 +27,10 @@ function init( o )
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
-  Parent.prototype.init.call( self,o );
+  Parent.prototype.init.call( self, o );
+
+  if( !self.outputs.length )
+  self.outputTo( _global_.logger );
 
 }
 
@@ -47,7 +40,6 @@ function init( o )
 
 let Composes =
 {
-  name : '',
 }
 
 let Aggregates =
@@ -56,8 +48,6 @@ let Aggregates =
 
 let Associates =
 {
-  // output : console,
-  output : null,
 }
 
 let Restricts =
@@ -79,7 +69,6 @@ let Proto =
 
   // relations
 
-
   Composes,
   Aggregates,
   Associates,
@@ -100,9 +89,6 @@ _.classDeclare
 //
 
 _[ Self.shortName ] = Self;
-
-if( !_global_.logger || !( _global_.logger instanceof Self ) )
-_global_.logger = _global_[ 'logger' ] = new Self({ output : console, name : 'global' });
 
 // --
 // export
