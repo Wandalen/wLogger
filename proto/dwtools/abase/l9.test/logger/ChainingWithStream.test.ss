@@ -28,7 +28,7 @@ let Parent = wTester;
 function onSuiteBegin()
 {
   let self = this;
-  self.testDirPath = _.path.pathDirTempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
+  self.testDirPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
 }
 
 //
@@ -36,7 +36,7 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.path.pathDirTempClose( self.testDirPath );
+  _.path.tempClose( self.testDirPath );
 }
 
 //
