@@ -1,4 +1,4 @@
-# wLogger [![Build Status](https://travis-ci.org/Wandalen/wLogger.svg?branch=master)](https://travis-ci.org/Wandalen/wLogger)
+# module::Logger [![Status](https://github.com/Wandalen/wLogger/workflows/Test/badge.svg)](https://github.com/Wandalen/wLogger}/actions?query=workflow%3ATest)
 
 Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.
 
