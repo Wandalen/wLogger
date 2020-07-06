@@ -26,7 +26,7 @@ return;
 let $ = jQuery;
 let _global = _global_;
 let _ = _global_.wTools;
-let Parent = _.LoggerTop;
+let Parent = _.Logger;
 let Self = function wPrinterToLayeredHtml( o )
 {
   return _.workpiece.construct( Self, this, arguments );

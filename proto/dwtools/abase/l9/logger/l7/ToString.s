@@ -10,7 +10,7 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-// let Parent = _.LoggerTop; /* yyy */
+// let Parent = _.Logger; /* yyy */
 let Parent = _.LoggerMid;
 let Self = function wLoggerToString( o )
 {
