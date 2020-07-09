@@ -1,5 +1,5 @@
 
-require( '../../../dwtools/Tools.s' );
+require( '../../../wtools/Tools.s' );
 
 var _global = _global_;
 var _ = _global_.wTools;

@@ -127,7 +127,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: ../proto/dwtools/abase/l9/logger/entry/Logger.s
+        path: ../proto/wtools/abase/l9/logger/entry/Logger.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -137,13 +137,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/entry/Logger.s'
+        path: '{path::out.*=1}/source/wtools/abase/l9/logger/entry/Logger.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/entry/Logger.s'
+        path: '{path::out.*=1}/source/wtools/abase/l9/logger/entry/Logger.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug
@@ -170,57 +170,57 @@ module:
         path:
           - ../proto
           - ../proto/Integration.test.s
-          - ../proto/dwtools
-          - ../proto/dwtools/Tools.s
-          - ../proto/dwtools/abase
-          - ../proto/dwtools/abase/l9
-          - ../proto/dwtools/abase/l9/logger
-          - ../proto/dwtools/abase/l9/logger/-entry
-          - ../proto/dwtools/abase/l9/logger/-include
-          - ../proto/dwtools/abase/l9/logger/entry
-          - ../proto/dwtools/abase/l9/logger/entry/Logger.s
-          - ../proto/dwtools/abase/l9/logger/include
-          - ../proto/dwtools/abase/l9/logger/include/Basic.s
-          - ../proto/dwtools/abase/l9/logger/include/Mid.s
-          - ../proto/dwtools/abase/l9/logger/l1
-          - ../proto/dwtools/abase/l9/logger/l1/LoggerBasic.s
-          - ../proto/dwtools/abase/l9/logger/l3
-          - ../proto/dwtools/abase/l9/logger/l3/Chainer.s
-          - ../proto/dwtools/abase/l9/logger/l3/ChainingMixin.s
-          - ../proto/dwtools/abase/l9/logger/l3/ColoredMixin.s
-          - ../proto/dwtools/abase/l9/logger/l3/LoggerMid.s
-          - ../proto/dwtools/abase/l9/logger/l5
-          - ../proto/dwtools/abase/l9/logger/l5/-LoggerTop.s
-          - ../proto/dwtools/abase/l9/logger/l5/Logger.s
-          - ../proto/dwtools/abase/l9/logger/l7
-          - ../proto/dwtools/abase/l9/logger/l7/-FromAnsiToCss.s
-          - ../proto/dwtools/abase/l9/logger/l7/-LoggerExtra.s
-          - ../proto/dwtools/abase/l9/logger/l7/-ToFile.s
-          - ../proto/dwtools/abase/l9/logger/l7/-ToJs.s
-          - ../proto/dwtools/abase/l9/logger/l7/LoggerPrime.s
-          - ../proto/dwtools/abase/l9/logger/l7/ToLayeredHtml.s
-          - ../proto/dwtools/abase/l9/logger/l7/ToString.s
-          - ../proto/dwtools/abase/l9.test
-          - ../proto/dwtools/abase/l9.test/logger
-          - ../proto/dwtools/abase/l9.test/logger/-FromAnsiToCss.test.s
-          - ../proto/dwtools/abase/l9.test/logger/-ToFile.test.s
-          - ../proto/dwtools/abase/l9.test/logger/-ToFile.test.ss
-          - ../proto/dwtools/abase/l9.test/logger/-ToJs.test.s
-          - ../proto/dwtools/abase/l9.test/logger/Backend.test.ss
-          - ../proto/dwtools/abase/l9.test/logger/Browser.test.html
-          - ../proto/dwtools/abase/l9.test/logger/Browser.test.js
-          - ../proto/dwtools/abase/l9.test/logger/Chaining.test.s
-          - ../proto/dwtools/abase/l9.test/logger/ChainingWithProcess.test.ss
-          - ../proto/dwtools/abase/l9.test/logger/ChainingWithStream.test.ss
-          - ../proto/dwtools/abase/l9.test/logger/Color.test.js
-          - ../proto/dwtools/abase/l9.test/logger/Color.test.ss
-          - ../proto/dwtools/abase/l9.test/logger/ColorTable.ss
-          - ../proto/dwtools/abase/l9.test/logger/ColorTableBad.ss
-          - ../proto/dwtools/abase/l9.test/logger/ColorTableGood.ss
-          - ../proto/dwtools/abase/l9.test/logger/Other.test.s
-          - ../proto/dwtools/abase/l9.test/logger/ToString.test.s
-          - ../proto/dwtools/amid
-          - ../proto/dwtools/atop
+          - ../proto/wtools
+          - ../proto/wtools/Tools.s
+          - ../proto/wtools/abase
+          - ../proto/wtools/abase/l9
+          - ../proto/wtools/abase/l9/logger
+          - ../proto/wtools/abase/l9/logger/-entry
+          - ../proto/wtools/abase/l9/logger/-include
+          - ../proto/wtools/abase/l9/logger/entry
+          - ../proto/wtools/abase/l9/logger/entry/Logger.s
+          - ../proto/wtools/abase/l9/logger/include
+          - ../proto/wtools/abase/l9/logger/include/Basic.s
+          - ../proto/wtools/abase/l9/logger/include/Mid.s
+          - ../proto/wtools/abase/l9/logger/l1
+          - ../proto/wtools/abase/l9/logger/l1/LoggerBasic.s
+          - ../proto/wtools/abase/l9/logger/l3
+          - ../proto/wtools/abase/l9/logger/l3/Chainer.s
+          - ../proto/wtools/abase/l9/logger/l3/ChainingMixin.s
+          - ../proto/wtools/abase/l9/logger/l3/ColoredMixin.s
+          - ../proto/wtools/abase/l9/logger/l3/LoggerMid.s
+          - ../proto/wtools/abase/l9/logger/l5
+          - ../proto/wtools/abase/l9/logger/l5/-LoggerTop.s
+          - ../proto/wtools/abase/l9/logger/l5/Logger.s
+          - ../proto/wtools/abase/l9/logger/l7
+          - ../proto/wtools/abase/l9/logger/l7/-FromAnsiToCss.s
+          - ../proto/wtools/abase/l9/logger/l7/-LoggerExtra.s
+          - ../proto/wtools/abase/l9/logger/l7/-ToFile.s
+          - ../proto/wtools/abase/l9/logger/l7/-ToJs.s
+          - ../proto/wtools/abase/l9/logger/l7/LoggerPrime.s
+          - ../proto/wtools/abase/l9/logger/l7/ToLayeredHtml.s
+          - ../proto/wtools/abase/l9/logger/l7/ToString.s
+          - ../proto/wtools/abase/l9.test
+          - ../proto/wtools/abase/l9.test/logger
+          - ../proto/wtools/abase/l9.test/logger/-FromAnsiToCss.test.s
+          - ../proto/wtools/abase/l9.test/logger/-ToFile.test.s
+          - ../proto/wtools/abase/l9.test/logger/-ToFile.test.ss
+          - ../proto/wtools/abase/l9.test/logger/-ToJs.test.s
+          - ../proto/wtools/abase/l9.test/logger/Backend.test.ss
+          - ../proto/wtools/abase/l9.test/logger/Browser.test.html
+          - ../proto/wtools/abase/l9.test/logger/Browser.test.js
+          - ../proto/wtools/abase/l9.test/logger/Chaining.test.s
+          - ../proto/wtools/abase/l9.test/logger/ChainingWithProcess.test.ss
+          - ../proto/wtools/abase/l9.test/logger/ChainingWithStream.test.ss
+          - ../proto/wtools/abase/l9.test/logger/Color.test.js
+          - ../proto/wtools/abase/l9.test/logger/Color.test.ss
+          - ../proto/wtools/abase/l9.test/logger/ColorTable.ss
+          - ../proto/wtools/abase/l9.test/logger/ColorTableBad.ss
+          - ../proto/wtools/abase/l9.test/logger/ColorTableGood.ss
+          - ../proto/wtools/abase/l9.test/logger/Other.test.s
+          - ../proto/wtools/abase/l9.test/logger/ToString.test.s
+          - ../proto/wtools/amid
+          - ../proto/wtools/atop
     submodule:
       wTools:
         path: 'npm:///wTools'
@@ -995,7 +995,7 @@ module:
       entry.proto.no.tests:
         criterion:
           tests: no.tests
-        path: proto/dwtools/abase/l9/logger/entry/Logger.s
+        path: proto/wtools/abase/l9/logger/entry/Logger.s
       entry.proto.only.tests:
         criterion:
           tests: only.tests
@@ -1005,13 +1005,13 @@ module:
           debug: debug
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/entry/Logger.s'
+        path: '{path::out.*=1}/source/wtools/abase/l9/logger/entry/Logger.s'
       entry.out.raw.debug.release:
         criterion:
           debug: release
           raw: raw
           content: prime
-        path: '{path::out.*=1}/source/dwtools/abase/l9/logger/entry/Logger.s'
+        path: '{path::out.*=1}/source/wtools/abase/l9/logger/entry/Logger.s'
       entry.out.compiled.debug.debug:
         criterion:
           debug: debug

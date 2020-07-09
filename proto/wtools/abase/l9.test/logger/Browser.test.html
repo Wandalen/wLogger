@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>
+wTools unit test
+</title>
+
+
+
+<!--need to replace some sources with files from node_modules later-->
+
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l1/aFundamental.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l1/cDiagnostics.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l1/eFieldMapper.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l1/kArrayDescriptor.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l1/zSetup.s"></script>
+<script src="../../../../node_modules/wProcess/staging/wtools/abase/l4/Process.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l2/bLookTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l2/fIncludeTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l2/fNameTools.s"></script>
+<script src="../../../../node_modules/wTools/staging/wtools/abase/l2/fStringTools.s"></script>
+<script src="../../../../node_modules/warraysorted/staging/wtools/abase/l4/ArraySorted.s"></script>
+<script src="../../../../node_modules/wstringsextra/staging/wtools/abase/l5/StringTools.s"></script>
+<script src="../../../../node_modules/wstringer/staging/wtools/abase/l4/aStringer.s"></script>
+
+<script src="../../../../node_modules/wProto/staging/wtools/l3/Proto.s"></script>
+<script src="../../../../node_modules/winstancing/staging/wtools/abase/l7_mixin/Instancing.s"></script>
+<script src="../../../../node_modules/wPathBasic/staging/wtools/l3/Path.s"></script>
+<script src="../../../../node_modules/wtraverser/staging/wtools/abase/l4/Traverser.s"></script>
+<script src="../../../../node_modules/wcloner/staging/wtools/abase/l5/Cloner.s"></script>
+<script src="../../../../node_modules/wCopyable/staging/wtools/abase/l7_mixin/Copyable.s"></script>
+<script src="../../../../node_modules/wConsequence/staging/wtools/abase/l9/consequence/Consequence.s"></script>
+<script src="../../../../node_modules/wColor/staging/wtools/amid/color/Color.s"></script>
+
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/aChainer.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/aChainingMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/aColoredMixin.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/LoggerBasic.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/LoggerMid.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/LoggerTop.s"></script>
+<script src="../../../../node_modules/wLogger/staging/wtools/abase/l9/logger/entry/Logger.s"></script>
+
+
+<script src="../../../../node_modules/wTesting/staging/wtools/atop/tester/aBase.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/wtools/atop/tester/aTestSuite.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/wtools/atop/tester/bTestRoutine.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/wtools/atop/tester/cTester.debug.s"></script>
+<script src="../../../../node_modules/wTesting/staging/wtools/atop/tester/zLast.debug.s"></script>
+
+
+<script src="./Browser.test.js">
+</script>
+
+<script src="./Color.test.js">
+</script>
+
+<script src="./Other.test.s">
+</script>
+
+<!--
+<script src="./Chaining.test.s">
+</script>
+<script src="./Logger.test.s">
+</script> -->
+
+<script>
+let _global = _global_;
+let _ = _global_.wTools;
+wTester.testAll();
+</script>
+
+</head>
+<body>
+</body>
+</html>

@@ -783,7 +783,7 @@ function consoleBarExperiment( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../dwtools/Tools.s' ) ) );
+  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
