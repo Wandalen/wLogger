@@ -825,7 +825,6 @@ function _inputsGet()
 {
   let self = this;
   let chainer = self[ chainerSymbol ];
-  debugger;
   return chainer.inputs;
 }
 
