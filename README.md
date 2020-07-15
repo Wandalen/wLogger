@@ -14,7 +14,7 @@ npm install wLogger
 ## Try out
 ```
 npm install
-node sample/Sample.js
+node sample/Sample.s
 ```
 
 ## Usage
