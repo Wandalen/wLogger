@@ -12,7 +12,7 @@ if( typeof module !== 'undefined' )
 }
 
 let _global = _global_;
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 let Parent = wTester;
 let fileProvider = _testerGlobal_.wTools.fileProvider;
 let path = fileProvider.path;
@@ -830,7 +830,7 @@ console.error works without context
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Tools.base.printer.Other',

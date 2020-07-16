@@ -94,7 +94,7 @@ l.log( '#background : yellow#text here#background : default#' );
 ##### Example #5
 ```javascript
 /* Colorful logging using shortcut wTools.strColor */
-var _ = wTools;
+let _ = wTools;
 var l = new wLogger();
 /* prints message with red color */
 l.log( _.strColor.fg( 'message','red' ) );

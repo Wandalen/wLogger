@@ -6,17 +6,17 @@ if( typeof module !== 'undefined' )
 {
 
   require( '../../l9/logger/entry/Logger.s' );
-  var _global = _global_;
-  var _ = _global_.wTools;
+  let _global = _global_;
+  let _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = wTester;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = wTester;
 var isUnix = process.platform !== 'win32' ? true : false;
 
 //
@@ -746,7 +746,7 @@ function shellColors( test )
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Tools.base.printer.Color.Shell',

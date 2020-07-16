@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 
   require( '../../l9/logger/entry/Logger.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
@@ -15,9 +15,9 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = wTester;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = wTester;
 
 //
 
@@ -4994,7 +4994,7 @@ function finit( test )
 
 //
 
-var Self =
+let Self =
 {
 
   name : 'Tools.base.printer.Chaining',

@@ -533,7 +533,7 @@ function output( test )
 // proto
 // --
 
-var Self =
+let Self =
 {
 
   name : 'Tools.base.printer.ChainingWithStream',

@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 
   require( '../../l9/logger/entry/Logger.s' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wTesting' );
   _.include( 'wFiles' );
@@ -19,9 +19,9 @@ if( typeof module !== 'undefined' )
 
 //
 
-var _global = _global_;
-var _ = _global_.wTools;
-var Parent = wTester;
+let _global = _global_;
+let _ = _global_.wTools;
+let Parent = wTester;
 
 // --
 // resource
@@ -102,7 +102,7 @@ trivial.timeOut = 30000;
 // proto
 // --
 
-var Self =
+let Self =
 {
 
   name : 'ChainingWithProcess',

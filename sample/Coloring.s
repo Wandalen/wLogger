@@ -3,13 +3,13 @@ if( typeof module !== 'undefined' )
 {
   require( 'wTools' );
 
-  var _ = _global_.wTools;
+  let _ = _global_.wTools;
 
   _.include( 'wLogger' );
   _.include( 'wColor' );
 }
 
-var _ = _global_.wTools;
+let _ = _global_.wTools;
 
 let printer = new _.Logger({ output : console });
 

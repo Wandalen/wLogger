@@ -1,8 +1,8 @@
 
 require( '../../../wtools/Tools.s' );
 
-var _global = _global_;
-var _ = _global_.wTools;
+let _global = _global_;
+let _ = _global_.wTools;
 
 require( 'wConsequence' );
 require( 'wLogger' );

@@ -1,7 +1,7 @@
 
 require( '../../../wtools/Tools.s' );
 
-var _ = _global_.wTools
+let _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
