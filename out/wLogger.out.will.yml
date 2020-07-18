@@ -207,6 +207,7 @@ module:
           - ../proto/wtools/abase/l9.test/logger/-ToFile.test.ss
           - ../proto/wtools/abase/l9.test/logger/-ToJs.test.s
           - ../proto/wtools/abase/l9.test/logger/Backend.test.ss
+          - ../proto/wtools/abase/l9.test/logger/Basic.test.s
           - ../proto/wtools/abase/l9.test/logger/Browser.test.html
           - ../proto/wtools/abase/l9.test/logger/Browser.test.js
           - ../proto/wtools/abase/l9.test/logger/Chaining.test.s
