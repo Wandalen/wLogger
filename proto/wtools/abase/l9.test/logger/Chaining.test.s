@@ -26,10 +26,14 @@ var _escaping = function( str )
   return _.toStr( str,{ escaping : 1 } );
 }
 
+//
+
 function log()
 {
   return arguments;
 }
+
+//
 
 var fakeConsole =
 {
@@ -38,6 +42,10 @@ var fakeConsole =
   info : _.routineJoin( console,console.info ),
   warn : _.routineJoin( console,console.warn ),
 }
+
+// --
+// tests
+// --
 
 function levelsTest( test )
 {
@@ -203,7 +211,7 @@ function _consoleChaining( o )
 
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
-  //
+  /* */
 
   test.case = 'inputFrom console that exists in outputs';
   var l = new _.Logger({ output : console });
@@ -211,7 +219,7 @@ function _consoleChaining( o )
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
 
-  //
+  /* */
 
   test.case = 'inputFrom console that not exists in outputs';
   var l = new _.Logger({ output : null });
@@ -221,13 +229,13 @@ function _consoleChaining( o )
   l.inputUnchain( console );
   test.is( !l.hasInputClose( console ) );
 
-  //
+  /* */
 
   test.case = 'inputFrom console that exists in outputs, exclusiveOutput on';
   var l = new _.Logger({ output : console });
   test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1  } ) );
 
-  //
+  /* */
 
   test.case = 'inputFrom console that not exists in outputs, exclusiveOutput on';
   var l = new _.Logger({ output : null });
@@ -240,7 +248,7 @@ function _consoleChaining( o )
 
   debugger
 
-  //
+  /* */
 
   if( Config.debug )
   {
@@ -255,7 +263,7 @@ function _consoleChaining( o )
     test.is( !_.Logger.ConsoleIsBarred( console ) );
   }
 
-  //
+  /* */
 
   test.case = 'outputTo console that exists in outputs';
   var l = new _.Logger({ output : console });
@@ -263,14 +271,14 @@ function _consoleChaining( o )
   test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
-  //
+  /* */
 
   test.case = 'outputTo console that exists in outputs, originalOutput on';
   var l = new _.Logger({ output : console });
   test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 1 } ) );
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
-  //
+  /* */
 
   test.case = 'outputTo console that exists in inputs, originalOutput off';
   var l = new _.Logger({ output : null });
@@ -281,7 +289,7 @@ function _consoleChaining( o )
   test.is( !l.hasInputClose( console ) );
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
-  //
+  /* */
 
   test.case = 'outputTo console that exists in inputs, originalOutput on';
   var l = new _.Logger({ output : null });
@@ -295,7 +303,7 @@ function _consoleChaining( o )
   test.is( !l.hasOutputClose( console ) && !l.outputs.length );
   test.is( !_.Logger.ConsoleIsBarred( console ) );
 
-  //
+  /* */
 
   test.case = 'console is not excluded, several inputs for console';
   test.is( !_.Logger.ConsoleIsBarred( console ) );
@@ -312,7 +320,7 @@ function _consoleChaining( o )
   l4.inputUnchain( console );
   test.identical( received, [ 'l1', 'l2', 'l3' ] );
 
-  //
+  /* */
 
   test.case = 'console is not excluded, several outputs from console';
   test.is( !_.Logger.ConsoleIsBarred( console ) );
@@ -331,7 +339,7 @@ function _consoleChaining( o )
   l3.inputUnchain( console );
   test.identical( received, [ 'msg', 'msg', 'msg' ] );
 
-  //
+  /* */
 
   test.case = 'console is not excluded, several outputs/inputs';
   test.is( !_.Logger.ConsoleIsBarred( console ) );
@@ -367,7 +375,7 @@ function _consoleChaining( o )
 
   test.identical( received, [ 'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3' ] );
 
-  //
+  /* */
 
   if( o.consoleWasBarred )
   {
@@ -376,7 +384,7 @@ function _consoleChaining( o )
   }
 
 
-  //
+  /* */
 
   test.case = 'console is excluded, several inputs for console';
   test.is( _.Logger.ConsoleIsBarred( console ) );
@@ -393,7 +401,7 @@ function _consoleChaining( o )
   l4.inputUnchain( console );
   test.identical( received, [] );
 
-  //
+  /* */
 
   test.case = 'console is excluded, several outputs from console';
   test.is( _.Logger.ConsoleIsBarred( console ) );
@@ -412,9 +420,9 @@ function _consoleChaining( o )
   l3.inputUnchain( console );
   test.identical( received, [] );
 
-  //
+  /* */
 
-  //
+  /* */
 
   test.case = 'console is excluded, several outputs/inputs';
   test.is( _.Logger.ConsoleIsBarred( console ) );
@@ -450,7 +458,7 @@ function _consoleChaining( o )
 
   test.identical( received, [] );
 
-  //
+  /* */
 
   test.case = 'if console is excluded, other console outputs must be omitted';
   test.is( _.Logger.ConsoleIsBarred( console ) );
@@ -467,7 +475,7 @@ function _consoleChaining( o )
   test.is( _.Logger.ConsoleIsBarred( console ) );
   test.identical( received, [] )
 
-  //
+  /* */
 }
 
 //
@@ -602,7 +610,7 @@ function chainingParallel( test )
   var expected = [ 'l2','l2','l2','l3','l3','l3','l4','l4','l4' ];
   test.identical( got, expected );
 
-  //
+  /* */
 
   test.case = 'case4: outputTo/inputFrom, remove some outputs ';
   var got = [];
@@ -638,7 +646,7 @@ function chainingParallel( test )
   // ];
   // var expected = [ 2, 0, 0 ];
   // test.identical( got, expected );
-  //
+  /* */
   // test.case = 'case6: l1->* leveling on ';
   // var l1 = new _.Logger({ output : console });
   // var l2 = new _.Logger({ output : console });
@@ -692,7 +700,7 @@ function outputTo( test )
   l.outputTo( l1, { combining : 'rewrite' } );
   test.is( l1.hasInputClose( l ) )
 
-  //
+  /* */
 
   test.case = 'few logger are writting into console'
   var l = new _.Logger({ output : null });
@@ -714,7 +722,7 @@ function outputTo( test )
   outputPrinter.onTransformEnd = onTransformEndTemp;
   test.identical( got, [ '1', '2', '3' ] );
 
-  //
+  /* */
 
   test.case = 'chain console as output, check descriptor';
   var l = new _.Logger({ output : console });
@@ -843,14 +851,14 @@ function outputTo( test )
   var expected = true;
   test.identical( got, expected );
 
-  //
+  /* */
 
   if( !Config.debug )
   return;
 
   var l = new _.Logger({ output : console });
 
-  //
+  /* */
 
   test.case = 'no args';
   test.shouldThrowErrorOfAnyKind( function()
@@ -858,7 +866,7 @@ function outputTo( test )
     l.outputTo();
   });
 
-  //
+  /* */
 
   test.case = 'output is not a Object';
   test.shouldThrowErrorOfAnyKind( function()
@@ -866,7 +874,7 @@ function outputTo( test )
     l.outputTo( 'output', { combining : 'rewrite' } );
   });
 
-  //
+  /* */
 
   test.case = 'not allowed combining mode';
   test.shouldThrowErrorOfAnyKind( function()
@@ -886,7 +894,7 @@ function outputTo( test )
     l.outputTo( )
   });
 
-  //
+  /* */
 
   test.case = 'invalid output type';
   test.shouldThrowErrorOfAnyKind( function()
@@ -894,7 +902,7 @@ function outputTo( test )
     l.outputTo( '1' )
   });
 
-  //
+  /* */
 
   test.case = 'invalid combining type';
   test.shouldThrowErrorOfAnyKind( function()
@@ -902,7 +910,7 @@ function outputTo( test )
     l.outputTo( console, { combining : 'invalid' } );
   });
 
-  //
+  /* */
 
   test.case = 'invalid leveling type';
   test.shouldThrowErrorOfAnyKind( function()
@@ -910,7 +918,7 @@ function outputTo( test )
     l.outputTo( console, { leveling : 'invalid' } );
   });
 
-  //
+  /* */
 
   test.case = 'combining off, outputs not empty';
   test.shouldThrowErrorOfAnyKind( function()
@@ -918,7 +926,7 @@ function outputTo( test )
     l.outputTo( console );
   });
 
-  //
+  /* */
 
   test.case = ' ';
   var l1 = new _.Logger({ output : null });
@@ -984,7 +992,7 @@ function outputUnchain( test )
   var got = l.outputUnchain( l1 );
   test.identical( got, false );
 
-  //
+  /* */
 
   test.case = 'remove console from output';
   var l = new _.Logger({ output : console });
@@ -1074,7 +1082,7 @@ function inputFrom( test )
   });
 
   // !!! needs silencing = false
-  //
+  /* */
   // test.case = 'case3: console as input';
   // var got = [];
   // var l = new _.Logger( { output : null, onTransformEnd } );
@@ -1095,7 +1103,7 @@ function inputFrom( test )
   var expected = [ '--abc' ];
   test.identical( got, expected );
 
-  //
+  /* */
 
   test.case = 'try to add existing input';
   var l = new _.Logger({ output : console });
@@ -1170,14 +1178,14 @@ function inputFrom( test )
   });
   l2.inputUnchain( console );
 
-  //
+  /* */
 
   if( !Config.debug )
   return;
 
   var l = new _.Logger({ output : console });
 
-  //
+  /* */
 
   test.case = 'no args';
   test.shouldThrowErrorOfAnyKind( function()
@@ -1185,7 +1193,7 @@ function inputFrom( test )
     l.inputFrom();
   });
 
-  //
+  /* */
 
   test.case = 'incorrect type';
   test.shouldThrowErrorOfAnyKind( function()
@@ -1193,7 +1201,7 @@ function inputFrom( test )
     l.inputFrom( '1' );
   });
 
-  //
+  /* */
 
   test.case = 'console exists as output';
   test.shouldThrowErrorOfAnyKind( function()
@@ -1250,7 +1258,7 @@ function inputUnchain( test )
   test.identical( l1.inputs.length, 0 );
   test.identical( l2.outputs.length, 0 );
 
-  //
+  /* */
 
   // !!! needs silencing = false
   // test.case = 'remove existing input';
@@ -1559,7 +1567,7 @@ function _output( o )
   ]
   test.identical( hooked, expected );
 
-  //
+  /* */
 
   test.case = 'combining : supplement, printers have no other chains';
 
@@ -1579,7 +1587,7 @@ function _output( o )
   test.will = 'message from printerA must reach both of handlers';
   test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
-  //
+  /* */
 
   test.case = 'combining : prepend, printers have other chains';
 
@@ -1612,7 +1620,7 @@ function _output( o )
   ]
   test.identical( hooked, expected );
 
-  //
+  /* */
 
   test.close( 'printer -> ordinary -> printer' );
 
@@ -1790,7 +1798,7 @@ function _output( o )
   ]
   test.identical( hooked, expected );
 
-  //
+  /* */
 
   test.case = 'combining : supplement, printers have no other chains';
 
@@ -1814,7 +1822,7 @@ function _output( o )
   test.will = 'message from printerA must reach both of handlers';
   test.identical( hooked, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
-  //
+  /* */
 
   test.case = 'supplement : prepend, printers have other chains';
 
@@ -2812,7 +2820,7 @@ function chain( test )
   test.identical( printerB.outputs[ 0 ].originalOutput, 0 );
   test.identical( printerB.outputs[ 0 ].exclusiveOutput, 0 );
 
-  //
+  /* */
 
   test.case = 'printer - console, both have chains, inputCombining : rewrite, outputCombining : rewrite';
 
@@ -3070,7 +3078,7 @@ function chain( test )
   test.identical( outputsC[ outputsC.length - 1 ].originalOutput, 0 );
   test.identical( outputsC[ outputsC.length - 1 ].exclusiveOutput, 0 );
 
-  //
+  /* */
 
   test.case = 'printer - multiple printers, have chains, inputCombining : append, outputCombining : append';
 
@@ -3168,7 +3176,7 @@ function chain( test )
   chainerPrinterC.inputUnchain( printerA );
   chainerPrinterC.outputUnchain( outputPrinter );
 
-  //
+  /* */
 
   test.case = 'console - multiple printers, have chains, inputCombining : append, outputCombining : append';
 
@@ -4289,104 +4297,6 @@ function recursion( test )
 
 //
 
-function _consoleBar( o )
-{
-  let test = o.test;
-
-  if( _.Logger.ConsoleIsBarred( console ) )
-  {
-    o.consoleWasBarred = true;
-    test.suite.consoleBar( 0 );
-  }
-
-  //
-
-  test.case = 'bar/unbar console'
-  var barDescriptor = _.Logger.ConsoleBar
-  ({
-    outputPrinter : wTester.logger,
-    barPrinter : null,
-    on : 1,
-  });
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-
-  if( Config.debug )
-  {
-    //try to on console again
-    test.shouldThrowErrorOfAnyKind( () =>
-    {
-      _.Logger.ConsoleBar
-      ({
-        outputPrinter : wTester.logger,
-        barPrinter : null,
-        on : 1,
-      })
-    });
-
-    var ConsoleIsBarred = _.Logger.ConsoleIsBarred( console );
-
-    // if( _.Logger.unbarringConsoleOnError )
-    // test.is( !ConsoleIsBarred );
-    // else
-    test.is( ConsoleIsBarred );
-  }
-
-  barDescriptor.on = 0;
-  _.Logger.ConsoleBar( barDescriptor );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  //
-
-  test.case = 'excluded console forwards message only to on logger';
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-  var barDescriptor = _.Logger.ConsoleBar
-  ({
-    outputPrinter : wTester.logger,
-    barPrinter : null,
-    on : 1,
-  });
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var l = new _.Logger
-  ({
-    output : null,
-    onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
-  });
-  l.inputFrom( console, { exclusiveOutput : 0 } );
-  console.log( 'message' );
-  l.inputUnchain( console );
-  barDescriptor.on = 0;
-  _.Logger.ConsoleBar( barDescriptor );
-  test.identical( received, [] );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  //
-
-  if( Config.debug )
-  {
-    test.case = 'error if provided barPrinter has inputs/outputs'
-    test.is( !_.Logger.ConsoleIsBarred( console ) );
-    let o =
-    {
-      outputPrinter : wTester.logger,
-      barPrinter : new _.Logger({ output : console }),
-      on : 1,
-    }
-    test.shouldThrowErrorOfAnyKind( () => _.Logger.ConsoleBar( o ) );
-    test.is( !_.Logger.ConsoleIsBarred( console ) );
-  }
-
-  //
-
-  if( o.consoleWasBarred )
-  {
-    test.suite.consoleBar( 1 );
-    test.is( _.Logger.ConsoleIsBarred( console ) );
-  }
-}
-
-//
-
 function ConsoleBar( test )
 {
   var o =
@@ -4403,8 +4313,105 @@ function ConsoleBar( test )
   {
     if( o.consoleWasBarred )
     test.suite.consoleBar( 1 );
-
     throw _.errLogOnce( err );
+  }
+
+  /* */
+
+  function _consoleBar( o )
+  {
+    let test = o.test;
+
+    if( _.Logger.ConsoleIsBarred( console ) )
+    {
+      o.consoleWasBarred = true;
+      test.suite.consoleBar( 0 );
+    }
+
+    /* */
+
+    test.case = 'bar/unbar console'
+    var barDescriptor = _.Logger.ConsoleBar
+    ({
+      outputPrinter : wTester.logger,
+      barPrinter : null,
+      on : 1,
+    });
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+
+    if( Config.debug )
+    {
+      //try to on console again
+      test.shouldThrowErrorOfAnyKind( () =>
+      {
+        _.Logger.ConsoleBar
+        ({
+          outputPrinter : wTester.logger,
+          barPrinter : null,
+          on : 1,
+        })
+      });
+
+      var ConsoleIsBarred = _.Logger.ConsoleIsBarred( console );
+
+      // if( _.Logger.unbarringConsoleOnError )
+      // test.is( !ConsoleIsBarred );
+      // else
+      test.is( ConsoleIsBarred );
+    }
+
+    barDescriptor.on = 0;
+    _.Logger.ConsoleBar( barDescriptor );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'excluded console forwards message only to on logger';
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+    var barDescriptor = _.Logger.ConsoleBar
+    ({
+      outputPrinter : wTester.logger,
+      barPrinter : null,
+      on : 1,
+    });
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var l = new _.Logger
+    ({
+      output : null,
+      onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
+    });
+    l.inputFrom( console, { exclusiveOutput : 0 } );
+    console.log( 'message' );
+    l.inputUnchain( console );
+    barDescriptor.on = 0;
+    _.Logger.ConsoleBar( barDescriptor );
+    test.identical( received, [] );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    if( Config.debug )
+    {
+      test.case = 'error if provided barPrinter has inputs/outputs'
+      test.is( !_.Logger.ConsoleIsBarred( console ) );
+      let o =
+      {
+        outputPrinter : wTester.logger,
+        barPrinter : new _.Logger({ output : console }),
+        on : 1,
+      }
+      test.shouldThrowErrorOfAnyKind( () => _.Logger.ConsoleBar( o ) );
+      test.is( !_.Logger.ConsoleIsBarred( console ) );
+    }
+
+    /* */
+
+    if( o.consoleWasBarred )
+    {
+      test.suite.consoleBar( 1 );
+      test.is( _.Logger.ConsoleIsBarred( console ) );
+    }
   }
 
 }
@@ -4438,25 +4445,28 @@ function consoleIs( test )
 
 function printerIs( test )
 {
+
   test.case = 'LoggerBasic';
   var src = _.LoggerBasic;
+  debugger;
   var got = _.printerIs( src );
-  test.identical( got, true );
+  test.identical( got, false );
 
   test.case = 'LoggerMid';
   var src = _.LoggerMid;
   var got = _.printerIs( src );
-  test.identical( got, true );
+  test.identical( got, false );
 
   test.case = 'LoggerTop';
   var src = _.LoggerTop;
   var got = _.printerIs( src );
-  test.identical( got, true );
+  test.identical( got, false );
 
   test.case = 'instance of Logger';
   var src = new _.Logger();
   var got = _.printerIs( src );
   test.identical( got, true );
+
 }
 
 //
@@ -4628,7 +4638,7 @@ function _finit( test )
   test.is( printerIsNotModified( printerBBefore, printerB ) );
   test.will = null;
 
-  //
+  /* */
 
   test.case = 'self = printer, finit on right side of chain'
 
@@ -4657,7 +4667,7 @@ function _finit( test )
   test.is( printerIsNotModified( printerBBefore, printerB ) );
   test.will = null;
 
-  //
+  /* */
 
   test.case = 'self = console'
 
@@ -4742,7 +4752,7 @@ function _finit( test )
   test.is( printerIsNotModified( printerBBefore, printerB ) );
   test.will = null;
 
-  //
+  /* */
 
   test.case = 'self = printer, finit on right side of chain'
 
@@ -4992,7 +5002,9 @@ function finit( test )
 
 }
 
-//
+// --
+// declare
+// --
 
 let Self =
 {
@@ -5011,10 +5023,6 @@ let Self =
     chaining,
     consoleChaining,
     chainingParallel,
-    // outputTo,
-    // outputUnchain,
-    // inputFrom,
-    // inputUnchain,
 
     output,
     input,
@@ -5029,13 +5037,14 @@ let Self =
     recursion,
 
     ConsoleBar,
-    consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
-    printerIs, // Dmytro : the second part of routine printerIs in module wTools
-    printerLike, // Dmytro : the second part of routine printerLike in module wTools
-    loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
 
-    clone,
-    finit,
+    // consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
+    // printerIs, // Dmytro : the second part of routine printerIs in module wTools
+    // printerLike, // Dmytro : the second part of routine printerLike in module wTools
+    // loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
+    /* */
+    // clone,
+    // finit,
 
   },
 

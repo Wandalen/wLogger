@@ -11,11 +11,19 @@ Supports colorful output in browser and shell, multilevel output, chaining with 
 npm install wLogger
 ```
 
-## Try out
+## Try out from the repository
 ```
+git clone https://github.com/Wandalen/wLogger
+cd wLogger
 npm install
 node sample/Sample.s
 ```
+
+## To add to your project
+```
+npm add 'wLogger@alpha'
+```
+
 
 ## Usage
 ### Options
