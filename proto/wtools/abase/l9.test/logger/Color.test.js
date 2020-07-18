@@ -82,7 +82,7 @@ function colorConsole( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.Color.Browser',
+  name : 'Tools.logger.Color.Browser',
   silencing : 1,
   enabled : () => Config.interpreter !== 'njs',
 

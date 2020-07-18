@@ -44,7 +44,7 @@ function basic( test )
 var Proto =
 {
 
-  name : 'Tools.base.printer.ToString',
+  name : 'Tools.logger.ToString',
   silencing : 1,
 
   tests :

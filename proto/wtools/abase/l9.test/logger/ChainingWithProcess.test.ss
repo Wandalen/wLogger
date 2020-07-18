@@ -105,7 +105,7 @@ trivial.timeOut = 30000;
 let Self =
 {
 
-  name : 'ChainingWithProcess',
+  name : 'Tools.logger.ChainingWithProcess',
   silencing : 1,
   enabled : 0,
   onRoutineEnd,

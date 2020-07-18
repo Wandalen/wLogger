@@ -46,7 +46,7 @@ function simplest( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.Backend',
+  name : 'Tools.logger.Backend',
   /* verbosity : 1, */
   silencing : 1,
 

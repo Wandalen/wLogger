@@ -5009,7 +5009,7 @@ function finit( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.Chaining',
+  name : 'Tools.logger.Chaining',
 
   // routineTimeOut : 999999,
 

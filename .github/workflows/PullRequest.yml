@@ -1,5 +1,5 @@
 
-name : PullRequest
+name : pr
 
 on :
   # push :

@@ -536,7 +536,7 @@ function output( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.ChainingWithStream',
+  name : 'Tools.logger.ChainingWithStream',
   silencing : 1,
   enabled : 1,
 

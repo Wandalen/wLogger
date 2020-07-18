@@ -45,7 +45,7 @@ function currentColor( test )
   test.case = 'case1 : setting foreground to red';
   logger.log( '#foreground : default##foreground : dark red#' );
   if( Config.interpreter === 'browser' )
-  var expected = [ 1, 0, 0 ];
+  var expected = [ 1, 0, 0, 1 ];
   else
   var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
@@ -53,7 +53,7 @@ function currentColor( test )
   test.case = 'case2 : next line color must be red too';
   logger.log( 'line' );
   if( Config.interpreter === 'browser' )
-  var expected = [ 1, 0, 0 ];
+  var expected = [ 1, 0, 0, 1 ];
   else
   var expected = [ 0.5, 0, 0, 1 ];
   test.identical( logger.foregroundColor, expected );
@@ -68,14 +68,14 @@ function currentColor( test )
   if( Config.interpreter === 'browser' )
   var expected =
   [
-    [ 1, 0, 0  ],
-    [ 0, 0, 0  ]
+    [ 1, 0, 0, 1 ],
+    [ 0, 0, 0, 1 ]
   ]
   else
   var expected =
   [
-    [ 0.5, 0, 0, 1  ],
-    [ 0, 0, 0  ]
+    [ 0.5, 0, 0, 1 ],
+    [ 0, 0, 0, 1 ]
   ]
 
   test.identical( got, expected  );
@@ -86,7 +86,7 @@ function currentColor( test )
   var expected =
   [
     null,
-    [ 0, 0, 0 ]
+    [ 0, 0, 0, 1 ]
   ]
   test.identical( got, expected  );
 
@@ -169,25 +169,25 @@ function currentColor( test )
   ]
 
   test.identical( got, expected  );
-  test.case = 'case12 : setting colors from setter, arrays';
-  logger.foregroundColor = [ 255, 0 , 0 ];
-  logger.backgroundColor = [ 255, 255, 255 ];
+  test.case = 'case12 : setting colors from rgb array';
+  logger.foregroundColor = [ 1, 0, 0 ];
+  logger.backgroundColor = [ 0, 1, 1 ];
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
     [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
+    [ 0, 1, 1, 1 ]
   ]
   test.identical( got, expected  );
 
-  test.case = 'case13 : setting colors from setter, arrays#2';
-  logger.foregroundColor = [ 1, 0, 0 ];
-  logger.backgroundColor = [ 1, 1, 1 ];
+  test.case = 'case13 : setting colors from rgba array';
+  logger.foregroundColor = [ 1, 0, 0, 0.5 ];
+  logger.backgroundColor = [ 1, 1, 1, 0.5 ];
   var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
-    [ 1, 0, 0, 1 ],
-    [ 1, 1, 1, 1 ]
+    [ 1, 0, 0, 0.5 ],
+    [ 1, 1, 1, 0.5 ]
   ]
   test.identical( got, expected  );
 
@@ -469,38 +469,38 @@ function diagnostic( test )
 
   var l = new _.Logger({ output : console });
 
-  //
+  /* */
 
   _.Logger.diagnosingColor = 0;
   _.Logger.diagnosingColorCollapse = 0;
   var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
-  //
+  /* */
 
   _.Logger.diagnosingColor = 1;
   _.Logger.diagnosingColorCollapse = 1;
 
-  /**/
+  /* */
 
   var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
-  /**/
+  /* */
 
   l.foregroundColor = 'red';
   l.backgroundColor = 'default';
   var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
-  /**/
+  /* */
 
   l.foregroundColor = 'default';
   l.backgroundColor = 'red';
   var got = l._diagnoseColorCheck();
   test.identical( got, undefined );
 
-  //
+  /* */
 
   test.case = 'ill color combinations test';
 
@@ -537,7 +537,7 @@ function diagnostic( test )
   var got = l._diagnoseColorCheck();
   test.identical( got.ill, false );
 
-  //
+  /* */
 
   test.case = 'color collapse test';
 
@@ -611,10 +611,10 @@ function stateChangingValue( test )
     test.identical( l[ state ], 1 );
     l[ state ] = 0;
     test.identical( l[ state ], 0 );
-    l[ state ] = -1;
-    test.identical( l[ state ], 0 );
+    // l[ state ] = -1;
+    // test.identical( l[ state ], 0 );
 
-    //
+    /* */
 
     test.case = state + ': ' + 'bool';
     var l = new _.Logger();
@@ -625,7 +625,7 @@ function stateChangingValue( test )
     l[ state ] = false;
     test.identical( l[ state ], prev - 1 );
 
-    //
+    /* */
 
     test.case = state + ': ' + 'as directive, number';
     var l = new _.Logger();
@@ -635,10 +635,10 @@ function stateChangingValue( test )
     test.identical( l[ state ], 2 );
     l.log( `#${state}:0#` )
     test.identical( l[ state ], 1 );
-    l.log( `#${state}:-1#` )
-    test.identical( l[ state ], 2 );
+    // l.log( `#${state}:-1#` )
+    // test.identical( l[ state ], 2 );
 
-    //
+    /* */
 
     test.case = state + ': ' + 'as directive, bool';
     var l = new _.Logger();
@@ -651,7 +651,7 @@ function stateChangingValue( test )
     l.log( `#${state}:false#` )
     test.identical( l[ state ], 0 );
 
-    //
+    /* */
 
 
     if( !Config.debug )
@@ -833,7 +833,7 @@ console.error works without context
 let Self =
 {
 
-  name : 'Tools.base.printer.Other',
+  name : 'Tools.logger.Other',
   silencing : 1,
   /* verbosity : 1, */
 

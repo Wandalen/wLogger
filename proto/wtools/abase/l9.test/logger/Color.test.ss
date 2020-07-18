@@ -335,8 +335,6 @@ function colorConsoleDirectives( test )
 
     l.log( o.text );
 
-    debugger;
-
     test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.outputForTerminal ) );
     test.identical( escape( got.outputForPrinter[ 0 ] ), escape( o.text ) );
   }
@@ -575,7 +573,7 @@ function colorConsoleDirectives( test )
 
   runCase2
   ({
-    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1 ',
+    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'inputGray',
     expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
@@ -583,7 +581,7 @@ function colorConsoleDirectives( test )
 
   runCase2
   ({
-    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1 ',
+    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputGray',
     expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
@@ -591,7 +589,7 @@ function colorConsoleDirectives( test )
 
   runCase2
   ({
-    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 1 ',
+    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'inputRaw',
     expected : coloredInput + coloredInput + coloredInput + coloredInput + coloredInput
@@ -599,7 +597,7 @@ function colorConsoleDirectives( test )
 
   runCase2
   ({
-    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1 ',
+    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputRaw',
     expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
@@ -609,32 +607,32 @@ function colorConsoleDirectives( test )
 
   runCase2
   ({
-    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 2 ',
-    other : 2,
+    case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1',
+    other : 1,
     directive : 'inputGray',
     expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
   })
 
   runCase2
   ({
-    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 2 ',
-    other : 2,
+    case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1',
+    other : 1,
     directive : 'outputGray',
     expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
   })
 
   runCase2
   ({
-    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 2 ',
-    other : 2,
+    case : 'inputRaw 0 - 1 - 2 - 1 - 0, other 1',
+    other : 1,
     directive : 'inputRaw',
     expected : coloredInput + coloredInput + coloredInput + coloredInput + coloredInput
   })
 
   runCase2
   ({
-    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 2 ',
-    other : 2,
+    case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1',
+    other : 1,
     directive : 'outputRaw',
     expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
   })
@@ -650,7 +648,7 @@ function shellColors( test )
   test.case = 'shell colors codes test';
 
   var logger = new _.Logger({ output : console });
-  
+
   logger.foregroundColor = 'dark black';
   test.identical( logger.foregroundColor, [ 0, 0, 0 ] );
   test.identical( logger._rgbToCode_nodejs( logger.foregroundColor ), '30' );
@@ -749,7 +747,7 @@ function shellColors( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.Color.Shell',
+  name : 'Tools.logger.Color.Shell',
   silencing : 1,
 
   tests :

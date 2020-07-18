@@ -39,7 +39,7 @@ function simplest( test )
 let Self =
 {
 
-  name : 'Tools.base.printer.Browser',
+  name : 'Tools.logger.Browser',
   enabled : () => Config.interpreter !== 'njs',
   silencing : 1,
 

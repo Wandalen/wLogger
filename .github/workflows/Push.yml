@@ -1,17 +1,14 @@
 
-name : Push
+name : push
 
 on :
   push :
     branches : [ master ]
-  # pull_request :
-  #   branches : [ master ]
-  # pull_request_review :
-  #   branches : [ master ]
 
 jobs :
 
   Cancel:
+    if : "!startsWith( github.event.head_commit.message, 'version' )"
     name : 'Cancel Previous Runs'
     runs-on : ubuntu-latest
     timeout-minutes : 1

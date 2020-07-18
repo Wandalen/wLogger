@@ -90,9 +90,9 @@ function _transformActHtml( o )
 
       if( color && color !== 'default' )
       {
-        color = _.color.rgbaFromTry( color, null );
+        color = _.color.rgbaFromTry( color );
         if( color )
-        color = _.color.colorNearestCustom({ color, colorMap : _.color.ColorMap })
+        color = _.color.rgbaFrom({ src : color, colorMap : _.color.ColorMap })
       }
 
       if( style === 'foreground')
@@ -985,15 +985,15 @@ function _colorSet( layer, color )
   {
     let originalName = color;
 
-    if( Config.interpreter === 'browser' )
+    if( Config.interpreter === 'browser' ) /* xxx qqq : use field instead of Config.interpreter */
     {
-      color = _.color.rgbaFromTry( color, null );
+      color = _.color.rgbaFromTry( color );
     }
     else
     {
-      color = _.color.rgbaFromTry.apply( { colorMap :  _.color.ColorMapShell }, [ color, null ] );
+      color = _.color.rgbaFromTry({ colorMap :  _.color.ColorMapShell, src : color, def : null });
       if( !color )
-      color = _.color.rgbaFromTry( originalName, null );
+      color = _.color.rgbaFromTry( originalName );
     }
 
     if( !color )
@@ -1006,12 +1006,12 @@ function _colorSet( layer, color )
     {
       if( Config.interpreter === 'browser' )
       {
-        color = _.color.colorNearestCustom({ color, colorMap : _.color.ColorMap });
+        color = _.color.rgbaFrom({ src : color, colorMap : _.color.ColorMap });
         currentName = _getColorName( _.color.ColorMap, color );
       }
       else
       {
-        color = _.color.colorNearestCustom({ color, colorMap :  _.color.ColorMapShell });
+        color = _.color.rgbaFrom({ src : color, colorMap :  _.color.ColorMapShell });
         currentName = _getColorName(  _.color.ColorMapShell, color );
       }
 
@@ -1167,13 +1167,11 @@ function _styleReset()
 function _inputGraySet( src )
 {
   let self = this;
+
   _.assert( _.boolLike( src ) );
 
   if( _.boolIs( src ) )
   src = self.inputGray + ( src ? 1 : -1 );
-
-  if( src < 0 )
-  debugger;
 
   if( src < 0 )
   src = 0;

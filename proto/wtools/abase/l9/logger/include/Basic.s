@@ -9,19 +9,12 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../../../../wtools/Tools.s' );
 
-  // _.include( 'wProto' );
   _.include( 'wCopyable' );
   _.include( 'wStringer' );
   _.include( 'wStringsExtra' );
   _.include( 'wEventHandler' );
 
-  try
-  {
-    _.include( 'wColor' );
-  }
-  catch( err )
-  {
-  }
+  _.include( 'wColor256' ); /* qqq : make the depdendeny optional */
 
   module[ 'exports' ] = _global_.wTools;
 }
