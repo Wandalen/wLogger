@@ -1,15 +1,10 @@
-# module::Logger [![Status](https://github.com/Wandalen/wLogger/workflows/publish/badge.svg)](https://github.com/Wandalen/wLogger/actions?query=workflow%3Apublish) [![experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
+# module::Logger [![Status](https://github.com/Wandalen/wLogger/workflows/publish/badge.svg)](https://github.com/Wandalen/wLogger/actions?query=workflow%3Apublish) [![stable](https://img.shields.io/badge/stability-stable-green.svg)](https://github.com/emersion/stability-badges#stable)
 
 Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.
 
 The module in JavaScript provides convenient, layered, cross-platform means for multilevel, colorful logging.
 Logger writes messages( incoming & outgoing ) to the specified output. By default it prints messages using console as output.
 Supports colorful output in browser and shell, multilevel output, chaining with other console-like objects to perform message transfering between multiple inputs/outputs.
-
-## Installation
-```terminal
-npm install wLogger
-```
 
 ## Try out from the repository
 ```
@@ -127,99 +122,3 @@ wLogger.consoleBar
 
 console.log( 'Message from console' );
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

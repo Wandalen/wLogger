@@ -965,7 +965,7 @@ let Supplement =
 
 //
 
-let Extend =
+let Extension =
 {
 
   // write
@@ -1037,7 +1037,7 @@ let Extend =
 _.classDeclare
 ({
   cls : Self,
-  extend : Extend,
+  extend : Extension,
   supplement : Supplement,
   onMixinEnd,
   functors : Functors,

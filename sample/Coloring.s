@@ -16,7 +16,6 @@ let printer = new _.Logger({ output : console });
 /**/
 
 printer.log();
-debugger
 printer.log( 'Setting color through field:' );
 
 printer.foregroundColor = 'red'; /* sets foreground color to red */
@@ -48,8 +47,8 @@ printer.log( '#background : red#\nred text\n#background : default#\ndefault text
 
 printer.log();
 printer.log( 'Coloring is easier with shortcuts:' );
-let fg = _.color.strFormatForeground;
-let bg = _.color.strFormatBackground;
+let fg = _.ct.fg;
+let bg = _.ct.bg;
 printer.log( '\n', fg( 'red text', 'red' ), 'default text' );
 
 /**/
@@ -79,9 +78,3 @@ printer.log();
 printer.log();
 printer.log( 'Stacking foreground color: red text between yellow' );
 printer.log( '\n', fg( 'yellow text' + fg( ' red text ', 'red' ) + 'yellow text', 'yellow' ) );
-
-
-
-
-
-

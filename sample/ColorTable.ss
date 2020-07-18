@@ -1,5 +1,12 @@
 
-require( '../../../wtools/Tools.s' );
+try
+{
+  require( '../../../wtools/Tools.s' );
+}
+catch( err )
+{
+  require( 'wTools' );
+}
 
 let _ = _global_.wTools
 
@@ -26,6 +33,8 @@ var colorNames =
   'dark green',
   'dark white'
 ]
+
+drawTable();
 
 //
 
@@ -134,5 +143,3 @@ function drawTable()
   table.push.apply( table, tables[ 1 ] );
   logger.log( table.toString() );
 }
-
-drawTable();

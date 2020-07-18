@@ -650,7 +650,7 @@ function shellColors( test )
   var logger = new _.Logger({ output : console });
 
   logger.foregroundColor = 'dark black';
-  test.identical( logger.foregroundColor, [ 0, 0, 0 ] );
+  test.identical( logger.foregroundColor, [ 0, 0, 0, 1 ] );
   test.identical( logger._rgbToCode_nodejs( logger.foregroundColor ), '30' );
 
 

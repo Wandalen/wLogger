@@ -1,11 +1,19 @@
 
-require( '../../../wtools/Tools.s' );
+try
+{
+  require( '../../../wtools/Tools.s' );
+}
+catch( err )
+{
+  require( 'wTools' );
+}
 
 let _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );
 
+drawTable();
 
 //
 
@@ -150,5 +158,3 @@ function drawTable()
 }
 
 //
-
-drawTable();

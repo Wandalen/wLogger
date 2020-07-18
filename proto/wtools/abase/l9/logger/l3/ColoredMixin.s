@@ -1607,7 +1607,7 @@ let Functors =
 
 }
 
-let Extend =
+let Extension =
 {
 
   // stack
@@ -1689,7 +1689,7 @@ let Extend =
 _.classDeclare
 ({
   cls : Self,
-  extend : Extend,
+  extend : Extension,
   functors : Functors,
   withMixin : true,
   withClass : true,
