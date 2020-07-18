@@ -25,7 +25,7 @@
     "wEventHandler" : "",
     "wstringer" : "",
     "wstringsextra" : "",
-    "wColor" : ""
+    "wColor256" : ""
   },
   "devDependencies" : { "wFiles" : "", "wTesting" : "", "wLogger" : "file:." },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]

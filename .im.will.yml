@@ -16,8 +16,8 @@ submodule :
   wStringsExtra :
     path : npm:///wstringsextra
     enabled : 0 # submodule
-  wColor :
-    path : npm:///wColor
+  wColor256 :
+    path : npm:///wColor256
     enabled : 0 # submodule
   wLogger :
     path : hd://.
