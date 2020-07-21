@@ -105,14 +105,14 @@ function drawTable()
   var tables = prepareTableInfo();
   var o2 = Object.create( null );
 
-  o2.colWidth = 9;
   // o2.topHead = [ 'fg/bg', ... colorNames.map( ( name ) => shortColor( name ) ) ];
   o2.topHead = [ ... colorNames.map( ( name ) => shortColor( name ) ) ];
   o2.onCellGet = onCellGet;
   o2.onLength = onLength;
   o2.data = tables[ 0 ];
   o2.dim = [ tables[ 0 ][ 0 ][ _.mapKeys( tables[ 0 ][ 0 ] )[ 0 ] ] .length, tables[ 0 ].length ];
-  o2.colWidth = 30;
+  // o2.colWidth = 30;
+  // o2.colWidth = 9;
   o2.style = 'doubleBorder';
 
   // o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
@@ -131,8 +131,7 @@ function drawTable()
 
   function onLength( src )
   {
-    debugger;
-    src = src.replace( /xxx/, 'yyy' );
+    src = src.replace( /.+?m/mg, '' );
     return src.length;
   }
 
