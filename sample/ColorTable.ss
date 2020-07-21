@@ -109,9 +109,10 @@ function drawTable()
   // o2.topHead = [ 'fg/bg', ... colorNames.map( ( name ) => shortColor( name ) ) ];
   o2.topHead = [ ... colorNames.map( ( name ) => shortColor( name ) ) ];
   o2.onCellGet = onCellGet;
+  o2.onLength = onLength;
   o2.data = tables[ 0 ];
   o2.dim = [ tables[ 0 ][ 0 ][ _.mapKeys( tables[ 0 ][ 0 ] )[ 0 ] ] .length, tables[ 0 ].length ];
-  o2.colWidth = 5;
+  o2.colWidth = 30;
   o2.style = 'doubleBorder';
 
   // o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
@@ -122,7 +123,20 @@ function drawTable()
   // var table = new Table( o );
   // table.push.apply( table, tables[ 0 ] );
 
+  debugger;
   logger.log( _.strTable( o2 ).result );
+  debugger;
+
+  /* */
+
+  function onLength( src )
+  {
+    debugger;
+    src = src.replace( /xxx/, 'yyy' );
+    return src.length;
+  }
+
+  /* */
 
   function onCellGet( i2d, o )
   {
