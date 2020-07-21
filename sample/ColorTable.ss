@@ -1,12 +1,12 @@
 
-try
-{
-  require( '../../../wtools/Tools.s' );
-}
-catch( err )
-{
-  require( 'wTools' );
-}
+// try
+// {
+  require( '../../../../wtools/Tools.s' );
+// }
+// catch( err )
+// {
+//   require( 'wTools' );
+// }
 
 let _ = _global_.wTools
 
@@ -35,6 +35,7 @@ var colorNames =
 ]
 
 drawTable();
+// drawTableOld();
 
 //
 
@@ -101,32 +102,57 @@ function prepareTableInfo()
 
 function drawTable()
 {
+  var tables = prepareTableInfo();
+  var o2 = Object.create( null );
+
+  o2.colWidth = 9;
+  // o2.topHead = [ 'fg/bg', ... colorNames.map( ( name ) => shortColor( name ) ) ];
+  o2.topHead = [ ... colorNames.map( ( name ) => shortColor( name ) ) ];
+  o2.onCellGet = onCellGet;
+  o2.data = tables[ 0 ];
+  o2.dim = [ tables[ 0 ][ 0 ][ _.mapKeys( tables[ 0 ][ 0 ] )[ 0 ] ] .length, tables[ 0 ].length ];
+  o2.colWidth = 5;
+  o2.style = 'doubleBorder';
+
+  // o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
+  // o.colWidths.push.apply( o.colWidths, _.longFill( [], 6,         colorNames.length / 2 ) )
+  // o.rowAligns.push.apply( o.rowAligns, _.longFill( [], 'center',  colorNames.length ) );
+  // o.colAligns = o.rowAligns;
+  //
+  // var table = new Table( o );
+  // table.push.apply( table, tables[ 0 ] );
+
+  logger.log( _.strTable( o2 ).result );
+
+  function onCellGet( i2d, o )
+  {
+    let col = o.data[ i2d[ 1 ] ];
+    return col[ _.mapKeys( col )[ 0 ] ][ i2d[ 0 ] ];
+  }
+}
+
+//
+
+function drawTableOld()
+{
   var Table = require( 'cli-table2' );
   var tables = prepareTableInfo();
   var o =
   {
-    head : [ "fg/bg" ],
+    head : [ 'fg/bg' ],
     colWidths : [ 9 ],
     rowAligns : [ 'left' ],
     colAligns : null,
-    style:
+    style :
     {
-       compact : true,
-      'padding-left': 0,
-      'padding-right': 0
+      compact : true,
     },
   }
 
   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-
-  debugger;
   o.colWidths.push.apply( o.colWidths, _.longFill( [], 6,         colorNames.length / 2 ) )
   o.rowAligns.push.apply( o.rowAligns, _.longFill( [], 'center',  colorNames.length ) );
-
-  // o.colWidths.push.apply( o.colWidths, _.longFillTimes( [] , colorNames.length / 2 , 6 ) )
-  // o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [] , colorNames.length , 'center' ) );
-
   o.colAligns = o.rowAligns;
 
   /**/
