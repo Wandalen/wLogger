@@ -180,13 +180,13 @@ function finit( test )
 
   try
   {
-    // test.suite.ConsoleBar( o );
+    // test.suite.сonsoleBar( o );
     _finit( test );
   }
   catch( err )
   {
     // if( o.consoleWasBarred )
-    // test.suite.ConsoleBar( 1 );
+    // test.suite.сonsoleBar( 1 );
     throw _.errLogOnce( err );
   }
 
@@ -207,7 +207,7 @@ function finit( test )
     if( _.Logger.ConsoleIsBarred( console ) )
     {
       o.consoleWasBarred = true;
-      test.suite.ConsoleBar( 0 );
+      test.suite.сonsoleBar( 0 );
     }
 
 
@@ -545,7 +545,7 @@ function finit( test )
 
     if( o.consoleWasBarred )
     {
-      test.suite.ConsoleBar( 1 );
+      test.suite.сonsoleBar( 1 );
       test.is( _.Logger.ConsoleIsBarred( console ) );
     }
 

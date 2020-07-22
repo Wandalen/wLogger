@@ -206,7 +206,7 @@ function _consoleChaining( o )
   {
     o.consoleWasBarred = true;
     debugger
-    test.suite.ConsoleBar( 0 );
+    test.suite.сonsoleBar( 0 );
   }
 
   test.is( !_.Logger.ConsoleIsBarred( console ) );
@@ -379,7 +379,7 @@ function _consoleChaining( o )
 
   if( o.consoleWasBarred )
   {
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -495,7 +495,7 @@ function consoleChaining( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -1345,7 +1345,7 @@ function _output( o )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.ConsoleBar( 0 );
+    test.suite.сonsoleBar( 0 );
   }
 
   /* - */
@@ -2597,7 +2597,7 @@ function _output( o )
 
   if( o.consoleWasBarred )
   {
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -2638,7 +2638,7 @@ function output( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -2654,7 +2654,7 @@ function _input( o )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.ConsoleBar( 0 );
+    test.suite.сonsoleBar( 0 );
   }
 
   /* - */
@@ -2696,7 +2696,7 @@ function _input( o )
 
   if( o.consoleWasBarred )
   {
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -2730,7 +2730,7 @@ function input( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -3994,7 +3994,7 @@ function chainWithEmptyConsole( test )
   let consoleWasBarred = _.Logger.ConsoleIsBarred( console );
 
   if( consoleWasBarred )
-  test.suite.ConsoleBar( 0 );
+  test.suite.сonsoleBar( 0 );
 
   let consolePrinter = console;
 
@@ -4065,7 +4065,7 @@ function chainWithEmptyConsole( test )
   consoleChainer.outputTo( consoleOutputs );
 
   if( consoleWasBarred )
-  test.suite.ConsoleBar( 1 );
+  test.suite.сonsoleBar( 1 );
 
   test.identical( consoleInputs1.length, 1 );
   test.identical( consoleOutputs1.length, 0 );
@@ -4312,7 +4312,7 @@ function ConsoleBar( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
     throw _.errLogOnce( err );
   }
 
@@ -4325,7 +4325,7 @@ function ConsoleBar( test )
     if( _.Logger.ConsoleIsBarred( console ) )
     {
       o.consoleWasBarred = true;
-      test.suite.ConsoleBar( 0 );
+      test.suite.сonsoleBar( 0 );
     }
 
     /* */
@@ -4409,7 +4409,7 @@ function ConsoleBar( test )
 
     if( o.consoleWasBarred )
     {
-      test.suite.ConsoleBar( 1 );
+      test.suite.сonsoleBar( 1 );
       test.is( _.Logger.ConsoleIsBarred( console ) );
     }
   }
@@ -4580,7 +4580,7 @@ function _finit( test )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.ConsoleBar( 0 );
+    test.suite.сonsoleBar( 0 );
   }
 
 
@@ -4918,7 +4918,7 @@ function _finit( test )
 
   if( o.consoleWasBarred )
   {
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -4995,7 +4995,7 @@ function finit( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.ConsoleBar( 1 );
+    test.suite.сonsoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
