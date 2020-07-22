@@ -850,12 +850,15 @@ function _diagnoseColorIll( fg, bg )
   let self = this;
   let ill = false;
 
+  /* qqq : optimize */
+
   for( let i = 0; i < PoisonedColorCombination.length; i++ )
   {
     let combination = PoisonedColorCombination[ i ];
     if( combination.fg === fg.originalName && combination.bg === bg.originalName )
     // if( combination.platform === process.platform )
     {
+      debugger;
       self.diagnosingColor = 0;
       ill = true;
       // logger.foregroundColor = 'blue';
@@ -985,6 +988,9 @@ function _colorSet( layer, color )
   {
     let originalName = color;
 
+    if( originalName === 'bright magenta' )
+    debugger;
+
     if( Config.interpreter === 'browser' ) /* xxx qqq : use field instead of Config.interpreter */
     {
       color = _.color.rgbaFromTry( color );
@@ -997,7 +1003,10 @@ function _colorSet( layer, color )
     }
 
     if( !color )
-    throw _.err( 'Can\'t set', layer, 'color.', 'Unknown color name:', _.strQuote( originalName ) );
+    {
+      debugger;
+      throw _.err( `Can\'t set ${layer} color. Unknown color name: "${originalName}".` );
+    }
 
     let originalValue = color;
     let currentName;
@@ -1059,7 +1068,7 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
-    // if( color === 'light green' )
+    // if( color === 'bright green' )
     // debugger;
     let keys = _.mapOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
@@ -1426,7 +1435,7 @@ let shellColorCodes =
 /* let shellColorCodesUnix =
 {
   'white'           : 37,
-  'light white'     : 97,
+  'bright white'     : 97,
 } */
 
 let PoisonedColorCombination =
@@ -1462,24 +1471,25 @@ let PoisonedColorCombination =
 
   /* */
 
-  // { fg : 'white', bg : 'light yellow', platform : 'darwin' },
+  // { fg : 'white', bg : 'bright yellow', platform : 'darwin' }, /* qqq : check the color */
   { fg : 'green', bg : 'cyan', platform : 'darwin' },
   { fg : 'yellow', bg : 'cyan', platform : 'darwin' },
-  { fg : 'blue', bg : 'light blue', platform : 'darwin' },
+  { fg : 'blue', bg : 'bright blue', platform : 'darwin' },
   { fg : 'blue', bg : 'black', platform : 'darwin' },
   { fg : 'cyan', bg : 'yellow', platform : 'darwin' },
   { fg : 'cyan', bg : 'green', platform : 'darwin' },
-  // { fg : 'light yellow', bg : 'white', platform : 'darwin' },
-  { fg : 'light red', bg : 'light magenta', platform : 'darwin' },
-  { fg : 'light magenta', bg : 'light red', platform : 'darwin' },
-  { fg : 'light blue', bg : 'blue', platform : 'darwin' },
-  // { fg : 'light white', bg : 'light cyan', platform : 'darwin' },
-  { fg : 'light green', bg : 'light cyan', platform : 'darwin' },
-  { fg : 'light cyan', bg : 'light green', platform : 'darwin' },
+  // { fg : 'bright yellow', bg : 'white', platform : 'darwin' },
+  { fg : 'bright red', bg : 'bright magenta', platform : 'darwin' },
+  { fg : 'bright magenta', bg : 'bright red', platform : 'darwin' },
+
+  { fg : 'bright blue', bg : 'blue', platform : 'darwin' },
+  // { fg : 'bright white', bg : 'bright cyan', platform : 'darwin' },
+  { fg : 'bright green', bg : 'bright cyan', platform : 'darwin' },
+  { fg : 'bright cyan', bg : 'bright green', platform : 'darwin' },
 
   /* */
 
-/* qqq : light black? */
+/* qqq : bright black? */
 
   { fg : 'white', bg : 'yellow', platform : 'linux' },
   { fg : 'green', bg : 'cyan', platform : 'linux' },

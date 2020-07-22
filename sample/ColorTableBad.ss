@@ -46,11 +46,11 @@ function prepareInfo()
 
   let platform = process.platform;
 
+  debugger;
   _.Logger.PoisonedColorCombination.forEach( function( c )
   {
     if( c.platform !== platform )
     return;
-
     var res = searchInList( c );
     if( res )
     res.push( c.platform );
@@ -60,7 +60,8 @@ function prepareInfo()
       newItem[ c.fg + splitter + c.bg ] = [ c.platform ];
       list.push( newItem );
     }
-  })
+  });
+  debugger;
 
   var row = _.longFill( [] , '-' , 3 );
   var currentPlatform;
@@ -78,7 +79,7 @@ function prepareInfo()
   var silencedLogger = new _.Logger
   ({
     output : null,
-    onTransformEnd
+    onTransformEnd,
   })
 
   var result = [];
@@ -121,7 +122,6 @@ function prepareInfo()
     newRow[ fg + splitter + bg ] = row;
     addToTable( newRow );
     row = _.longFill( [] , '-' , 3 );
-    // row = _.longFillTimes( [] , 3 , '-' );
   })
 
 
@@ -156,7 +156,6 @@ function drawTable()
 
   function onTableDim( table )
   {
-    debugger;
     return [ table.length, table[ 0 ][ _.mapKeys( table[ 0 ] )[ 0 ] ].length ];
   }
 
