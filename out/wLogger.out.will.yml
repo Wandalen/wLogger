@@ -175,8 +175,6 @@ module:
           - ../proto/wtools/abase
           - ../proto/wtools/abase/l9
           - ../proto/wtools/abase/l9/logger
-          - ../proto/wtools/abase/l9/logger/-entry
-          - ../proto/wtools/abase/l9/logger/-include
           - ../proto/wtools/abase/l9/logger/entry
           - ../proto/wtools/abase/l9/logger/entry/Logger.s
           - ../proto/wtools/abase/l9/logger/include
