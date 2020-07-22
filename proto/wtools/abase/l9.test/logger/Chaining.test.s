@@ -198,288 +198,6 @@ function chaining( test )
 
 //
 
-function _consoleChaining( o )
-{
-  let test = o.test;
-
-  if( _.Logger.ConsoleIsBarred( console ) )
-  {
-    o.consoleWasBarred = true;
-    debugger
-    test.suite.сonsoleBar( 0 );
-  }
-
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  /* */
-
-  test.case = 'inputFrom console that exists in outputs';
-  var l = new _.Logger({ output : console });
-  test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console ) );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-
-  /* */
-
-  test.case = 'inputFrom console that not exists in outputs';
-  var l = new _.Logger({ output : null });
-  l.inputFrom( console );
-  test.is( l.hasInputClose( console ) );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-  l.inputUnchain( console );
-  test.is( !l.hasInputClose( console ) );
-
-  /* */
-
-  test.case = 'inputFrom console that exists in outputs, exclusiveOutput on';
-  var l = new _.Logger({ output : console });
-  test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1  } ) );
-
-  /* */
-
-  test.case = 'inputFrom console that not exists in outputs, exclusiveOutput on';
-  var l = new _.Logger({ output : null });
-  l.inputFrom( console, { exclusiveOutput : 1 } );
-  test.is( l.hasInputClose( console ) );
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  l.inputUnchain( console );
-  test.is( !l.hasInputClose( console ) );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  debugger
-
-  /* */
-
-  if( Config.debug )
-  {
-    test.case = 'console is excluded, try to chain again';
-    var l = new _.Logger({ output : null });
-    l.inputFrom( console, { exclusiveOutput : 1 } );
-    test.is( l.hasInputClose( console ) );
-    test.is( _.Logger.ConsoleIsBarred( console ) );
-    test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1 } ) );
-    l.inputUnchain( console );
-    test.is( !l.hasInputClose( console ) );
-    test.is( !_.Logger.ConsoleIsBarred( console ) );
-  }
-
-  /* */
-
-  test.case = 'outputTo console that exists in outputs';
-  var l = new _.Logger({ output : console });
-  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console ) );
-  test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  /* */
-
-  test.case = 'outputTo console that exists in outputs, originalOutput on';
-  var l = new _.Logger({ output : console });
-  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 1 } ) );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  /* */
-
-  test.case = 'outputTo console that exists in inputs, originalOutput off';
-  var l = new _.Logger({ output : null });
-  l.inputFrom( console );
-  test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 0 } ) );
-  test.is( !l.hasOutputClose( console ) );
-  l.inputUnchain( console );
-  test.is( !l.hasInputClose( console ) );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  /* */
-
-  test.case = 'outputTo console that exists in inputs, originalOutput on';
-  var l = new _.Logger({ output : null });
-  l.inputFrom( console );
-  l.outputTo( console, { originalOutput : 1 } );
-  var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-  test.is( l.outputs[ l.outputs.length - 1 ] === consoleChainer.inputs[ consoleChainer.inputs.length - 1 ] );
-  l.inputUnchain( console );
-  l.outputUnchain( console );
-  test.is( !l.hasInputClose( console ) && !l.inputs.length );
-  test.is( !l.hasOutputClose( console ) && !l.outputs.length );
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-
-  /* */
-
-  test.case = 'console is not excluded, several inputs for console';
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
-  var l1 = new _.Logger({ output : console });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, onTransformEnd });
-  l4.inputFrom( console, { combining : 'append' } );
-  l1.log( 'l1' );
-  l2.log( 'l2' );
-  l3.log( 'l3' );
-  l4.inputUnchain( console );
-  test.identical( received, [ 'l1', 'l2', 'l3' ] );
-
-  /* */
-
-  test.case = 'console is not excluded, several outputs from console';
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
-  var l1 = new _.Logger({ output : null, onTransformEnd });
-  var l2 = new _.Logger({ output : null, onTransformEnd });
-  var l3 = new _.Logger({ output : null, onTransformEnd });
-
-  l1.inputFrom( console, { combining : 'append' } );
-  l2.inputFrom( console, { combining : 'append' } );
-  l3.inputFrom( console, { combining : 'append' } );
-  console.log( 'msg' );
-  l1.inputUnchain( console );
-  l2.inputUnchain( console );
-  l3.inputUnchain( console );
-  test.identical( received, [ 'msg', 'msg', 'msg' ] );
-
-  /* */
-
-  test.case = 'console is not excluded, several outputs/inputs';
-  test.is( !_.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
-
-  /*inputs*/
-
-  var l1 = new _.Logger({ output : console });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-
-  /*outputs*/
-
-  var l4 = new _.Logger({ output : null, onTransformEnd });
-  var l5 = new _.Logger({ output : null, onTransformEnd });
-  var l6 = new _.Logger({ output : null, onTransformEnd });
-
-  l4.inputFrom( console, { combining : 'append' } );
-  l5.inputFrom( console, { combining : 'append' } );
-  l6.inputFrom( console, { combining : 'append' } );
-
-  l1.log( 'l1' );
-  l2.log( 'l2' );
-  l3.log( 'l3' );
-
-  l1.outputUnchain( console );
-  l2.outputUnchain( console );
-  l3.outputUnchain( console );
-  l4.inputUnchain( console );
-  l5.inputUnchain( console );
-  l6.inputUnchain( console );
-
-  test.identical( received, [ 'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3' ] );
-
-  /* */
-
-  if( o.consoleWasBarred )
-  {
-    test.suite.сonsoleBar( 1 );
-    test.is( _.Logger.ConsoleIsBarred( console ) );
-  }
-
-
-  /* */
-
-  test.case = 'console is excluded, several inputs for console';
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger({ output : console });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : null, onTransformEnd });
-  l4.inputFrom( console, { combining : 'append' } );
-  l1.log( 'l1' );
-  l2.log( 'l2' );
-  l3.log( 'l3' );
-  l4.inputUnchain( console );
-  test.identical( received, [] );
-
-  /* */
-
-  test.case = 'console is excluded, several outputs from console';
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
-  var l1 = new _.Logger({ output : null, onTransformEnd });
-  var l2 = new _.Logger({ output : null, onTransformEnd });
-  var l3 = new _.Logger({ output : null, onTransformEnd });
-
-  l1.inputFrom( console, { combining : 'append' } );
-  l2.inputFrom( console, { combining : 'append' } );
-  l3.inputFrom( console, { combining : 'append' } );
-  console.log( 'msg' );
-  l1.inputUnchain( console );
-  l2.inputUnchain( console );
-  l3.inputUnchain( console );
-  test.identical( received, [] );
-
-  /* */
-
-  /* */
-
-  test.case = 'console is excluded, several outputs/inputs';
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var onTransformEnd = ( o ) => received.push( o.output[ 0 ] );
-
-  /*inputs*/
-
-  var l1 = new _.Logger({ output : console });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-
-  /*outputs*/
-
-  var l4 = new _.Logger({ output : null, onTransformEnd });
-  var l5 = new _.Logger({ output : null, onTransformEnd });
-  var l6 = new _.Logger({ output : null, onTransformEnd });
-
-  l4.inputFrom( console, { combining : 'append' } );
-  l5.inputFrom( console, { combining : 'append' } );
-  l6.inputFrom( console, { combining : 'append' } );
-
-  l1.log( 'l1' );
-  l2.log( 'l2' );
-  l3.log( 'l3' );
-
-  l1.outputUnchain( console );
-  l2.outputUnchain( console );
-  l3.outputUnchain( console );
-  l4.inputUnchain( console );
-  l5.inputUnchain( console );
-  l6.inputUnchain( console );
-
-  test.identical( received, [] );
-
-  /* */
-
-  test.case = 'if console is excluded, other console outputs must be omitted';
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  var received = [];
-  var l = new _.Logger
-  ({
-    output : null,
-    onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
-  })
-  l.inputFrom( console );
-  test.is( l.hasInputClose( console ) );
-  console.log( 'message' );
-  l.inputUnchain( console );
-  test.is( _.Logger.ConsoleIsBarred( console ) );
-  test.identical( received, [] )
-
-  /* */
-}
-
-//
-
 function consoleChaining( test )
 {
   var o =
@@ -495,9 +213,297 @@ function consoleChaining( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.сonsoleBar( 1 );
+    debugger;
+    test.suite.consoleBar( 1 );
 
     throw _.errLogOnce( err );
+  }
+
+  /* - */
+
+  function _consoleChaining( o )
+  {
+    let test = o.test;
+
+    if( _.Logger.ConsoleIsBarred( console ) )
+    {
+      o.consoleWasBarred = true;
+      debugger
+      test.suite.consoleBar( 0 );
+    }
+
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'inputFrom console that exists in outputs';
+    var l = new _.Logger({ output : console });
+    test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+
+    /* */
+
+    test.case = 'inputFrom console that not exists in outputs';
+    var l = new _.Logger({ output : null });
+    l.inputFrom( console );
+    test.is( l.hasInputClose( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+    l.inputUnchain( console );
+    test.is( !l.hasInputClose( console ) );
+
+    /* */
+
+    test.case = 'inputFrom console that exists in outputs, exclusiveOutput on';
+    var l = new _.Logger({ output : console });
+    test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1  } ) );
+
+    /* */
+
+    test.case = 'inputFrom console that not exists in outputs, exclusiveOutput on';
+    var l = new _.Logger({ output : null });
+    l.inputFrom( console, { exclusiveOutput : 1 } );
+    test.is( l.hasInputClose( console ) );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    l.inputUnchain( console );
+    test.is( !l.hasInputClose( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    debugger
+
+    /* */
+
+    if( Config.debug )
+    {
+      test.case = 'console is excluded, try to chain again';
+      var l = new _.Logger({ output : null });
+      l.inputFrom( console, { exclusiveOutput : 1 } );
+      test.is( l.hasInputClose( console ) );
+      test.is( _.Logger.ConsoleIsBarred( console ) );
+      test.shouldThrowErrorOfAnyKind( () => l.inputFrom( console, { exclusiveOutput : 1 } ) );
+      l.inputUnchain( console );
+      test.is( !l.hasInputClose( console ) );
+      test.is( !_.Logger.ConsoleIsBarred( console ) );
+    }
+
+    /* */
+
+    test.case = 'outputTo console that exists in outputs';
+    var l = new _.Logger({ output : console });
+    test.shouldThrowErrorOfAnyKind( () => l.outputTo( console ) );
+    test.is( console.inputs === undefined || console.inputs.indexOf( l ) === -1 );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'outputTo console that exists in outputs, originalOutput on';
+    var l = new _.Logger({ output : console });
+    test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 1 } ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'outputTo console that exists in inputs, originalOutput off';
+    var l = new _.Logger({ output : null });
+    l.inputFrom( console );
+    test.shouldThrowErrorOfAnyKind( () => l.outputTo( console, { originalOutput : 0 } ) );
+    test.is( !l.hasOutputClose( console ) );
+    l.inputUnchain( console );
+    test.is( !l.hasInputClose( console ) );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'outputTo console that exists in inputs, originalOutput on';
+    var l = new _.Logger({ output : null });
+    l.inputFrom( console );
+    l.outputTo( console, { originalOutput : 1 } );
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.is( l.outputs[ l.outputs.length - 1 ] === consoleChainer.inputs[ consoleChainer.inputs.length - 1 ] );
+    l.inputUnchain( console );
+    l.outputUnchain( console );
+    test.is( !l.hasInputClose( console ) && !l.inputs.length );
+    test.is( !l.hasOutputClose( console ) && !l.outputs.length );
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+
+    /* */
+
+    test.case = 'console is not excluded, several inputs for console';
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
+    var l4 = new _.Logger({ output : null, onTransformEnd });
+    l4.inputFrom( console, { combining : 'append' } );
+    l1.log( 'l1' );
+    l2.log( 'l2' );
+    l3.log( 'l3' );
+    l4.inputUnchain( console );
+    test.identical( received, [ 'l1', 'l2', 'l3' ] );
+
+    /* */
+
+    test.case = 'console is not excluded, several outputs from console';
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
+    var l1 = new _.Logger({ output : null, onTransformEnd });
+    var l2 = new _.Logger({ output : null, onTransformEnd });
+    var l3 = new _.Logger({ output : null, onTransformEnd });
+
+    l1.inputFrom( console, { combining : 'append' } );
+    l2.inputFrom( console, { combining : 'append' } );
+    l3.inputFrom( console, { combining : 'append' } );
+    console.log( 'msg' );
+    l1.inputUnchain( console );
+    l2.inputUnchain( console );
+    l3.inputUnchain( console );
+    test.identical( received, [ 'msg', 'msg', 'msg' ] );
+
+    /* */
+
+    test.case = 'console is not excluded, several outputs/inputs';
+    test.is( !_.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
+
+    /*inputs*/
+
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
+
+    /*outputs*/
+
+    var l4 = new _.Logger({ output : null, onTransformEnd });
+    var l5 = new _.Logger({ output : null, onTransformEnd });
+    var l6 = new _.Logger({ output : null, onTransformEnd });
+
+    l4.inputFrom( console, { combining : 'append' } );
+    l5.inputFrom( console, { combining : 'append' } );
+    l6.inputFrom( console, { combining : 'append' } );
+
+    l1.log( 'l1' );
+    l2.log( 'l2' );
+    l3.log( 'l3' );
+
+    l1.outputUnchain( console );
+    l2.outputUnchain( console );
+    l3.outputUnchain( console );
+    l4.inputUnchain( console );
+    l5.inputUnchain( console );
+    l6.inputUnchain( console );
+
+    test.identical( received, [ 'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3' ] );
+
+    /* */
+
+    if( o.consoleWasBarred )
+    {
+      test.suite.consoleBar( 1 );
+      test.is( _.Logger.ConsoleIsBarred( console ) );
+    }
+
+    /* */
+
+    test.case = 'console is excluded, several inputs for console';
+    debugger;
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    debugger;
+    var received = [];
+    var onTransformEnd = ( o ) =>
+    {
+      debugger;
+      received.push( o.outputForPrinter[ 0 ] );
+    };
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
+    var l4 = new _.Logger({ output : null, onTransformEnd });
+    l4.inputFrom( console, { combining : 'append' } );
+    l1.log( 'l1' );
+    l2.log( 'l2' );
+    l3.log( 'l3' );
+    l4.inputUnchain( console );
+    test.identical( received, [] );
+
+    /* */
+
+    test.case = 'console is excluded, several outputs from console';
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var onTransformEnd = ( o ) => received.push( o.outputForPrinter[ 0 ] );
+    var l1 = new _.Logger({ output : null, onTransformEnd });
+    var l2 = new _.Logger({ output : null, onTransformEnd });
+    var l3 = new _.Logger({ output : null, onTransformEnd });
+
+    l1.inputFrom( console, { combining : 'append' } );
+    l2.inputFrom( console, { combining : 'append' } );
+    l3.inputFrom( console, { combining : 'append' } );
+    console.log( 'msg' );
+    l1.inputUnchain( console );
+    l2.inputUnchain( console );
+    l3.inputUnchain( console );
+    test.identical( received, [] );
+
+    /* */
+
+    /* */
+
+    test.case = 'console is excluded, several outputs/inputs';
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var onTransformEnd = ( o ) => received.push( o.outputForPrinter[ 0 ] );
+
+    /*inputs*/
+
+    var l1 = new _.Logger({ output : console });
+    var l2 = new _.Logger({ output : console });
+    var l3 = new _.Logger({ output : console });
+
+    /*outputs*/
+
+    var l4 = new _.Logger({ output : null, onTransformEnd });
+    var l5 = new _.Logger({ output : null, onTransformEnd });
+    var l6 = new _.Logger({ output : null, onTransformEnd });
+
+    l4.inputFrom( console, { combining : 'append' } );
+    l5.inputFrom( console, { combining : 'append' } );
+    l6.inputFrom( console, { combining : 'append' } );
+
+    l1.log( 'l1' );
+    l2.log( 'l2' );
+    l3.log( 'l3' );
+
+    l1.outputUnchain( console );
+    l2.outputUnchain( console );
+    l3.outputUnchain( console );
+    l4.inputUnchain( console );
+    l5.inputUnchain( console );
+    l6.inputUnchain( console );
+
+    test.identical( received, [] );
+
+    /* */
+
+    test.case = 'if console is excluded, other console outputs must be omitted';
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    var received = [];
+    var l = new _.Logger
+    ({
+      output : null,
+      onTransformEnd : ( o ) => received.push( o.input[ 0 ] )
+    })
+    l.inputFrom( console );
+    test.is( l.hasInputClose( console ) );
+    console.log( 'message' );
+    l.inputUnchain( console );
+    test.is( _.Logger.ConsoleIsBarred( console ) );
+    test.identical( received, [] )
+
+    /* */
   }
 
 }
@@ -1345,7 +1351,7 @@ function _output( o )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.сonsoleBar( 0 );
+    test.suite.consoleBar( 0 );
   }
 
   /* - */
@@ -2597,7 +2603,7 @@ function _output( o )
 
   if( o.consoleWasBarred )
   {
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -2638,7 +2644,7 @@ function output( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -2654,7 +2660,7 @@ function _input( o )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.сonsoleBar( 0 );
+    test.suite.consoleBar( 0 );
   }
 
   /* - */
@@ -2696,7 +2702,7 @@ function _input( o )
 
   if( o.consoleWasBarred )
   {
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -2730,7 +2736,7 @@ function input( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -3994,7 +4000,7 @@ function chainWithEmptyConsole( test )
   let consoleWasBarred = _.Logger.ConsoleIsBarred( console );
 
   if( consoleWasBarred )
-  test.suite.сonsoleBar( 0 );
+  test.suite.consoleBar( 0 );
 
   let consolePrinter = console;
 
@@ -4065,7 +4071,7 @@ function chainWithEmptyConsole( test )
   consoleChainer.outputTo( consoleOutputs );
 
   if( consoleWasBarred )
-  test.suite.сonsoleBar( 1 );
+  test.suite.consoleBar( 1 );
 
   test.identical( consoleInputs1.length, 1 );
   test.identical( consoleOutputs1.length, 0 );
@@ -4312,7 +4318,7 @@ function ConsoleBar( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
     throw _.errLogOnce( err );
   }
 
@@ -4325,7 +4331,7 @@ function ConsoleBar( test )
     if( _.Logger.ConsoleIsBarred( console ) )
     {
       o.consoleWasBarred = true;
-      test.suite.сonsoleBar( 0 );
+      test.suite.consoleBar( 0 );
     }
 
     /* */
@@ -4409,7 +4415,7 @@ function ConsoleBar( test )
 
     if( o.consoleWasBarred )
     {
-      test.suite.сonsoleBar( 1 );
+      test.suite.consoleBar( 1 );
       test.is( _.Logger.ConsoleIsBarred( console ) );
     }
   }
@@ -4580,7 +4586,7 @@ function _finit( test )
   if( _.Logger.ConsoleIsBarred( console ) )
   {
     o.consoleWasBarred = true;
-    test.suite.сonsoleBar( 0 );
+    test.suite.consoleBar( 0 );
   }
 
 
@@ -4918,7 +4924,7 @@ function _finit( test )
 
   if( o.consoleWasBarred )
   {
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
     test.is( _.Logger.ConsoleIsBarred( console ) );
   }
 
@@ -4933,7 +4939,7 @@ function _finit( test )
     info.keys = _.mapOwnKeys( printer );
 
     if( _.arrayLike( chainer.outputs ) )
-    info.outputs = chainer.outputs.slice();
+    info.outputForPrinters = chainer.outputs.slice();
 
     if( _.arrayLike( chainer.inputs ) )
     info.inputs = chainer.inputs.slice();
@@ -4995,7 +5001,7 @@ function finit( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    test.suite.сonsoleBar( 1 );
+    test.suite.consoleBar( 1 );
 
     throw _.errLogOnce( err );
   }
@@ -5045,6 +5051,8 @@ let Self =
     /* */
     // clone,
     // finit,
+
+    /* qqq : make this test suite and all other working with silencing:0 */
 
   },
 
