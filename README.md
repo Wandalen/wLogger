@@ -19,7 +19,6 @@ node sample/Sample.s
 npm add 'wLogger@alpha'
 ```
 
-
 ## Usage
 ### Options
 * output { object }[ optional, default : console ] - single output object for current logger.
