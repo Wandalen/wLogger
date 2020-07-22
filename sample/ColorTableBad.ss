@@ -1,7 +1,7 @@
 
 try
 {
-  require( '../../../wtools/Tools.s' );
+  require( '../../../../wtools/Tools.s' );
 }
 catch( err )
 {
@@ -62,9 +62,7 @@ function prepareInfo()
     }
   })
 
-  debugger;
   var row = _.longFill( [] , '-' , 3 );
-  // var row = _.longFillTimes( [] , 3 , '-' );
   var currentPlatform;
 
   function onTransformEnd( data )
@@ -134,27 +132,77 @@ function prepareInfo()
 
 function drawTable()
 {
-  var Table = require( 'cli-table2' );
   var info = prepareInfo();
-  var o =
+  var o2 = Object.create( null );
+  o2.topHead = [ "fg/bg", 'win32', 'darwin', 'linux' ],
+  o2.leftHead = [ 'fg/bg', ... leftHeadFrom( info ) ];
+  o2.onCellGet = onCellGet;
+  o2.onLength = onLength;
+  o2.data = info;
+  o2.dim = onTableDim( info );
+  o2.colSplits = 1;
+  /* o2.rowSplits = 1; */
+  o2.style = 'doubleBorder';
+  logger.log( _.strTable( o2 ).result );
+
+  /* */
+
+  function leftHeadFrom( table )
   {
-    head : [ "fg - bg", 'win32', 'darwin', 'linux' ],
-    colWidths : [ 22 ],
-    rowAligns : [ 'left', 'center', 'center', 'center' ],
-    colAligns : [ 'center', 'center', 'center', 'center' ],
-    style:
-    {
-     compact : false,
-     'padding-left': 0,
-     'padding-right': 0
-    },
+    return table.map( ( e ) => wTools.mapKeys( e )[ 0 ] );
   }
 
-  /**/
+  /* */
 
-  var table = new Table( o );
-  table.push.apply( table, info );
-  logger.log( table.toString() );
+  function onTableDim( table )
+  {
+    debugger;
+    return [ table.length, table[ 0 ][ _.mapKeys( table[ 0 ] )[ 0 ] ].length ];
+  }
+
+  /* */
+
+  function onLength( src )
+  {
+    src = src.replace( /.+?m/mg, '' );
+    return src.length;
+  }
+
+  /* */
+
+  function onCellGet( i2d, o )
+  {
+    let row = o.data[ i2d[ 0 ] ];
+    return row[ _.mapKeys( row )[ 0 ] ][ i2d[ 1 ] ];
+  }
+
 }
 
+//
+//
+// function drawTableOld()
+// {
+//   var Table = require( 'cli-table2' );
+//   var info = prepareInfo();
+//   var o =
+//   {
+//     head : [ "fg - bg", 'win32', 'darwin', 'linux' ],
+//     colWidths : [ 22 ],
+//     rowAligns : [ 'left', 'center', 'center', 'center' ],
+//     colAligns : [ 'center', 'center', 'center', 'center' ],
+//     style:
+//     {
+//      compact : false,
+//      'padding-left': 0,
+//      'padding-right': 0
+//     },
+//   }
+//
+//   /**/
+//
+//   var table = new Table( o );
+//   table.push.apply( table, info );
+//   logger.log( table.toString() );
+// }
+//
 //

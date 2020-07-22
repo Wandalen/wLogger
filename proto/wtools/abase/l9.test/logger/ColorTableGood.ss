@@ -1,7 +1,7 @@
 
 try
 {
-  require( '../../../wtools/Tools.s' );
+  require( '../../../../wtools/Tools.s' );
 }
 catch( err )
 {
@@ -11,8 +11,7 @@ catch( err )
 let _global = _global_;
 let _ = _global_.wTools;
 
-require( 'wConsequence' );
-require( 'wLogger' );
+_.include( 'wLogger' );
 
 let colorNames =
 [
@@ -33,7 +32,6 @@ let colorNames =
   'dark green',
   'dark white'
 ]
-
 
 drawTable();
 
@@ -126,9 +124,7 @@ function prepareTableInfo()
   {
     var c = map[ fg ];
     var obj1 = {};
-    debugger;
     obj1[ fg ] = _.longFill( [], '-', colorNames.length / 2 );
-    // obj1[ fg ] = _.longFillTimes( [], colorNames.length / 2, '-' );
     row1 = obj1[ fg ];
 
     var obj2 = {};
@@ -153,42 +149,98 @@ function prepareTableInfo()
 
 function drawTable()
 {
-  var Table = require( 'cli-table2' );
   var tables = prepareTableInfo();
-  var o =
+
+  var o2 = Object.create( null );
+  o2.topHead = [ 'fg/bg', ... colorNames.slice( 0, 8 ).map( ( name ) => shortColor( name ) ) ];
+  o2.leftHead = [ 'fg/bg', ... colorNames.map( ( name ) => shortColor( name ) ) ];
+  o2.onCellGet = onCellGet;
+  o2.onLength = onLength;
+  o2.data = tables[ 0 ];
+  o2.dim = onTableDim( tables[ 0 ] );
+  o2.colWidth = 9;
+  o2.colSplits = 1;
+  o2.style = 'doubleBorder';
+  logger.log( _.strTable( o2 ).result );
+
+  var o2 = Object.create( null );
+  o2.topHead = [ 'fg/bg', ... colorNames.slice( 8, 16 ).map( ( name ) => shortColor( name ) ) ];
+  o2.leftHead = [ 'fg/bg', ... colorNames.map( ( name ) => shortColor( name ) ) ];
+  o2.onCellGet = onCellGet;
+  o2.onLength = onLength;
+  o2.data = tables[ 1 ];
+  o2.dim = onTableDim( tables[ 1 ] );
+  o2.colWidth = 9;
+  o2.colSplits = 1;
+  o2.style = 'doubleBorder';
+  logger.log( _.strTable( o2 ).result );
+
+  /* */
+
+  function onTableDim( table )
   {
-    head : [ "fg/bg" ],
-    colWidths : [ 10 ],
-    rowAligns : [ 'left' ],
-    colAligns : null,
-    style :
-    {
-       compact : true,
-      'padding-left': 0,
-      'padding-right': 0
-    },
+    debugger;
+    return [ table.length, table[ 0 ][ _.mapKeys( table[ 0 ] )[ 0 ] ].length ];
   }
 
-  colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
-  o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
-  debugger;
-  o.colWidths.push.apply( o.colWidths, _.longFill( [], 8, colorNames.length / 2 ) );
-  o.rowAligns.push.apply( o.rowAligns, _.longFill( [], 'center', colorNames.length / 2 ) );
-  // o.colWidths.push.apply( o.colWidths, _.longFillTimes( [], colorNames.length / 2,  8 ) );
-  // o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [], colorNames.length / 2, 'center' ) );
-  o.colAligns = o.rowAligns;
+  /* */
 
-  /**/
+  function onLength( src )
+  {
+    src = src.replace( /.+?m/mg, '' );
+    return src.length;
+  }
 
-  var table = new Table( o );
-  table.push.apply( table, tables[ 0 ] );
-  logger.log( table.toString() );
+  /* */
 
-  /**/
+  function onCellGet( i2d, o )
+  {
+    let row = o.data[ i2d[ 0 ] ];
+    return row[ _.mapKeys( row )[ 0 ] ][ i2d[ 1 ] ];
+  }
 
-  o.head = [ o.head[ 0 ] ];
-  o.head.push.apply( o.head, colorNames.slice( colorNames.length / 2, colorNames.length) );
-  var table = new Table( o );
-  table.push.apply( table, tables[ 1 ] );
-  logger.log( table.toString() );
 }
+
+// //
+//
+// function drawTableOld()
+// {
+//   var Table = require( 'cli-table2' );
+//   var tables = prepareTableInfo();
+//   var o =
+//   {
+//     head : [ "fg/bg" ],
+//     colWidths : [ 10 ],
+//     rowAligns : [ 'left' ],
+//     colAligns : null,
+//     style :
+//     {
+//        compact : true,
+//       'padding-left': 0,
+//       'padding-right': 0
+//     },
+//   }
+//
+//   colorNames.forEach( ( name, i ) => colorNames[ i ] = shortColor( name ) );
+//   o.head.push.apply( o.head, colorNames.slice( 0, colorNames.length / 2 ) );
+//   debugger;
+//   o.colWidths.push.apply( o.colWidths, _.longFill( [], 8, colorNames.length / 2 ) );
+//   o.rowAligns.push.apply( o.rowAligns, _.longFill( [], 'center', colorNames.length / 2 ) );
+//   // o.colWidths.push.apply( o.colWidths, _.longFillTimes( [], colorNames.length / 2,  8 ) );
+//   // o.rowAligns.push.apply( o.rowAligns, _.longFillTimes( [], colorNames.length / 2, 'center' ) );
+//   o.colAligns = o.rowAligns;
+//
+//   /**/
+//
+//   var table = new Table( o );
+//   table.push.apply( table, tables[ 0 ] );
+//   logger.log( table.toString() );
+//
+//   /**/
+//
+//   o.head = [ o.head[ 0 ] ];
+//   o.head.push.apply( o.head, colorNames.slice( colorNames.length / 2, colorNames.length) );
+//   var table = new Table( o );
+//   table.push.apply( table, tables[ 1 ] );
+//   logger.log( table.toString() );
+// }
