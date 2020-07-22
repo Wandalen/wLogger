@@ -6,14 +6,14 @@ let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
-/*  By default logger cant use console as input & output device in one time, by using consoleBar we can
+/*  By default logger cant use console as input & output device in one time, by using ConsoleBar we can
 get all console output and print it through outputPrinter without recursion */
 
 var outputPrinter = new _.Logger();
 var barPrinter = new _.Logger({ output : null });
 
 /*
-consoleBar redirects all console output to outputPrinter through barPrinter that
+ConsoleBar redirects all console output to outputPrinter through barPrinter that
 makes other loggers connected after it unable to receive messages from console,
 outputPrinter prints messages through original console methods( channels ).
 */
@@ -34,7 +34,7 @@ so no cycle
 
 */
 
-_.Logger.consoleBar
+_.Logger.ConsoleBar
 ({
   barPrinter : barPrinter,
   outputPrinter : outputPrinter,

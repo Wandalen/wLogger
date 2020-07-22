@@ -578,7 +578,7 @@ function ConsoleIsBarred( output )
 
 /*
 qqq : extend test coverage, write doc. ask how
-qqq : implement, test, doc method consoleBar
+qqq : implement, test, doc method ConsoleBar
 */
 
 function ConsoleBar( o )

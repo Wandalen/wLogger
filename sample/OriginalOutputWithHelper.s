@@ -11,7 +11,7 @@ _.include( 'wLogger' );
 let outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin });
 let barPrinter = new _.Logger({ name : 'barPrinter', onTransformBegin : onTransformBegin });
 
-var bar = _.Logger.consoleBar
+var bar = _.Logger.ConsoleBar
 ({
   outputPrinter : outputPrinter,
   barPrinter : barPrinter,
@@ -21,7 +21,7 @@ console.log( 'console.log - #1' );
 outputPrinter.log( 'outputPrinter.log - #1' );
 
 bar.on = 0;
-_.Logger.consoleBar( bar )
+_.Logger.ConsoleBar( bar )
 
 console.log( 'console.log - #2' );
 outputPrinter.log( 'outputPrinter.log - #2' );
