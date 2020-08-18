@@ -22,6 +22,7 @@ function wPrinterColoredMixin( o )
 Self.shortName = 'PrinterColoredMixin';
 
 _.assert( _.routineIs( _.strSplitInlined ) );
+_.assert( _.routineIs( _.strSplitInlinedStereo ) );
 
 // --
 // stack
@@ -569,6 +570,8 @@ function _split( src )
 {
   let self = this;
   _.assert( _.strIs( src ) );
+  debugger;
+  // let splitted = _.strSplitInlinedStereo /* qqq */
   let splitted = _.strSplitInlined
   ({
     src,
@@ -576,6 +579,7 @@ function _split( src )
     preservingEmpty : 0,
     stripping : 0,
   });
+  debugger;
   return splitted;
 }
 
