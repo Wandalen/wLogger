@@ -570,7 +570,7 @@ function _split( src )
 {
   let self = this;
   _.assert( _.strIs( src ) );
-  debugger;
+  // debugger;
   // let splitted = _.strSplitInlinedStereo /* qqq */
   let splitted = _.strSplitInlined
   ({
@@ -579,7 +579,7 @@ function _split( src )
     preservingEmpty : 0,
     stripping : 0,
   });
-  debugger;
+  // debugger;
   return splitted;
 }
 
