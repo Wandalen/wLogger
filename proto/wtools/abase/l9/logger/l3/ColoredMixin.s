@@ -572,7 +572,7 @@ function _split( src )
   _.assert( _.strIs( src ) );
   // debugger;
   // let splitted = _.strSplitInlinedStereo /* qqq */
-  let splitted = _.strSplitInlined
+  let splitted = _.strSplitInlinedStereo_
   ({
     src,
     onInlined : self._splitHandle.bind( self ),
