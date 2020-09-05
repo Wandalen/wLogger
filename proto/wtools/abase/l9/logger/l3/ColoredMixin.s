@@ -524,7 +524,7 @@ function _transformSplit( o )
 
     if( !input )
     {
-      split = '#' + split[ 0 ] + ':' + split[ 1 ] + '#';
+      split = '❮' + split[ 0 ] + ':' + split[ 1 ] + '❯';
       splitted[ i ] = split;
       return;
     }
@@ -557,7 +557,7 @@ function _join( splitted )
     if( _.strIs( split ) )
     result += split
     else if( _.arrayIs( split ) )
-    result += '#' + split.join( ':' ) + '#';
+    result += '❮' + split.join( ':' ) + '❯';
     else _.assert( 0 );
   });
 

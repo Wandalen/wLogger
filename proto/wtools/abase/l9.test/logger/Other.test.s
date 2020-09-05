@@ -43,7 +43,7 @@ function currentColor( test )
   var logger = new _.Logger();
 
   test.case = 'case1 : setting foreground to red';
-  logger.log( '#foreground : default##foreground : dark red#' );
+  logger.log( '❮foreground : default❯❮foreground : dark red❯' );
   if( Config.interpreter === 'browser' )
   var expected = [ 1, 0, 0, 1 ];
   else
@@ -59,11 +59,11 @@ function currentColor( test )
   test.identical( logger.foregroundColor, expected );
 
   test.case = 'case3 : setting color to default';
-  logger.log( '#foreground : default#' );
+  logger.log( '❮foreground : default❯' );
   test.identical( logger.foregroundColor, null );
 
   test.case = 'case4 : setting two styles';
-  logger.log( '#foreground : dark red##background : dark black#' );
+  logger.log( '❮foreground : dark red❯❮background : dark black❯' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   if( Config.interpreter === 'browser' )
   var expected =
@@ -81,7 +81,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.case = 'case5 : setting foreground to default, bg still black';
-  logger.log( '#foreground : default#' );
+  logger.log( '❮foreground : default❯' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
@@ -91,7 +91,7 @@ function currentColor( test )
   test.identical( got, expected  );
 
   test.case = 'case6 : setting background to default';
-  logger.log( '#background : default#' );
+  logger.log( '❮background : default❯' );
   var got = [ logger.foregroundColor,logger.backgroundColor ];
   var expected =
   [
@@ -360,7 +360,7 @@ function coloredToHtml( test )
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'><br>red background<span style='background:rgba( 255, 255, 0, 1 );'>yellow background</span>red background</span>";
   test.identical( got, expected );
 
-  var src = '#background : red#red#background : blue#blue#background : default#red#background : default#';
+  var src = '❮background : red❯red❮background : blue❯blue❮background : default❯red❮background : default❯';
   l.log( src );
   var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
   test.identical( got, expected );
@@ -434,13 +434,13 @@ function emptyLines( test )
 
   /* on directive#1 */
 
-  logger.log( '#outputGray : 0#' );
+  logger.log( '❮outputGray : 0❯' );
   var expected = '';
   test.identical( got, expected );
 
   /* on directive#2 */
 
-  logger.log( '#foreground : red##foreground : default#' );
+  logger.log( '❮foreground : red❯❮foreground : default❯' );
   var expected = '';
   test.identical( got, expected );
 
@@ -629,11 +629,11 @@ function stateChangingValue( test )
 
     test.case = state + ': ' + 'as directive, number';
     var l = new _.Logger();
-    l.log( `#${state}:1#` )
+    l.log( `❮${state}:1❯` )
     test.identical( l[ state ], 1 );
-    l.log( `#${state}:1#` )
+    l.log( `❮${state}:1❯` )
     test.identical( l[ state ], 2 );
-    l.log( `#${state}:0#` )
+    l.log( `❮${state}:0❯` )
     test.identical( l[ state ], 1 );
     // l.log( `#${state}:-1#` )
     // test.identical( l[ state ], 2 );
@@ -642,13 +642,13 @@ function stateChangingValue( test )
 
     test.case = state + ': ' + 'as directive, bool';
     var l = new _.Logger();
-    l.log( `#${state}:true#` )
+    l.log( `❮${state}:true❯` )
     test.identical( l[ state ], 1 );
-    l.log( `#${state}:true#` )
+    l.log( `❮${state}:true❯` )
     test.identical( l[ state ], 2 );
-    l.log( `#${state}:false#` )
+    l.log( `❮${state}:false❯` )
     test.identical( l[ state ], 1 );
-    l.log( `#${state}:false#` )
+    l.log( `❮${state}:false❯` )
     test.identical( l[ state ], 0 );
 
     /* */
