@@ -63,7 +63,7 @@ function prepareInfo()
   });
   debugger;
 
-  var row = _.longFill( [] , '-' , 3 );
+  var row = _.longFill( [], '-', 3 );
   var currentPlatform;
 
   function onTransformEnd( data )
@@ -93,7 +93,7 @@ function prepareInfo()
     for( var i = 0; i < result.length; i++ )
     {
       var currentColors = splitCombinationKey( result[ i ] );
-      if( srcColors[ 0 ] === currentColors[ 0 ]  )
+      if( srcColors[ 0 ] === currentColors[ 0 ] )
       {
         pos = i;
       }
@@ -114,14 +114,14 @@ function prepareInfo()
     for( var i = 0; i < c[ key ].length; i++ )
     {
       currentPlatform = c[ key ][ i ];
-      silencedLogger.log( _.ct.bg( _.ct.fg( 'TEXT TEXT TEXT', fg ) ,bg ));
+      silencedLogger.log( _.ct.bg( _.ct.fg( 'TEXT TEXT TEXT', fg ), bg ));
     }
     var newRow = {};
     var fg = shortColor( combination[ 0 ] );
     var bg = shortColor( combination[ 1 ] );
     newRow[ fg + splitter + bg ] = row;
     addToTable( newRow );
-    row = _.longFill( [] , '-' , 3 );
+    row = _.longFill( [], '-', 3 );
   })
 
 
@@ -134,7 +134,7 @@ function drawTable()
 {
   var info = prepareInfo();
   var o2 = Object.create( null );
-  o2.topHead = [ "fg/bg", 'win32', 'darwin', 'linux' ],
+  o2.topHead = [ 'fg/bg', 'win32', 'darwin', 'linux' ];
   o2.leftHead = [ 'fg/bg', ... leftHeadFrom( info ) ];
   o2.onCellGet = onCellGet;
   o2.onLength = onLength;

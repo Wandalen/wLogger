@@ -8,13 +8,13 @@ let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
-let outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin });
-let barPrinter = new _.Logger({ name : 'barPrinter', onTransformBegin : onTransformBegin });
+let outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin });
+let barPrinter = new _.Logger({ name : 'barPrinter', onTransformBegin });
 
 var bar = _.Logger.ConsoleBar
 ({
-  outputPrinter : outputPrinter,
-  barPrinter : barPrinter,
+  outputPrinter,
+  barPrinter,
 });
 
 console.log( 'console.log - #1' );
@@ -28,6 +28,6 @@ outputPrinter.log( 'outputPrinter.log - #2' );
 
 function onTransformBegin( o )
 {
-  o.input[ 0 ] = this.name +  ' : ' + o.input[ 0 ];
+  o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
   return o;
 }

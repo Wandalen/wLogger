@@ -1,4 +1,5 @@
-(function _LoggerPrime_s_() {
+(function _LoggerPrime_s_()
+{
 
 'use strict';
 
@@ -12,7 +13,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = _.Logger;
-let Self = function wLoggerPrime( o )
+let Self = wLoggerPrime;
+function wLoggerPrime( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

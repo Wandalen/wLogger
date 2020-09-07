@@ -1,4 +1,5 @@
-(function _aChainer_s_() {
+(function _aChainer_s_()
+{
 
 'use strict';
 
@@ -12,7 +13,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wChainer( o )
+let Self = wChainer;
+function wChainer( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -527,13 +529,13 @@ function _inputFromStream( cd )
     if( _.bufferAnyIs( data ) )
     data = _.bufferToStr( data );
 
-    if( _.strEnds( data,'\n' ) )
-    data = _.strRemoveEnd( data,'\n' );
+    if( _.strEnds( data, '\n' ) )
+    data = _.strRemoveEnd( data, '\n' );
 
     outputPrinter[ outputChannel ].call( outputPrinter, data );
   }
 
-  stream.on( 'data',cd.onDataHandler );
+  stream.on( 'data', cd.onDataHandler );
 }
 
 //
@@ -980,7 +982,7 @@ function MakeFor( printer )
     }
 
     if( _.consoleIs( printer ) )
-    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel,printer ] );
+    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel, printer ] );
     else
     chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToPrinter, [ channel ] );
 
@@ -1080,7 +1082,7 @@ function _nameSet( src )
 // checker
 // --
 
-function _hasInput( input,o )
+function _hasInput( input, o )
 {
   let self = this;
 
@@ -1129,7 +1131,7 @@ function hasInputClose( input )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return self._hasInput( input,{ deep : 0 } );
+  return self._hasInput( input, { deep : 0 } );
 }
 
 //
@@ -1140,19 +1142,19 @@ function hasInputDeep( input )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return self._hasInput( input,{ deep : 1 } );
+  return self._hasInput( input, { deep : 1 } );
 }
 
 //
 
-function _hasOutput( output,o )
+function _hasOutput( output, o )
 {
   let self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.mapIs( o ) );
   _.assert( _.printerLike( output ) || _.processIs( output ) || _.streamIs( output ) );
-  _.routineOptions( _hasOutput,o );
+  _.routineOptions( _hasOutput, o );
 
   for( let d = 0 ; d < self.outputs.length ; d++ )
   {
@@ -1195,7 +1197,7 @@ function hasOutputClose( output )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return self._hasOutput( output,{ deep : 0 } );
+  return self._hasOutput( output, { deep : 0 } );
 }
 
 //
@@ -1206,7 +1208,7 @@ function hasOutputDeep( output )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  return self._hasOutput( output,{ deep : 1 } );
+  return self._hasOutput( output, { deep : 1 } );
 }
 
 function _chainDescriptorLike( src )

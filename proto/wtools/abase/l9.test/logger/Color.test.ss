@@ -1,4 +1,5 @@
-( function _Color_test_ss_( ) {
+( function _Color_test_ss_( )
+{
 
 'use strict';
 
@@ -17,7 +18,7 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = wTester;
-var isUnix = process.platform !== 'win32' ? true : false;
+var isUnix = process.platform !== 'win32';
 
 //
 
@@ -89,7 +90,7 @@ function colorConsole( test )
 
   logger.log( '❮foreground : dark red❯' );
   logger.log( 'text' );
-  test.identical( logger.foregroundColor, [ 0.5, 0 ,0, 1 ] );
+  test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   var expected = '\u001b[31mtext\u001b[39;0m';
   test.identical( escape( got ), escape( expected ) );
 
@@ -98,7 +99,7 @@ function colorConsole( test )
   logger.foregroundColor = 'default';
   logger.log( '❮background : dark red❯' );
   logger.log( 'text' );
-  test.identical( logger.backgroundColor, [ 0.5, 0 ,0, 1 ] );
+  test.identical( logger.backgroundColor, [ 0.5, 0, 0, 1 ] );
   var expected = '\u001b[41mtext\u001b[49;0m';
   test.identical( escape( got ), escape( expected ) );
 
@@ -109,8 +110,8 @@ function colorConsole( test )
   logger.log( '❮foreground : dark red❯' );
   logger.log( '❮background : dark yellow❯' );
   logger.log( 'text' );
-  test.identical( logger.foregroundColor, [ 0.5, 0 ,0, 1 ] );
-  test.identical( logger.backgroundColor, [ 0.5, 0.5 ,0, 1 ] );
+  test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
+  test.identical( logger.backgroundColor, [ 0.5, 0.5, 0, 1 ] );
   var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
   test.identical( escape( got ), escape( expected ) );
 
@@ -234,7 +235,7 @@ function colorConsole( test )
   logger.log( '❮outputGray : 1❯' );
   logger.log( '❮foreground : dark red❯' );
   logger.log( '❮background : dark yellow❯' );
-  test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1] );
+  test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0, 1 ] );
   logger.log( 'text' );
   var expected = 'text';
@@ -526,7 +527,16 @@ function colorConsoleDirectives( test )
 
     var directiveOn = `❮${o.directive}:1❯`;
     var directiveOff = `❮${o.directive}:0❯`;
-    var input = coloredInput + directiveOn + coloredInput + directiveOn + coloredInput + directiveOff + coloredInput + directiveOff + coloredInput;
+    var input =
+    coloredInput
+    + directiveOn
+    + coloredInput
+    + directiveOn
+    + coloredInput
+    + directiveOff
+    + coloredInput
+    + directiveOff
+    + coloredInput;
 
     l.inputGray = o.other;
     l.outputGray = o.other;
@@ -577,7 +587,8 @@ function colorConsoleDirectives( test )
     case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'inputGray',
-    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
+    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn
+    + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
   })
 
   runCase2
@@ -585,7 +596,8 @@ function colorConsoleDirectives( test )
     case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputGray',
-    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
+    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn
+    + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
   })
 
   runCase2
@@ -601,7 +613,8 @@ function colorConsoleDirectives( test )
     case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputRaw',
-    expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
+    expected : coloredInput + outputRawOn + coloredInput + outputRawOn
+    + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
   })
 
   /**/
@@ -611,7 +624,8 @@ function colorConsoleDirectives( test )
     case : 'inputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'inputGray',
-    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
+    expected : coloredInput + inputGrayOn + coloredInput + inputGrayOn
+    + coloredInput + inputGrayOff + coloredInput + inputGrayOff + coloredInput
   })
 
   runCase2
@@ -619,7 +633,8 @@ function colorConsoleDirectives( test )
     case : 'outputGray 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputGray',
-    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
+    expected : coloredInput + outputGrayOn + coloredInput + outputGrayOn
+    + coloredInput + outputGrayOff + coloredInput + outputGrayOff + coloredInput
   })
 
   runCase2
@@ -635,7 +650,8 @@ function colorConsoleDirectives( test )
     case : 'outputRaw 0 - 1 - 2 - 1 - 0, other 1',
     other : 1,
     directive : 'outputRaw',
-    expected : coloredInput + outputRawOn + coloredInput + outputRawOn + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
+    expected : coloredInput + outputRawOn + coloredInput + outputRawOn
+    + coloredInput + outputRawOff + coloredInput + outputRawOff + coloredInput
   })
 
   test.close( 'states combined with colored input' )

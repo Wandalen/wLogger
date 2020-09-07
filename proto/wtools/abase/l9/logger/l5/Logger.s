@@ -1,4 +1,5 @@
-(function _Logger_s_() {
+(function _Logger_s_()
+{
 
 'use strict';
 
@@ -32,7 +33,8 @@ self -> original -> printer
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = _.LoggerMid;
-let Self = function wLoggerTop( o )
+let Self = wLoggerTop;
+function wLoggerTop( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

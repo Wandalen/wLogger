@@ -27,6 +27,6 @@
     "wstringsextra" : "alpha",
     "wColor256" : "alpha"
   },
-  "devDependencies" : { "wLogger" : "file:.", "wFiles" : "alpha", "wTesting" : "alpha" },
+  "devDependencies" : { "wLogger" : "file:.", "wFiles" : "alpha", "wTesting" : "alpha", "eslint" : "7.1.0" },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }

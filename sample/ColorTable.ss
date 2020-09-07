@@ -65,7 +65,7 @@ function prepareTableInfo()
 
   var table1 = [];
   var table2 = [];
-  var fg,bg;
+  var fg, bg;
   var row1  = {};
   var row2  = {};
   var c = 0;

@@ -116,8 +116,7 @@ function prepareTableInfo()
   var t2 = [];
   var row1  = {};
   var row2  = {};
-  var row;
-  var i;
+  var row, i;
 
   var keys = _.mapOwnKeys( map );
   keys.forEach( ( fg ) =>

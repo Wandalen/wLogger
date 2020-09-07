@@ -6,9 +6,9 @@ let _ = _global_.wTools;
 
 _.include( 'wLogger' );
 
-let l1 = new _.Logger({ name : 'l1', onTransformBegin : onTransformBegin });
-let l2 = new _.Logger({ name : 'l2', onTransformBegin : onTransformBegin });
-let l3 = new _.Logger({ name : 'l3', onTransformBegin : onTransformBegin });
+let l1 = new _.Logger({ name : 'l1', onTransformBegin });
+let l2 = new _.Logger({ name : 'l2', onTransformBegin });
+let l3 = new _.Logger({ name : 'l3', onTransformBegin });
 
 l1.outputTo( l2 );
 l2.outputTo( l3 );

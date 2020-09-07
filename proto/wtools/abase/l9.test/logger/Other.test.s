@@ -1,4 +1,5 @@
-( function _Other_test_s_( ) {
+( function _Other_test_s_( )
+{
 
 'use strict';
 
@@ -64,7 +65,7 @@ function currentColor( test )
 
   test.case = 'case4 : setting two styles';
   logger.log( '❮foreground : dark red❯❮background : dark black❯' );
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   if( Config.interpreter === 'browser' )
   var expected =
   [
@@ -78,54 +79,54 @@ function currentColor( test )
     [ 0, 0, 0, 1 ]
   ]
 
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case5 : setting foreground to default, bg still black';
   logger.log( '❮foreground : default❯' );
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     null,
     [ 0, 0, 0, 1 ]
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case6 : setting background to default';
   logger.log( '❮background : default❯' );
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     null,
     null
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case7 : setting colors to default#2';
   logger.foregroundColor = 'default';
   logger.backgroundColor = 'default';
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     null,
     null
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case8 : setting colors to default#3';
   logger.foregroundColor = null;
   logger.backgroundColor = null;
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     null,
     null
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case9 : setting colors from setter';
   logger.foregroundColor = 'dark red';
   logger.backgroundColor = 'dark white';
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   if( Config.interpreter === 'browser' )
   var expected =
   [
@@ -138,18 +139,18 @@ function currentColor( test )
     [ 0.5, 0, 0, 1 ],
     [ 0.9, 0.9, 0.9, 1 ]
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case10 : setting colors from setter, hex';
   logger.foregroundColor = 'ff0000';
   logger.backgroundColor = 'ffffff';
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     [ 1, 0, 0, 1 ],
     [ 1, 1, 1, 1 ]
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case11 : setting colors from setter, unknown';
   var logger = new _.Logger();
@@ -161,24 +162,24 @@ function currentColor( test )
   {
     logger.backgroundColor = 'd';
   })
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     null,
     null,
   ]
 
-  test.identical( got, expected  );
+  test.identical( got, expected );
   test.case = 'case12 : setting colors from rgb array';
   logger.foregroundColor = [ 1, 0, 0 ];
   logger.backgroundColor = [ 0, 1, 1 ];
-  var got = [ logger.foregroundColor,logger.backgroundColor ];
+  var got = [ logger.foregroundColor, logger.backgroundColor ];
   var expected =
   [
     [ 1, 0, 0, 1 ],
     [ 0, 1, 1, 1 ]
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case13 : setting colors from rgba array';
   logger.foregroundColor = [ 1, 0, 0, 0.5 ];
@@ -189,7 +190,7 @@ function currentColor( test )
     [ 1, 0, 0, 0.5 ],
     [ 1, 1, 1, 0.5 ]
   ]
-  test.identical( got, expected  );
+  test.identical( got, expected );
 
   test.case = 'case13 : setting colors from setter, bitmask';
   logger.foregroundColor = 0xff0000;
@@ -337,37 +338,37 @@ function coloredToHtml( test )
 
   var src = fg( 'red text', 'red' );
   l.log( src );
-  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span>";
+  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span>';
   test.identical( got, expected );
 
   var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ].join( '' );
   l.log( src );
-  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'>red text</span><span style='background:rgba( 255, 0, 0, 1 );'>red background</span>";
+  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span><span style=\'background:rgba( 255, 0, 0, 1 );\'>red background</span>';
   test.identical( got, expected );
 
-  var src = [ 'some text',_.ct.fg( 'text','red' ),_.ct.bg( 'text','yellow' ),'some text' ].join( '' );
+  var src = [ 'some text', _.ct.fg( 'text', 'red' ), _.ct.bg( 'text', 'yellow' ), 'some text' ].join( '' );
   l.log( src );
-  var expected = "some text<span style='color:rgba( 255, 0, 0, 1 );'>text</span><span style='background:rgba( 255, 255, 0, 1 );'>text</span>some text";
+  var expected = 'some text<span style=\'color:rgba( 255, 0, 0, 1 );\'>text</span><span style=\'background:rgba( 255, 255, 0, 1 );\'>text</span>some text';
   test.identical( got, expected );
 
   var src = fg( '\nred text' + fg( 'yellow text', 'yellow' ) + 'red text', 'red' );
   l.log( src );
-  var expected = "<span style='color:rgba( 255, 0, 0, 1 );'><br>red text<span style='color:rgba( 255, 255, 0, 1 );'>yellow text</span>red text</span>";
+  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'><br>red text<span style=\'color:rgba( 255, 255, 0, 1 );\'>yellow text</span>red text</span>';
   test.identical( got, expected );
 
   var src = bg( '\nred background' + bg( 'yellow background', 'yellow' ) + 'red background', 'red' );
   l.log( src );
-  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'><br>red background<span style='background:rgba( 255, 255, 0, 1 );'>yellow background</span>red background</span>";
+  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'><br>red background<span style=\'background:rgba( 255, 255, 0, 1 );\'>yellow background</span>red background</span>';
   test.identical( got, expected );
 
   var src = '❮background : red❯red❮background : blue❯blue❮background : default❯red❮background : default❯';
   l.log( src );
-  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
+  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>';
   test.identical( got, expected );
 
-  var src = _.ct.bg( 'red' + _.ct.bg( 'blue','blue' ) + 'red','red' );
+  var src = _.ct.bg( 'red' + _.ct.bg( 'blue', 'blue' ) + 'red', 'red' );
   l.log( src );
-  var expected = "<span style='background:rgba( 255, 0, 0, 1 );'>red<span style='background:rgba( 0, 0, 255, 1 );'>blue</span>red</span>";
+  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>';
   test.identical( got, expected );
 
   // test.case = 'compact mode disabled';
@@ -718,15 +719,15 @@ function clone( test )
   test.identical( clonedPrinter.outputs.length, 1 );
 
   test.identical( outputPrinter.inputs.length, 2 );
-  test.identical( outputPrinter.inputs[ 0 ].inputPrinter , printer );
-  test.identical( outputPrinter.inputs[ 1 ].inputPrinter , clonedPrinter );
+  test.identical( outputPrinter.inputs[ 0 ].inputPrinter, printer );
+  test.identical( outputPrinter.inputs[ 1 ].inputPrinter, clonedPrinter );
 
   test.identical( inputPrinter.outputs.length, 2 );
-  test.identical( inputPrinter.outputs[ 0 ].outputPrinter , printer );
-  test.identical( inputPrinter.outputs[ 1 ].outputPrinter , clonedPrinter );
+  test.identical( inputPrinter.outputs[ 0 ].outputPrinter, printer );
+  test.identical( inputPrinter.outputs[ 1 ].outputPrinter, clonedPrinter );
 
-  test.identical( printer.inputs[ 0 ].inputPrinter , clonedPrinter.inputs[ 0 ].inputPrinter );
-  test.identical( printer.outputs[ 0 ].outputPrinter , clonedPrinter.outputs[ 0 ].outputPrinter );
+  test.identical( printer.inputs[ 0 ].inputPrinter, clonedPrinter.inputs[ 0 ].inputPrinter );
+  test.identical( printer.outputs[ 0 ].outputPrinter, clonedPrinter.outputs[ 0 ].outputPrinter );
 
   var hooked = [];
   var expected =
@@ -756,7 +757,7 @@ function processWarning( test )
 {
   if( Config.interpreter !== 'njs' )
   {
-    test.identical( 1,1 )
+    test.identical( 1, 1 )
     return
   }
 

@@ -10,8 +10,8 @@ _.include( 'wLogger' );
 
 let hooked = '';
 
-let l1 = new _.Logger({ name : 'l1', onTransformBegin : onTransformBegin });
-let l2 = new _.Logger({ name : 'l2', onTransformBegin : onTransformBegin });
+let l1 = new _.Logger({ name : 'l1', onTransformBegin });
+let l2 = new _.Logger({ name : 'l2', onTransformBegin });
 
 l1.outputTo( console );
 

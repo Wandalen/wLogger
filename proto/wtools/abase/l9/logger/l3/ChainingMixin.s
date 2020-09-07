@@ -1,4 +1,5 @@
-(function _aChainingMixin_s_() {
+(function _aChainingMixin_s_()
+{
 
 'use strict';
 
@@ -657,20 +658,20 @@ function ConsoleBar( o )
 
   }
 
-/*
+  /*
 
-     exclusiveOutput        ordinary      originalOutput
- console    ->    barPrinter  ->  outputPrinter   ->   console
-   ^
-   |
- others
+      exclusiveOutput        ordinary      originalOutput
+  console    ->    barPrinter  ->  outputPrinter   ->   console
+    ^
+    |
+  others
 
-originalOutput link is not transitive, but terminating
-so no cycle
+  originalOutput link is not transitive, but terminating
+  so no cycle
 
- console -> barPrinter -> outputPrinter -> defLogger -> console
+  console -> barPrinter -> outputPrinter -> defLogger -> console
 
-*/
+  */
 
   return o;
 }

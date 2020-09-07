@@ -1,4 +1,5 @@
-( function _Backend_test_ss_( ) {
+( function _Backend_test_ss_( )
+{
 
 'use strict';
 
@@ -18,7 +19,7 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = wTester;
-var isUnix = process.platform !== 'win32' ? true : false;
+var isUnix = process.platform !== 'win32';
 
 //
 
@@ -32,12 +33,12 @@ function simplest( test )
   logger.logUp( 'up' );
   logger.log( 'log' );
   logger.log( 'log\nlog' );
-  logger.log( 'log','a','b' );
-  logger.log( 'log\nlog','a','b' );
-  logger.log( 'log\nlog','a\n','b\n' );
+  logger.log( 'log', 'a', 'b' );
+  logger.log( 'log\nlog', 'a', 'b' );
+  logger.log( 'log\nlog', 'a\n', 'b\n' );
   logger.logDown( 'down' );
 
-  test.identical( 1,1 );
+  test.identical( 1, 1 );
 
 }
 

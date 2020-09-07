@@ -8,7 +8,7 @@ _.include( 'wLogger' );
 
 let hooked = '';
 
-let l1 = new _.Logger({ name : 'l1', onTransformEnd : onTransformEnd });
+let l1 = new _.Logger({ name : 'l1', onTransformEnd });
 
 console.log( 'After inputFrom console with exclusiveOutput:1 will print nothing because l2 will steel all input of console' );
 

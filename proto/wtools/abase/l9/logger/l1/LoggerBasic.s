@@ -1,4 +1,5 @@
-(function _LoggerBasic_s_() {
+(function _LoggerBasic_s_()
+{
 
 'use strict';
 
@@ -12,7 +13,8 @@
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = null;
-let Self = function wLoggerBasic( o )
+let Self = wLoggerBasic;
+function wLoggerBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -194,7 +196,7 @@ function levelSet( level )
 {
   let self = this;
 
-  _.assert( level >= 0, 'levelSet : cant go below zero level to',level );
+  _.assert( level >= 0, 'levelSet : cant go below zero level to', level );
   _.assert( isFinite( level ) );
 
   let dLevel = level - self[ levelSymbol ];
@@ -239,7 +241,7 @@ function _strConcat( args )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
-  return _.toStrSimple.apply( _,args );
+  return _.toStrSimple.apply( _, args );
 
   let o2 =
   {

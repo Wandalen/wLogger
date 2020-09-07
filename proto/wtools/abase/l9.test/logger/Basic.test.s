@@ -1,4 +1,5 @@
-( function _Basic_test_s_( ) {
+( function _Basic_test_s_( )
+{
 
 'use strict';
 
@@ -153,8 +154,8 @@ function clone( test )
   test.identical( clonedChainer.inputs.length, 1 );
   test.identical( clonedChainer.outputs.length, 1 );
 
-  test.identical( chainer.inputs[ 0 ].inputPrinter , clonedChainer.inputs[ 0 ].inputPrinter );
-  test.identical( chainer.outputs[ 0 ].outputPrinter , clonedChainer.outputs[ 0 ].outputPrinter );
+  test.identical( chainer.inputs[ 0 ].inputPrinter, clonedChainer.inputs[ 0 ].inputPrinter );
+  test.identical( chainer.outputs[ 0 ].outputPrinter, clonedChainer.outputs[ 0 ].outputPrinter );
 
   test.will = 'cloned chainer reflects changes';
 

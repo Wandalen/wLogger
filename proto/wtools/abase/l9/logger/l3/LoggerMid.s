@@ -1,4 +1,5 @@
-(function _LoggerMid_s_() {
+(function _LoggerMid_s_()
+{
 
 'use strict';
 
@@ -35,7 +36,7 @@ function init( o )
   if( o.scriptStack === undefined )
   o.scriptStack = _.introspector.stack([ 1, Infinity ]);
 
-  Parent.prototype.init.call( self,o );
+  Parent.prototype.init.call( self, o );
 
   self.levelSet( self.level );
 
@@ -49,12 +50,12 @@ function levelSet( level )
 {
   let self = this;
 
-  Parent.prototype.levelSet.call( self,level );
+  Parent.prototype.levelSet.call( self, level );
 
   level = self[ levelSymbol ];
 
-  self._prefix = _.strDup( self._dprefix || '',level );
-  self._postfix = _.strDup( self._dpostfix || '',level );
+  self._prefix = _.strDup( self._dprefix || '', level );
+  self._postfix = _.strDup( self._dpostfix || '', level );
 
 }
 
@@ -108,17 +109,17 @@ function _transformEnd( o )
 // attributing
 // --
 
-function _begin( key,val )
+function _begin( key, val )
 {
   let self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'Expects string {-key-}, got',_.strType( key ) );
+  _.assert( _.strIs( key ), 'Expects string {-key-}, got', _.strType( key ) );
 
   if( val === undefined )
   {
-    _.assert( 0,'value expected' );
-    self._end( key,val );
+    _.assert( 0, 'value expected' );
+    self._end( key, val );
     return self;
   }
 
@@ -146,11 +147,11 @@ function begin()
     if( _.objectIs( argument ) )
     {
       for( let key in argument )
-      self._begin( key,argument[ key ] )
+      self._begin( key, argument[ key ] )
       return;
     }
 
-    self._begin( argument,1 );
+    self._begin( argument, 1 );
   }
 
   return self;
@@ -158,7 +159,7 @@ function begin()
 
 //
 
-function _end( key,val )
+function _end( key, val )
 {
   let self = this;
 
@@ -202,7 +203,7 @@ function end()
     if( _.objectIs( argument ) )
     {
       for( let key in argument )
-      self._end( key,argument[ key ] )
+      self._end( key, argument[ key ] )
       return;
     }
 
@@ -226,8 +227,8 @@ function _rbegin( key, val )
   }
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ),'Expects string {-key-}, got', () => _.strType( key ) );
-  _.assert( _.numberIs( val ),'Expects number {-val-}, got', () => _.strType( val ) );
+  _.assert( _.strIs( key ), 'Expects string {-key-}, got', () => _.strType( key ) );
+  _.assert( _.numberIs( val ), 'Expects number {-val-}, got', () => _.strType( val ) );
   _.assert( _.numberIs( attribute ), () => _.args( 'Expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
 
   return self._begin( key, val + attribute )
@@ -246,11 +247,11 @@ function rbegin()
     if( _.objectIs( argument ) )
     {
       for( let key in argument )
-      self._rbegin( key,argument[ key ] )
+      self._rbegin( key, argument[ key ] )
       return;
     }
 
-    self._rbegin( argument,1 );
+    self._rbegin( argument, 1 );
   }
 
   return self;
@@ -294,7 +295,7 @@ function rend()
     if( _.objectIs( argument ) )
     {
       for( let key in argument )
-      self._rend( key,argument[ key ] )
+      self._rend( key, argument[ key ] )
       return;
     }
 
@@ -314,11 +315,11 @@ function _attributeError( key, begin, end )
 
   return _.err
   (
-    '{-begin-} does not have complemented {-end-}' +
-    '\nkey : ' + _.toStr( key ) +
-    '\nbegin : ' + _.toStr( begin ) +
-    '\nend : ' + _.toStr( end ) +
-    '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
+    '{-begin-} does not have complemented {-end-}'
+    + '\nkey : ' + _.toStr( key )
+    + '\nbegin : ' + _.toStr( begin )
+    + '\nend : ' + _.toStr( end )
+    + '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
   );
 
 }
@@ -418,9 +419,9 @@ function _verbosityReport()
 {
   let self = this;
 
-  console.log( 'logger.verbosity',self.verbosity );
-  console.log( 'logger.attributes.verbosity',self.attributes.verbosity );
-  console.log( self.verboseEnough() ? 'Verbose enough!' : 'Not enough verbose!'  );
+  console.log( 'logger.verbosity', self.verbosity );
+  console.log( 'logger.attributes.verbosity', self.attributes.verbosity );
+  console.log( self.verboseEnough() ? 'Verbose enough!' : 'Not enough verbose!' );
 
 }
 
@@ -468,7 +469,7 @@ function later( name )
   later.log = function log()
   {
     if( this.logger.verboseEnough )
-    this.after.push([ 'log',arguments ]);
+    this.after.push([ 'log', arguments ]);
   }
 
   self._mines[ name ] = later;
@@ -510,7 +511,7 @@ function laterActualize( later )
   for( let a = 0 ; a < later.after.length ; a++ )
   {
     let after = later.after[ a ];
-    self[ after[ 0 ] ].apply( self,after[ 1 ] );
+    self[ after[ 0 ] ].apply( self, after[ 1 ] );
   }
 
   if( later.autoFinit )

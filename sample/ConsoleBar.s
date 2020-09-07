@@ -36,8 +36,8 @@ so no cycle
 
 _.Logger.ConsoleBar
 ({
-  barPrinter : barPrinter,
-  outputPrinter : outputPrinter,
+  barPrinter,
+  outputPrinter,
   on : 1
 });
 
