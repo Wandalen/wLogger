@@ -93,7 +93,7 @@ function prepareInfo()
     for( var i = 0; i < result.length; i++ )
     {
       var currentColors = splitCombinationKey( result[ i ] );
-      if( srcColors[ 0 ] === currentColors[ 0 ] )
+      if( srcColors[ 0 ] === currentColors[ 0 ]  )
       {
         pos = i;
       }
