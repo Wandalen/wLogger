@@ -1,4 +1,5 @@
-(function _ToString_s_() {
+(function _ToString_s_()
+{
 
 'use strict';
 
@@ -12,7 +13,8 @@ let _global = _global_;
 let _ = _global_.wTools;
 // let Parent = _.Logger; /* yyy */
 let Parent = _.LoggerMid;
-let Self = function wLoggerToString( o )
+let Self = wLoggerToString;
+function wLoggerToString( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }

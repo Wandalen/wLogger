@@ -1,4 +1,5 @@
-( function _ChainingWithProcess_test_ss_( ) {
+( function _ChainingWithProcess_test_ss_( )
+{
 
 'use strict';
 
@@ -35,13 +36,13 @@ function testFile()
 
 //
 
-function onRoutineBegin( test,testFile )
+function onRoutineBegin( test, testFile )
 {
   var self = this;
   var c = Object.create( null );
   c.tempDirPath = self.tempDirPath = _.normalize( _.dirTempMake() );
-  c.testFilePath = _.normalize( _.join( c.tempDirPath,testFile.name + '.s' ) );
-  _.fileProvider.fileWrite( c.testFilePath,_.routineSourceGet({ routine : testFile, withWrap : 0 }) );
+  c.testFilePath = _.normalize( _.join( c.tempDirPath, testFile.name + '.s' ) );
+  _.fileProvider.fileWrite( c.testFilePath, _.routineSourceGet({ routine : testFile, withWrap : 0 }) );
   return c;
 }
 
@@ -61,7 +62,7 @@ function trivial( test )
 {
   var self = this;
   debugger
-  var c = onRoutineBegin.call( this,test,testFile );
+  var c = onRoutineBegin.call( this, test, testFile );
   function onWrite( o )
   {
     got.push( o.input[ 0 ] );
@@ -76,10 +77,7 @@ function trivial( test )
     outputPrefixing : 0,
     ipc : 1,
   }
-  var expected =
-  [
-    'slave : starting',
-  ];
+  var expected = [ 'slave : starting' ];
   var got  = [];
   var result = _.process.startNode( shell )
   .finally( function( err )

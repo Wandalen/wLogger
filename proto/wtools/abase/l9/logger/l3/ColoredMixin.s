@@ -1,4 +1,5 @@
-(function _aColoredMixin_s_() {
+(function _aColoredMixin_s_()
+{
 
 'use strict';
 
@@ -499,7 +500,7 @@ function _transformSplit( o )
   let outputRaw = self.outputRaw;
   let outputGray = self.outputGray;
 
-  splitted.forEach( ( split,i ) =>
+  splitted.forEach( ( split, i ) =>
   {
 
     if( !_.arrayIs( split ) )
@@ -524,7 +525,7 @@ function _transformSplit( o )
 
     if( !input )
     {
-      split = '#' + split[ 0 ] + ':' + split[ 1 ] + '#';
+      split = '❮' + split[ 0 ] + ':' + split[ 1 ] + '❯';
       splitted[ i ] = split;
       return;
     }
@@ -557,7 +558,7 @@ function _join( splitted )
     if( _.strIs( split ) )
     result += split
     else if( _.arrayIs( split ) )
-    result += '#' + split.join( ':' ) + '#';
+    result += '❮' + split.join( ':' ) + '❯';
     else _.assert( 0 );
   });
 
@@ -572,7 +573,7 @@ function _split( src )
   _.assert( _.strIs( src ) );
   // debugger;
   // let splitted = _.strSplitInlinedStereo /* qqq */
-  let splitted = _.strSplitInlined
+  let splitted = _.ct.parse
   ({
     src,
     onInlined : self._splitHandle.bind( self ),
@@ -687,9 +688,9 @@ function _directiveMoveApply( value )
 
   let shellMoveDirectiveCodes =
   {
-    'eol' : eol,
+    eol,
+    eos,
     'bol' : '0G',
-    'eos' : eos,
     'bos' : '1;1H',
     'pl' : '1F',
     'nl' : '1E',
@@ -716,7 +717,7 @@ function _directiveMoveApply( value )
   {
     let result = '';
 
-    if( !!process.stdout.columns )
+    if( process.stdout.columns )
     result = `${process.stdout.columns}G`;
 
     return result;
@@ -744,8 +745,8 @@ function _directiveClsApply( value )
   let clsValuesMap =
   {
     '' : 2,
-    left : 1,
-    right : 0,
+    'left' : 1,
+    'right' : 0,
   }
 
   let cls = clsValuesMap[ value ];
@@ -769,7 +770,7 @@ function _transformAct( original )
 
     _.assert( _.mapIs( o ) );
 
-    o = original.call( self,o );
+    o = original.call( self, o );
 
     _.assert( _.strIs( o.pure ) );
     _.assert( _.longIs( o.input ) );
@@ -907,9 +908,9 @@ function _diagnoseColorCollapse( fg, bg )
     logger.styleSet( 'info.negative' );
     logger.warn( 'Warning: Color collapse in native terminal.' );
     logger.warn( 'fg passed : ', fg.originalName, fg.originalValue );
-    logger.warn( 'fg set : ', fg.currentName,self.foregroundColor );
+    logger.warn( 'fg set : ', fg.currentName, self.foregroundColor );
     logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
-    logger.warn( 'bg set : ',bg.currentName, self.backgroundColor );
+    logger.warn( 'bg set : ', bg.currentName, self.backgroundColor );
     logger.styleSet( 'default' );
     // logger.foregroundColor = 'default';
     // logger.backgroundColor = 'default';
@@ -961,8 +962,7 @@ function _backgroundColorSet( color )
 function _colorSet( layer, color )
 {
   let self = this;
-  let symbol;
-  let diagnosticInfo;
+  let symbol, diagnosticInfo;
 
   if( layer === 'foreground' )
   symbol = symbolForForeground;
@@ -1282,9 +1282,9 @@ function _clsSet( src )
   let clsValuesMap =
   {
     '' : 2,
-    left : 1,
-    right : 0,
-    null : null
+    'left' : 1,
+    'right' : 0,
+    'null' : null
   }
 
   let value = clsValuesMap[ src ];
@@ -1493,7 +1493,7 @@ let PoisonedColorCombination =
 
   /* */
 
-/* qqq : bright black? */
+  /* qqq : bright black? */
 
   { fg : 'white', bg : 'yellow', platform : 'linux' },
   { fg : 'green', bg : 'cyan', platform : 'linux' },
@@ -1530,7 +1530,7 @@ let PoisonedColorCombination =
 
 ]
 
-let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style','move','cll' ];
+let Directive = [ 'bg', 'background', 'fg', 'foreground', 'outputGray', 'inputGray', 'inputRaw', 'outputRaw', 'underline', 'cls', 'style', 'move', 'cll' ];
 let DirectiveColoring = [ 'bg', 'background', 'fg', 'foreground' ];
 
 // --
@@ -1663,7 +1663,7 @@ let Extension =
   _underlineSet,
 
   styleSet,
-  _styleApply : _styleApply,
+  _styleApply,
   _styleComplement,
   _styleReset,
 

@@ -14,9 +14,9 @@ console.log( 'Setup exclusive input from logger l1 -> l2' );
 let hooked = '';
 let l1 = new _.Logger
 ({
-    name : 'l1',
-    onTransformBegin : onTransformBegin,
-    onTransformEnd : onTransformEnd
+  name : 'l1',
+  onTransformBegin,
+  onTransformEnd
 });
 let l2 = new _.Logger({ name : 'l2' });
 
@@ -34,14 +34,14 @@ l3.log( 'This message will not get on screen, because l3 -> originalOutput -> l1
 
 function onTransformBegin( o )
 {
-    hooked += '( transformOnBegin ) ' + this.name + ' : ' + o.input[ 0 ] + '\n';
-    return o;
+  hooked += '( transformOnBegin ) ' + this.name + ' : ' + o.input[ 0 ] + '\n';
+  return o;
 }
 
 function onTransformEnd( o )
 {
-    hooked += '( transformOnEnd ) ' + this.name + ' : ' + o.input[ 0 ] + '\n';
-    return o;
+  hooked += '( transformOnEnd ) ' + this.name + ' : ' + o.input[ 0 ] + '\n';
+  return o;
 }
 
 console.log( 'Link l3 -> originalOutput -> l1 is terminating, but message reaches onTransform* handlers anyway' );

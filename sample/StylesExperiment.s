@@ -29,7 +29,7 @@ console.log( `\x1b[9m`, 'crossed', reset, 'not crossed' );
     mac +
 */
 
-console.log( `\x1b[3m`, 'italic', reset , 'not italic');
+console.log( `\x1b[3m`, 'italic', reset, 'not italic' );
 
 /*
     underline :

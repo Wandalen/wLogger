@@ -1,4 +1,5 @@
-(function _ToLayeredHtml_s_() {
+(function _ToLayeredHtml_s_()
+{
 
 'use strict';
 
@@ -27,7 +28,8 @@ let $ = jQuery;
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = _.Logger;
-let Self = function wPrinterToLayeredHtml( o )
+let Self = wPrinterToLayeredHtml;
+function wPrinterToLayeredHtml( o )
 {
   return _.workpiece.construct( Self, this, arguments );
 }
@@ -40,10 +42,10 @@ function init( o )
 {
   let self = this;
 
-  Parent.prototype.init.call( self,o );
+  Parent.prototype.init.call( self, o );
 
   self.containerDom = $( self.containerDom );
-  _.assert( self.containerDom.length,'wPrinterToLayeredHtml : not found containerDom' );
+  _.assert( self.containerDom.length, 'wPrinterToLayeredHtml : not found containerDom' );
 
   self.containerDom.addClass( self.contentCssClass );
 
@@ -73,7 +75,7 @@ function write()
 
   /* */
 
-  let o = _.LoggerBasic.prototype.write.apply( self,arguments );
+  let o = _.LoggerBasic.prototype.write.apply( self, arguments );
 
   if( !o )
   return;
@@ -83,7 +85,7 @@ function write()
 
   /* */
 
-  let data = _.strConcat.apply( {},arguments );
+  let data = _.strConcat.apply( {}, arguments );
   data = data.split( '\n' );
 
   for( let d = 0 ; d < data.length ; d ++ )
@@ -105,12 +107,12 @@ function levelSet( level )
 {
   let self = this;
 
-  _.assert( level >= 0, 'level cant go below zero level to',level );
+  _.assert( level >= 0, 'level cant go below zero level to', level );
   _.assert( isFinite( level ) );
 
   let dLevel = level - self[ levelSymbol ];
 
-  Parent.prototype.levelSet.call( self,level );
+  Parent.prototype.levelSet.call( self, level );
 
   if( dLevel > 0 )
   {
@@ -133,17 +135,17 @@ function _makeBranchDom( )
   let result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
-  _.dom.s.attr( result,self.attributes );
+  _.dom.s.attr( result, self.attributes );
 
   self.currentDom.append( result );
   result.addClass( self.branchCssClass );
 
   if( self.usingRandomColor )
   {
-    let color = _.color.randomRgbWithSl( 0.5,0.5 );
+    let color = _.color.randomRgbWithSl( 0.5, 0.5 );
     color[ 3 ] = self.opacity;
     // color = [ 0.75,1,1,0.5 ];
-    result.css( 'background-color',_.color.colorToRgbaHtml( color ) );
+    result.css( 'background-color', _.color.colorToRgbaHtml( color ) );
   }
 
   return result;
@@ -157,7 +159,7 @@ function _makeTerminalDom()
   let result = $( '<' + self.elementCssTag + '>' );
 
   if( _.mapKeys( self.attributes ).length )
-  _.dom.s.attr( result,self.attributes );
+  _.dom.s.attr( result, self.attributes );
 
   self.currentDom.append( result );
   result.addClass( self.terminalCssClass );

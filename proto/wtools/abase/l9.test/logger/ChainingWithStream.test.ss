@@ -1,4 +1,5 @@
-( function _ChainingWithStream_test_ss_( ) {
+( function _ChainingWithStream_test_ss_( )
+{
 
 'use strict';
 

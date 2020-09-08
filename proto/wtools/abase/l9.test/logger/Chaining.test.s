@@ -1,4 +1,5 @@
-( function _Chaining_test_s_( ) {
+( function _Chaining_test_s_( )
+{
 
 'use strict';
 
@@ -37,10 +38,10 @@ function log()
 
 var fakeConsole =
 {
-  log : _.routineJoin( console,log ),
-  error : _.routineJoin( console,console.error ),
-  info : _.routineJoin( console,console.info ),
-  warn : _.routineJoin( console,console.warn ),
+  log : _.routineJoin( console, log ),
+  error : _.routineJoin( console, console.error ),
+  info : _.routineJoin( console, console.info ),
+  warn : _.routineJoin( console, console.warn ),
 }
 
 // --
@@ -1431,8 +1432,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1456,9 +1457,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
@@ -1477,8 +1478,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1502,10 +1503,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
@@ -1529,8 +1530,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1554,10 +1555,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, outputPrinter );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
@@ -1583,8 +1584,8 @@ function _output( o )
   var result = printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must  have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1610,9 +1611,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1643,8 +1644,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.ge( consoleChainer.inputs.length, 1 );
@@ -1672,9 +1673,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
@@ -1696,8 +1697,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ]
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -1724,10 +1725,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
@@ -1755,8 +1756,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ]
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -1783,10 +1784,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, outputPrinter );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
@@ -1815,8 +1816,8 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.outputs.length, 1 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ]
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -1845,9 +1846,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs';
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, inputPrinter );
@@ -1877,10 +1878,10 @@ function _output( o )
   printerA.outputTo( printerC );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1905,10 +1906,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1933,10 +1934,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -1961,9 +1962,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 0 );
@@ -1990,10 +1991,10 @@ function _output( o )
   printerA.outputTo( printerD );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerD );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -2019,10 +2020,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -2048,10 +2049,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -2076,9 +2077,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( consoleChainer.hasInputClose( printerA ) );
@@ -2101,9 +2102,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must not have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must not have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
@@ -2130,10 +2131,10 @@ function _output( o )
   printerA.outputTo( printerC );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -2158,10 +2159,10 @@ function _output( o )
   printerA.outputTo( printerC );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -2187,10 +2188,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -2214,9 +2215,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
@@ -2240,9 +2241,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must not have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must not have printerA in inputs'
   test.is( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 0 );
@@ -2250,9 +2251,7 @@ function _output( o )
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
-  [
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
-  ]
+  [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ]
   test.identical( hooked, expected );
 
   test.close( 'printer -> original -> printer' );
@@ -2271,9 +2270,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
@@ -2297,10 +2296,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
@@ -2310,10 +2309,7 @@ function _output( o )
   consoleHook.inputUnchain( console );
   printerA.outputUnchain( console );
   test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-  var expected =
-  [
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
-  ];
+  var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
   test.identical( hooked, expected );
 
   test.case = 'combining : prepend';
@@ -2327,10 +2323,10 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,2 );
+  test.identical( printerA.outputs.length, 2 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
   test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = console[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
@@ -2340,10 +2336,7 @@ function _output( o )
   consoleHook.inputUnchain( console );
   printerA.outputUnchain( console );
   test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-  var expected =
-  [
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
-  ];
+  var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
   test.identical( hooked, expected );
 
   test.case = 'combining : supplement, no other chains';
@@ -2355,13 +2348,13 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must have printerA in inputs'
   var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
-  test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter,printerA );
+  test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
   printerC.inputFrom( printerB );
   printerA.log( 'A for printer B' );
   printerC.inputUnchain( printerB );
@@ -2380,9 +2373,9 @@ function _output( o )
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
   test.will = 'printerA must not have printerB in outputs'
   test.is( !printerA.hasOutputClose( printerB ) );
-  test.identical( printerA.outputs.length,1 );
+  test.identical( printerA.outputs.length, 1 );
   test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-  test.identical( printerA.inputs.length,0 );
+  test.identical( printerA.inputs.length, 0 );
   test.will = 'printerB must not have printerA in inputs'
   var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
   test.is( !consoleChainer.hasInputClose( printerA ) );
@@ -2990,8 +2983,6 @@ function chain( test )
   })
 
   test.case = 'console - other printer, both have chains, inputCombining : rewrite, outputCombining : rewrite';
-
-
 
   test.close( 'one input - one output' );
 
@@ -4144,7 +4135,7 @@ function hasOutputDeep( test )
   test.case = 'has logger in outputs';
   var l1 = new _.Logger({ output : console });
   var l2 = new _.Logger({ output : console });
-  l1.outputTo( l2,{ combining : 'rewrite' } );
+  l1.outputTo( l2, { combining : 'rewrite' } );
   var got = l1.hasOutputDeep( l2 );
   var expected = true;
   test.identical( got, expected );
@@ -4554,8 +4545,8 @@ function clone( test )
   test.identical( clonedChainer.inputs.length, 1 );
   test.identical( clonedChainer.outputs.length, 1 );
 
-  test.identical( chainer.inputs[ 0 ].inputPrinter , clonedChainer.inputs[ 0 ].inputPrinter );
-  test.identical( chainer.outputs[ 0 ].outputPrinter , clonedChainer.outputs[ 0 ].outputPrinter );
+  test.identical( chainer.inputs[ 0 ].inputPrinter, clonedChainer.inputs[ 0 ].inputPrinter );
+  test.identical( chainer.outputs[ 0 ].outputPrinter, clonedChainer.outputs[ 0 ].outputPrinter );
 
   test.will = 'cloned chainer reflects changes';
 

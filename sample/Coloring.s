@@ -32,16 +32,16 @@ printer.log( 'default text' );
 
 printer.log();
 printer.log( 'Providing color directives through input:' );
-printer.log( '#foreground : red#' ); /* sets foreground color to red */
+printer.log( '❮foreground : red❯' ); /* sets foreground color to red */
 printer.log( 'red text' ); /* each call of log will print input in red color */
-printer.log( '#foreground : default#' ); /* sets foreground color to default */
+printer.log( '❮foreground : default❯' ); /* sets foreground color to default */
 printer.log( 'default text' );
 
 /**/
 
 printer.log();
 printer.log( 'Same result in one call:' );
-printer.log( '#background : red#\nred text\n#background : default#\ndefault text' );
+printer.log( '❮background : red❯\nred text\n❮background : default❯\ndefault text' );
 
 /**/
 

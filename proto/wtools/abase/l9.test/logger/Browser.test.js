@@ -1,4 +1,5 @@
-( function _Browser_test_s_( ) {
+( function _Browser_test_s_( )
+{
 
 'use strict';
 
@@ -10,7 +11,7 @@ let Parent = wTester;
 
 function toStrEscaping( str )
 {
-  return _.toStr( str,{ escaping : 1 } );
+  return _.toStr( str, { escaping : 1 } );
 }
 
 //
@@ -25,12 +26,12 @@ function simplest( test )
   logger.logUp( 'up' );
   logger.log( 'log' );
   logger.log( 'log\nlog' );
-  logger.log( 'log','a','b' );
-  logger.log( 'log\nlog','a','b' );
-  logger.log( 'log\nlog','a\n','b\n' );
+  logger.log( 'log', 'a', 'b' );
+  logger.log( 'log\nlog', 'a', 'b' );
+  logger.log( 'log\nlog', 'a\n', 'b\n' );
   logger.logDown( 'down' );
 
-  test.identical( 1,1);
+  test.identical( 1, 1 );
 
 }
 
