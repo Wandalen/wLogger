@@ -79,7 +79,7 @@ function trivial( test )
   }
   var expected = [ 'slave : starting' ];
   var got  = [];
-  var result = _.process.startNode( shell )
+  var result = _.process.startNjs( shell )
   .finally( function( err )
   {
     console.log( 'shellNode : done' );

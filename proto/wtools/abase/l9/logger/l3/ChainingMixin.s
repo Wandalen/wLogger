@@ -580,6 +580,8 @@ function ConsoleIsBarred( output )
 /*
 qqq : extend test coverage, write doc. ask how
 qqq : implement, test, doc method ConsoleBar
+qqq : write test routine to bar, unbar, bar
+qqq : write test routine to unbar, bar, unbar
 */
 
 function ConsoleBar( o )
@@ -609,7 +611,7 @@ function ConsoleBar( o )
 
     _.assert( !o.barPrinter.inputs.length );
     _.assert( !o.barPrinter.outputs.length );
-    _.assert( !o.outputPrinterHadOutputs );
+    // _.assert( !o.outputPrinterHadOutputs );
 
     o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
     o.outputPrinter.outputUnchain();
