@@ -140,7 +140,7 @@ function colorConsole( test )
   logger.backgroundColor = 'dark white';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0, 0, 0.5, 1 ] );
-  test.identical( logger.backgroundColor, [ 0.9, 0.9, 0.9, 1 ] );
+  test.identical( logger.backgroundColor, [ 0.75, 0.75, 0.75, 1 ] );
   // if( isUnix )
   // var expected = '\u001b[34m\u001b[107mtext\u001b[39;0m\u001b[49;0m';
   // else
@@ -157,7 +157,7 @@ function colorConsole( test )
   logger.backgroundColor = 'dark white';
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
-  test.identical( logger.backgroundColor, [ 0.9, 0.9, 0.9, 1 ] );
+  test.identical( logger.backgroundColor, [ 0.75, 0.75, 0.75, 1 ] );
   // if( isUnix )
   // var expected = '\u001b[107mtext\u001b[49;0m';
   // else
@@ -745,7 +745,7 @@ function shellColors( test )
   // test.identical( logger._rgbToCode_nodejs( logger.foregroundColor ), '1;36' );
 
   logger.foregroundColor = 'dark white';
-  test.identical( logger.foregroundColor, [ 0.9, 0.9, 0.9, 1 ] );
+  test.identical( logger.foregroundColor, [ 0.75, 0.75, 0.75, 1 ] );
   // if( isUnix )
   // test.identical( logger._rgbToCode_nodejs( logger.foregroundColor ), 97 );
   // else

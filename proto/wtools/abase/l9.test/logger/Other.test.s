@@ -131,13 +131,13 @@ function currentColor( test )
   var expected =
   [
     [ 1, 0, 0 ],
-    [ 1, 1, 1 ]
+    [ 1, 1, 1 ],
   ]
   else
   var expected =
   [
     [ 0.5, 0, 0, 1 ],
-    [ 0.9, 0.9, 0.9, 1 ]
+    [ 0.75, 0.75, 0.75, 1 ],
   ]
   test.identical( got, expected );
 
