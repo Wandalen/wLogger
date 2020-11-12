@@ -13,7 +13,7 @@ if( typeof module !== 'undefined' )
 
 //
 
-let _ = _testerGlobal_.wTools;
+let _ = _globals_.testing.wTools;
 let fileProvider = _.fileProvider;
 let path = fileProvider.path;
 
@@ -142,6 +142,7 @@ function eslint( test )
       '--ignore-pattern', '*.yaml',
       '--ignore-pattern', '*.md',
       '--ignore-pattern', '*.xml',
+      '--ignore-pattern', '*.css',
       '--quiet'
     ],
     throwingExitCode : 0,

@@ -15,7 +15,7 @@ if( typeof module !== 'undefined' )
 let _global = _global_;
 let _ = _global_.wTools;
 let Parent = wTester;
-let fileProvider = _testerGlobal_.wTools.fileProvider;
+let fileProvider = _globals_.testing.wTools.fileProvider;
 let path = fileProvider.path;
 
 //
@@ -784,7 +784,7 @@ function consoleBarExperiment( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let toolsPath = _testerGlobal_.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
+  let toolsPath = _globals_.testing.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
