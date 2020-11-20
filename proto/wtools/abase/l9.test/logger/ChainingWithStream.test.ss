@@ -88,8 +88,8 @@ function input( test )
       let onDataListeners = readStream.listeners( 'data' );
       let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
 
-      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       printerA.inputUnchain( readStream );
       printerB.inputUnchain( readStream );
@@ -104,8 +104,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -151,8 +151,8 @@ function input( test )
       let onDataListeners = readStream.listeners( 'data' );
       let chainerReadStream = readStream[ Symbol.for( 'chainer' ) ];
 
-      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       chainerReadStream.outputUnchain( printerA );
       chainerReadStream.outputUnchain( printerB );
@@ -167,8 +167,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -214,8 +214,8 @@ function input( test )
       let cdPrinterB = printerB.inputs[ 0 ];
       let onDataListeners = readStream.listeners( 'data' );
 
-      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       chainerReadStream.outputUnchain( printerA );
       chainerReadStream.outputUnchain( printerB );
@@ -230,8 +230,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
@@ -277,8 +277,8 @@ function input( test )
       let cdPrinterB = printerB.inputs[ 0 ];
       let onDataListeners = readStream.listeners( 'data' );
 
-      test.is( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
-      test.is( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterA.onDataHandler ) )
+      test.true( _.longHas( onDataListeners, cdPrinterB.onDataHandler ) )
 
       printerA.inputUnchain( readStream );
       printerB.inputUnchain( readStream );
@@ -293,8 +293,8 @@ function input( test )
       test.identical( chainerReadStream.outputs.length, 0 );
 
       onDataListeners = readStream.listeners( 'data' );
-      test.is( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
-      test.is( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterA.onDataHandler ) );
+      test.true( !_.longHas( onDataListeners, cdPrinterB.onDataHandler ) );
       test.identical( onDataListeners.length, 0 );
 
       return true;
