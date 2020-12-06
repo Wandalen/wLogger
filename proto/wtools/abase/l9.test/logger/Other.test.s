@@ -6,10 +6,7 @@
 if( typeof module !== 'undefined' )
 {
   let _ = require( '../../l9/logger/entry/Logger.s' );
-
   _.include( 'wTesting' );
-  _.include( 'wConsequence' );
-
 }
 
 let _global = _global_;
@@ -259,7 +256,7 @@ function _colorsStack( test )
 function logUp( test )
 {
   var got;
-  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
+  function onTransformEnd( o ) { got = o.output };
 
   var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
 
@@ -287,7 +284,7 @@ function logUp( test )
 function logDown( test )
 {
   var got;
-  function onTransformEnd( args ) { got = args.outputForPrinter[ 0 ] };
+  function onTransformEnd( o ) { got = o.output };
 
   var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
 
@@ -324,7 +321,7 @@ function coloredToHtml( test )
 
   function onTransformEnd( o )
   {
-    got = o.outputForTerminal[ 0 ];
+    got = o.output;
   }
 
   var l = new _.Logger({ output : null, onTransformEnd, writingToHtml : 1 })
@@ -402,22 +399,21 @@ function outputGray( test )
   var fg = _.ct.fg;
   var bg = _.ct.bg;
 
-  function onTransformEnd( args ){ got = args.outputForTerminal };
+  function onTransformEnd( o ){ got = o.output };
 
-  var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
+  var l = new _.Logger({ output : console, outputGray : false, onTransformEnd });
 
   test.case = 'wColor, outputGray : 0';
   l.log( _.ct.fg( 'text', 'dark red') );
   if( Config.interpreter === 'browser' )
   test.identical( got, [ '%ctext', 'color:rgba( 255, 0, 0, 1 );background:none;' ] );
   else
-  test.identical( got[ 0 ], '\u001b[31mtext\u001b[39;0m' );
-
+  test.identical( got, [ '\u001b[31mtext\u001b[39;0m' ] );
 
   test.case =  'wColor, outputGray : 1';
   l.outputGray = true;
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
-  test.identical( got[ 0 ], 'red text red background' );
+  test.identical( got, [ 'red text red background' ] );
 
 }
 
@@ -428,7 +424,7 @@ function emptyLines( test )
   test.case = 'logger is not skipping empty lines'
 
   var got;
-  var onTransformEnd = function( args ){ got = args.outputForTerminal[ 0 ]; };
+  var onTransformEnd = function( args ){ got = args.output; };
 
   var logger = new _.Logger({ output : null, onTransformEnd });
 
@@ -677,7 +673,7 @@ function coloringNoColor( test )
 
   var got;
 
-  function onTransformEnd( args ){ got = args.outputForTerminal[ 0 ] };
+  function onTransformEnd( o ){ got = o.output };
 
   var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
 

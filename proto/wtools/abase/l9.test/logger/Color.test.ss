@@ -36,7 +36,7 @@ function colorConsole( test )
   var onTransformEnd = function( args )
   {
     debugger;
-    got = args.outputForTerminal[ 0 ];
+    got = args.output;
   };
   var logger = new _.Logger({ output : null, onTransformEnd });
 
@@ -307,8 +307,8 @@ function colorConsoleDirectives( test )
   {
     got = o;
     // console.log( test.case );
-    // console.log( 'o.outputForTerminal:', escape( o.outputForTerminal[ 0 ] ) )
-    // console.log( 'o.outputForPrinter', escape( o.outputForPrinter[ 0 ] ) )
+    // console.log( 'o._outputForTerminal:', escape( o.output ) )
+    // console.log( 'o._outputForPrinter', escape( o.output ) )
   }
 
   let l = new _.Logger({ output : null, onTransformEnd  });
@@ -336,9 +336,9 @@ function colorConsoleDirectives( test )
 
     l.log( o.text );
 
-    test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.outputForTerminal ) );
+    test.identical( escape( got.output ), escape( o._outputForTerminal ) );
     debugger;
-    test.identical( escape( got.outputForPrinter[ 0 ] ), escape( o.text ) );
+    test.identical( escape( got.output ), escape( o.text ) );
   }
 
   runCase
@@ -348,7 +348,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '\u001b[91mtext\u001b[39;0m'
+    _outputForTerminal : '\u001b[91mtext\u001b[39;0m'
   })
 
   runCase
@@ -358,7 +358,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -368,7 +368,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : 'text'
+    _outputForTerminal : 'text'
   })
 
   runCase
@@ -378,7 +378,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -388,7 +388,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : 'text'
+    _outputForTerminal : 'text'
   })
 
   runCase
@@ -398,7 +398,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -408,7 +408,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -418,7 +418,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -428,7 +428,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -438,7 +438,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -448,7 +448,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : 'text'
+    _outputForTerminal : 'text'
   })
 
   runCase
@@ -458,7 +458,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -468,7 +468,7 @@ function colorConsoleDirectives( test )
     inputRaw : 0,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -478,7 +478,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -488,7 +488,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 0,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   runCase
@@ -498,7 +498,7 @@ function colorConsoleDirectives( test )
     inputRaw : 1,
     outputRaw : 1,
     text : '❮foreground: red❯text❮foreground: default❯',
-    outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
+    _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
   test.close( 'setting states as property' );
@@ -545,7 +545,7 @@ function colorConsoleDirectives( test )
     l[ o.directive ] = 0;
 
     l.log( input );
-    test.identical( escape( got.outputForTerminal[ 0 ] ), escape( o.expected ) );
+    test.identical( escape( got.output ), escape( o.expected ) );
   }
 
   runCase2

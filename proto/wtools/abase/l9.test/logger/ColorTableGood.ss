@@ -58,9 +58,9 @@ function prepareTableInfo()
   function onTransformEnd( data )
   {
     if( i < colorNames.length / 2 )
-    row1[ i ] =  data.outputForTerminal[ 0 ];
+    row1[ i ] =  data.output;
     else
-    row2[ i - colorNames.length / 2 ] =  data.outputForTerminal[ 0 ];
+    row2[ i - colorNames.length / 2 ] =  data.output;
   }
 
   var combinations = [];

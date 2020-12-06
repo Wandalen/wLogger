@@ -11,7 +11,6 @@
 
 let _global = _global_;
 let _ = _global_.wTools;
-// let Parent = _.Logger; /* yyy */
 let Parent = _.LoggerMid;
 let Self = wLoggerToString;
 function wLoggerToString( o )
@@ -37,14 +36,12 @@ function _writeAct( channel, args )
 
   let o = _.LoggerBasic.prototype._writeAct.apply( self, arguments );
 
-  // _.assert( _.arrayIs( o.output ) );
-  // _.assert( o.output.length === 1 );
-  _.assert( _.strIs( o.pure ) );
+  _.assert( _.strIs( o.joinedInput ) );
 
   if( self.outputData )
-  self.outputData += self.eol + o.pure;
+  self.outputData += self.eol + o.joinedInput;
   else
-  self.outputData += o.pure;
+  self.outputData += o.joinedInput;
 
   return o;
 }

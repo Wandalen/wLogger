@@ -5,13 +5,8 @@
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/logger/entry/Logger.s' );
-
-  let _ = _global_.wTools;
-
+  let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
-
 }
 
 //
@@ -103,51 +98,146 @@ function chaining( test )
 {
   function onTransformEnd( o )
   {
-    got.push( o.outputForPrinter[ 0 ] )
+    got.push({ name : this.name, output : o.output });
   };
 
-  test.case = 'case1: l2 -> l1';
+  test.case = 'case1: l2 -> l1 -> console, listen l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, onTransformEnd } );
-  var l2 = new _.Logger( { output : l1 } );
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : console, onTransformEnd } );
+  var l2 = new _.Logger( { name : '2', output : l1 } );
   l2.log( '1' );
   l2.log( '2' );
-  var expected = [ '1', '2' ];
+  var expected =
+  [
+    {
+      'name' : '1',
+      'output' : [ '1' ]
+    },
+    {
+      'name' : '1',
+      'output' : [ '2' ]
+    }
+  ]
+  test.identical( got, expected );
+
+  test.case = 'case1: l2 -> l1 -> console, listen l2';
+  var got = [];
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : console } );
+  var l2 = new _.Logger( { name : '2', output : l1, onTransformEnd } );
+  l2.log( '1' );
+  l2.log( '2' );
+  var expected =
+  [
+    {
+      'name' : '2',
+      'output' : [ '1' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ '2' ]
+    }
+  ]
+  test.identical( got, expected );
+
+  test.case = 'case1: l2 -> l1 -> null, listen l1';
+  var got = [];
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : null, onTransformEnd } );
+  var l2 = new _.Logger( { name : '2', output : l1 } );
+  l2.log( '1' );
+  l2.log( '2' );
+  var expected = [];
+  test.identical( got, expected );
+
+  test.case = 'case1: l2 -> l1 -> null, listen l2';
+  var got = [];
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : null } );
+  var l2 = new _.Logger( { name : '2', output : l1, onTransformEnd } );
+  l2.log( '1' );
+  l2.log( '2' );
+  var expected =
+  [
+    {
+      'name' : '2',
+      'output' : [ '1' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ '2' ]
+    }
+  ]
   test.identical( got, expected );
 
   test.case = 'case2: l3 -> l2 -> l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, onTransformEnd } );
-  var l2 = new _.Logger( { output : l1, onTransformEnd } );
-  var l3 = new _.Logger( { output : l2 } );
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : null, onTransformEnd } );
+  var l2 = new _.Logger( { name : '2', output : l1, onTransformEnd } );
+  var l3 = new _.Logger( { name : '3', output : l2 } );
   l2.log( 'l2' );
   l3.log( 'l3' );
-  var expected = [ 'l2', 'l2', 'l3', 'l3' ];
+  var expected =
+  [
+    {
+      'name' : '2',
+      'output' : [ 'l2' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l3' ]
+    }
+  ]
   test.identical( got, expected );
 
   test.case = 'case3: l4->l3->l2->l1';
   var got = [];
-  var l1 = new _.Logger( { output : null, onTransformEnd } );
-  var l2 = new _.Logger( { output : l1, onTransformEnd } );
-  var l3 = new _.Logger( { output : l2, onTransformEnd } );
-  var l4 = new _.Logger( { output : l3, onTransformEnd } );
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : null, onTransformEnd } );
+  var l2 = new _.Logger( { name : '2', output : l1, onTransformEnd } );
+  var l3 = new _.Logger( { name : '3', output : l2, onTransformEnd } );
+  var l4 = new _.Logger( { name : '4', output : l3, onTransformEnd } );
   l4.log( 'l4' );
   l3.log( 'l3' );
   l2.log( 'l2' );
   var expected =
   [
-    'l4', 'l4', 'l4', 'l4',
-    'l3', 'l3', 'l3',
-    'l2', 'l2',
-  ];
+    {
+      'name' : '4',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '3',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '3',
+      'output' : [ 'l3' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l3' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l2' ]
+    }
+  ]
   test.identical( got, expected );
 
   test.case = 'case4: l1 <- l2 <- l3 <- l4 ';
   var got = [];
-  var l1 = new _.Logger( { output : null, onTransformEnd } );
-  var l2 = new _.Logger( { onTransformEnd } );
-  var l3 = new _.Logger( { onTransformEnd } );
-  var l4 = new _.Logger( { onTransformEnd } );
+  var forTerminal = [];
+  var l1 = new _.Logger( { name : '1', output : null, onTransformEnd } );
+  var l2 = new _.Logger( { name : '2', onTransformEnd } );
+  var l3 = new _.Logger( { name : '3', onTransformEnd } );
+  var l4 = new _.Logger( { name : '4', onTransformEnd } );
   l3.inputFrom( l4 );
   l2.inputFrom( l3 );
   l1.inputFrom( l2 );
@@ -157,11 +247,34 @@ function chaining( test )
   l2.log( 'l2' );
   var expected =
   [
-    'l4', 'l4', 'l4', 'l4',
-    'l3', 'l3', 'l3',
-    'l2', 'l2',
-  ];
+    {
+      'name' : '4',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '3',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l4' ]
+    },
+    {
+      'name' : '3',
+      'output' : [ 'l3' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l3' ]
+    },
+    {
+      'name' : '2',
+      'output' : [ 'l2' ]
+    }
+  ]
   test.identical( got, expected );
+
+  // qqq xxx : restore
 
   // test.case = 'case5: l1->l2->l3 leveling off ';
   // var l1 = new _.Logger({ output : console });
@@ -214,9 +327,7 @@ function consoleChaining( test )
   catch( err )
   {
     if( o.consoleWasBarred )
-    debugger;
     test.suite.consoleBar( 1 );
-
     throw _.errLogOnce( err );
   }
 
@@ -229,7 +340,6 @@ function consoleChaining( test )
     if( _.Logger.ConsoleIsBarred( console ) )
     {
       o.consoleWasBarred = true;
-      debugger
       test.suite.consoleBar( 0 );
     }
 
@@ -269,8 +379,6 @@ function consoleChaining( test )
     l.inputUnchain( console );
     test.true( !l.hasInputClose( console ) );
     test.true( !_.Logger.ConsoleIsBarred( console ) );
-
-    debugger
 
     /* */
 
@@ -410,14 +518,11 @@ function consoleChaining( test )
     /* */
 
     test.case = 'console is excluded, several inputs for console';
-    debugger;
     test.true( _.Logger.ConsoleIsBarred( console ) );
-    debugger;
     var received = [];
     var onTransformEnd = ( o ) =>
     {
-      debugger;
-      received.push( o.outputForPrinter[ 0 ] );
+      received.push( o.output );
     };
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
@@ -435,7 +540,7 @@ function consoleChaining( test )
     test.case = 'console is excluded, several outputs from console';
     test.true( _.Logger.ConsoleIsBarred( console ) );
     var received = [];
-    var onTransformEnd = ( o ) => received.push( o.outputForPrinter[ 0 ] );
+    var onTransformEnd = ( o ) => received.push( o.output );
     var l1 = new _.Logger({ output : null, onTransformEnd });
     var l2 = new _.Logger({ output : null, onTransformEnd });
     var l3 = new _.Logger({ output : null, onTransformEnd });
@@ -456,7 +561,7 @@ function consoleChaining( test )
     test.case = 'console is excluded, several outputs/inputs';
     test.true( _.Logger.ConsoleIsBarred( console ) );
     var received = [];
-    var onTransformEnd = ( o ) => received.push( o.outputForPrinter[ 0 ] );
+    var onTransformEnd = ( o ) => received.push( o.output );
 
     /*inputs*/
 
@@ -4445,7 +4550,6 @@ function printerIs( test )
 
   test.case = 'LoggerBasic';
   var src = _.LoggerBasic;
-  debugger;
   var got = _.printerIs( src );
   test.identical( got, false );
 
@@ -5035,13 +5139,14 @@ let Self =
 
     ConsoleBar,
 
-    // consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
-    // printerIs, // Dmytro : the second part of routine printerIs in module wTools
-    // printerLike, // Dmytro : the second part of routine printerLike in module wTools
-    // loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
+    consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
+    printerIs, // Dmytro : the second part of routine printerIs in module wTools
+    printerLike, // Dmytro : the second part of routine printerLike in module wTools
+    loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
+
     /* */
-    // clone,
-    // finit,
+    // clone, /* qqq : restore */
+    // finit, /* qqq : restore */
 
     /* qqq : make this test suite and all other working with silencing:0 */
 

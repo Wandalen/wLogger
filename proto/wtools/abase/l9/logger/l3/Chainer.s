@@ -1,4 +1,4 @@
-(function _aChainer_s_()
+(function _Chainer_s_()
 {
 
 'use strict';
@@ -44,200 +44,9 @@ function init( o )
 function finit()
 {
   let self = this;
-  // debugger;xxx
-
   self.unchainEverything();
-
   _.Copyable.prototype.finit.call( self );
 }
-
-//
-
-// function _chain( o )
-// {
-//   let self = this;
-//   let result = 1;
-
-//   o = _.routineOptions( self._chain, arguments );
-
-//   if( o.outputPrinter instanceof self.ChainDescriptor )
-//   o.outputPrinter = o.outputPrinter.outputPrinter;
-//   if( o.inputPrinter instanceof self.ChainDescriptor )
-//   o.inputPrinter = o.inputPrinter.inputPrinter;
-
-//   _.assert( arguments.length === 1 );
-//   _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
-//   _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
-//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
-//   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
-
-//   /* */
-
-//   if( self.outputs.length )
-//   {
-//     if( o.inputCombining === 'supplement' )
-//     {
-//       // debugger; xxx
-//       result = 0;
-//       return result;
-//     }
-//     else if( o.inputCombining === 'rewrite' )
-//     {
-//       // debugger;
-//       self.outputUnchain();
-//     }
-//   }
-
-//   /* */
-
-//   if( self.inputs.length )
-//   {
-//     if( o.outputCombining === 'supplement' )
-//     {
-//       // debugger; xxx
-//       result = 0;
-//       return result;
-//     }
-//     else if( o.outputCombining === 'rewrite' )
-//     {
-//       self.inputUnchain();
-//     }
-//   }
-
-//   /* */
-
-//   if( _.arrayLike( o.outputPrinter ) )
-//   {
-//     result = 0;
-
-//     o.outputPrinter.forEach( ( outputPrinter ) =>
-//     {
-//       // debugger; // qqq
-//       let o2 = _.mapExtend( null, o );
-//       o2.outputPrinter = outputPrinter;
-//       result += self._chain( o2 );
-//     });
-
-//     return result;
-//   }
-
-//   /* */
-
-//   if( _.arrayLike( o.inputPrinter ) )
-//   {
-//     result = 0;
-
-//     o.inputPrinter.forEach( ( inputPrinter ) =>
-//     {
-//       // debugger; xxx
-//       let o2 = _.mapExtend( null, o );
-//       o2.inputPrinter = inputPrinter;
-//       result += self._chain( o2 );
-//     });
-
-//     return result;
-//   }
-
-//   /* */
-
-//   _.assert( !!o.outputPrinter, 'Expects {-o.outputPrinter-}' );
-//   _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
-
-//   let cd = self._chainDescriptorMake( o );
-
-//   // if( !cd.combining )
-//   // _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
-
-//   let inputChainer = cd.inputPrinter[ chainerSymbol ] || self.MakeFor( cd.inputPrinter );
-//   let outputChainer = cd.outputPrinter[ chainerSymbol ] || self.MakeFor( cd.outputPrinter );
-
-//   /* output check */
-
-//   if( Config.debug )
-//   if( inputChainer.hasOutputClose( o.outputPrinter ) )
-//   _.assert( 0, () => _.strConcat([ 'inputPrinter', _.toStrShort( o.inputPrinter ), 'already has outputPrinter', _.toStrShort( o.outputPrinter ), 'in outputs' ] ) );
-
-//   /* input check */
-
-//   if( Config.debug )
-//   if( !o.originalOutput )
-//   if( inputChainer.hasInputClose( o.outputPrinter ) )
-//   _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
-
-//   /*
-//     no need to check inputs if chaining is originalOutput
-//   */
-
-//   if( Config.debug )
-//   if( !o.originalOutput )
-//   if( inputChainer.hasInputDeep( o.outputPrinter ) )
-//   _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
-
-//   if( cd.outputCombining === 'prepend' )
-//   {
-//     _.arrayPrependOnceStrictly( outputChainer.inputs, cd );
-//   }
-//   else
-//   {
-//     _.arrayAppendOnceStrictly( outputChainer.inputs, cd );
-//   }
-
-//   if( cd.inputCombining === 'prepend' )
-//   {
-//     _.arrayPrependOnceStrictly( inputChainer.outputs, cd );
-//   }
-//   else
-//   {
-//     _.arrayAppendOnceStrictly( inputChainer.outputs, cd );
-//   }
-
-//   /**/
-
-//   if( _.streamIs( cd.outputPrinter ) )
-//   {
-//     debugger; xxx
-//     self._outputToStream( cd );
-//   }
-//   else if( _.consoleIs( cd.outputPrinter ) )
-//   {
-//     self._outputToConsole( cd );
-//   }
-
-//   if( _.streamIs( cd.inputPrinter ) )
-//   {
-//     debugger; xxx
-//     self._inputFromStream( cd );
-//   }
-//   else if( _.consoleIs( cd.inputPrinter ) )
-//   {
-//     self._inputFromConsole( cd );
-//   }
-
-//   /* */
-
-//   if( cd.originalOutput )
-//   {
-//     outputChainer.hasOriginalOutputs = +1;
-//   }
-
-//   if( cd.exclusiveOutput )
-//   {
-//     _.assert( !inputChainer.exclusiveOutputPrinter, 'console is already excluded by printer', _.toStrShort( inputChainer.exclusiveOutputPrinter ) );
-//     inputChainer.exclusiveOutputPrinter = o.outputPrinter;
-//   }
-
-//   return result;
-// }
-
-// _chain.defaults =
-// {
-//   outputPrinter : null,
-//   inputPrinter : null,
-//   outputCombining : 'append',
-//   inputCombining : 'append',
-//   originalOutput : 0,
-//   exclusiveOutput : 0,
-// }
 
 //
 
@@ -259,8 +68,6 @@ function _chain( o )
   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
-  // debugger;
-
   /* */
 
   if( _.printerLike( o.inputPrinter ) && o.inputPrinter[ chainerSymbol ] )
@@ -268,13 +75,11 @@ function _chain( o )
   {
     if( o.inputCombining === 'supplement' )
     {
-      // debugger; xxx
       result = 0;
       return result;
     }
     else if( o.inputCombining === 'rewrite' )
     {
-      // debugger;
       o.inputPrinter[ chainerSymbol ].outputUnchain();
     }
   }
@@ -286,7 +91,6 @@ function _chain( o )
   {
     if( o.outputCombining === 'supplement' )
     {
-      // debugger; xxx
       result = 0;
       return result;
     }
@@ -304,7 +108,6 @@ function _chain( o )
 
     o.outputPrinter.forEach( ( outputPrinter ) =>
     {
-      // debugger; // qqq
       let o2 = _.mapExtend( null, o );
       o2.outputPrinter = outputPrinter;
 
@@ -328,7 +131,6 @@ function _chain( o )
 
     o.inputPrinter.forEach( ( inputPrinter ) =>
     {
-      // debugger; xxx
       let o2 = _.mapExtend( null, o );
       o2.inputPrinter = inputPrinter;
 
@@ -350,10 +152,6 @@ function _chain( o )
   _.assert( o.inputPrinter !== o.outputPrinter, 'Output to itself is not correct chaining' );
 
   let cd = self._chainDescriptorMake( o );
-
-
-  // if( !cd.combining )
-  // _.assert( self.outputs.length === 0, 'if combining is off then multiple outputs are not allowed' );
 
   let inputChainer = cd.inputPrinter[ chainerSymbol ] || self.MakeFor( cd.inputPrinter );
   let outputChainer = cd.outputPrinter[ chainerSymbol ] || self.MakeFor( cd.outputPrinter );
@@ -402,7 +200,6 @@ function _chain( o )
 
   if( _.streamIs( cd.outputPrinter ) )
   {
-    //debugger; //xxx
     inputChainer._outputToStream( cd );
   }
   else if( _.consoleIs( cd.outputPrinter ) )
@@ -412,7 +209,6 @@ function _chain( o )
 
   if( _.streamIs( cd.inputPrinter ) )
   {
-    //debugger; //xxx
     outputChainer._inputFromStream( cd );
   }
   else if( _.consoleIs( cd.inputPrinter ) )
@@ -516,7 +312,6 @@ function _outputToStream( cd )
 function _inputFromStream( cd )
 {
   let self = this;
-
   let outputChannel = 'log';
   let stream = cd.inputPrinter;
   let outputPrinter = cd.outputPrinter;
@@ -524,18 +319,21 @@ function _inputFromStream( cd )
   _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
   _.assert( !cd.onDataHandler );
 
-  cd.onDataHandler = function ( data )
+  cd.onDataHandler = onDataHandler;
+  stream.on( 'data', cd.onDataHandler );
+
+  function onDataHandler( data )
   {
     if( _.bufferAnyIs( data ) )
     data = _.bufferToStr( data );
 
-    if( _.strEnds( data, '\n' ) )
-    data = _.strRemoveEnd( data, '\n' );
+    // if( _.strEnds( data, '\n' ) )
+    // data = _.strRemoveEnd( data, '\n' );
 
-    outputPrinter[ outputChannel ].call( outputPrinter, data );
+    outputPrinter._writeAct( outputChannel, [ data ] );
+    // outputPrinter[ outputChannel ].call( outputPrinter, data );
   }
 
-  stream.on( 'data', cd.onDataHandler );
 }
 
 //
@@ -619,8 +417,6 @@ function outputTo( output, o )
 {
   let self = this;
 
-  // debugger;xxx
-
   _.assert( arguments.length === 1 || arguments.length === 2 );
   o = _.routineOptions( self.outputTo, o );
 
@@ -628,10 +424,8 @@ function outputTo( output, o )
   o2.inputPrinter = self.printer;
   o2.outputPrinter = output;
   o2.inputCombining = o.combining;
-  // o2.outputCombining = o.combining;
   delete o2.combining;
 
-  // return chainer._chain( o2 );
   return Self._chain( o2 );
 }
 
@@ -679,19 +473,15 @@ function inputFrom( input, o )
 {
   let self = this;
 
-  // debugger; xxx
-
   _.assert( arguments.length === 1 || arguments.length === 2 );
   o = _.routineOptions( self.outputTo, o );
 
   let o2 = _.mapExtend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self.printer;
-  // o2.inputCombining = o.combining;
   o2.outputCombining = o.combining;
   delete o2.combining;
 
-  // return chainer._chain( o2 );
   return Self._chain( o2 );
 }
 
@@ -794,7 +584,6 @@ function outputUnchain( output )
 
   _.assert( arguments.length === 0 || arguments.length === 1 );
   _.assert( _.printerLike( output ) || _.streamIs( output ) || output === undefined );
-  // _.assert( self !== output, 'Can not remove outputPrinter from outputs' );
 
   if( output === undefined )
   {
@@ -1162,7 +951,6 @@ function _hasOutput( output, o )
     {
       if( o.withoutOutputToOriginal && self.outputs[ d ].originalOutput )
       continue;
-      // debugger;
       return true;
     }
   }
@@ -1255,14 +1043,6 @@ let Combining = [ 'rewrite', 'supplement', 'append', 'prepend' ];
 
 let Channel = _.LoggerBasic.Channel;
 _.assert( Channel.length > 0 );
-// let Channel =
-// [
-//   'log',
-//   'error',
-//   'info',
-//   'warn',
-//   'debug'
-// ];
 
 // --
 // relations

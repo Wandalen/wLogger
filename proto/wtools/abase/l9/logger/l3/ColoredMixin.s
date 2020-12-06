@@ -67,21 +67,20 @@ function _stackIsNotEmpty( layer )
 function _transformActHtml( o )
 {
   let self = this;
+  let result = '';
+  let spanCount = 0;
+  let splitted = o._outputSplitted;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
-  _.assert( o.outputForPrinter.length === 1 );
-
-  // _.assert( _.strIs( o.src ) || _.arrayIs( o.src ) );
-  // _.assert( _.routineIs( o.onInlined ) );
+  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
+  // _.assert( o._outputForPrinter.length === 1 );
+  // _.assert( _.strIs( o.joinedInput ) );
+  _.assert( _.arrayIs( o._outputSplitted ) );
+  _.assert( !o._outputForTerminal );
 
   let options = _.mapOnly( o, _transformActHtml.defaults );
   _.routineOptions( _transformActHtml, options );
-
-  let result = '';
-  let spanCount = 0;
-  let splitted = o.outputSplitted;
 
   for( let i = 0; i < splitted.length; i++ )
   {
@@ -162,14 +161,13 @@ function _transformActHtml( o )
 
   _.assert( spanCount === 0 );
 
-  o.outputForTerminal = [ result ];
-
+  o._outputForTerminal = [ result ];
+  // o._outputForTerminal = [ result ];
   return o;
 }
 
 _transformActHtml.defaults =
 {
-  // src : null,
   tag : 'span',
   compact : true,
 }
@@ -179,13 +177,14 @@ _transformActHtml.defaults =
 function _transformAct_nodejs( o )
 {
   let self = this;
+  let result = '';
+  let splitted = o._outputSplitted;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
-
-  let result = '';
-  let splitted = o.outputSplitted;
+  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
+  _.assert( _.arrayIs( o._outputSplitted ) );
+  _.assert( !o._outputForTerminal );
 
   splitted.forEach( function( split )
   {
@@ -258,78 +257,24 @@ function _transformAct_nodejs( o )
 
   });
 
-  o.outputForTerminal = [ result ];
-
+  o._outputForTerminal = [ result ];
   return o;
 }
-
-//
-
-// function _transformAct_browser( o )
-// {
-//   let self = this;
-
-//   _.assert( arguments.length === 1, 'Expects single argument' );
-//   _.assert( _.mapIs( o ) );
-//   _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
-
-//   let result = [ '' ];
-//   let splitted = o.outputSplitted;
-
-//   if( splitted.length === 1 && !self._isStyled )
-//   {
-//     if( !_.arrayIs( splitted[ 0 ] ) )
-//     return splitted;
-//   }
-
-//   for( let i = 0; i < splitted.length; i++ )
-//   {
-//     if( _.arrayIs( splitted[ i ] ) )
-//     {
-//       self._directiveApply( splitted[ i ] );
-
-//       if( !self.foregroundColor && !self.backgroundColor )
-//       self._isStyled = 0;
-//       else if( !!self.foregroundColor | !!self.backgroundColor )
-//       self._isStyled = 1;
-//     }
-//     else
-//     {
-//       if( ( !i && !self._isStyled ) || self.outputGray )
-//       {
-//         result[ 0 ] += splitted[ i ];
-//       }
-//       else
-//       {
-//         let fg = self.foregroundColor || 'none';
-//         let bg = self.backgroundColor || 'none';
-
-//         result[ 0 ] += `%c${ splitted[ i ] }`;
-//         result.push( `color:${ _.color.colorToRgbaHtml( fg ) };background:${ _.color.colorToRgbaHtml( bg ) };` );
-//         /* qqq : make it working without _.color */
-
-//       }
-//     }
-//   }
-
-//   o.outputForTerminal = result;
-
-//   return o;
-// }
 
 //
 
 function _transformAct_browser( o )
 {
   let self = this;
+  let result = [ '' ];
+  let splitted = o._outputSplitted;
+  let styled = false;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
-
-  let result = [ '' ];
-  let splitted = o.outputSplitted;
-  let styled = false;
+  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
+  _.assert( _.arrayIs( o._outputSplitted ) );
+  _.assert( !o._outputForTerminal );
 
   splitted.forEach( function( split )
   {
@@ -413,8 +358,7 @@ function _transformAct_browser( o )
 
   });
 
-  o.outputForTerminal = result;
-
+  o._outputForTerminal = result;
   return o;
 }
 
@@ -424,12 +368,13 @@ function _transformActWithoutColors( o )
 {
   let self = this;
   let result = '';
+  let splitted = o._outputSplitted;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  _.assert( _.strIs( o.outputForPrinter[ 0 ] ) );
-
-  let splitted = o.outputSplitted;
+  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
+  _.assert( _.arrayIs( o._outputSplitted ) );
+  _.assert( !o._outputForTerminal );
 
   for( let i = 0 ; i < splitted.length ; i++ )
   {
@@ -437,41 +382,43 @@ function _transformActWithoutColors( o )
     result += splitted[ i ];
   }
 
-  o.outputForTerminal = [ result ];
-
+  o._outputForTerminal = [ result ];
   return o;
 }
 
 //
 
-function _transformColor( o )
+function _transformColorApply( o )
 {
   let self = this;
 
-  _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
+  _.assert( _.strIs( o.joinedInput ) );
+  // _.assert( _.arrayIs( o._outputForPrinter ) && o._outputForPrinter.length === 1 );
+
+  /* xxx */
 
   if( self.permanentStyle )
   {
-    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], self.permanentStyle );
+    o.joinedInput = _.ct.formatFinal( o.joinedInput, self.permanentStyle );
   }
 
   if( self.coloringConnotation )
   {
     if( self.attributes.connotation === 'positive' )
-    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'positive' );
+    o.joinedInput = _.ct.formatFinal( o.joinedInput, 'positive' );
     else if( self.attributes.connotation === 'negative' )
-    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'negative' );
+    o.joinedInput = _.ct.formatFinal( o.joinedInput, 'negative' );
   }
 
   if( self.coloringHeadAndTail )
   if( self.attributes.head || self.attributes.tail )
-  if( _.strStrip( o.pure ) )
+  if( _.strStrip( o.joinedInput ) )
   {
     let reserve = self.verbosityReserve();
     if( self.attributes.head && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'head' );
+    o.joinedInput = _.ct.formatFinal( o.joinedInput, 'head' );
     else if( self.attributes.tail && reserve > 1 )
-    o.outputForPrinter[ 0 ] = _.ct.formatFinal( o.outputForPrinter[ 0 ], 'tail' );
+    o.joinedInput = _.ct.formatFinal( o.joinedInput, 'tail' );
   }
 
 }
@@ -484,23 +431,29 @@ function _transformSplit( o )
   let result = [ '' ];
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assert( _.arrayIs( o.outputForPrinter ) && o.outputForPrinter.length === 1 );
-  _.assert( !o.outputSplitted );
+  // _.assert( _.arrayIs( o._outputForPrinter ) && o._outputForPrinter.length === 1 );
+  // _.assert( !o._outputSplitted );
+  _.assert( _.strIs( o.joinedInput ) );
+  _.assert( !o._outputSplitted );
+  _.assert( !o._outputForTerminal );
+  // _.assert( !o._outputForPrinter );
 
   if( self.raw || self.rawAll )
   {
-    o.outputSplitted = o.outputForPrinter;
+    o._outputSplitted = [ o.joinedInput ]; /* xxx */
+    // o._outputSplitted = o._outputForPrinter; /* xxx */
     return;
   }
 
-  let splitted = o.outputSplitted = self._split( o.outputForPrinter[ 0 ] );
+  let splits = o._outputSplitted = self._split( o.joinedInput );
+  // let splits = o._outputSplitted = self._split( o._outputForPrinter[ 0 ] );
 
   let inputRaw = self.inputRaw;
   let inputGray = self.inputGray;
   let outputRaw = self.outputRaw;
   let outputGray = self.outputGray;
 
-  splitted.forEach( ( split, i ) =>
+  splits.forEach( ( split, i ) =>
   {
 
     if( !_.arrayIs( split ) )
@@ -509,7 +462,6 @@ function _transformSplit( o )
     let directive = split[ 0 ];
     let value = split[ 1 ];
     let input = true;
-    // let output = true;
 
     if( directive === 'inputRaw' )
     inputRaw += _.boolFrom( value.trim() ) ? +1 : -1;
@@ -518,15 +470,10 @@ function _transformSplit( o )
     else if( inputGray && _.longHas( self.DirectiveColoring, directive ) )
     input = false;
 
-    // if( outputRaw )
-    // output = false;
-    // else if( outputGray && _.longHas( self.DirectiveColoring, directive ) )
-    // output = false;
-
     if( !input )
     {
       split = '❮' + split[ 0 ] + ':' + split[ 1 ] + '❯';
-      splitted[ i ] = split;
+      splits[ i ] = split;
       return;
     }
 
@@ -539,8 +486,9 @@ function _transformSplit( o )
 
   });
 
-  o.outputForPrinter = [ self._join( splitted ) ];
-
+  // o._outputForPrinter = [ self._join( splits ) ];
+  // o.input = o._outputForPrinter;
+  // o._outputForPrinter = [ self._join( splits ) ];
 }
 
 // --
@@ -571,8 +519,6 @@ function _split( src )
 {
   let self = this;
   _.assert( _.strIs( src ) );
-  // debugger;
-  // let splitted = _.strSplitInlinedStereo /* qqq */
   let splitted = _.ct.parse
   ({
     src,
@@ -580,7 +526,6 @@ function _split( src )
     preservingEmpty : 0,
     stripping : 0,
   });
-  // debugger;
   return splitted;
 }
 
@@ -705,7 +650,9 @@ function _directiveMoveApply( value )
   if( _.routineIs( code ) )
   code = code();
 
-  // for eos, eol returns empty string if program can't get sizes of the terminal
+  /*
+  for eos, eol returns empty string if program can't get sizes of the terminal
+  */
   if( code.length )
   code = `\x1b[${code}`;
 
@@ -754,7 +701,11 @@ function _directiveClsApply( value )
 
   let code = `\x1b[${cls}J`;
   if( cls === 2 )
-  code += `\x1b[H` //moves cursor to top left corner as terminal 'cls' does
+  code += `\x1b[H`;
+
+  /*
+  moves cursor to top left corner as terminal 'cls' does
+  */
 
   return code;
 }
@@ -772,27 +723,44 @@ function _transformAct( original )
 
     o = original.call( self, o );
 
-    _.assert( _.strIs( o.pure ) );
+    _.assert( _.strIs( o.joinedInput ) );
     _.assert( _.longIs( o.input ) );
-    _.assert( _.longIs( o.outputForPrinter ) );
-    _.assert( o.outputForPrinter.length === 1 )
+    _.assert( o.output === null );
+    _.assert( !!o.chainLink );
+    // _.assert( _.longIs( o._outputForPrinter ) );
+    // _.assert( o._outputForPrinter.length === 1 )
     _.assert( arguments.length === 1, 'Expects single argument' );
 
     if( !self.outputGray && _.color )
-    self._transformColor( o );
-
-    self._transformSplit( o ); /* xxx */
+    self._transformColorApply( o );
 
     /* */
 
-    if( self.writingToHtml )
-    self._transformActHtml( o );
-    else if( Config.interpreter === 'njs' )
-    self._transformAct_nodejs( o );
-    else if( Config.interpreter === 'browser' )
-    self._transformAct_browser( o );
+    if( !o.chainLink.outputPrinter.isPrinter )
+    {
 
-    _.assert( _.arrayIs( o.outputForPrinter ) );
+      if( !o._outputSplitted )
+      self._transformSplit( o ); /* xxx */
+
+      if( !o._outputForTerminal )
+      {
+        if( self.writingToHtml )
+        self._transformActHtml( o );
+        else if( Config.interpreter === 'njs' )
+        self._transformAct_nodejs( o );
+        else if( Config.interpreter === 'browser' )
+        self._transformAct_browser( o );
+      }
+
+      _.assert( _.arrayIs( o._outputForTerminal ) );
+      o.output = o._outputForTerminal;
+    }
+    else
+    {
+      o._outputForPrinter = [ o.joinedInput ];
+      o.output = o._outputForPrinter;
+      _.assert( _.arrayIs( o._outputForPrinter ) );
+    }
 
     return o;
   }
@@ -1636,7 +1604,7 @@ let Extension =
   _transformAct_nodejs,
   _transformAct_browser,
   _transformActWithoutColors,
-  _transformColor,
+  _transformColorApply,
   _transformSplit,
 
   //

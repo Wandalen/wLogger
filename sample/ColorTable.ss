@@ -58,9 +58,9 @@ function prepareTableInfo()
   function onTransformEnd( data )
   {
     if( c <= colorNames.length / 2 )
-    row1[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
+    row1[ shortColor( fg ) ].push( data.output );
     else
-    row2[ shortColor( fg ) ].push( data.outputForTerminal[ 0 ] );
+    row2[ shortColor( fg ) ].push( data.output );
   }
 
   var table1 = [];

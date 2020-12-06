@@ -8,14 +8,9 @@ return;
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/logger/entry/Logger.s' );
-
-  let _ = _global_.wTools;
-
+  let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPathBasic' );
 }
 
 //
@@ -45,13 +40,12 @@ function onSuiteEnd()
 function input( test )
 {
   let self = this;
-
-  let con = new _.Consequence().take( null )
+  let con = _.take( null );
 
   test.open( 'readStream -> multiple printers, chain/unchain in different ways' );
 
   con
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -66,8 +60,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     printerA.inputFrom( readStream );
     printerB.inputFrom( readStream );
@@ -95,10 +89,10 @@ function input( test )
       printerB.inputUnchain( readStream );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerReadStream.inputs.length, 0 );
       test.identical( chainerReadStream.outputs.length, 0 );
@@ -114,7 +108,7 @@ function input( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -129,8 +123,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     printerA.inputFrom( readStream );
     printerB.inputFrom( readStream );
@@ -158,10 +152,10 @@ function input( test )
       chainerReadStream.outputUnchain( printerB );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerReadStream.inputs.length, 0 );
       test.identical( chainerReadStream.outputs.length, 0 );
@@ -177,7 +171,7 @@ function input( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -193,8 +187,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     chainerReadStream.outputTo( printerA );
     chainerReadStream.outputTo( printerB );
@@ -221,10 +215,10 @@ function input( test )
       chainerReadStream.outputUnchain( printerB );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerReadStream.inputs.length, 0 );
       test.identical( chainerReadStream.outputs.length, 0 );
@@ -240,7 +234,7 @@ function input( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -256,8 +250,8 @@ function input( test )
       got.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     chainerReadStream.outputTo( printerA );
     chainerReadStream.outputTo( printerB );
@@ -284,10 +278,10 @@ function input( test )
       printerB.inputUnchain( readStream );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerReadStream.inputs.length, 0 );
       test.identical( chainerReadStream.outputs.length, 0 );
@@ -312,12 +306,12 @@ function output( test )
 {
   let self = this;
 
-  let con = new _.Consequence().take( null )
+  let con = _.take( null );
 
   test.open( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
   con
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -331,8 +325,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
@@ -353,10 +347,10 @@ function output( test )
       printerB.outputUnchain( writeStream );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerwriteStream.inputs.length, 0 );
       test.identical( chainerwriteStream.outputs.length, 0 );
@@ -370,7 +364,7 @@ function output( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -384,8 +378,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
@@ -406,10 +400,10 @@ function output( test )
       chainerwriteStream.inputUnchain( printerB );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerwriteStream.inputs.length, 0 );
       test.identical( chainerwriteStream.outputs.length, 0 );
@@ -423,7 +417,7 @@ function output( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -438,8 +432,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
@@ -458,10 +452,10 @@ function output( test )
       chainerWriteStream.inputUnchain( printerB );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerWriteStream.inputs.length, 0 );
       test.identical( chainerWriteStream.outputs.length, 0 );
@@ -475,7 +469,7 @@ function output( test )
 
   //
 
-  .ifNoErrorThen( () =>
+  .then( () =>
   {
     let filePath = _.path.join( self.testDirPath, 'file.txt' )
 
@@ -490,8 +484,8 @@ function output( test )
       expected.push( this.name + ' : ' + o.input[ 0 ] );
     }
 
-    let printerA = new _.Logger({ name : 'printerA', onTransformEnd });
-    let printerB = new _.Logger({ name : 'printerB', onTransformEnd });
+    let printerA = new _.Logger({ name : 'printerA', onTransformEnd, output : console });
+    let printerB = new _.Logger({ name : 'printerB', onTransformEnd, output : console });
 
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
@@ -510,10 +504,10 @@ function output( test )
       printerB.outputUnchain( writeStream );
 
       test.identical( printerA.inputs.length, 0 );
-      test.identical( printerA.outputs.length, 0 );
+      test.identical( printerA.outputs.length, 1 );
 
       test.identical( printerB.inputs.length, 0 );
-      test.identical( printerB.outputs.length, 0 );
+      test.identical( printerB.outputs.length, 1 );
 
       test.identical( chainerWriteStream.inputs.length, 0 );
       test.identical( chainerWriteStream.outputs.length, 0 );

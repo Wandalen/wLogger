@@ -8,14 +8,9 @@ return;
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/logger/entry/Logger.s' );
-
-  let _ = _global_.wTools;
-
+  let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
   _.include( 'wFiles' );
-  _.include( 'wPathBasic' );
 }
 
 //

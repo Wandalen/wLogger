@@ -52,17 +52,34 @@ function transform( o )
 
   _.assertMapHasAll( o, transform.defaults );
 
-  o = self._transformBegin( o );
+  o.output = null;
+  o.discarding = false;
 
-  if( !o )
-  return;
+  if( o.originalInput === undefined || o.originalInput === null )
+  o.originalInput = o.input;
+  if( o.joinedInput === undefined || o.joinedInput === null )
+  o.joinedInput = self._strConcat( o.input );
 
-  o = self._transformAct( o );
+  let o2 = self._transformBegin( o );
+  _.assert( o2 === o );
+
+  if( o.discarding )
+  return o;
+
+  // if( !o )
+  // return;
+
+  let o3 = self._transformAct( o );
+  _.assert( o3 === o );
+
+  if( o.discarding )
+  return o;
 
   _.assert( _.mapIs( o ) );
   _.assert( _.longIs( o.input ) );
 
-  o = self._transformEnd( o );
+  let o4 = self._transformEnd( o );
+  _.assert( o4 === o );
 
   return o;
 }
@@ -90,20 +107,20 @@ function _transformAct( o )
   _.assert( _.mapIs( o ) );
   _.assert( _.longIs( o.input ) );
 
-  o.pure = self._strConcat( o.input );
-  o.outputForPrinter = [ o.pure ];
-  o.outputForTerminal = [ o.pure ];
+  // o.outputSplitted;
+  // o._outputForPrinter = [ o.joinedInput ];
+  // o._outputForTerminal = [ o.joinedInput ];
 
-  /* !!! remove later */
-
-  _.accessor.forbid
-  ({
-    object : o,
-    names :
-    {
-      output : 'output',
-    }
-  });
+  // /* !!! remove later */
+  //
+  // _.accessor.forbid
+  // ({
+  //   object : o,
+  //   names :
+  //   {
+  //     output : 'output',
+  //   }
+  // });
 
   return o;
 }
@@ -213,24 +230,16 @@ function _writeAct( channelName, args )
 {
   let self = this;
 
+  _.assert( arguments.length === 2 );
+  _.assert( _.longHas( self.Channel, channelName ) );
+
   let o = self.transform({ input : args, channelName });
 
-  _.assert( o.outputForPrinter );
+  _.assert( o.output !== undefined );
+  // _.assert( o._outputForPrinter );
 
   return o;
-  // return self;
 }
-
-// function write()
-// {
-//   let self = this;
-//
-//   let o = self.transform({ input : arguments });
-//
-//   _.assert( o.outputForPrinter );
-//
-//   return self;
-// }
 
 //
 

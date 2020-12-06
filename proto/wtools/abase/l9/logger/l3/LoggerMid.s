@@ -32,9 +32,9 @@ function init( o )
 
   _.assert( arguments.length === 0 | arguments.length === 1 );
 
-  if( Config.debug )
-  if( o.scriptStack === undefined )
-  o.scriptStack = _.introspector.stack([ 1, Infinity ]);
+  // if( Config.debug )
+  // if( o.scriptStack === undefined )
+  // o.scriptStack = _.introspector.stack([ 1, Infinity ]);
 
   Parent.prototype.init.call( self, o );
 
@@ -68,20 +68,33 @@ function _transformBegin( o )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( self.onTransformBegin )
-  o = self.onTransformBegin( o );
+  {
+    let o2 = self.onTransformBegin( o );
+    _.assert( o2 === o, 'Callback::onTransformBegin should return the argument' );
+  }
 
-  if( !o )
-  return;
+  if( o.discarding )
+  return o;
+
+  // if( !o )
+  // return;
 
   if( !self.verboseEnough() )
-  return;
+  {
+    o.discarding = true;
+    return o;
+  }
 
-  o = Parent.prototype._transformBegin.call( self, o );
+  let o2 = Parent.prototype._transformBegin.call( self, o );
+  _.assert( o === o2 );
 
-  if( !o )
-  return;
+  if( o.discarding )
+  return o;
 
-  self._laterActualize();
+  // if( !o )
+  // return;
+
+  self._laterActualize(); /* xxx : remove? */
 
   return o;
 }
@@ -97,10 +110,11 @@ function _transformEnd( o )
   if( self.onTransformEnd )
   self.onTransformEnd( o );
 
-  o = Parent.prototype._transformEnd.call( self, o );
+  let o2 = Parent.prototype._transformEnd.call( self, o );
+  _.assert( o2 === o );
 
-  if( !o )
-  return;
+  // if( !o )
+  // return;
 
   return o;
 }
@@ -559,8 +573,8 @@ let Composes =
 
 }
 
-if( Config.debug )
-Composes.scriptStack = null;
+// if( Config.debug )
+// Composes.scriptStack = null;
 
 let Aggregates =
 {
@@ -680,7 +694,6 @@ _.EventHandler.mixin( Self );
 // --
 
 _[ Self.shortName ] = Self;
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 

@@ -72,9 +72,6 @@ function _initChainingMixinChannel( mixinDescriptor, channel )
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
   _.assert( _.strIs( channel ) );
 
-  // if( proto[ channel ] )
-  // return;
-
   /* */
 
   proto[ channel ] = write;
@@ -87,7 +84,6 @@ function _initChainingMixinChannel( mixinDescriptor, channel )
   function write()
   {
     this._writeAct( channel, arguments );
-    // this._writeAct( channel, _.longSlice( arguments ) ); /* yyy */
     return this;
   }
 
@@ -144,7 +140,6 @@ function finit( original )
   {
     let self = this;
 
-    // debugger; xxx
     self.chainer.finit();
 
     let result = original.apply( self, arguments );
@@ -187,41 +182,58 @@ function _writeToChannelWithoutExclusion( channelName, args )
   _.assert( _.strIs( channelName ) );
   _.assert( _.longIs( args ) );
 
-  // debugger;
-  args = _.filter_( null, args, ( a ) => a ); // yyy
-  if( !args.length ) // yyy
-  return; // yyy
-
-  let o = self.transform({ input : args, channelName });
-
-  if( !o )
+  args = _.filter_( null, args, ( a ) => a );
+  if( !args.length )
   return;
 
-  self.outputs.forEach( ( cd ) =>
+  let transformation =
   {
-    let outputChainer = cd.outputPrinter[ chainerSymbol ];
-    let outputData = cd.outputPrinter.isPrinter ? o.outputForPrinter : o.outputForTerminal;
+    input : args,
+    channelName,
+  }
 
+  // let transformation = self.transform({ input : args, channelName });
+  // if( !transformation )
+  // return;
+
+  self.outputs.forEach( ( chainLink ) =>
+  {
+    let outputChainer = chainLink.outputPrinter[ chainerSymbol ];
+
+    transformation.chainLink = chainLink;
+    let transformation2 = self.transform( transformation );
+    _.assert( transformation === transformation2 );
+
+    if( transformation.discarding )
+    return;
+    // if( !transformation )
+    // return;
+
+    // let outputData = chainLink.outputPrinter.isPrinter ? transformation._outputForPrinter : transformation._outputForTerminal;
+    let outputData = transformation.output;
     _.assert( _.longIs( outputData ) );
 
-    if( cd.originalOutput )
+    debugger;
+
+    if( chainLink.originalOutput )
     {
-      return outputChainer.originalWrite[ channelName ].apply( cd.outputPrinter, outputData );
+      return outputChainer.originalWrite[ channelName ].apply( chainLink.outputPrinter, outputData );
     }
 
-    if( cd.write && cd.write[ channelName ] )
+    if( chainLink.write && chainLink.write[ channelName ] )
     {
-      cd.write[ channelName ].apply( cd.outputPrinter, outputData );
+      chainLink.write[ channelName ].apply( chainLink.outputPrinter, outputData );
     }
     else
     {
-      _.assert( _.routineIs( cd.outputPrinter[ channelName ] ) );
-      cd.outputPrinter[ channelName ].apply( cd.outputPrinter, outputData );
+      _.assert( _.routineIs( chainLink.outputPrinter[ channelName ] ) );
+      chainLink.outputPrinter[ channelName ].apply( chainLink.outputPrinter, outputData );
+      /* xxx : use _writeAct here */
     }
 
   });
 
-  return o;
+  return transformation;
 }
 
 //
@@ -374,7 +386,6 @@ function _writeToChannelIn( channelName, args )
 function outputTo( output, o )
 {
   let self = this;
-  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.outputTo, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -383,10 +394,8 @@ function outputTo( output, o )
   o2.inputPrinter = self;
   o2.outputPrinter = output;
   o2.inputCombining = o.combining;
-  // o2.outputCombining = o.combining;
   delete o2.combining;
 
-  // return chainer._chain( o2 );
   return _.Chainer._chain( o2 );
 }
 
@@ -485,7 +494,6 @@ function outputUnchain( output )
 function inputFrom( input, o )
 {
   let self = this;
-  // let chainer = self[ chainerSymbol ];
 
   o = _.routineOptions( self.inputFrom, o );
   _.assert( arguments.length === 1 || arguments.length === 2 );
@@ -493,11 +501,9 @@ function inputFrom( input, o )
   let o2 = _.mapExtend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self;
-  // o2.inputCombining = o.combining;
   o2.outputCombining = o.combining;
   delete o2.combining;
 
-  // return chainer._chain( o2 );
   return _.Chainer._chain( o2 );
 }
 
@@ -611,7 +617,6 @@ function ConsoleBar( o )
 
     _.assert( !o.barPrinter.inputs.length );
     _.assert( !o.barPrinter.outputs.length );
-    // _.assert( !o.outputPrinterHadOutputs );
 
     o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
     o.outputPrinter.outputUnchain();
@@ -790,8 +795,6 @@ function _outputSet( output )
   else
   self.outputUnchain();
 
-  // self.outputTo( output, { combining : 'rewrite' } );
-
 }
 
 //
@@ -950,19 +953,6 @@ let Functors =
 
 let Supplement =
 {
-
-  // // write
-  //
-  // _writeAct,
-  // _writeToChannelWithoutExclusion,
-  // _writeToChannelUp,
-  // _writeToChannelDown,
-  // _writeToChannelIn,
-  //
-  // // init
-  //
-  // _initChainingMixin,
-  // _initChainingMixinChannel,
 
 }
 

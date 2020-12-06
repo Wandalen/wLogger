@@ -74,7 +74,7 @@ function prepareInfo()
       'darwin' : 1,
       'linux' : 2,
     }
-    row[ rowMap[ currentPlatform ] ]= data.outputForTerminal[ 0 ];
+    row[ rowMap[ currentPlatform ] ]= data.output;
   }
   var silencedLogger = new _.Logger
   ({

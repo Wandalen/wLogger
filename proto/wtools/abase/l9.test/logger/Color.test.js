@@ -7,13 +7,8 @@
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/logger/entry/Logger.s' );
-  let _global = _global_;
-  let _ = _global_.wTools;
-
+  let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
-
 }
 
 let _global = _global_;
@@ -34,7 +29,7 @@ var _escaping = function( str )
 function colorConsole( test )
 {
   var got;
-  var onTransformEnd = function( args ) { got = args.outputForTerminal };
+  var onTransformEnd = function( args ) { got = args._outputForTerminal };
   var logger = new _.Logger({ output : null, onTransformEnd });
 
   test.case = 'case1';
