@@ -4101,7 +4101,7 @@ function chainWithEmptyConsole( test )
   let consolePrinter = console;
 
   let consoleChainer = consolePrinter[ Symbol.for( 'chainer' ) ] || _.Chainer.MakeFor( consolePrinter );
-  let originalWrite = consoleChainer.originalWrite;
+  let originalWriteMap = consoleChainer.originalWriteMap;
 
   var consoleInputs = consoleChainer.inputs.slice();
   var consoleOutputs = consoleChainer.outputs.slice();
@@ -4123,7 +4123,7 @@ function chainWithEmptyConsole( test )
   var methodsPreserved = true;
   _.Chainer.Channel.forEach( ( c ) =>
   {
-    if(  consolePrinter[ c ] !== originalWrite[ c ] )
+    if(  consolePrinter[ c ] !== originalWriteMap[ c ] )
     methodsPreserved = false;
   });
 
@@ -4140,9 +4140,9 @@ function chainWithEmptyConsole( test )
   var methodsModified = true;
   _.Chainer.Channel.forEach( ( c ) =>
   {
-    if(  consolePrinter[ c ] === originalWrite[ c ] )
+    if(  consolePrinter[ c ] === originalWriteMap[ c ] )
     methodsModified = false;
-    if(  consolePrinter[ c ] !== consoleChainer.writeFromConsole[ c ] )
+    if(  consolePrinter[ c ] !== consoleChainer.readFromMap[ c ] )
     methodsModified = false;
   });
 
@@ -4156,7 +4156,7 @@ function chainWithEmptyConsole( test )
   var methodsRestored = true;
   _.Chainer.Channel.forEach( ( c ) =>
   {
-    if(  consolePrinter[ c ] !== originalWrite[ c ] )
+    if(  consolePrinter[ c ] !== originalWriteMap[ c ] )
     methodsRestored = false;
   });
 

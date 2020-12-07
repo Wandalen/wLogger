@@ -257,8 +257,8 @@ function _inputFromConsole( cd )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    _.assert( _.routineIs( inputChainer.writeFromConsole[ channel ] ) );
-    cd.inputPrinter[ channel ] = inputChainer.writeFromConsole[ channel ];
+    _.assert( _.routineIs( inputChainer.readFromMap[ channel ] ) );
+    cd.inputPrinter[ channel ] = inputChainer.readFromMap[ channel ];
   });
 
 }
@@ -280,7 +280,7 @@ function _outputToConsole( cd )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    cd.write[ channel ] = outputChainer.writeFromConsole[ channel ];
+    cd.write[ channel ] = outputChainer.readFromMap[ channel ];
   });
 
 }
@@ -686,7 +686,8 @@ function _restoreOriginalWriteConsole( chainer )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    chainer.printer[ channel ] = chainer.originalWrite[ channel ];
+    _.assert( _.routineIs( chainer.originalWriteMap[ channel ] ) );
+    chainer.printer[ channel ] = chainer.originalWriteMap[ channel ];
   });
 
 }
@@ -758,22 +759,22 @@ function MakeFor( printer )
 
   self.Channel.forEach( ( channel, c ) =>
   {
-    _.assert( _.routineIs( printer[ channel ] ), () => 'console should have method ' + _.strQuote( channel ) );
+    _.assert( _.routineIs( printer[ channel ] ), () => 'Console should have method ' + _.strQuote( channel ) );
 
     if( _.consoleIs( printer ) )
     {
-      chainer.originalWrite[ channel ] = printer[ channel ];
+      chainer.originalWriteMap[ channel ] = printer[ channel ];
     }
-    else chainer.originalWrite[ channel ] = function writeToChannelWithoutExclusion()
+    else chainer.originalWriteMap[ channel ] = function writeToChannelWithoutExclusion()
     {
       debugger;
       return this._writeToChannelWithoutExclusion( channel, arguments );
     }
 
     if( _.consoleIs( printer ) )
-    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToConsole, [ channel, printer ] );
+    chainer.readFromMap[ channel ] = _.routineJoin( undefined, self._printerReadFromConsole, [ channel, printer ] );
     else
-    chainer.writeFromConsole[ channel ] = _.routineJoin( undefined, self._chainerWriteToPrinter, [ channel ] );
+    chainer.readFromMap[ channel ] = _.routineJoin( undefined, self._printerReadFromPrinter, [ channel ] );
 
   });
 
@@ -782,7 +783,7 @@ function MakeFor( printer )
 
 //
 
-function _chainerWriteToConsole( channel, defaultConsole )
+function _printerReadFromConsole( channel, defaultConsole )
 {
   let result;
   let console = this || defaultConsole;
@@ -794,30 +795,29 @@ function _chainerWriteToConsole( channel, defaultConsole )
   let args = _.longSlice( arguments, 2 );
 
   _.assert( _.arrayIs( cds ) );
-  _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );
+  _.assert( _.routineIs( chainer.originalWriteMap[ channel ] ) );
 
   if( chainer.exclusiveOutputPrinter )
   {
     result = chainer.exclusiveOutputPrinter[ channel ].apply( chainer.exclusiveOutputPrinter, args );
+    return result;
+  }
+  else
+  {
+    cds.forEach( ( cd ) =>
+    {
+      _.assert( cd.inputPrinter === console );
+      if( !chainer.exclusiveOutputPrinter || cd.originalOutput )
+      cd.outputPrinter[ channel ].apply( cd.outputPrinter, args );
+    });
+    return chainer.originalWriteMap[ channel ].apply( console, args );
   }
 
-  if( !chainer.exclusiveOutputPrinter /*|| chainer.hasOriginalOutputs*/ )
-  cds.forEach( ( cd ) =>
-  {
-    _.assert( cd.inputPrinter === console );
-    if( !chainer.exclusiveOutputPrinter || cd.originalOutput )
-    cd.outputPrinter[ channel ].apply( cd.outputPrinter, args );
-  });
-
-  if( chainer.exclusiveOutputPrinter )
-  return result;
-  else
-  return chainer.originalWrite[ channel ].apply( console, args );
 }
 
 //
 
-function _chainerWriteToPrinter( channel )
+function _printerReadFromPrinter( channel )
 {
   let result;
   let self = this;
@@ -825,10 +825,11 @@ function _chainerWriteToPrinter( channel )
   let cds = chainer.outputs;
   let args = _.longSlice( arguments, 1 );
 
-  debugger; xxx
+  _.assert( 0, 'not tested' );
+  /* xxx */
 
   _.assert( _.arrayIs( cds ) );
-  _.assert( _.routineIs( chainer.originalWrite[ channel ] ) );
+  _.assert( _.routineIs( chainer.originalWriteMap[ channel ] ) );
 
   if( chainer.exclusiveOutputPrinter )
   {
@@ -838,7 +839,7 @@ function _chainerWriteToPrinter( channel )
   if( chainer.exclusiveOutputPrinter )
   return result;
   else
-  return chainer.originalWrite[ channel ].apply( self, arguments );
+  return chainer.originalWriteMap[ channel ].apply( self, arguments );
 
 }
 
@@ -1023,6 +1024,7 @@ function _chainDescriptorLike( src )
 
 let chainerSymbol = Symbol.for( 'chainer' );
 
+/* xxx : use blueprint */
 function ChainDescriptor(){};
 ChainDescriptor.prototype = Object.create( null );
 
@@ -1063,8 +1065,8 @@ let Associates =
   printer : null,
   inputs : _.define.own( [] ),
   outputs : _.define.own( [] ),
-  originalWrite : _.define.own( {} ),
-  writeFromConsole : _.define.own( {} ),
+  originalWriteMap : _.define.own( {} ),
+  readFromMap : _.define.own( {} ),
   exclusiveOutputPrinter : null,
 }
 
@@ -1074,13 +1076,14 @@ let Restricts =
 
 let Statics =
 {
+
   _chain,
 
   Get,
   MakeFor,
   _chainDescriptorMake,
-  _chainerWriteToConsole,
-  _chainerWriteToPrinter,
+  _printerReadFromConsole,
+  _printerReadFromPrinter,
 
   ChainDescriptor,
   ChainDescriptorFields,
@@ -1134,8 +1137,8 @@ let Extension =
   _chainDescriptorMake,
   _chainDescriptorFree,
   MakeFor,
-  _chainerWriteToConsole,
-  _chainerWriteToPrinter,
+  _printerReadFromConsole,
+  _printerReadFromPrinter,
 
   //
 
@@ -1182,7 +1185,6 @@ _.Copyable.mixin( Self );
 // --
 
 _[ Self.shortName ] = Self;
-
 if( typeof module !== 'undefined' )
 module[ 'exports' ] = Self;
 

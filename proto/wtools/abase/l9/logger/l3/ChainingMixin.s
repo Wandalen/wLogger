@@ -217,7 +217,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
     if( chainLink.originalOutput )
     {
-      return outputChainer.originalWrite[ channelName ].apply( chainLink.outputPrinter, outputData );
+      return outputChainer.originalWriteMap[ channelName ].apply( chainLink.outputPrinter, outputData );
     }
 
     if( chainLink.write && chainLink.write[ channelName ] )
