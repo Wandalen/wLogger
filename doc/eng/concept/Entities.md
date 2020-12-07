@@ -1,4 +1,5 @@
-# Entities :
+# Entities
+Overview of the entities presented in the module.
 
 ## Low level ( Parent = null ) :
 
