@@ -8,61 +8,61 @@
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_loggerbasic">
+  <summary><a href="./architecture/Overview.md#class-loggerbasic">
     Class LoggerBasic
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_chainer">
+  <summary><a href="./architecture/Overview.md#class-chainer">
     Class Chainer
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_chainerchaindescriptor">
+  <summary><a href="./architecture/Overview.md#class-chainerchaindescriptor">
     Class Chainer.ChainDescriptor
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_printerchainingmixin">
+  <summary><a href="./architecture/Overview.md#class-printerchainingmixin">
     Class PrinterChainingMixin
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_printercoloredmixin">
+  <summary><a href="./architecture/Overview.md#class-printercoloredmixin">
     Class PrinterColoredMixin
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_loggermid">
+  <summary><a href="./architecture/Overview.md#class-loggermid">
     Class LoggerMid
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_logger">
+  <summary><a href="./architecture/Overview.md#class-logger">
     Class Logger
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_loggerprime">
+  <summary><a href="./architecture/Overview.md#class-loggerprime">
     Class LoggerPrime
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_printertolayeredhtml">
+  <summary><a href="./architecture/Overview.md#class-printertolayeredhtml">
     Class PrinterToLayeredHtml
   </a></summary>
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-_loggertostring">
+  <summary><a href="./architecture/Overview.md#class-loggertostring">
     Class LoggerToString
   </a></summary>
 </details>
