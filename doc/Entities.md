@@ -28,8 +28,8 @@ Class that creates a logger for printing colorful and well formatted diagnostic 
 Parent : _.Logger
 
 ### Class _.PrinterToLayeredHtml
-Class that Creates a printer that writes messages into a DOM container. Parent : _.Logger.
+Class that creates a printer that writes messages into a DOM container. Parent : _.Logger.
 
-### Class _.Logger
-Class that creates a logger for printing colorful and well formatted diagnostic code. Parent : _.LoggerMid.
+### Class _.LoggerToString
+Class that creates a printer that collects messages into a single string. Parent : _.LoggerMid.
 
