@@ -20,7 +20,7 @@
 </details>
 
 <details>
-  <summary><a href="./architecture/Entities.md#class-_chainerdescriptor">
+  <summary><a href="./architecture/Entities.md#class-_chainerchaindescriptor">
     Class _.Chainer.ChainDescriptor
   </a></summary>
 </details>
