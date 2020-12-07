@@ -26,7 +26,7 @@ Class that extends logger with input transforming, attributing and verbosity con
 Class that creates a logger for printing colorful and well formatted diagnostic code. Parent : _.LoggerMid.
 
 ### Class _.LoggerPrime
-Parent : _.Logger
+Class that creates a logger for printing colorful and well formatted diagnostic code. Parent : _.Logger
 
 ### Class _.PrinterToLayeredHtml
 Class that creates a printer that writes messages into a DOM container. Parent : _.Logger.
