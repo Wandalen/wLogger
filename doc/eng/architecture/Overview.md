@@ -8,7 +8,7 @@ Class with basic abilities of the printer: input transformation, verbosity level
 Class that encapsulates chainability of printers, loggers and consoles.
 Several printerLike entities ( console, stream, process ) can be chained together, modifying and transfering data.
 
-### Class Chainer.ChainDescriptor
+### Class ChainDescriptor
 Class that connects two printerLike entities.
 
 ### Class PrinterChainingMixin

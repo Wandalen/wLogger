@@ -20,8 +20,8 @@
 </details>
 
 <details>
-  <summary><a href="./architecture/Overview.md#class-chainerchaindescriptor">
-    Class Chainer.ChainDescriptor
+  <summary><a href="./architecture/Overview.md#class-chaindescriptor">
+    Class ChainDescriptor
   </a></summary>
 </details>
 
