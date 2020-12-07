@@ -213,8 +213,6 @@ function _writeToChannelWithoutExclusion( channelName, args )
     let outputData = transformation.output;
     _.assert( _.longIs( outputData ) );
 
-    debugger;
-
     if( chainLink.originalOutput )
     {
       return outputChainer.originalWriteMap[ channelName ].apply( chainLink.outputPrinter, outputData );
