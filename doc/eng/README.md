@@ -21,7 +21,7 @@
 
 <details>
   <summary><a href="./architecture/Entities.md#class-_chainerdescriptor">
-    _.Chainer.ChainDescriptor
+    Class _.Chainer.ChainDescriptor
   </a></summary>
 </details>
 
