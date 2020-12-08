@@ -341,18 +341,6 @@ function colorConsoleDirectives( test )
     test.identical( escape( got.output ), escape( [ o.text ] ) );
   }
 
-  /*
-  - got :
-    '[ 'text' ]'
-  - expected :
-    '[
-      'teoreground: default❯'
-    ]'
-  - difference :
-    '[*
-  
-  */
-
   // FAILS
   // runCase
   // ({
@@ -373,6 +361,19 @@ function colorConsoleDirectives( test )
     text : '❮foreground: red❯text❮foreground: default❯',
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
+
+  /*
+  - got :
+    '[ 'text' ]'
+  - expected :
+    '[
+      'teoreground: default❯'
+    ]'
+  - difference :
+    '[*
+  
+  */
+
   // FAILS
   // runCase
   // ({

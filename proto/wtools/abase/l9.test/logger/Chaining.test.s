@@ -1532,7 +1532,7 @@ function _output( o )
   test.case = 'combining : rewrite, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1542,15 +1542,15 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : for printer B', 'end : printerB : for printer B' */ ] );
+  test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
   test.case = 'combining : rewrite, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
   var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
   var hooked = [];
@@ -1568,17 +1568,17 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, inputPrinter );
   test.identical( printerB.inputs[ 1 ].inputPrinter, printerA );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : for printer B', 'end : printerB : for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
   test.case = 'combining : append, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1588,17 +1588,17 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /* 'begin : printerB : for printer B', 'end : printerB : for printer B' */ ] );
+  test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
   test.case = 'combining : append, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1615,22 +1615,22 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, inputPrinter );
   test.identical( printerB.inputs[ 1 ].inputPrinter, printerA );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-    'begin : printerB : for printer B', 'end : printerB : for printer B'*/
+    'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
+    'begin : printerB : for printer B', 'end : printerB : for printer B'
   ]
   test.identical( hooked, expected );
 
   test.case = 'combining : prepend, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
   test.will = 'printerA must have printerB in outputs'
@@ -1640,17 +1640,17 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /* 'begin : printerB : for printer B', 'end : printerB : for printer B' */ ] );
+  test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
   test.case = 'combining : prepend, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1667,15 +1667,15 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 2 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, inputPrinter );
   test.identical( printerB.inputs[ 1 ].inputPrinter, printerA );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : printerB : for printer B', 'end : printerB : for printer B',
-    'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'*/
+    'begin : printerB : for printer B', 'end : printerB : for printer B',
+    'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
   ]
   test.identical( hooked, expected );
 
@@ -1684,7 +1684,7 @@ function _output( o )
   test.case = 'combining : supplement, printers have no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   var result = printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
   test.will = 'printerA must  have printerB in outputs'
@@ -1694,19 +1694,19 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : for printer B', 'end : printerB : for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
 
   /* */
 
   test.case = 'combining : prepend, printers have other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( outputPrinter );
   printerB.inputFrom( inputPrinter );
@@ -1722,13 +1722,13 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, inputPrinter );
   printerA.log( 'for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'*/
+    'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
   ]
   test.identical( hooked, expected );
 
@@ -1975,8 +1975,8 @@ function _output( o )
   test.case = 'combining : rewrite';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( console );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
@@ -1991,21 +1991,21 @@ function _output( o )
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : A for printer B', 'end : printerB : A for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
   test.will = 'unchain exclusive output, printerC now must get the message';
   printerA.outputUnchain( printerB );
   hooked = [];
   printerA.log( 'A for printer C' );
-  test.identical( hooked, [ /*'begin : printerC : A for printer C', 'end : printerC : A for printer C'*/ ] );
+  test.identical( hooked, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
 
   test.case = 'combining : append';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
@@ -2019,21 +2019,21 @@ function _output( o )
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : A for printer B', 'end : printerB : A for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
   test.will = 'unchain exclusive output, printerC now must get the message';
   printerA.outputUnchain( printerB );
   hooked = [];
   printerA.log( 'A for printer C' );
-  test.identical( hooked, [ /*'begin : printerC : A for printer C', 'end : printerC : A for printer C'*/ ] );
+  test.identical( hooked, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
 
   test.case = 'combining : prepend';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
@@ -2047,21 +2047,21 @@ function _output( o )
   test.true( printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerB : A for printer B', 'end : printerB : A for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
   test.will = 'unchain exclusive output, printerC now must get the message';
   printerA.outputUnchain( printerB );
   hooked = [];
   printerA.log( 'A for printer C' );
-  test.identical( hooked, [ /*'begin : printerC : A for printer C', 'end : printerC : A for printer C'*/ ] );
+  test.identical( hooked, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
 
   test.case = 'combining : supplement';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
@@ -2073,10 +2073,10 @@ function _output( o )
   test.will = 'printerB must have printerA in inputs'
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 0 );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
-  test.identical( hooked, [ /*'begin : printerC : A for printer B', 'end : printerC : A for printer B'*/ ] );
+  test.identical( hooked, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
 
   test.close( 'printer -> exclusive -> printer' );
 
@@ -2228,8 +2228,8 @@ function _output( o )
   test.case = 'combining : rewrite';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( console );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
@@ -2244,21 +2244,21 @@ function _output( o )
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'*/
+    'begin : printerB : A for printer B', 'end : printerB : A for printer B',
+    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
   ]
   test.identical( hooked, expected );
 
   test.case = 'combining : append';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
   printerA.outputTo( printerC );
@@ -2272,21 +2272,21 @@ function _output( o )
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'*/
+    'begin : printerB : A for printer B', 'end : printerB : A for printer B',
+    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
   ]
   test.identical( hooked, expected );
 
   test.case = 'combining : prepend';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
 
   printerA.outputTo( printerC );
@@ -2301,20 +2301,20 @@ function _output( o )
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-    'begin : printerC : A for printer B', 'end : printerC : A for printer B'*/
+    'begin : printerB : A for printer B', 'end : printerB : A for printer B',
+    'begin : printerC : A for printer B', 'end : printerC : A for printer B'
   ]
   test.identical( hooked, expected );
 
   test.case = 'combining : supplement, no other chains';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
   var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
@@ -2327,12 +2327,12 @@ function _output( o )
   test.true( !printerB.hasInputClose( printerA ) );
   test.identical( printerB.inputs.length, 1 );
   test.identical( printerB.inputs[ 0 ].inputPrinter, printerA );
-  test.identical( printerB.outputs.length, 0 );
+  test.identical( printerB.outputs.length, 1 );
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
   [
-    /*'begin : printerB : A for printer B', 'end : printerB : A for printer B'*/
+    'begin : printerB : A for printer B', 'end : printerB : A for printer B'
   ]
   test.identical( hooked, expected );
 
@@ -2340,7 +2340,7 @@ function _output( o )
 
   var printerA = new _.Logger({ name : 'printerA' });
   var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-  var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+  var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
   var hooked = [];
   printerA.outputTo( printerC );
   printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
@@ -2356,7 +2356,7 @@ function _output( o )
   printerA.log( 'A for printer B' );
   test.will = 'message from printerA must reach both of handlers';
   var expected =
-  [ /*'begin : printerC : A for printer B', 'end : printerC : A for printer B'*/ ]
+  [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ]
   test.identical( hooked, expected );
 
   test.close( 'printer -> original -> printer' );
@@ -2501,9 +2501,9 @@ function _output( o )
   test.case = 'two otputs';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
-  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-  var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 }); /* onTransformBegin is not called */
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  }); /* onTransformBegin is not called */
+  var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
 
   printerA.outputTo( printerO, { originalOutput : 1 } );
   printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
@@ -2514,11 +2514,13 @@ function _output( o )
 
   printerA.log( 'for printerB' );
 
-  var expected =
-  [
-    /*'begin : printerB : printerEx : for printerB',
-    'end : printerB : printerEx : for printerB'*/
-  ];
+  /* ORIGINAL */
+  // var expected =
+  // [
+  //   'begin : printerB : printerEx : for printerB',
+  //   'end : printerB : printerEx : for printerB'
+  // ];
+  var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
   test.identical( hooked, expected );
 
   function onTransformBegin2( o )
