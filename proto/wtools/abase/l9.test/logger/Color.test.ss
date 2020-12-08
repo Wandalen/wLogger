@@ -338,6 +338,7 @@ function colorConsoleDirectives( test )
 
     test.identical( escape( got.output ), escape( [ o._outputForTerminal ] ) );
     debugger;
+    //
     test.identical( escape( got.output ), escape( [ o.text ] ) );
   }
 
@@ -375,15 +376,15 @@ function colorConsoleDirectives( test )
   */
 
   // FAILS
-  // runCase
-  // ({
-  //   inputGray : 0,
-  //   outputGray : 1,
-  //   inputRaw : 0,
-  //   outputRaw : 0,
-  //   text : '❮foreground: red❯text❮foreground: default❯',
-  //   _outputForTerminal : 'text'
-  // })
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '❮foreground: red❯text❮foreground: default❯',
+    _outputForTerminal : 'text'
+  })
 
   runCase
   ({
