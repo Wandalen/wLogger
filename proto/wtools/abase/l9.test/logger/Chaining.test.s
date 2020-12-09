@@ -2512,14 +2512,14 @@ function _output( o )
 
   /* - */
 
-  /***** REVIEW ******/
+  /* REVIEW : onTransformBegin2 callbacks are not called */
   test.open( 'multiple original/exclusive output' );
 
   test.case = 'two otputs';
 
   var printerA = new _.Logger({ name : 'printerA' });
-  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 }); /* onTransformBegin is not called */
-  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  }); /* onTransformBegin is not called */
+  var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+  var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
   var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
 
   printerA.outputTo( printerO, { originalOutput : 1 } );
@@ -2537,6 +2537,8 @@ function _output( o )
   //   'begin : printerB : printerEx : for printerB',
   //   'end : printerB : printerEx : for printerB'
   // ];
+  
+  /* REWRITTEN */
   var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
   test.identical( hooked, expected );
 
@@ -2545,6 +2547,8 @@ function _output( o )
     o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
     return o;
   }
+
+  /* */
 
   test.case = 'two otputs, console as input';
 
@@ -2566,8 +2570,8 @@ function _output( o )
 
   var expected =
   [
-    /*'begin : printerB : printerEx : for printerB',
-    'end : printerB : printerEx : for printerB'*/
+    // 'begin : printerB : printerEx : for printerB',
+    // 'end : printerB : printerEx : for printerB'
   ];
   test.identical( hooked, expected );
 
@@ -2576,6 +2580,8 @@ function _output( o )
     o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
     return o;
   }
+
+  /* */
 
   test.case = 'two otputs, console as input, diff order';
 
@@ -2601,6 +2607,8 @@ function _output( o )
     'end : printerB : printerEx : for printerB'*/
   ];
   test.identical( hooked, expected );
+
+  /* */
 
   test.case = 'two otputs, different order';
 
@@ -2631,6 +2639,8 @@ function _output( o )
     return o;
   }
 
+  /* */
+
   test.case = 'multiple outputs, different order';
 
   var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
@@ -2651,6 +2661,8 @@ function _output( o )
   printerA.log( 'for E' );
   var expected = [ /*'end : printerE : printerD : printerC : printerB : for E'*/ ];
   test.identical( hooked, expected )
+
+  /* */
 
   test.case = 'multiple outputs, different order';
 
@@ -2673,6 +2685,8 @@ function _output( o )
   var expected = [ /*'end : printerE : printerD : printerB : printerA : for E'*/ ];
   test.identical( hooked, expected )
 
+  /* */
+
   test.case = 'multiple outputs, different order';
 
   var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
@@ -2693,6 +2707,8 @@ function _output( o )
   printerA.log( 'for E' );
   var expected = [ /*'end : printerE : printerD : printerC : printerB : printerA : for E'*/ ];
   test.identical( hooked, expected );
+
+  /* */
 
   test.case = 'multiple outputs, different order';
 
