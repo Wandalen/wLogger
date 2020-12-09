@@ -11,6 +11,7 @@ if( typeof module !== 'undefined' )
   let _ = _global_.wTools;
 
   _.include( 'wTesting' );
+  _.include( 'wConsequence' );
 
 }
 
@@ -334,6 +335,7 @@ function colorConsoleDirectives( test )
     l.inputRaw = o.inputRaw;
     l.outputRaw = o.outputRaw;
 
+    /* ORIGINAL */
     l.log( o.text );
 
     test.identical( escape( got.output ), escape( [ o._outputForTerminal ] ) );
@@ -343,15 +345,15 @@ function colorConsoleDirectives( test )
   }
 
   // FAILS
-  // runCase
-  // ({
-  //   inputGray : 0,
-  //   outputGray : 0,
-  //   inputRaw : 0,
-  //   outputRaw : 0,
-  //   text : '❮foreground: red❯text❮foreground: default❯',
-  //   _outputForTerminal : '\u001b[91mtext\u001b[39;0m'
-  // })
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 0,
+    text : '❮foreground: red❯text❮foreground: default❯',
+    _outputForTerminal : '\u001b[91mtext\u001b[39;0m'
+  })
 
   runCase
   ({
@@ -372,9 +374,7 @@ function colorConsoleDirectives( test )
     ]'
   - difference :
     '[*
-  
   */
-
   // FAILS
   runCase
   ({
@@ -396,15 +396,15 @@ function colorConsoleDirectives( test )
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
   // FAILS
-  // runCase
-  // ({
-  //   inputGray : 0,
-  //   outputGray : 0,
-  //   inputRaw : 0,
-  //   outputRaw : 1,
-  //   text : '❮foreground: red❯text❮foreground: default❯',
-  //   _outputForTerminal : 'text'
-  // })
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 0,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '❮foreground: red❯text❮foreground: default❯',
+    _outputForTerminal : 'text'
+  })
 
   runCase
   ({
@@ -456,15 +456,15 @@ function colorConsoleDirectives( test )
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
   // FAILS
-  // runCase
-  // ({
-  //   inputGray : 0,
-  //   outputGray : 1,
-  //   inputRaw : 0,
-  //   outputRaw : 1,
-  //   text : '❮foreground: red❯text❮foreground: default❯',
-  //   _outputForTerminal : 'text'
-  // })
+  runCase
+  ({
+    inputGray : 0,
+    outputGray : 1,
+    inputRaw : 0,
+    outputRaw : 1,
+    text : '❮foreground: red❯text❮foreground: default❯',
+    _outputForTerminal : 'text'
+  })
 
   runCase
   ({

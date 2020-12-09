@@ -2531,15 +2531,14 @@ function _output( o )
 
   printerA.log( 'for printerB' );
 
-  /* ORIGINAL */
-  // var expected =
-  // [
-  //   'begin : printerB : printerEx : for printerB',
-  //   'end : printerB : printerEx : for printerB'
-  // ];
+  var expected =
+  [
+    'begin : printerB : printerEx : for printerB',
+    'end : printerB : printerEx : for printerB'
+  ];
   
-  /* REWRITTEN */
-  var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
+  /* ACTUAL output */
+  // var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
   test.identical( hooked, expected );
 
   function onTransformBegin2( o )
