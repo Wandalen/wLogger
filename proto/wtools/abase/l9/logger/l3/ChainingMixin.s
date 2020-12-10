@@ -192,9 +192,12 @@ function _writeToChannelWithoutExclusion( channelName, args )
     channelName,
   }
 
-  // let transformation = self.transform({ input : args, channelName });
-  // if( !transformation )
-  // return;
+  // xxx
+  // self.transform.head.call( self, self.transform, [ transformation ] );
+  // if( self.onWriteBegin )
+  // self.onWriteBegin( transformation );
+  // if( transformation.discarding )
+  // return transformation;
 
   self.outputs.forEach( ( chainLink ) =>
   {
@@ -206,10 +209,7 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
     if( transformation.discarding )
     return;
-    // if( !transformation )
-    // return;
 
-    // let outputData = chainLink.outputPrinter.isPrinter ? transformation._outputForPrinter : transformation._outputForTerminal;
     let outputData = transformation.output;
     _.assert( _.longIs( outputData ) );
 
@@ -230,6 +230,9 @@ function _writeToChannelWithoutExclusion( channelName, args )
     }
 
   });
+
+  if( self.onWriteEnd )
+  self.onWriteEnd( transformation );
 
   return transformation;
 }

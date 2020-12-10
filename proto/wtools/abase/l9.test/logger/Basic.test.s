@@ -49,7 +49,7 @@ function printerIs( test )
 
   test.case = 'LoggerBasic';
   var src = _.LoggerBasic;
-  debugger;
+
   var got = _.printerIs( src );
   test.identical( got, false );
 

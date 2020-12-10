@@ -726,7 +726,7 @@ function clone( test )
   test.identical( printer.inputs[ 0 ].inputPrinter, clonedPrinter.inputs[ 0 ].inputPrinter );
   test.identical( printer.outputs[ 0 ].outputPrinter, clonedPrinter.outputs[ 0 ].outputPrinter );
 
-  var hooked = [];
+  var track = [];
   var expected =
   [
     'inputPrinter : for printers',
@@ -741,11 +741,11 @@ function clone( test )
 
   inputPrinter.log( 'for printers' );
 
-  test.identical( hooked, expected );
+  test.identical( track, expected );
 
   function onTransformEnd( o )
   {
-    hooked.push( this.name + ' : ' + o.input[ 0 ] );
+    track.push( this.name + ' : ' + o.input[ 0 ] );
     return o;
   }
 

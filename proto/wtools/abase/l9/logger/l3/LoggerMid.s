@@ -67,32 +67,31 @@ function _transformBegin( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  if( self.onTransformBegin )
-  {
-    let o2 = self.onTransformBegin( o );
-    _.assert( o2 === o, 'Callback::onTransformBegin should return the argument' );
-  }
+  let o2 = Parent.prototype._transformBegin.call( self, o );
+  _.assert( o === o2 );
 
-  if( o.discarding )
-  return o;
+  // if( self.onTransformBegin )
+  // {
+  //   let o2 = self.onTransformBegin( o );
+  //   _.assert( o2 === o, 'Callback::onTransformBegin should return the argument' );
+  // }
+  //
+  // if( o.discarding )
+  // return o;
 
-  // if( !o )
-  // return;
-
+  // debugger;
   if( !self.verboseEnough() )
   {
+    // debugger;
     o.discarding = true;
     return o;
   }
 
-  let o2 = Parent.prototype._transformBegin.call( self, o );
-  _.assert( o === o2 );
+  // let o2 = Parent.prototype._transformBegin.call( self, o );
+  // _.assert( o === o2 );
 
-  if( o.discarding )
-  return o;
-
-  // if( !o )
-  // return;
+  // if( o.discarding )
+  // return o;
 
   self._laterActualize(); /* xxx : remove? */
 
@@ -107,8 +106,8 @@ function _transformEnd( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
 
-  if( self.onTransformEnd )
-  self.onTransformEnd( o );
+  // if( self.onTransformEnd )
+  // self.onTransformEnd( o );
 
   let o2 = Parent.prototype._transformEnd.call( self, o );
   _.assert( o2 === o );
@@ -566,8 +565,8 @@ let Composes =
   verbosity : 0,
   usingVerbosity : 1,
 
-  onTransformBegin : null,
-  onTransformEnd : null,
+  // onTransformBegin : null,
+  // onTransformEnd : null,
 
   attributes : _.define.own( {} ),
 

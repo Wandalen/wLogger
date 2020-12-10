@@ -72,7 +72,7 @@ function prepareTableInfo()
 
   var silencedLogger = new _.Logger
   ({
-    output : null,
+    output : console,
     onTransformEnd,
   })
   silencedLogger.diagnosingColor = 0;
@@ -114,6 +114,7 @@ function drawTable()
   o2.colWidth = 9;
   o2.colSplits = 1;
   o2.style = 'doubleBorder';
+  debugger;
   logger.log( _.strTable( o2 ).result );
 
   var o2 = Object.create( null );

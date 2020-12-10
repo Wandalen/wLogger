@@ -46,11 +46,14 @@ function init( o )
 // transform
 // --
 
-function transform( o )
+function transform_head( routine, args )
 {
   let self = this;
+  let o = args[ 0 ];
 
-  _.assertMapHasAll( o, transform.defaults );
+  _.assert( args.length === 1 );
+  _.assert( arguments.length === 2 );
+  _.assertMapHasAll( o, routine.defaults );
 
   o.output = null;
   o.discarding = false;
@@ -60,14 +63,20 @@ function transform( o )
   if( o.joinedInput === undefined || o.joinedInput === null )
   o.joinedInput = self._strConcat( o.input );
 
+  return o;
+}
+
+function transform_body( o )
+{
+  let self = this;
+
+  // _.assertMapHasAll( o, transform_body.defaults );
+
   let o2 = self._transformBegin( o );
   _.assert( o2 === o );
 
   if( o.discarding )
   return o;
-
-  // if( !o )
-  // return;
 
   let o3 = self._transformAct( o );
   _.assert( o3 === o );
@@ -84,16 +93,39 @@ function transform( o )
   return o;
 }
 
-transform.defaults =
+transform_body.defaults =
 {
   input : null,
 }
+
+let transform = _.routineUnite( transform_head, transform_body );
 
 //
 
 function _transformBegin( o )
 {
+  let self = this;
+
   _.assert( arguments.length === 1, 'Expects single argument' );
+  _.assertMapHasAll( o, self.transform.defaults );
+
+  o.output = null;
+  o.discarding = false;
+
+  if( o.originalInput === undefined || o.originalInput === null )
+  o.originalInput = o.input;
+  if( o.joinedInput === undefined || o.joinedInput === null )
+  o.joinedInput = self._strConcat( o.input );
+
+  if( self.onTransformBegin )
+  {
+    let o2 = self.onTransformBegin( o );
+    _.assert( o2 === o, 'Callback::onTransformBegin should return the argument' );
+  }
+
+  if( o.discarding )
+  return o;
+
   return o;
 }
 
@@ -129,7 +161,13 @@ function _transformAct( o )
 
 function _transformEnd( o )
 {
+  let self = this;
+
   _.assert( arguments.length === 1, 'Expects single argument' );
+
+  if( self.onTransformEnd )
+  self.onTransformEnd( o );
+
   return o;
 }
 
@@ -233,12 +271,30 @@ function _writeAct( channelName, args )
   _.assert( arguments.length === 2 );
   _.assert( _.longHas( self.Channel, channelName ) );
 
-  let o = self.transform({ input : args, channelName });
+  debugger;
+  let transformation =
+  {
+    input : args,
+    channelName,
+  }
 
-  _.assert( o.output !== undefined );
-  // _.assert( o._outputForPrinter );
+  // xxx
+  self.transform.head.call( self, self.transform, [ transformation ] );
 
-  return o;
+  if( self.onWriteBegin )
+  self.onWriteBegin( transformation );
+
+  if( transformation.discarding )
+  return transformation;
+
+  self.transform( transformation );
+
+  if( self.onWriteEnd )
+  self.onWriteEnd( transformation );
+
+  _.assert( transformation.output !== undefined );
+
+  return transformation;
 }
 
 //
@@ -322,6 +378,12 @@ let Composes =
 
   name : '',
   level : 0,
+
+  onWriteBegin : null,
+  onWriteEnd : null,
+
+  onTransformBegin : null,
+  onTransformEnd : null,
 
 }
 
