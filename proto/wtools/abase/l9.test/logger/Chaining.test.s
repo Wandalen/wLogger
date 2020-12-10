@@ -444,13 +444,14 @@ function consoleChaining( test )
     var l1 = new _.Logger({ output : console });
     var l2 = new _.Logger({ output : console });
     var l3 = new _.Logger({ output : console });
-    var l4 = new _.Logger({ output : null, onTransformEnd });
+    var lSilenced = new _.Logger({ output : null });
+    var l4 = new _.Logger({ output : lSilenced, onTransformEnd });
     l4.inputFrom( console, { combining : 'append' } );
     l1.log( 'l1' );
     l2.log( 'l2' );
     l3.log( 'l3' );
     l4.inputUnchain( console );
-    test.identical( received, [ /*'l1', 'l2', 'l3'*/ ] );
+    test.identical( received, [ 'l1', 'l2', 'l3' ] );
 
     /* */
 
@@ -458,9 +459,10 @@ function consoleChaining( test )
     test.true( !_.Logger.ConsoleIsBarred( console ) );
     var received = [];
     var onTransformEnd = ( o ) => received.push( o.input[ 0 ] );
-    var l1 = new _.Logger({ output : null, onTransformEnd });
-    var l2 = new _.Logger({ output : null, onTransformEnd });
-    var l3 = new _.Logger({ output : null, onTransformEnd });
+    var lSilenced = new _.Logger({ output : null });
+    var l1 = new _.Logger({ output : lSilenced, onTransformEnd });
+    var l2 = new _.Logger({ output : lSilenced, onTransformEnd });
+    var l3 = new _.Logger({ output : lSilenced, onTransformEnd });
 
     l1.inputFrom( console, { combining : 'append' } );
     l2.inputFrom( console, { combining : 'append' } );
@@ -469,7 +471,7 @@ function consoleChaining( test )
     l1.inputUnchain( console );
     l2.inputUnchain( console );
     l3.inputUnchain( console );
-    test.identical( received, [ /*'msg', 'msg', 'msg'*/ ] );
+    test.identical( received, [ 'msg', 'msg', 'msg' ] );
 
     /* */
 
@@ -486,9 +488,10 @@ function consoleChaining( test )
 
     /*outputs*/
 
-    var l4 = new _.Logger({ output : null, onTransformEnd });
-    var l5 = new _.Logger({ output : null, onTransformEnd });
-    var l6 = new _.Logger({ output : null, onTransformEnd });
+    var lSilenced = new _.Logger({ output : null });
+    var l4 = new _.Logger({ output : lSilenced, onTransformEnd });
+    var l5 = new _.Logger({ output : lSilenced, onTransformEnd });
+    var l6 = new _.Logger({ output : lSilenced, onTransformEnd });
 
     l4.inputFrom( console, { combining : 'append' } );
     l5.inputFrom( console, { combining : 'append' } );
@@ -505,7 +508,7 @@ function consoleChaining( test )
     l5.inputUnchain( console );
     l6.inputUnchain( console );
 
-    test.identical( received, [ /*'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3'*/ ] );
+    test.identical( received, [ 'l1', 'l1', 'l1', 'l2', 'l2', 'l2', 'l3', 'l3', 'l3' ] );
 
     /* */
 
@@ -622,24 +625,24 @@ function chainingParallel( test )
 
   test.case = 'case1: 1 -> *';
   var got = [];
-  var l1 = new _.Logger({ onTransformEnd  });
-  var l2 = new _.Logger({ onTransformEnd  });
-  var l3 = new _.Logger({ onTransformEnd  });
+  var l1 = new _.Logger({ output : console, onTransformEnd  });
+  var l2 = new _.Logger({ output : console, onTransformEnd  });
+  var l3 = new _.Logger({ output : console, onTransformEnd  });
   var l4 = new _.Logger({ output : console });
   l4.outputTo( l3, { combining : 'append' } );
   l4.outputTo( l2, { combining : 'append' } );
   l4.outputTo( l1, { combining : 'append' } );
 
   l4.log( 'msg' );
-  var expected = [ /*'msg','msg','msg'*/ ];
+  var expected = [ 'msg','msg','msg' ];
   test.identical( got, expected );
 
   test.case = 'case2: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger({ onTransformEnd });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console, onTransformEnd });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
+  var l4 = new _.Logger({ output : null });
   l2.outputTo( l1, { combining : 'rewrite' } );
   l3.outputTo( l1, { combining : 'rewrite' } );
   l4.outputTo( l1, { combining : 'rewrite' } );
@@ -647,15 +650,15 @@ function chainingParallel( test )
   l2.log( 'l2' );
   l3.log( 'l3' );
   l4.log( 'l4' );
-  var expected = [ /*'l2','l3','l4'*/ ];
+  var expected = [ 'l2','l3','l4' ];
   test.identical( got, expected );
 
   test.case = 'case3: many inputs to 1 logger';
   var got = [];
-  var l1 = new _.Logger({ onTransformEnd  });
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : console });
+  var l1 = new _.Logger({ output : console, onTransformEnd  });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
+  var l4 = new _.Logger({ output : null });
   l1.inputFrom( l2, { combining : 'append' } );
   l1.inputFrom( l3, { combining : 'append' } );
   l1.inputFrom( l4, { combining : 'append' } );
@@ -664,7 +667,7 @@ function chainingParallel( test )
   l3.log( 'l3' );
   l4.log( 'l4' );
 
-  var expected = [ /*'l2','l3','l4'*/ ];
+  var expected = [ 'l2','l3','l4' ];
   test.identical( got, expected );
 
   test.case = 'case3: 1 logger to many loggers';
@@ -700,17 +703,17 @@ function chainingParallel( test )
   var l1 = new _.Logger( { output : null  } );
 
   /* input */
-  var l2 = new _.Logger({ output : console });
-  var l3 = new _.Logger({ output : console });
-  var l4 = new _.Logger({ output : console });
+  var l2 = new _.Logger({ output : null });
+  var l3 = new _.Logger({ output : null });
+  var l4 = new _.Logger({ output : null });
   l1.inputFrom( l2, { combining : 'append' } );
   l1.inputFrom( l3, { combining : 'append' } );
   l1.inputFrom( l4, { combining : 'append' } );
 
   /* output */
-  var l5 = new _.Logger({ onTransformEnd });
-  var l6 = new _.Logger({ onTransformEnd });
-  var l7 = new _.Logger({ onTransformEnd });
+  var l5 = new _.Logger({ output : console, onTransformEnd });
+  var l6 = new _.Logger({ output : console, onTransformEnd });
+  var l7 = new _.Logger({ output : console, onTransformEnd });
 
   l1.outputTo( l5, { combining : 'append' } );
   l1.outputTo( l6, { combining : 'append' } );
@@ -719,7 +722,7 @@ function chainingParallel( test )
   l2.log( 'l2' );
   l3.log( 'l3' );
   l4.log( 'l4' );
-  var expected = [ /*'l2','l2','l2','l3','l3','l3','l4','l4','l4'*/ ];
+  var expected = [ 'l2','l2','l2','l3','l3','l3','l4','l4','l4' ];
   test.identical( got, expected );
 
   /* */

@@ -698,7 +698,7 @@ function clone( test )
 
   var printer = new _.Logger({ name : 'printerA', onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter', onTransformEnd });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformEnd });
 
   printer.outputTo( outputPrinter );
   printer.inputFrom( inputPrinter );
@@ -729,22 +729,14 @@ function clone( test )
   var hooked = [];
   var expected =
   [
-    // 'inputPrinter : for printers',
-
-    // 'printerA : for printers',
-    // 'outputPrinter : for printers',
-
-    // 'clonedPrinter : for printers',
-    // 'outputPrinter : for printers'
-
     'inputPrinter : for printers',
 
     'printerA : for printers',
-
+    'outputPrinter : for printers',
     'inputPrinter : for printers',
 
     'clonedPrinter : for printers',
-    
+    'outputPrinter : for printers'
   ]
 
   inputPrinter.log( 'for printers' );
