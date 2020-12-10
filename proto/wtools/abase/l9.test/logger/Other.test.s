@@ -7,7 +7,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
-  _.include( 'wConsequence' );
+  // _.include( 'wConsequence' );
 }
 
 let _global = _global_;
@@ -759,30 +759,30 @@ function clone( test )
 
 }
 
-function processWarning( test )
-{
-  if( Config.interpreter !== 'njs' )
-  {
-    test.identical( 1, 1 )
-    return
-  }
+// function processWarning( test )
+// {
+//   if( Config.interpreter !== 'njs' )
+//   {
+//     test.identical( 1, 1 )
+//     return
+//   }
 
-  let ready = new _.Consequence();
+//   let ready = new _.Consequence();
 
-  var message = 'Something wrong';
-  process.emitWarning( 'Something wrong' );
-  process.on( 'warning', ( warning ) =>
-  {
-    ready.take( warning )
-  });
-  ready.then( ( got ) =>
-  {
-    test.identical( got.message, message );
-    return null;
-  })
+//   var message = 'Something wrong';
+//   process.emitWarning( 'Something wrong' );
+//   process.on( 'warning', ( warning ) =>
+//   {
+//     ready.take( warning )
+//   });
+//   ready.then( ( got ) =>
+//   {
+//     test.identical( got.message, message );
+//     return null;
+//   })
 
-  return ready;
-}
+//   return ready;
+// }
 
 //
 
@@ -870,7 +870,7 @@ let Self =
     stateChangingValue,
     clone,
     coloringNoColor,
-    processWarning,
+    // processWarning,
     consoleBarExperiment
   },
 
