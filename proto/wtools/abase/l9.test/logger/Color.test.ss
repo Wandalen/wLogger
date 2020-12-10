@@ -11,7 +11,6 @@ if( typeof module !== 'undefined' )
   let _ = _global_.wTools;
 
   _.include( 'wTesting' );
-  _.include( 'wConsequence' );
 
 }
 
