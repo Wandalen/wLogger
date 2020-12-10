@@ -38,25 +38,25 @@ function colorConsole( test )
     debugger;
     got = args.output;
   };
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
 
   test.case = 'case1: dark red text';
   logger.log( _.ct.fg( 'text', 'dark red') );
-  var expected = '\u001b[31mtext\u001b[39;0m';
+  var expected = [ '\u001b[31mtext\u001b[39;0m' ];
   test.identical( logger.foregroundColor, null );
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case2: dark yellow background';
   logger.log( _.ct.bg( 'text', 'dark yellow') );
   test.identical( logger.backgroundColor, null );
-  var expected = '\u001b[43mtext\u001b[49;0m';
+  var expected = [ '\u001b[43mtext\u001b[49;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case3: dark red text on dark yellow background';
   logger.log( _.ct.bg( _.ct.fg( 'text', 'dark red'), 'dark yellow') );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m' ];
   debugger;
   test.identical( escape( got ), escape( expected ) );
   debugger;
@@ -65,7 +65,7 @@ function colorConsole( test )
   logger.log( 'text' + _.ct.fg( _.ct.bg( 'text', 'dark red'), 'dark yellow') + 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = 'text\u001b[33m\u001b[41mtext\u001b[49;0m\u001b[39;0mtext';
+  var expected = [ 'text\u001b[33m\u001b[41mtext\u001b[49;0m\u001b[39;0mtext' ];
   test.identical( escape( got ), escape( expected ) );
 
   test.case = 'case5: unknown color ';
@@ -79,7 +79,7 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = 'text';
+  var expected = [ 'text' ];
   test.identical( got, expected );
 
   //
@@ -91,7 +91,7 @@ function colorConsole( test )
   logger.log( '❮foreground : dark red❯' );
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
-  var expected = '\u001b[31mtext\u001b[39;0m';
+  var expected = [ '\u001b[31mtext\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /**/
@@ -100,7 +100,7 @@ function colorConsole( test )
   logger.log( '❮background : dark red❯' );
   logger.log( 'text' );
   test.identical( logger.backgroundColor, [ 0.5, 0, 0, 1 ] );
-  var expected = '\u001b[41mtext\u001b[49;0m';
+  var expected = [ '\u001b[41mtext\u001b[49;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /**/
@@ -112,7 +112,7 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0, 1 ] );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /**/
@@ -144,12 +144,12 @@ function colorConsole( test )
   // if( isUnix )
   // var expected = '\u001b[34m\u001b[107mtext\u001b[39;0m\u001b[49;0m';
   // else
-  var expected = '\u001b[34m\u001b[47mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[34m\u001b[47mtext\u001b[49;0m\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /**/
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
   test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'aa';
@@ -161,12 +161,12 @@ function colorConsole( test )
   // if( isUnix )
   // var expected = '\u001b[107mtext\u001b[49;0m';
   // else
-  var expected = '\u001b[47mtext\u001b[49;0m';
+  var expected = [ '\u001b[47mtext\u001b[49;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /**/
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
   test.shouldThrowErrorOfAnyKind( () =>
   {
     logger.foregroundColor = 'aa';
@@ -178,13 +178,13 @@ function colorConsole( test )
   logger.log( 'text' );
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
-  var expected = 'text';
+  var expected = [ 'text' ];
   test.identical( escape( got ), escape( expected ) );
 
   //
 
   test.case = 'stacking colors';
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
 
   /**/
 
@@ -200,7 +200,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 0, 0, 0.5, 1 ] )
   test.identical( logger.backgroundColor, [ 0, 0.5, 0, 1 ] )
   logger.log( 'text' );
-  var expected = '\u001b[34m\u001b[42mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[34m\u001b[42mtext\u001b[49;0m\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   //setting to default to get stacked color
@@ -211,7 +211,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0, 1 ] );
   logger.log( 'text' );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   //setting to default, no stacked colors, must be null
@@ -222,7 +222,7 @@ function colorConsole( test )
   test.identical( logger.foregroundColor, null );
   test.identical( logger.backgroundColor, null );
   logger.log( 'text' );
-  var expected = 'text';
+  var expected = [ 'text' ];
   test.identical( escape( got ), escape( expected ) );
 
   //other
@@ -231,23 +231,23 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
   logger.log( '❮outputGray : 1❯' );
   logger.log( '❮foreground : dark red❯' );
   logger.log( '❮background : dark yellow❯' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   test.identical( logger.backgroundColor, [ 0.5, 0.5, 0, 1 ] );
   logger.log( 'text' );
-  var expected = 'text';
+  var expected = [ 'text' ];
   test.identical( escape( got ), escape( expected ) );
   logger.log( '❮outputGray : 0❯' );
   logger.log( 'text' );
-  var expected = '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m';
+  var expected = [ '\u001b[31m\u001b[43mtext\u001b[49;0m\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
 
   /* stacking colors even if outputGray is enabled */
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
   logger.log( '❮outputGray : 1❯' );
   logger.log( '❮foreground : dark red❯' );
   logger.log( '❮foreground : dark blue❯' );
@@ -281,14 +281,14 @@ function colorConsole( test )
 
   /**/
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
   logger.log( '❮inputGray : 1❯' );
   logger.log( '❮foreground : dark red❯' );
   logger.log( '❮inputGray : 0❯' );
   logger.log( '❮foreground : dark red❯' );
   test.identical( logger.foregroundColor, [ 0.5, 0, 0, 1 ] );
   logger.log( 'text' );
-  var expected = '\u001b[31mtext\u001b[39;0m';
+  var expected = [ '\u001b[31mtext\u001b[39;0m' ];
   test.identical( escape( got ), escape( expected ) );
   // test.identical( 0, 1 );
   //inputGray problem, logger of test suit cant override it value correctly, directive is inside of it output
@@ -311,7 +311,7 @@ function colorConsoleDirectives( test )
     // console.log( 'o._outputForPrinter', escape( o.output ) )
   }
 
-  let l = new _.Logger({ output : null, onTransformEnd  });
+  let l = new _.Logger({ output : console, onTransformEnd  });
 
   test.open( 'setting states as property' )
 
@@ -334,13 +334,16 @@ function colorConsoleDirectives( test )
     l.inputRaw = o.inputRaw;
     l.outputRaw = o.outputRaw;
 
+    /* ORIGINAL */
     l.log( o.text );
 
-    test.identical( escape( got.output ), escape( o._outputForTerminal ) );
+    test.identical( escape( got.output ), escape( [ o._outputForTerminal ] ) );
     debugger;
-    test.identical( escape( got.output ), escape( o.text ) );
+    //
+    test.identical( escape( got.output ), escape( [ o.text ] ) );
   }
 
+  // FAILS
   runCase
   ({
     inputGray : 0,
@@ -361,6 +364,17 @@ function colorConsoleDirectives( test )
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
 
+  /*
+  - got :
+    '[ 'text' ]'
+  - expected :
+    '[
+      'teoreground: default❯'
+    ]'
+  - difference :
+    '[*
+  */
+  // FAILS
   runCase
   ({
     inputGray : 0,
@@ -380,7 +394,7 @@ function colorConsoleDirectives( test )
     text : '❮foreground: red❯text❮foreground: default❯',
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
-
+  // FAILS
   runCase
   ({
     inputGray : 0,
@@ -440,7 +454,7 @@ function colorConsoleDirectives( test )
     text : '❮foreground: red❯text❮foreground: default❯',
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
-
+  // FAILS
   runCase
   ({
     inputGray : 0,
@@ -545,7 +559,7 @@ function colorConsoleDirectives( test )
     l[ o.directive ] = 0;
 
     l.log( input );
-    test.identical( escape( got.output ), escape( o.expected ) );
+    test.identical( escape( got.output ), escape( [ o.expected ] ) );
   }
 
   runCase2

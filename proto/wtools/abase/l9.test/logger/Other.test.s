@@ -7,6 +7,7 @@ if( typeof module !== 'undefined' )
 {
   let _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
+  // _.include( 'wConsequence' );
 }
 
 let _global = _global_;
@@ -38,7 +39,7 @@ function onSuiteEnd()
 function currentColor( test )
 {
 
-  var logger = new _.Logger();
+  var logger = new _.Logger({ output : console });
 
   test.case = 'case1 : setting foreground to red';
   logger.log( '❮foreground : default❯❮foreground : dark red❯' );
@@ -258,18 +259,18 @@ function logUp( test )
   var got;
   function onTransformEnd( o ) { got = o.output };
 
-  var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
+  var logger = new _.Logger({ output : console, onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   var msg = 'Up';
   logger.logUp( msg );
-  test.identical( got.length - msg.length, 2 )
+  test.identical( got[ 0 ].length - msg.length, 2 )
 
   test.case = 'case2';
   var msg = 'Up';
   logger.logUp( msg );
   logger.logUp( msg );
-  test.identical( got.length - msg.length, 6 );
+  test.identical( got[ 0 ].length - msg.length, 6 );
 
   test.case = 'case3';
   test.shouldThrowErrorOfAnyKind( function()
@@ -286,13 +287,13 @@ function logDown( test )
   var got;
   function onTransformEnd( o ) { got = o.output };
 
-  var logger = new _.Logger({ output : null, onTransformEnd, outputGray : 1 });
+  var logger = new _.Logger({ output : console, onTransformEnd, outputGray : 1 });
 
   test.case = 'case1';
   logger.up( 2 );
   var msg = 'Down';
   logger.logDown( msg );
-  test.identical( got.length - msg.length, 4 );
+  test.identical( got[ 0 ].length - msg.length, 4 );
 
   test.case = 'case2';
   test.shouldThrowErrorOfAnyKind( function()
@@ -324,48 +325,48 @@ function coloredToHtml( test )
     got = o.output;
   }
 
-  var l = new _.Logger({ output : null, onTransformEnd, writingToHtml : 1 })
+  var l = new _.Logger({ output : console, onTransformEnd, writingToHtml : 1 })
 
   test.case = 'default settings';
 
   var src = 'simple text';
   l.log( src );
-  var expected = 'simple text';
+  var expected = [ 'simple text' ];
   test.identical( got, expected );
 
   var src = fg( 'red text', 'red' );
   l.log( src );
-  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span>';
+  var expected = [ '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span>' ];
   test.identical( got, expected );
 
   var src = [ fg( 'red text', 'red' ), bg( 'red background', 'red' ) ].join( '' );
   l.log( src );
-  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span><span style=\'background:rgba( 255, 0, 0, 1 );\'>red background</span>';
+  var expected = [ '<span style=\'color:rgba( 255, 0, 0, 1 );\'>red text</span><span style=\'background:rgba( 255, 0, 0, 1 );\'>red background</span>' ];
   test.identical( got, expected );
 
   var src = [ 'some text', _.ct.fg( 'text', 'red' ), _.ct.bg( 'text', 'yellow' ), 'some text' ].join( '' );
   l.log( src );
-  var expected = 'some text<span style=\'color:rgba( 255, 0, 0, 1 );\'>text</span><span style=\'background:rgba( 255, 255, 0, 1 );\'>text</span>some text';
+  var expected = [ 'some text<span style=\'color:rgba( 255, 0, 0, 1 );\'>text</span><span style=\'background:rgba( 255, 255, 0, 1 );\'>text</span>some text' ];
   test.identical( got, expected );
 
   var src = fg( '\nred text' + fg( 'yellow text', 'yellow' ) + 'red text', 'red' );
   l.log( src );
-  var expected = '<span style=\'color:rgba( 255, 0, 0, 1 );\'><br>red text<span style=\'color:rgba( 255, 255, 0, 1 );\'>yellow text</span>red text</span>';
+  var expected = [ '<span style=\'color:rgba( 255, 0, 0, 1 );\'><br>red text<span style=\'color:rgba( 255, 255, 0, 1 );\'>yellow text</span>red text</span>' ];
   test.identical( got, expected );
 
   var src = bg( '\nred background' + bg( 'yellow background', 'yellow' ) + 'red background', 'red' );
   l.log( src );
-  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'><br>red background<span style=\'background:rgba( 255, 255, 0, 1 );\'>yellow background</span>red background</span>';
+  var expected = [ '<span style=\'background:rgba( 255, 0, 0, 1 );\'><br>red background<span style=\'background:rgba( 255, 255, 0, 1 );\'>yellow background</span>red background</span>' ];
   test.identical( got, expected );
 
   var src = '❮background : red❯red❮background : blue❯blue❮background : default❯red❮background : default❯';
   l.log( src );
-  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>';
+  var expected = [ '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>' ];
   test.identical( got, expected );
 
   var src = _.ct.bg( 'red' + _.ct.bg( 'blue', 'blue' ) + 'red', 'red' );
   l.log( src );
-  var expected = '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>';
+  var expected = [ '<span style=\'background:rgba( 255, 0, 0, 1 );\'>red<span style=\'background:rgba( 0, 0, 255, 1 );\'>blue</span>red</span>' ];
   test.identical( got, expected );
 
   // test.case = 'compact mode disabled';
@@ -426,31 +427,31 @@ function emptyLines( test )
   var got;
   var onTransformEnd = function( args ){ got = args.output; };
 
-  var logger = new _.Logger({ output : null, onTransformEnd });
+  var logger = new _.Logger({ output : console, onTransformEnd });
 
 
   /* on directive#1 */
 
   logger.log( '❮outputGray : 0❯' );
-  var expected = '';
+  var expected = [ '' ];
   test.identical( got, expected );
 
   /* on directive#2 */
 
   logger.log( '❮foreground : red❯❮foreground : default❯' );
-  var expected = '';
+  var expected = [ '' ];
   test.identical( got, expected );
 
   /* on empty log */
 
   logger.log();
-  var expected = '';
+  var expected = [ '' ];
   test.identical( got, expected );
 
   /* on empty line */
 
   logger.log( '' );
-  var expected = '';
+  var expected = [ '' ];
   test.identical( got, expected );
 }
 
@@ -601,7 +602,7 @@ function stateChangingValue( test )
   {
 
     test.case = state + ': ' + 'number';
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l[ state ] = 1;
     test.identical( l[ state ], 1 );
     l[ state ] = 1;
@@ -614,7 +615,7 @@ function stateChangingValue( test )
     /* */
 
     test.case = state + ': ' + 'bool';
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     var prev = l[ state ];
     l[ state ] = true;
     test.identical( l[ state ], prev + 1 );
@@ -625,7 +626,7 @@ function stateChangingValue( test )
     /* */
 
     test.case = state + ': ' + 'as directive, number';
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.log( `❮${state}:1❯` )
     test.identical( l[ state ], 1 );
     l.log( `❮${state}:1❯` )
@@ -638,7 +639,7 @@ function stateChangingValue( test )
     /* */
 
     test.case = state + ': ' + 'as directive, bool';
-    var l = new _.Logger();
+    var l = new _.Logger({ output : console });
     l.log( `❮${state}:true❯` )
     test.identical( l[ state ], 1 );
     l.log( `❮${state}:true❯` )
@@ -675,16 +676,16 @@ function coloringNoColor( test )
 
   function onTransformEnd( o ){ got = o.output };
 
-  var l = new _.Logger({ output : null, outputGray : false, onTransformEnd });
+  var l = new _.Logger({ output : console, outputGray : false, onTransformEnd });
 
   test.case = 'No wColor, outputGray : 0';
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
-  test.identical( got, 'red text red background' );
+  test.identical( got, [ 'red text red background' ] );
 
   test.case =  'No wColor, outputGray : 1';
   l.outputGray = true;
   l.log( fg( 'red text', 'red' ), bg( 'red background', 'red' ) );
-  test.identical( got, 'red text red background' );
+  test.identical( got, [ 'red text red background' ] );
 
   _.color = color;
 }
@@ -697,7 +698,7 @@ function clone( test )
 
   var printer = new _.Logger({ name : 'printerA', onTransformEnd });
   var inputPrinter = new _.Logger({ name : 'inputPrinter', onTransformEnd });
-  var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformEnd });
+  var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformEnd });
 
   printer.outputTo( outputPrinter );
   printer.inputFrom( inputPrinter );
@@ -732,6 +733,7 @@ function clone( test )
 
     'printerA : for printers',
     'outputPrinter : for printers',
+    'inputPrinter : for printers',
 
     'clonedPrinter : for printers',
     'outputPrinter : for printers'
@@ -749,30 +751,30 @@ function clone( test )
 
 }
 
-function processWarning( test )
-{
-  if( Config.interpreter !== 'njs' )
-  {
-    test.identical( 1, 1 )
-    return
-  }
+// function processWarning( test )
+// {
+//   if( Config.interpreter !== 'njs' )
+//   {
+//     test.identical( 1, 1 )
+//     return
+//   }
 
-  let ready = new _.Consequence();
+//   let ready = new _.Consequence();
 
-  var message = 'Something wrong';
-  process.emitWarning( 'Something wrong' );
-  process.on( 'warning', ( warning ) =>
-  {
-    ready.take( warning )
-  });
-  ready.then( ( got ) =>
-  {
-    test.identical( got.message, message );
-    return null;
-  })
+//   var message = 'Something wrong';
+//   process.emitWarning( 'Something wrong' );
+//   process.on( 'warning', ( warning ) =>
+//   {
+//     ready.take( warning )
+//   });
+//   ready.then( ( got ) =>
+//   {
+//     test.identical( got.message, message );
+//     return null;
+//   })
 
-  return ready;
-}
+//   return ready;
+// }
 
 //
 
@@ -860,7 +862,7 @@ let Self =
     stateChangingValue,
     clone,
     coloringNoColor,
-    processWarning,
+    // processWarning,
     consoleBarExperiment
   },
 
