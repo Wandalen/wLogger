@@ -343,7 +343,7 @@ function colorConsoleDirectives( test )
     test.identical( escape( got.output ), escape( [ o.text ] ) );
   }
 
-  // FAILS
+  /* Yevhen : Fails */
   runCase
   ({
     inputGray : 0,
@@ -365,6 +365,7 @@ function colorConsoleDirectives( test )
   })
 
   /*
+  Yevhen :
   - got :
     '[ 'text' ]'
   - expected :
@@ -374,7 +375,7 @@ function colorConsoleDirectives( test )
   - difference :
     '[*
   */
-  // FAILS
+  /* Yevhen : Fails */
   runCase
   ({
     inputGray : 0,
@@ -394,7 +395,7 @@ function colorConsoleDirectives( test )
     text : '❮foreground: red❯text❮foreground: default❯',
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
-  // FAILS
+  /* Yevhen : Fails */
   runCase
   ({
     inputGray : 0,
@@ -454,7 +455,7 @@ function colorConsoleDirectives( test )
     text : '❮foreground: red❯text❮foreground: default❯',
     _outputForTerminal : '❮foreground: red❯text❮foreground: default❯'
   })
-  // FAILS
+  /* Yevhen : Fails */
   runCase
   ({
     inputGray : 0,
