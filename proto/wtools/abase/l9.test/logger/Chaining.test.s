@@ -1555,7 +1555,7 @@ function output( test )
     test.case = 'combining : rewrite, printers have no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
     test.will = 'printerA must have printerB in outputs'
@@ -1573,9 +1573,9 @@ function output( test )
     test.case = 'combining : rewrite, printers have other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( outputPrinter );
     printerB.inputFrom( inputPrinter );
@@ -1601,7 +1601,7 @@ function output( test )
     test.case = 'combining : append, printers have no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
     test.will = 'printerA must have printerB in outputs'
@@ -1619,9 +1619,9 @@ function output( test )
     test.case = 'combining : append, printers have other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( outputPrinter );
     printerB.inputFrom( inputPrinter );
@@ -1653,7 +1653,7 @@ function output( test )
     test.case = 'combining : prepend, printers have no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
     test.will = 'printerA must have printerB in outputs'
@@ -1671,9 +1671,9 @@ function output( test )
     test.case = 'combining : prepend, printers have other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( outputPrinter );
     printerB.inputFrom( inputPrinter );
@@ -1707,7 +1707,7 @@ function output( test )
     test.case = 'combining : supplement, printers have no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     var result = printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
     test.will = 'printerA must  have printerB in outputs'
@@ -1727,9 +1727,9 @@ function output( test )
     test.case = 'combining : prepend, printers have other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
     var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onTransformBegin, onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( outputPrinter );
     printerB.inputFrom( inputPrinter );
@@ -1761,279 +1761,245 @@ function output( test )
 
     /* - */
 
-    // test.open( 'printer -> ordinary -> console' );
+    test.open( 'printer -> ordinary -> console' );
 
-    /* xxx qqq for Yevhen : not good solution. it crashes. */
-    // test.case = 'combining : rewrite, printers have no other chains';
+    /* xxx qqq for Yevhen : not good solution. it crashes. | aaa : fixed group */
+    test.case = 'combining : rewrite, printers have no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // // var printerSilenced3 = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin : onTransformBegin, onWriteEnd : onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.ge( consoleChainer.inputs.length, 1 );
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.ge( consoleChainer.outputs.length, 0 );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // debugger;
-    // printerA.log( 'for printer B' );
-    // debugger;
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.ge( consoleChainer.inputs.length, 1 );
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.ge( consoleChainer.outputs.length, 0 );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
-    // test.case = 'combining : rewrite, printers have no other chains';
+    test.case = 'combining : rewrite, printers have other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin, onTransformEnd });
-    // var hooked = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.ge( consoleChainer.inputs.length, 1 );
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.ge( consoleChainer.outputs.length, 0 );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( hooked, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( outputPrinter );
+    inputPrinter.outputTo( console );
+    test.will = 'printer must have other input and output'
+    test.true( printerA.hasOutputClose( outputPrinter ) );
+    test.true( inputPrinter.hasOutputClose( console ) );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    inputPrinter.outputUnchain( console );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
-    // test.case = 'combining : rewrite, printers have other chains';
+    test.case = 'combining : append, printers have no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( outputPrinter );
-    // inputPrinter.outputTo( console );
-    // test.will = 'printer must have other input and output'
-    // test.true( printerA.hasOutputClose( outputPrinter ) );
-    // test.true( inputPrinter.hasOutputClose( console ) );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'rewrite' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // inputPrinter.outputUnchain( console );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ]
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
+    test.case = 'combining : append, printers have other chains';
 
-    // test.case = 'combining : append, printers have no other chains';
-
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ]
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
-
-    // test.case = 'combining : append, printers have other chains';
-
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console
-    // var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( outputPrinter );
-    // inputPrinter.outputTo( console );
-    // test.will = 'printer must have other input and output'
-    // test.true( printerA.hasOutputClose( outputPrinter ) );
-    // test.true( inputPrinter.hasOutputClose( console ) );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // inputPrinter.outputUnchain( console );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // var expected =
-    // [
-    //   'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-    //   'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
-    // ]
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console
+    var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( outputPrinter );
+    inputPrinter.outputTo( console );
+    test.will = 'printer must have other input and output'
+    test.true( printerA.hasOutputClose( outputPrinter ) );
+    test.true( inputPrinter.hasOutputClose( console ) );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'append' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    inputPrinter.outputUnchain( console );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    var expected =
+    [
+      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
+      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+    ]
+    test.identical( track, expected );
 
 
-    // test.case = 'combining : prepend, printers have no other chains';
+    test.case = 'combining : prepend, printers have no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ]
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ]
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
-    // test.case = 'combining : prepend, printers have other chains';
+    test.case = 'combining : prepend, printers have other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console
-    // var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( outputPrinter );
-    // inputPrinter.outputTo( console );
-    // test.will = 'printer must have other input and output'
-    // test.true( printerA.hasOutputClose( outputPrinter ) );
-    // test.true( inputPrinter.hasOutputClose( console ) );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, outputPrinter );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // inputPrinter.outputUnchain( console );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // var expected =
-    // [
-    //   'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-    //   'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
-    // ]
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console
+    var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( outputPrinter );
+    inputPrinter.outputTo( console );
+    test.will = 'printer must have other input and output'
+    test.true( printerA.hasOutputClose( outputPrinter ) );
+    test.true( inputPrinter.hasOutputClose( console ) );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'prepend' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, outputPrinter );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 2 ].inputPrinter, inputPrinter );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    inputPrinter.outputUnchain( console );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    var expected =
+    [
+      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
+      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+    ]
+    test.identical( track, expected );
 
-    // /* */
+    /* */
 
-    // test.case = 'combining : supplement, printers have no other chains';
+    test.case = 'combining : supplement, printers have no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ]
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // outputPrinter.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ]
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    outputPrinter.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
 
-    // /* */
+    /* */
 
-    // test.case = 'supplement : prepend, printers have other chains';
+    test.case = 'supplement : prepend, printers have other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console
-    // var inputPrinter = new _.Logger({ name : 'inputPrinter' });
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( outputPrinter );
-    // inputPrinter.outputTo( console );
-    // test.will = 'printer must have other input and output'
-    // test.true( printerA.hasOutputClose( outputPrinter ) );
-    // test.true( inputPrinter.hasOutputClose( console ) );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs';
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, inputPrinter );
-    // outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'for printer B' );
-    // inputPrinter.outputUnchain( console );
-    // outputPrinter.inputUnchain( console );
-    // test.will = 'message from printerA must reach both of handlers';
-    // var expected =
-    // [
-    //   'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
-    // ]
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console
+    var inputPrinter = new _.Logger({ name : 'inputPrinter' });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( outputPrinter );
+    inputPrinter.outputTo( console );
+    test.will = 'printer must have other input and output'
+    test.true( printerA.hasOutputClose( outputPrinter ) );
+    test.true( inputPrinter.hasOutputClose( console ) );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 0, combining : 'supplement' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, outputPrinter );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs';
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, inputPrinter );
+    outputPrinter.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'for printer B' );
+    inputPrinter.outputUnchain( console );
+    outputPrinter.inputUnchain( console );
+    test.will = 'message from printerA must reach both of handlers';
+    var expected =
+    [
+      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+    ]
+    test.identical( track, expected );
 
-    // test.close( 'printer -> ordinary -> console' );
+    test.close( 'printer -> ordinary -> console' );
 
     test.open( 'printer -> exclusive -> printer' );
 
     test.case = 'combining : rewrite';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( console );
     printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
@@ -2061,8 +2027,8 @@ function output( test )
     test.case = 'combining : append';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerC );
     printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
@@ -2089,8 +2055,8 @@ function output( test )
     test.case = 'combining : prepend';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerC );
     printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
@@ -2117,8 +2083,8 @@ function output( test )
     test.case = 'combining : supplement';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerC );
     printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
@@ -2137,161 +2103,156 @@ function output( test )
 
     test.close( 'printer -> exclusive -> printer' );
 
-    // /* - */
+    /* - */
 
-    // test.open( 'printer -> exclusive -> console' );
+    test.open( 'printer -> exclusive -> console' );
 
-    // test.case = 'combining : rewrite';
+    test.case = 'combining : rewrite';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerC = new _.Logger({ name : 'printerC' });
-    // // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerD = new _.Logger({ name : 'printerD', onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
-    // printerA.outputTo( printerD );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerD );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerD.inputFrom( console );
-    // printerA.log( 'A for printer B' );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : printerD : A for printer B', 'end : printerD : A for printer B' ] );
-    // test.will = 'unchain exclusive output, printerD now must get the message';
-    // printerD.inputUnchain( console );
-    // printerA.outputUnchain( printerB );
-    // track = [];
-    // printerA.log( 'A for printer D' );
-    // test.identical( track, [ 'begin : printerD : A for printer D', 'end : printerD : A for printer D' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC' });
+    var printerD = new _.Logger({ name : 'printerD', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'rewrite' } );
+    printerA.outputTo( printerD );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerD );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerD.inputFrom( console );
+    printerA.log( 'A for printer B' );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : printerD : A for printer B', 'end : printerD : A for printer B' ] );
+    test.will = 'unchain exclusive output, printerD now must get the message';
+    printerD.inputUnchain( console );
+    printerA.outputUnchain( printerB );
+    track = [];
+    printerA.log( 'A for printer D' );
+    test.identical( track, [ 'begin : printerD : A for printer D', 'end : printerD : A for printer D' ] );
 
-    // test.case = 'combining : append';
+    test.case = 'combining : append';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerC.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'A for printer B' );
-    // test.will = 'unchain exclusive output, printerD now must get the message';
-    // printerC.inputUnchain( console );
-    // printerA.outputUnchain( printerB );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
-    // track = [];
-    // printerA.log( 'A for printer C' );
-    // test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'append' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerC.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'A for printer B' );
+    test.will = 'unchain exclusive output, printerD now must get the message';
+    printerC.inputUnchain( console );
+    printerA.outputUnchain( printerB );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    track = [];
+    printerA.log( 'A for printer C' );
+    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
 
-    // test.case = 'combining : prepend';
+    test.case = 'combining : prepend';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerC.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'A for printer B' );
-    // test.will = 'unchain exclusive output, printerD now must get the message';
-    // printerC.inputUnchain( console );
-    // printerA.outputUnchain( printerB );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
-    // track = [];
-    // printerA.log( 'A for printer C' );
-    // test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'prepend' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerC.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'A for printer B' );
+    test.will = 'unchain exclusive output, printerD now must get the message';
+    printerC.inputUnchain( console );
+    printerA.outputUnchain( printerB );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    track = [];
+    printerA.log( 'A for printer C' );
+    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
 
-    // test.case = 'combining : supplement, no other chains';
+    test.case = 'combining : supplement, no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerC.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'A for printer B' );
-    // test.will = 'message from printerA must reach both of handlers';
-    // test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
-    // test.will = 'unchain exclusive output, printerD now must get the message';
-    // printerC.inputUnchain( console );
-    // printerA.outputUnchain( printerB );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerC.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'A for printer B' );
+    test.will = 'message from printerA must reach both of handlers';
+    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.will = 'unchain exclusive output, printerD now must get the message';
+    printerC.inputUnchain( console );
+    printerA.outputUnchain( printerB );
 
-    // test.case = 'combining : supplement';
+    test.case = 'combining : supplement';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
-    // test.will = 'printerA must not have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must not have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // printerC.inputFrom( console, { exclusiveOutput : 1 } );
-    // printerA.log( 'A for printer B' );
-    // printerC.inputUnchain( console );
-    // test.will = 'message from printerA must not reach printerB';
-    // test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 1, originalOutput : 0, combining : 'supplement' } );
+    test.will = 'printerA must not have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must not have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    printerC.inputFrom( console, { exclusiveOutput : 1 } );
+    printerA.log( 'A for printer B' );
+    printerC.inputUnchain( console );
+    test.will = 'message from printerA must not reach printerB';
+    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
 
-    // test.close( 'printer -> exclusive -> console' );
+    test.close( 'printer -> exclusive -> console' );
 
-    // /* - */
+    /* - */
 
     test.open( 'printer -> original -> printer' );
 
     test.case = 'combining : rewrite';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( console );
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
@@ -2319,8 +2280,8 @@ function output( test )
     test.case = 'combining : append';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
     printerA.outputTo( printerC );
@@ -2347,8 +2308,8 @@ function output( test )
     test.case = 'combining : prepend';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
 
     printerA.outputTo( printerC );
@@ -2376,8 +2337,8 @@ function output( test )
     test.case = 'combining : supplement, no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
     test.will = 'printerA must have printerB in outputs'
@@ -2401,8 +2362,8 @@ function output( test )
     test.case = 'combining : supplement';
 
     var printerA = new _.Logger({ name : 'printerA' });
-    var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
-    var printerC = new _.Logger({ name : 'printerC', output : console, onTransformBegin, onTransformEnd });
+    var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
+    var printerC = new _.Logger({ name : 'printerC', output : console, onWriteBegin, onWriteEnd });
     var track = [];
     printerA.outputTo( printerC );
     printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
@@ -2425,143 +2386,143 @@ function output( test )
 
     /* - */
 
-    // test.open( 'printer -> original -> console' );
+    test.open( 'printer -> original -> console' );
 
-    // test.case = 'combining : rewrite';
+    test.case = 'combining : rewrite';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( console );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerC.inputFrom( console );
-    // printerA.log( 'A for printer B' );
-    // printerC.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    // var expected = [];
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( console );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'rewrite' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerC.inputFrom( console );
+    printerA.log( 'A for printer B' );
+    printerC.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA will be printed by original method, printer C will not get a message';
+    var expected = [];
+    test.identical( track, expected );
 
-    // test.case = 'combining : append';
+    test.case = 'combining : append';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var consoleHook = new _.Logger({ name : 'consoleHook', onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // consoleHook.inputFrom( console );
-    // printerA.log( 'A for printer B' );
-    // consoleHook.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    // var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerSilenced = new _.Logger({ name : 'printerSilenced' });
+    var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onWriteBegin, onWriteEnd });
+    var consoleHook = new _.Logger({ name : 'consoleHook', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'append' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    consoleHook.inputFrom( console );
+    printerA.log( 'A for printer B' );
+    consoleHook.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA will be printed by original method, printer C will not get a message';
+    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    test.identical( track, expected );
 
-    // test.case = 'combining : prepend';
+    test.case = 'combining : prepend';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var consoleHook = new _.Logger({ name : 'consoleHook', onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 2 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = console[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // consoleHook.inputFrom( console );
-    // printerA.log( 'A for printer B' );
-    // consoleHook.inputUnchain( console );
-    // printerA.outputUnchain( console );
-    // test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    // var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerSilenced = new _.Logger({ name : 'printerSilenced' });
+    var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onWriteBegin, onWriteEnd });
+    var consoleHook = new _.Logger({ name : 'consoleHook', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'prepend' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 2 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.outputs[ 1 ].outputPrinter, printerC );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = console[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    consoleHook.inputFrom( console );
+    printerA.log( 'A for printer B' );
+    consoleHook.inputUnchain( console );
+    printerA.outputUnchain( console );
+    test.will = 'message from printerA will be printed by original method, printer C will not get a message';
+    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    test.identical( track, expected );
 
-    // test.case = 'combining : supplement, no other chains';
+    test.case = 'combining : supplement, no other chains';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
-    // test.will = 'printerA must have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must have printerA in inputs'
-    // var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
-    // printerC.inputFrom( printerB );
-    // printerA.log( 'A for printer B' );
-    // printerC.inputUnchain( printerB );
-    // printerA.outputUnchain( printerB );
-    // test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    // var expected = [];
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerC = new _.Logger({ name : 'printerC', onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
+    test.will = 'printerA must have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerB );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must have printerA in inputs'
+    var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    test.identical( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter, printerA );
+    printerC.inputFrom( printerB );
+    printerA.log( 'A for printer B' );
+    printerC.inputUnchain( printerB );
+    printerA.outputUnchain( printerB );
+    test.will = 'message from printerA will be printed by original method, printer C will not get a message';
+    var expected = [];
+    test.identical( track, expected );
 
-    // test.case = 'combining : supplement';
+    test.case = 'combining : supplement';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerB = console;
-    // var printerSilenced = new _.Logger({ name : 'printerSilenced' });
-    // var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onTransformBegin, onTransformEnd });
-    // var track = [];
-    // printerA.outputTo( printerC );
-    // printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
-    // test.will = 'printerA must not have printerB in outputs'
-    // test.true( !printerA.hasOutputClose( printerB ) );
-    // test.identical( printerA.outputs.length, 1 );
-    // test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
-    // test.identical( printerA.inputs.length, 0 );
-    // test.will = 'printerB must not have printerA in inputs'
-    // var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
-    // test.true( !consoleChainer.hasInputClose( printerA ) );
-    // test.true( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter !== printerA );
-    // printerC.inputFrom( printerB );
-    // printerA.log( 'A for printer B' );
-    // printerC.inputUnchain( printerB );
-    // test.will = 'message from printerA will not be printed by original method, printer C will get a message';
-    // var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
-    // test.identical( track, expected );
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerB = console;
+    var printerSilenced = new _.Logger({ name : 'printerSilenced' });
+    var printerC = new _.Logger({ name : 'printerC', output : printerSilenced, onWriteBegin, onWriteEnd });
+    var track = [];
+    printerA.outputTo( printerC );
+    printerA.outputTo( printerB, { exclusiveOutput : 0, originalOutput : 1, combining : 'supplement' } );
+    test.will = 'printerA must not have printerB in outputs'
+    test.true( !printerA.hasOutputClose( printerB ) );
+    test.identical( printerA.outputs.length, 1 );
+    test.identical( printerA.outputs[ 0 ].outputPrinter, printerC );
+    test.identical( printerA.inputs.length, 0 );
+    test.will = 'printerB must not have printerA in inputs'
+    var consoleChainer = printerB[ Symbol.for( 'chainer' ) ];
+    test.true( !consoleChainer.hasInputClose( printerA ) );
+    test.true( consoleChainer.inputs[ consoleChainer.inputs.length - 1 ].inputPrinter !== printerA );
+    printerC.inputFrom( printerB );
+    printerA.log( 'A for printer B' );
+    printerC.inputUnchain( printerB );
+    test.will = 'message from printerA will not be printed by original method, printer C will get a message';
+    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    test.identical( track, expected );
 
-    // test.close( 'printer -> original -> console' );
+    test.close( 'printer -> original -> console' );
 
-    // /* - */
+    /* - */
 
-    // /* Yevhen : Review - onTransformBegin2 callbacks are not called */
+    /* Yevhen : Review - onTransformBegin2 callbacks are not called */
     // test.open( 'multiple original/exclusive output' );
 
     // test.case = 'two otputs';
@@ -2569,7 +2530,7 @@ function output( test )
     // var printerA = new _.Logger({ name : 'printerA' });
     // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
     // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', output : console, onTransformBegin, onTransformEnd });
+    // var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
 
     // printerA.outputTo( printerO, { originalOutput : 1 } );
     // printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
@@ -2597,7 +2558,7 @@ function output( test )
     // var printerA = console;
     // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
     // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+    // var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
 
     // printerO.inputFrom( printerA, { originalOutput : 1 } );
     // printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
@@ -2630,7 +2591,7 @@ function output( test )
     // var printerA = console;
     // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
     // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', /*output : console,*/ onTransformBegin, onTransformEnd });
+    // var printerB = new _.Logger({ name : 'printerB', /*output : console,*/ onWriteBegin, onWriteEnd });
 
     // printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
     // printerO.inputFrom( printerA, { originalOutput : 1 } );
@@ -2657,7 +2618,7 @@ function output( test )
     // var printerA = new _.Logger({ name : 'printerA' });
     // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
     // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin, onTransformEnd });
+    // var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
 
     // printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
     // printerA.outputTo( printerO, { originalOutput : 1 } );
@@ -2783,6 +2744,7 @@ function output( test )
 
     function onTransformBegin2( o )
     {
+      debugger
       o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
       console.log( 'onTransformBegin2', o.input[ 0 ] );
       return o;
@@ -2799,6 +2761,29 @@ function output( test )
     {
       track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
       console.log( 'onTransformEnd', this.name + ' : ' + o.input[ 0 ] );
+      return o;
+    }
+
+    /* Yevhen : Log inside onWrite* callbacks causes 'Maximum stack size excedeed' error */
+    function onWriteBegin( o )
+    {
+      debugger;
+      track.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
+      return o;
+    }
+
+    // function onWriteBegin2( o )
+    // {
+    //   debugger;
+    //   o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+    //   console.log( 'onTransformBegin2', o.input[ 0 ] );
+    //   return o;
+    // }
+
+    function onWriteEnd( o )
+    {
+      debugger;
+      track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
       return o;
     }
 
