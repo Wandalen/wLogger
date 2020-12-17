@@ -311,6 +311,11 @@ function colorConsoleDirectives( test )
     // console.log( 'o._outputForPrinter', escape( o.output ) )
   }
 
+  // function onWriteEnd( o )
+  // {
+  //   got = o;
+  // }
+
   let l = new _.Logger({ output : console, onTransformEnd  });
 
   test.open( 'setting states as property' )
@@ -334,12 +339,9 @@ function colorConsoleDirectives( test )
     l.inputRaw = o.inputRaw;
     l.outputRaw = o.outputRaw;
 
-    /* ORIGINAL */
     l.log( o.text );
-
     test.identical( escape( got.output ), escape( [ o._outputForTerminal ] ) );
     debugger;
-    //
     test.identical( escape( got.output ), escape( [ o.text ] ) );
   }
 
