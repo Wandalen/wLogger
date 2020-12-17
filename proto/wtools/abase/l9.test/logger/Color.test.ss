@@ -314,6 +314,7 @@ function colorConsoleDirectives( test )
   // function onWriteEnd( o )
   // {
   //   got = o;
+  //   return o;
   // }
 
   let l = new _.Logger({ output : console, onTransformEnd  });
