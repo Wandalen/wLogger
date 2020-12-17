@@ -2523,218 +2523,218 @@ function output( test )
     /* - */
 
     /* Yevhen : Review - onTransformBegin2 callbacks are not called */
-    // test.open( 'multiple original/exclusive output' );
+    test.open( 'multiple original/exclusive output' );
 
-    // test.case = 'two otputs';
+    test.case = 'two otputs';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
-    // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerO = new _.Logger({ name : 'printerO', onWriteBegin : onWriteBegin2 });
+    var printerEx = new _.Logger({ name : 'printerEx', onWriteBegin : onWriteBegin2 });
+    var printerB = new _.Logger({ name : 'printerB', output : console, onWriteBegin, onWriteEnd });
 
-    // printerA.outputTo( printerO, { originalOutput : 1 } );
-    // printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
-    // printerB.inputFrom( printerO );
-    // printerB.inputFrom( printerEx );
+    printerA.outputTo( printerO, { originalOutput : 1 } );
+    printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
+    printerB.inputFrom( printerO );
+    printerB.inputFrom( printerEx );
 
-    // var track = [];
+    var track = [];
 
-    // printerA.log( 'for printerB' );
+    printerA.log( 'for printerB' );
 
-    // var expected =
-    // [
-    //   'begin : printerB : printerEx : for printerB',
-    //   'end : printerB : printerEx : for printerB'
-    // ];
+    var expected =
+    [
+      'begin : printerB : printerEx : for printerB',
+      'end : printerB : printerEx : for printerB'
+    ];
 
-    // /* ACTUAL output */
-    // // var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
-    // test.identical( track, expected );
+    /* Yevhen : actual output */
+    // var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
+    test.identical( track, expected );
 
-    // /* */
+    /* */
 
-    // test.case = 'two otputs, console as input';
+    test.case = 'two otputs, console as input';
 
-    // var printerA = console;
-    // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
-    // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
+    var printerA = console;
+    var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+    var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+    var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
 
-    // printerO.inputFrom( printerA, { originalOutput : 1 } );
-    // printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
-    // printerB.inputFrom( printerO );
-    // printerB.inputFrom( printerEx );
+    printerO.inputFrom( printerA, { originalOutput : 1 } );
+    printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
+    printerB.inputFrom( printerO );
+    printerB.inputFrom( printerEx );
 
-    // track = [];
+    track = [];
 
-    // printerA.log( 'for printerB' );
-    // printerO.inputUnchain( printerA );
-    // printerEx.inputUnchain( printerA );
+    printerA.log( 'for printerB' );
+    printerO.inputUnchain( printerA );
+    printerEx.inputUnchain( printerA );
 
-    // var expected =
-    // [
-    //   // 'begin : printerB : printerEx : for printerB',
-    //   // 'end : printerB : printerEx : for printerB'
-    // ];
-    // test.identical( track, expected );
+    var expected =
+    [
+      'begin : printerB : printerEx : for printerB',
+      'end : printerB : printerEx : for printerB'
+    ];
+    test.identical( track, expected );
 
-    // function onTransformBegin2( o )
-    // {
-    //   o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-    //   return o;
-    // }
+    function onTransformBegin2( o )
+    {
+      o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+      return o;
+    }
 
-    // /* */
+    /* */
 
-    // test.case = 'two otputs, console as input, diff order';
+    test.case = 'two otputs, console as input, diff order';
 
-    // var printerA = console;
-    // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
-    // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', /*output : console,*/ onWriteBegin, onWriteEnd });
+    var printerA = console;
+    var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+    var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+    var printerB = new _.Logger({ name : 'printerB', /*output : console,*/ onWriteBegin, onWriteEnd });
 
-    // printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
-    // printerO.inputFrom( printerA, { originalOutput : 1 } );
-    // printerB.inputFrom( printerO );
-    // printerB.inputFrom( printerEx );
+    printerEx.inputFrom( printerA, { exclusiveOutput : 1 } );
+    printerO.inputFrom( printerA, { originalOutput : 1 } );
+    printerB.inputFrom( printerO );
+    printerB.inputFrom( printerEx );
 
-    // track = [];
+    track = [];
 
-    // printerA.log( 'for printerB' );
-    // printerO.inputUnchain( printerA );
-    // printerEx.inputUnchain( printerA );
+    printerA.log( 'for printerB' );
+    printerO.inputUnchain( printerA );
+    printerEx.inputUnchain( printerA );
 
-    // var expected =
-    // [
-    //   /*'begin : printerB : printerEx : for printerB',
-    //   'end : printerB : printerEx : for printerB'*/
-    // ];
-    // test.identical( track, expected );
+    var expected =
+    [
+      'begin : printerB : printerEx : for printerB',
+      'end : printerB : printerEx : for printerB'
+    ];
+    test.identical( track, expected );
 
-    // /* */
+    /* */
 
-    // test.case = 'two otputs, different order';
+    test.case = 'two otputs, different order';
 
-    // var printerA = new _.Logger({ name : 'printerA' });
-    // var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
-    // var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
-    // var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
+    var printerA = new _.Logger({ name : 'printerA' });
+    var printerO = new _.Logger({ name : 'printerO', onTransformBegin : onTransformBegin2 });
+    var printerEx = new _.Logger({ name : 'printerEx', onTransformBegin : onTransformBegin2  });
+    var printerB = new _.Logger({ name : 'printerB', onWriteBegin, onWriteEnd });
 
-    // printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
-    // printerA.outputTo( printerO, { originalOutput : 1 } );
-    // printerB.inputFrom( printerO );
-    // printerB.inputFrom( printerEx );
+    printerA.outputTo( printerEx, { exclusiveOutput : 1 } );
+    printerA.outputTo( printerO, { originalOutput : 1 } );
+    printerB.inputFrom( printerO );
+    printerB.inputFrom( printerEx );
 
-    // track = [];
+    track = [];
 
-    // printerA.log( 'for printerB' );
+    printerA.log( 'for printerB' );
 
-    // var expected =
-    // [
-    //   /*'begin : printerB : printerEx : for printerB',
-    //   'end : printerB : printerEx : for printerB'*/
-    // ];
-    // test.identical( track, expected );
+    var expected =
+    [
+      'begin : printerB : printerEx : for printerB',
+      'end : printerB : printerEx : for printerB'
+    ];
+    test.identical( track, expected );
 
-    // function onTransformBegin2( o )
-    // {
-    //   o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-    //   return o;
-    // }
+    function onTransformBegin2( o )
+    {
+      o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+      return o;
+    }
 
-    // /* */
+    /* */
 
-    // test.case = 'multiple outputs, different order';
+    test.case = 'multiple outputs, different order';
 
-    // var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
-    // var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-    // var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+    var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+    var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+    var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+    var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+    var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
-    // printerA.outputTo( printerB, { exclusiveOutput : 1 } );
-    // printerA.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerB.outputTo( printerC, { originalOutput : 1 } );
-    // printerC.outputTo( printerD, { exclusiveOutput : 1 } );
-    // printerC.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerD.outputTo( printerE, { originalOutput : 1 } );
+    printerA.outputTo( printerB, { exclusiveOutput : 1 } );
+    printerA.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerB.outputTo( printerC, { originalOutput : 1 } );
+    printerC.outputTo( printerD, { exclusiveOutput : 1 } );
+    printerC.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerD.outputTo( printerE, { originalOutput : 1 } );
 
-    // track = [];
-    // printerA.log( 'for E' );
-    // var expected = [ /*'end : printerE : printerD : printerC : printerB : for E'*/ ];
-    // test.identical( track, expected )
+    track = [];
+    printerA.log( 'for E' );
+    var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    test.identical( track, expected )
 
-    // /* */
+    /* */
 
-    // test.case = 'multiple outputs, different order';
+    test.case = 'multiple outputs, different order';
 
-    // var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
-    // var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-    // var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+    var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+    var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+    var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+    var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+    var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
-    // printerA.outputTo( printerB, { originalOutput : 1 } );
-    // printerB.outputTo( printerC, { exclusiveOutput : 1 } );
-    // printerB.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerC.outputTo( printerD, { exclusiveOutput : 1 } );
-    // printerC.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerD.outputTo( printerE, { originalOutput : 1 } );
+    printerA.outputTo( printerB, { originalOutput : 1 } );
+    printerB.outputTo( printerC, { exclusiveOutput : 1 } );
+    printerB.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerC.outputTo( printerD, { exclusiveOutput : 1 } );
+    printerC.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerD.outputTo( printerE, { originalOutput : 1 } );
 
-    // track = [];
-    // printerA.log( 'for E' );
-    // var expected = [ /*'end : printerE : printerD : printerB : printerA : for E'*/ ];
-    // test.identical( track, expected )
+    track = [];
+    printerA.log( 'for E' );
+    var expected = [ 'end : printerE : printerD : printerB : printerA : for E' ];
+    test.identical( track, expected )
 
-    // /* */
+    /* */
 
-    // test.case = 'multiple outputs, different order';
+    test.case = 'multiple outputs, different order';
 
-    // var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
-    // var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-    // var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+    var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+    var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+    var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+    var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+    var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
-    // printerA.outputTo( printerB, { originalOutput : 1 } );
-    // printerB.outputTo( printerC, { exclusiveOutput : 1 } );
-    // printerB.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerC.outputTo( printerD, { originalOutput : 1 } );
-    // printerD.outputTo( printerE, { exclusiveOutput : 1 } );
-    // printerD.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerA.outputTo( printerB, { originalOutput : 1 } );
+    printerB.outputTo( printerC, { exclusiveOutput : 1 } );
+    printerB.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerC.outputTo( printerD, { originalOutput : 1 } );
+    printerD.outputTo( printerE, { exclusiveOutput : 1 } );
+    printerD.outputTo( outputPrinter, { originalOutput : 1 } );
 
-    // track = [];
-    // printerA.log( 'for E' );
-    // var expected = [ /*'end : printerE : printerD : printerC : printerB : printerA : for E'*/ ];
-    // test.identical( track, expected );
+    track = [];
+    printerA.log( 'for E' );
+    var expected = [ 'end : printerE : printerD : printerC : printerB : printerA : for E' ];
+    test.identical( track, expected );
 
-    // /* */
+    /* */
 
-    // test.case = 'multiple outputs, different order';
+    test.case = 'multiple outputs, different order';
 
-    // var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
-    // var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
-    // var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
-    // var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
-    // var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
-    // var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
+    var printerA = new _.Logger({ name : 'printerA', onTransformBegin : onTransformBegin2 });
+    var printerB = new _.Logger({ name : 'printerB', onTransformBegin : onTransformBegin2 });
+    var printerC = new _.Logger({ name : 'printerC', onTransformBegin : onTransformBegin2 });
+    var printerD = new _.Logger({ name : 'printerD', onTransformBegin : onTransformBegin2 });
+    var printerE = new _.Logger({ name : 'printerE', onTransformEnd });
+    var outputPrinter = new _.Logger({ name : 'outputPrinter', onTransformBegin : onTransformBegin2 });
 
-    // printerA.outputTo( printerB, { exclusiveOutput : 1 } );
-    // printerA.outputTo( outputPrinter, { originalOutput : 1 } );
-    // printerB.outputTo( printerC, { originalOutput : 1 } );
-    // printerC.outputTo( printerD, { originalOutput : 1 } );
-    // printerD.outputTo( printerE, { exclusiveOutput : 1 } );
-    // printerD.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerA.outputTo( printerB, { exclusiveOutput : 1 } );
+    printerA.outputTo( outputPrinter, { originalOutput : 1 } );
+    printerB.outputTo( printerC, { originalOutput : 1 } );
+    printerC.outputTo( printerD, { originalOutput : 1 } );
+    printerD.outputTo( printerE, { exclusiveOutput : 1 } );
+    printerD.outputTo( outputPrinter, { originalOutput : 1 } );
 
-    // track = [];
-    // printerA.log( 'for E' );
-    // var expected = [ /*'end : printerE : printerD : printerC : printerB : for E'*/ ];
-    // test.identical( track, expected )
+    track = [];
+    printerA.log( 'for E' );
+    var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    test.identical( track, expected )
 
-    // test.close( 'multiple original/exclusive output' );
+    test.close( 'multiple original/exclusive output' );
 
     if( o.consoleWasBarred )
     {
@@ -2746,7 +2746,7 @@ function output( test )
     {
       debugger
       o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-      console.log( 'onTransformBegin2', o.input[ 0 ] );
+      // console.log( 'onTransformBegin2', o.input[ 0 ] );
       return o;
     }
 
@@ -2772,13 +2772,13 @@ function output( test )
       return o;
     }
 
-    // function onWriteBegin2( o )
-    // {
-    //   debugger;
-    //   o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-    //   console.log( 'onTransformBegin2', o.input[ 0 ] );
-    //   return o;
-    // }
+    function onWriteBegin2( o )
+    {
+      debugger;
+      o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+      console.log( 'onWriteBegin2', o.input[ 0 ] );
+      return o;
+    }
 
     function onWriteEnd( o )
     {
