@@ -491,6 +491,14 @@ function _transformSplit( o )
   // o._outputForPrinter = [ self._join( splits ) ];
 }
 
+//
+
+function TransformCssStylingToDirectives( input )
+{
+  //https://developers.google.com/web/tools/chrome-devtools/console/console-write#styling_console_output_with_css
+  return input.join( '' );
+}
+
 // --
 //
 // --
@@ -1555,6 +1563,7 @@ let Statics =
   PoisonedColorCombination,
   Directive,
   DirectiveColoring,
+  TransformCssStylingToDirectives
 }
 
 let Forbids =
