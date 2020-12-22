@@ -899,8 +899,8 @@ let Self =
     stateChangingValue,
     clone,
     coloringNoColor,
-    // processWarning,
-    TransformCssStylingToDirectives,
+    // processWarning, /* qqq : repair? */
+    // TransformCssStylingToDirectives, /* qqq : implement pelase */
     consoleBarExperiment
   },
 

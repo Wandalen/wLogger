@@ -73,9 +73,6 @@ function _transformActHtml( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
-  // _.assert( o._outputForPrinter.length === 1 );
-  // _.assert( _.strIs( o.joinedInput ) );
   _.assert( _.arrayIs( o._outputSplitted ) );
   _.assert( !o._outputForTerminal );
 
@@ -162,7 +159,6 @@ function _transformActHtml( o )
   _.assert( spanCount === 0 );
 
   o._outputForTerminal = [ result ];
-  // o._outputForTerminal = [ result ];
   return o;
 }
 
@@ -182,7 +178,6 @@ function _transformAct_nodejs( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
   _.assert( _.arrayIs( o._outputSplitted ) );
   _.assert( !o._outputForTerminal );
 
@@ -272,7 +267,6 @@ function _transformAct_browser( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
   _.assert( _.arrayIs( o._outputSplitted ) );
   _.assert( !o._outputForTerminal );
 
@@ -372,7 +366,6 @@ function _transformActWithoutColors( o )
 
   _.assert( arguments.length === 1, 'Expects single argument' );
   _.assert( _.mapIs( o ) );
-  // _.assert( _.strIs( o._outputForPrinter[ 0 ] ) );
   _.assert( _.arrayIs( o._outputSplitted ) );
   _.assert( !o._outputForTerminal );
 
@@ -393,7 +386,6 @@ function _transformColorApply( o )
   let self = this;
 
   _.assert( _.strIs( o.joinedInput ) );
-  // _.assert( _.arrayIs( o._outputForPrinter ) && o._outputForPrinter.length === 1 );
 
   /* xxx */
 
@@ -431,22 +423,17 @@ function _transformSplit( o )
   let result = [ '' ];
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  // _.assert( _.arrayIs( o._outputForPrinter ) && o._outputForPrinter.length === 1 );
-  // _.assert( !o._outputSplitted );
   _.assert( _.strIs( o.joinedInput ) );
   _.assert( !o._outputSplitted );
   _.assert( !o._outputForTerminal );
-  // _.assert( !o._outputForPrinter );
 
   if( self.raw || self.rawAll )
   {
     o._outputSplitted = [ o.joinedInput ]; /* xxx */
-    // o._outputSplitted = o._outputForPrinter; /* xxx */
     return;
   }
 
   let splits = o._outputSplitted = self._split( o.joinedInput );
-  // let splits = o._outputSplitted = self._split( o._outputForPrinter[ 0 ] );
 
   let inputRaw = self.inputRaw;
   let inputGray = self.inputGray;
@@ -486,13 +473,11 @@ function _transformSplit( o )
 
   });
 
-  // o._outputForPrinter = [ self._join( splits ) ];
-  // o.input = o._outputForPrinter;
-  // o._outputForPrinter = [ self._join( splits ) ];
 }
 
 //
 
+/* qqq : implement please */
 function TransformCssStylingToDirectives( input )
 {
   //https://developers.google.com/web/tools/chrome-devtools/console/console-write#styling_console_output_with_css
@@ -610,7 +595,6 @@ function _directiveApply( directive )
     return true;
   }
 
-  // _.assert( 0, 'Unknown logger directive', _.strQuote( name ) );
 }
 
 //
@@ -735,8 +719,6 @@ function _transformAct( original )
     _.assert( _.longIs( o.input ) );
     _.assert( o.output === null );
     _.assert( !!o.chainLink );
-    // _.assert( _.longIs( o._outputForPrinter ) );
-    // _.assert( o._outputForPrinter.length === 1 )
     _.assert( arguments.length === 1, 'Expects single argument' );
 
     if( !self.outputGray && _.color )
@@ -837,22 +819,15 @@ function _diagnoseColorIll( fg, bg )
   {
     let combination = PoisonedColorCombination[ i ];
     if( combination.fg === fg.originalName && combination.bg === bg.originalName )
-    // if( combination.platform === process.platform )
     {
-      debugger;
       self.diagnosingColor = 0;
       ill = true;
-      // logger.foregroundColor = 'blue';
-      // logger.backgroundColor = 'yellow';
       logger.styleSet( 'info.negative' );
       logger.warn( 'Warning!. Ill colors combination: ' );
       logger.warn( 'fg : ', fg.currentName, self.foregroundColor );
       logger.warn( 'bg : ', bg.currentName, self.backgroundColor );
       logger.warn( 'platform : ', combination.platform );
       logger.styleSet( 'default' );
-      // logger.foregroundColor = 'default';
-      // logger.backgroundColor = 'default';
-      // break;
     }
   }
 
@@ -878,8 +853,6 @@ function _diagnoseColorCollapse( fg, bg )
 
   if( collapse )
   {
-    // logger.foregroundColor = 'blue';
-    // logger.backgroundColor = 'yellow';
     self.diagnosingColorCollapse = 0;
     logger.styleSet( 'info.negative' );
     logger.warn( 'Warning: Color collapse in native terminal.' );
@@ -888,8 +861,6 @@ function _diagnoseColorCollapse( fg, bg )
     logger.warn( 'bg passed: ', bg.originalName, bg.originalValue );
     logger.warn( 'bg set : ', bg.currentName, self.backgroundColor );
     logger.styleSet( 'default' );
-    // logger.foregroundColor = 'default';
-    // logger.backgroundColor = 'default';
   }
 
   return collapse;
@@ -1004,8 +975,6 @@ function _colorSet( layer, color )
         currentName = _getColorName(  _.color.ColorMapShell, color );
       }
 
-      // console.log( '_colorSet', currentName, colorWas, '->', color );
-
       diagnosticInfo =
       {
         originalValue,
@@ -1048,8 +1017,6 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
-    // if( color === 'bright green' )
-    // debugger;
     let keys = _.mapOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
     if( _.longIdentical( map[ keys[ i ] ], color ) )

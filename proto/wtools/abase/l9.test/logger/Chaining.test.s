@@ -2543,15 +2543,19 @@ function output( test )
 
     var expected =
     [
-      'begin : printerB : printerEx : for printerB',
-      'end : printerB : printerEx : for printerB'
-    ];
+      'onWriteEnd2.printerEx : for printerB',
+      'onWriteBegin.printerB : for printerB',
+      'onWriteEnd.printerB : for printerB',
+    ]
+    // var expected =
+    // [
+    //   'begin : printerB : printerEx : for printerB',
+    //   'end : printerB : printerEx : for printerB'
+    // ];
 
     /* Yevhen : actual output */
     // var expected = [ 'begin : printerB : for printerB', 'end : printerB : for printerB' ];
     test.identical( track, expected );
-
-    /* */
 
     test.case = 'two otputs, console as input';
 
@@ -2745,22 +2749,25 @@ function output( test )
     function onTransformBegin2( o )
     {
       debugger
-      o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+      track.push( `onTransformBegin2.${this.name} : ${o.input[ 0 ]}` );
+      // o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
       // console.log( 'onTransformBegin2', o.input[ 0 ] );
       return o;
     }
 
     function onTransformBegin( o )
     {
-      track.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
-      console.log( 'onTransformBegin', this.name + ' : ' + o.input[ 0 ] );
+      track.push( `onTransformBegin.${this.name} : ${o.input[ 0 ]}` );
+      // track.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
+      // console.log( 'onTransformBegin', this.name + ' : ' + o.input[ 0 ] );
       return o;
     }
 
     function onTransformEnd( o )
     {
-      track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
-      console.log( 'onTransformEnd', this.name + ' : ' + o.input[ 0 ] );
+      track.push( `onTransformEnd.${this.name} : ${o.input[ 0 ]}` );
+      // track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
+      // console.log( 'onTransformEnd', this.name + ' : ' + o.input[ 0 ] );
       return o;
     }
 
@@ -2768,22 +2775,25 @@ function output( test )
     function onWriteBegin( o )
     {
       debugger;
-      track.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
+      track.push( `onWriteBegin.${this.name} : ${o.input[ 0 ]}` );
+      // track.push( 'begin' + ' : ' + this.name + ' : ' + o.input[ 0 ] );
       return o;
     }
 
     function onWriteBegin2( o )
     {
       debugger;
-      o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
-      console.log( 'onWriteBegin2', o.input[ 0 ] );
+      track.push( `onWriteEnd2.${this.name} : ${o.input[ 0 ]}` );
+      // o.input[ 0 ] = this.name + ' : ' + o.input[ 0 ];
+      // console.log( 'onWriteBegin2', o.input[ 0 ] );
       return o;
     }
 
     function onWriteEnd( o )
     {
       debugger;
-      track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
+      track.push( `onWriteEnd.${this.name} : ${o.input[ 0 ]}` );
+      // track.push( 'end' + ' : ' + this.name + ' : ' + o.input[ 0 ]  );
       return o;
     }
 
