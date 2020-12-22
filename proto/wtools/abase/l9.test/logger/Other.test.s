@@ -692,6 +692,43 @@ function coloringNoColor( test )
 
 //
 
+function TransformCssStylingToDirectives( test )
+{
+  let printer = new _.Logger({ output : null });
+
+  test.case = 'case1';
+  var input = [ '%cmsg', 'color:rgba( 0, 0, 0, 1 );background:none;' ];
+  var expected = _.ct.fg( 'msg', 'black' );
+  var got = printer.TransformCssStylingToDirectives( input )
+  test.identical( got, expected );
+
+  test.case = 'case2';
+  var input = [ '%cmsg', 'color:none;background:rgba( 0, 0, 0, 1 );' ];
+  var expected = _.ct.bg( 'msg', 'black' );
+  var got = printer.TransformCssStylingToDirectives( input )
+  test.identical( got, expected );
+
+  test.case = 'case3';
+  var expected = _.ct.bg( _.ct.fg( 'red text', 'red' ), 'black' );
+  var input = [ '%cred text', 'color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
+  var got = printer.TransformCssStylingToDirectives( input )
+  test.identical( got, expected );
+
+  test.case = 'case4';
+  var expected = _.ct.fg( 'yellow text' + _.ct.bg( _.ct.fg( 'red text', 'red' ), 'black' ), 'yellow' )
+  var input = [ '%cyellow text%cred text', 'color:rgba( 255, 255, 0, 1 );background:none;', 'color:rgba( 255, 0, 0, 1 );background:rgba( 0, 0, 0, 1 );' ];
+  var got = printer.TransformCssStylingToDirectives( input )
+  test.identical( got, expected );
+
+  test.case = 'case6: hex color';
+  var expected = _.ct.fg( 'msg', 'ff00ff' )
+  var input = [ '%cmsg', 'color:rgba( 255, 0, 255, 1 );background:none;' ];
+  var got = printer.TransformCssStylingToDirectives( input )
+  test.identical( got, expected );
+}
+
+//
+
 function clone( test )
 {
   test.case = 'clone printer';
@@ -863,6 +900,7 @@ let Self =
     clone,
     coloringNoColor,
     // processWarning,
+    TransformCssStylingToDirectives,
     consoleBarExperiment
   },
 
