@@ -192,12 +192,12 @@ function _writeToChannelWithoutExclusion( channelName, args )
     channelName,
   }
 
-  // xxx
-  // self.transform.head.call( self, self.transform, [ transformation ] );
-  // if( self.onWriteBegin )
-  // self.onWriteBegin( transformation );
-  // if( transformation.discarding )
-  // return transformation;
+  /* xxx ; Yevhen : onWriteBegin callback is not called, uncommented to fix */
+  self.transform.head.call( self, self.transform, [ transformation ] );
+  if( self.onWriteBegin )
+  self.onWriteBegin( transformation );
+  if( transformation.discarding )
+  return transformation;
 
   self.outputs.forEach( ( chainLink ) =>
   {
