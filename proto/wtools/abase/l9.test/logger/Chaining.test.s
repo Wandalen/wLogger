@@ -5107,7 +5107,7 @@ function finit( test )
       let chainer = chainerGet( printer );
 
       info.name = printer.name;
-      info.keys = _.mapOwnKeys( printer );
+      info.keys = _.mapOnlyOwnKeys( printer );
 
       if( _.arrayLike( chainer.outputs ) )
       info.outputForPrinters = chainer.outputs.slice();

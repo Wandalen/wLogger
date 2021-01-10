@@ -84,7 +84,7 @@ function prepareInfo()
 
   var result = [];
 
-  var splitCombinationKey = ( src ) => _.mapOwnKeys( src )[ 0 ].split( splitter );
+  var splitCombinationKey = ( src ) => _.mapOnlyOwnKeys( src )[ 0 ].split( splitter );
 
   function addToTable( src )
   {
@@ -107,7 +107,7 @@ function prepareInfo()
 
   list.forEach( function( c )
   {
-    var key = _.mapOwnKeys( c )[ 0 ];
+    var key = _.mapOnlyOwnKeys( c )[ 0 ];
     var combination = key.split( splitter );
     var fg = combination[ 0 ];
     var bg = combination[ 1 ];
