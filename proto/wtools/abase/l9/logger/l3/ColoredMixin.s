@@ -1017,7 +1017,7 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
-    let keys = _.mapOwnKeys( map );
+    let keys = _.mapOnlyOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
     if( _.longIdentical( map[ keys[ i ] ], color ) )
     return keys[ i ];
