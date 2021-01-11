@@ -95,6 +95,7 @@ function prepareTableInfo()
     row2 = {};
     c = 0;
   }
+
   return [ table1, table2 ];
 }
 
