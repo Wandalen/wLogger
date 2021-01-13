@@ -1568,7 +1568,7 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B' ] );
 
     test.case = 'combining : rewrite, printers have other chains';
 
@@ -1596,7 +1596,7 @@ function output( test )
     test.identical( printerB.inputs[ 1 ].inputPrinter, printerA );
     printerA.log( 'for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B' ] );
 
     test.case = 'combining : append, printers have no other chains';
 
@@ -1614,7 +1614,7 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B' ] );
 
     test.case = 'combining : append, printers have other chains';
 
@@ -1645,8 +1645,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-      'begin : printerB : for printer B', 'end : printerB : for printer B'
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B',
+      'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B'
     ]
     test.identical( track, expected );
 
@@ -1666,7 +1666,7 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B' ] );
 
     test.case = 'combining : prepend, printers have other chains';
 
@@ -1697,8 +1697,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : printerB : for printer B', 'end : printerB : for printer B',
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+      'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B',
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B'
     ]
     test.identical( track, expected );
 
@@ -1720,7 +1720,7 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : for printer B', 'end : printerB : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : for printer B', 'onWriteEnd.printerB : for printer B' ] );
 
     /* */
 
@@ -1751,7 +1751,7 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B'
     ]
     test.identical( track, expected );
 
@@ -1785,7 +1785,7 @@ function output( test )
     outputPrinter.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B' ] );
 
     test.case = 'combining : rewrite, printers have other chains';
 
@@ -1814,7 +1814,7 @@ function output( test )
     outputPrinter.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B' ] );
 
     test.case = 'combining : append, printers have no other chains';
 
@@ -1836,7 +1836,7 @@ function output( test )
     outputPrinter.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B' ] );
 
     test.case = 'combining : append, printers have other chains';
 
@@ -1869,8 +1869,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B',
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B'
     ]
     test.identical( track, expected );
 
@@ -1895,7 +1895,7 @@ function output( test )
     outputPrinter.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B' ] );
 
     test.case = 'combining : prepend, printers have other chains';
 
@@ -1928,8 +1928,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B',
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B',
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B'
     ]
     test.identical( track, expected );
 
@@ -1955,7 +1955,7 @@ function output( test )
     outputPrinter.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B' ] );
 
     /* */
 
@@ -1987,7 +1987,7 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : outputPrinter : for printer B', 'end : outputPrinter : for printer B'
+      'onWriteBegin.outputPrinter : for printer B', 'onWriteEnd.outputPrinter : for printer B'
     ]
     test.identical( track, expected );
 
@@ -2017,12 +2017,12 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B' ] );
     test.will = 'unchain exclusive output, printerC now must get the message';
     printerA.outputUnchain( printerB );
     track = [];
     printerA.log( 'A for printer C' );
-    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer C', 'onWriteEnd.printerC : A for printer C' ] );
 
     test.case = 'combining : append';
 
@@ -2045,12 +2045,12 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B' ] );
     test.will = 'unchain exclusive output, printerC now must get the message';
     printerA.outputUnchain( printerB );
     track = [];
     printerA.log( 'A for printer C' );
-    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer C', 'onWriteEnd.printerC : A for printer C' ] );
 
     test.case = 'combining : prepend';
 
@@ -2073,12 +2073,12 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerB : A for printer B', 'end : printerB : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B' ] );
     test.will = 'unchain exclusive output, printerC now must get the message';
     printerA.outputUnchain( printerB );
     track = [];
     printerA.log( 'A for printer C' );
-    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer C', 'onWriteEnd.printerC : A for printer C' ] );
 
     test.case = 'combining : supplement';
 
@@ -2099,7 +2099,7 @@ function output( test )
     test.identical( printerB.outputs.length, 1 );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ] );
 
     test.close( 'printer -> exclusive -> printer' );
 
@@ -2130,13 +2130,13 @@ function output( test )
     printerD.inputFrom( console );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerD : A for printer B', 'end : printerD : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerD : A for printer B', 'onWriteEnd.printerD : A for printer B' ] );
     test.will = 'unchain exclusive output, printerD now must get the message';
     printerD.inputUnchain( console );
     printerA.outputUnchain( printerB );
     track = [];
     printerA.log( 'A for printer D' );
-    test.identical( track, [ 'begin : printerD : A for printer D', 'end : printerD : A for printer D' ] );
+    test.identical( track, [ 'onWriteBegin.printerD : A for printer D', 'onWriteEnd.printerD : A for printer D' ] );
 
     test.case = 'combining : append';
 
@@ -2162,10 +2162,10 @@ function output( test )
     printerC.inputUnchain( console );
     printerA.outputUnchain( printerB );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ] );
     track = [];
     printerA.log( 'A for printer C' );
-    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer C', 'onWriteEnd.printerC : A for printer C' ] );
 
     test.case = 'combining : prepend';
 
@@ -2191,10 +2191,10 @@ function output( test )
     printerC.inputUnchain( console );
     printerA.outputUnchain( printerB );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ] );
     track = [];
     printerA.log( 'A for printer C' );
-    test.identical( track, [ 'begin : printerC : A for printer C', 'end : printerC : A for printer C' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer C', 'onWriteEnd.printerC : A for printer C' ] );
 
     test.case = 'combining : supplement, no other chains';
 
@@ -2215,7 +2215,7 @@ function output( test )
     printerC.inputFrom( console, { exclusiveOutput : 1 } );
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
-    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ] );
     test.will = 'unchain exclusive output, printerD now must get the message';
     printerC.inputUnchain( console );
     printerA.outputUnchain( printerB );
@@ -2240,7 +2240,7 @@ function output( test )
     printerA.log( 'A for printer B' );
     printerC.inputUnchain( console );
     test.will = 'message from printerA must not reach printerB';
-    test.identical( track, [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ] );
+    test.identical( track, [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ] );
 
     test.close( 'printer -> exclusive -> console' );
 
@@ -2272,8 +2272,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-      'begin : printerC : A for printer B', 'end : printerC : A for printer B'
+      'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B',
+      'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B'
     ]
     test.identical( track, expected );
 
@@ -2300,8 +2300,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-      'begin : printerC : A for printer B', 'end : printerC : A for printer B'
+      'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B',
+      'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B'
     ]
     test.identical( track, expected );
 
@@ -2329,8 +2329,8 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : printerB : A for printer B', 'end : printerB : A for printer B',
-      'begin : printerC : A for printer B', 'end : printerC : A for printer B'
+      'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B',
+      'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B'
     ]
     test.identical( track, expected );
 
@@ -2355,7 +2355,7 @@ function output( test )
     test.will = 'message from printerA must reach both of handlers';
     var expected =
     [
-      'begin : printerB : A for printer B', 'end : printerB : A for printer B'
+      'onWriteBegin.printerB : A for printer B', 'onWriteEnd.printerB : A for printer B'
     ]
     test.identical( track, expected );
 
@@ -2379,7 +2379,7 @@ function output( test )
     printerA.log( 'A for printer B' );
     test.will = 'message from printerA must reach both of handlers';
     var expected =
-    [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ]
+    [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ]
     test.identical( track, expected );
 
     test.close( 'printer -> original -> printer' );
@@ -2438,7 +2438,7 @@ function output( test )
     consoleHook.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    var expected = [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ];
     test.identical( track, expected );
 
     test.case = 'combining : prepend';
@@ -2466,7 +2466,7 @@ function output( test )
     consoleHook.inputUnchain( console );
     printerA.outputUnchain( console );
     test.will = 'message from printerA will be printed by original method, printer C will not get a message';
-    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    var expected = [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ];
     test.identical( track, expected );
 
     test.case = 'combining : supplement, no other chains';
@@ -2515,7 +2515,7 @@ function output( test )
     printerA.log( 'A for printer B' );
     printerC.inputUnchain( printerB );
     test.will = 'message from printerA will not be printed by original method, printer C will get a message';
-    var expected = [ 'begin : printerC : A for printer B', 'end : printerC : A for printer B' ];
+    var expected = [ 'onWriteBegin.printerC : A for printer B', 'onWriteEnd.printerC : A for printer B' ];
     test.identical( track, expected );
 
     test.close( 'printer -> original -> console' );
@@ -2577,8 +2577,11 @@ function output( test )
 
     var expected =
     [
-      'begin : printerB : printerEx : for printerB',
-      'end : printerB : printerEx : for printerB'
+      // 'begin : printerB : printerEx : for printerB',
+      // 'end : printerB : printerEx : for printerB'
+      'onTransformBegin2.printerEx : for printerB', 
+      'onWriteBegin.printerB : for printerB', 
+      'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );
 
@@ -2610,8 +2613,11 @@ function output( test )
 
     var expected =
     [
-      'begin : printerB : printerEx : for printerB',
-      'end : printerB : printerEx : for printerB'
+      // 'begin : printerB : printerEx : for printerB',
+      // 'end : printerB : printerEx : for printerB'
+      'onTransformBegin2.printerEx : for printerB', 
+      'onWriteBegin.printerB : for printerB', 
+      'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );
 
@@ -2635,8 +2641,11 @@ function output( test )
 
     var expected =
     [
-      'begin : printerB : printerEx : for printerB',
-      'end : printerB : printerEx : for printerB'
+      // 'begin : printerB : printerEx : for printerB',
+      // 'end : printerB : printerEx : for printerB'
+      'onTransformBegin2.printerEx : for printerB', 
+      'onWriteBegin.printerB : for printerB', 
+      'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );
 
@@ -2666,7 +2675,14 @@ function output( test )
 
     track = [];
     printerA.log( 'for E' );
-    var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    // var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    var expected =
+    [
+      'onTransformBegin2.printerB : for E',
+      'onTransformBegin2.printerC : for E',
+      'onTransformBegin2.printerD : for E',
+      'onTransformBegin2.printerC : for E'
+    ]
     test.identical( track, expected )
 
     /* */
@@ -2689,7 +2705,14 @@ function output( test )
 
     track = [];
     printerA.log( 'for E' );
-    var expected = [ 'end : printerE : printerD : printerB : printerA : for E' ];
+    // var expected = [ 'end : printerE : printerD : printerB : printerA : for E' ];
+    var expected =
+    [
+      'onTransformBegin2.printerA : for E',
+      'onTransformBegin2.printerB : for E',
+      'onTransformBegin2.printerD : for E',
+      'onTransformBegin2.printerB : for E'
+    ];
     test.identical( track, expected )
 
     /* */
@@ -2712,7 +2735,16 @@ function output( test )
 
     track = [];
     printerA.log( 'for E' );
-    var expected = [ 'end : printerE : printerD : printerC : printerB : printerA : for E' ];
+    // var expected = [ 'end : printerE : printerD : printerC : printerB : printerA : for E' ];
+    var expected =
+    [
+      'onTransformBegin2.printerA : for E',
+      'onTransformBegin2.printerB : for E',
+      'onTransformBegin2.printerC : for E',
+      'onTransformBegin2.printerD : for E',
+      'onTransformBegin2.printerD : for E',
+      'onTransformBegin2.printerB : for E'
+    ]
     test.identical( track, expected );
 
     /* */
@@ -2735,7 +2767,15 @@ function output( test )
 
     track = [];
     printerA.log( 'for E' );
-    var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    // var expected = [ 'end : printerE : printerD : printerC : printerB : for E' ];
+    /* Yevhen : onTransformBegin2.printerD is called twice */
+    var expected =
+    [
+      'onTransformBegin2.printerB : for E',
+      'onTransformBegin2.printerC : for E',
+      'onTransformBegin2.printerD : for E',
+      'onTransformBegin2.printerD : for E'
+    ];
     test.identical( track, expected )
 
     test.close( 'multiple original/exclusive output' );
