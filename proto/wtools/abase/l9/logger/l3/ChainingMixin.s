@@ -176,26 +176,12 @@ function _writeAct( channelName, args )
 function _writeToChannelWithoutExclusion( channelName, args )
 {
   let self = this;
-  let inputChainer = self[ chainerSymbol ];
 
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( channelName ) );
-  _.assert( _.longIs( args ) );
+  let transformation = self._transformationForm( channelName, args );
 
-  args = _.filter_( null, args, ( a ) => a );
-  if( !args.length )
+  if( transformation === null )
   return;
 
-  let transformation =
-  {
-    input : args,
-    channelName,
-  }
-
-  /* xxx ; Yevhen : onWriteBegin callback is not called, uncommented to fix */
-  self.transform.head.call( self, self.transform, [ transformation ] );
-  if( self.onWriteBegin )
-  self.onWriteBegin( transformation );
   if( transformation.discarding )
   return transformation;
 
@@ -233,6 +219,35 @@ function _writeToChannelWithoutExclusion( channelName, args )
 
   if( self.onWriteEnd )
   self.onWriteEnd( transformation );
+
+  return transformation;
+}
+
+//
+
+function _transformationForm( channelName, args )
+{
+  let self = this;
+  let inputChainer = self[ chainerSymbol ];
+
+  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  _.assert( _.strIs( channelName ) );
+  _.assert( _.longIs( args ) );
+
+  args = _.filter_( null, args, ( a ) => a );
+  if( !args.length )
+  return null;
+
+  let transformation =
+  {
+    input : args,
+    channelName,
+  }
+
+  /* xxx ; Yevhen : onWriteBegin callback is not called, uncommented to fix */
+  self.transform.head.call( self, self.transform, [ transformation ] );
+  if( self.onWriteBegin )
+  self.onWriteBegin( transformation );
 
   return transformation;
 }
@@ -966,6 +981,7 @@ let Extension =
 
   _writeAct,
   _writeToChannelWithoutExclusion,
+  _transformationForm, /* Yevhen : subroutine for `_writeToChannelWithoutExclusion` */
   _writeToChannelUp,
   _writeToChannelDown,
   _writeToChannelIn,
