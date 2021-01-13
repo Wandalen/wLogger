@@ -55,12 +55,13 @@ function shortColor( name )
 
 function prepareTableInfo()
 {
-  function onTransformEnd( data )
+  function onWriteEnd( data )
   {
     if( c <= colorNames.length / 2 )
-    row1[ shortColor( fg ) ].push( data.output );
+    row1[ shortColor( fg ) ].push( data.output[ 0 ] );
     else
-    row2[ shortColor( fg ) ].push( data.output );
+    row2[ shortColor( fg ) ].push( data.output[ 0 ] );
+
   }
 
   var table1 = [];
@@ -73,7 +74,7 @@ function prepareTableInfo()
   var silencedLogger = new _.Logger
   ({
     output : console,
-    onTransformEnd,
+    onWriteEnd,
   })
   silencedLogger.diagnosingColor = 0;
   for( var i = 0; i < colorNames.length; i++ )
@@ -114,7 +115,6 @@ function drawTable()
   o2.colWidth = 9;
   o2.colSplits = 1;
   o2.style = 'doubleBorder';
-  debugger;
   logger.log( _.strTable( o2 ).result );
 
   var o2 = Object.create( null );
