@@ -481,7 +481,72 @@ function _transformSplit( o )
 function TransformCssStylingToDirectives( input )
 {
   //https://developers.google.com/web/tools/chrome-devtools/console/console-write#styling_console_output_with_css
-  return input.join( '' );
+
+  if( !_.strHas( input[ 0 ], '%c' ) )
+  return input;
+
+  let result = [ '' ];
+
+  let splitted = _.strSplitFast
+  ({
+    src : input[ 0 ],
+    delimeter : '%c',
+    preservingEmpty : 0,
+    preservingDelimeters : 0
+  });
+
+  splitted.forEach( ( chunk, i ) =>
+  {
+    let styles = input[ i + 1 ];
+
+    if( styles )
+    {
+      let splits = _.strSplitFast
+      ({
+        src : styles,
+        delimeter : [ ';', ':' ],
+        preservingEmpty : 0,
+        preservingDelimeters : 0
+      });
+
+      if( splits.length > 1 )
+      for( let i = 0; i < splits.length; i += 2 )
+      {
+        let key = _.strStrip( splits[ i ] );
+        let value = _.strStrip( splits[ i + 1 ] );
+
+        if( value === 'none' )
+        value = 'default';
+
+        if( key === 'color' )
+        {
+          value = _.color.rgbaHtmlFrom( value );
+          value = _.color.colorNameNearest( value );
+          chunk = _.color.strFg( chunk, value );
+        }
+        else if( key === 'background' )
+        {
+          value = _.color.rgbaHtmlFrom( value );
+          value = _.color.colorNameNearest( value )
+          chunk = _.color.strBg( chunk, value );
+        }
+        else if( key === 'text-decoration' )
+        {
+          _.assert( value === 'underline' );
+          chunk = `❮${value} : true❯${chunk}❮${value} : false❯`
+        }
+      }
+    }
+
+    result[ 0 ] += chunk;
+  })
+
+  if( !result[ 0 ] )
+  return input;
+
+  result.push( ... input.slice( splitted.length + 1 ) );
+
+  return result;
 }
 
 // --
