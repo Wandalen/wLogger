@@ -516,7 +516,7 @@ function TransformCssStylingToDirectives( input )
         let value = _.strStrip( splits[ i + 1 ] );
 
         if( value === 'none' )
-        value = 'default';
+        continue;
 
         if( key === 'color' )
         {
@@ -532,7 +532,6 @@ function TransformCssStylingToDirectives( input )
         }
         else if( key === 'text-decoration' )
         {
-          _.assert( value === 'underline' );
           chunk = `❮${value} : true❯${chunk}❮${value} : false❯`
         }
       }
