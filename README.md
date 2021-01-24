@@ -11,7 +11,7 @@ Supports colorful output in browser and shell, multilevel output, chaining with 
 git clone https://github.com/Wandalen/wLogger
 cd wLogger
 npm install
-node sample/Sample.s
+node sample/trivial/Sample.s
 ```
 
 ## To add to your project
