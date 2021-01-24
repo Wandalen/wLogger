@@ -1,32 +1,57 @@
 {
-  "name" : "wLogger",
-  "version" : "0.5.367",
-  "engine" : "node >= 10.0.0",
-  "description" : "Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.",
-  "author" : "Kostiantyn Wandalen <wanalen@01.school>",
-  "contributors" :
-  [
-    { "name" : "Kostiantyn Wandalen", "email" : "wanalen@01.school" },
-    { "name" : "Volodymyr M.", "email" : "volodymyr.migdal@gmail.com" }
+  "name": "wLogger",
+  "version": "0.5.368",
+  "engine": "node >= 10.0.0",
+  "description": "Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.",
+  "author": "Kostiantyn Wandalen <wanalen@01.school>",
+  "contributors": [
+    {
+      "name": "Kostiantyn Wandalen",
+      "email": "wanalen@01.school"
+    },
+    {
+      "name": "Volodymyr M.",
+      "email": "volodymyr.migdal@gmail.com"
+    }
   ],
-  "license" : "MIT",
-  "main" : "proto/wtools/abase/l9/logger/entry/Logger.s",
-  "files" : [ "proto/wtools/abase/l9/logger", "proto/wtools/Tools.s", "out" ],
-  "scripts" : { "test" : "wtest .run 'proto/**' rapidity:-1", "docgen" : "wdocgen proto" },
-  "repository" : { "type" : "git", "url" : "https://github.com/Wandalen/wLogger.git" },
-  "bugs" :
-  {
-    "url" : "https://github.com/Wandalen/wLogger/issues"
+  "license": "MIT",
+  "main": "proto/wtools/abase/l9/logger/entry/Logger.s",
+  "files": [
+    "proto/wtools/abase/l9/logger",
+    "proto/wtools/Tools.s",
+    "out"
+  ],
+  "scripts": {
+    "test": "wtest .run 'proto/**' rapidity:-1",
+    "docgen": "wdocgen proto"
   },
-  "dependencies" :
-  {
-    "wTools" : "alpha",
-    "wCopyable" : "alpha",
-    "wEventHandler" : "alpha",
-    "wstringer" : "alpha",
-    "wstringsextra" : "alpha",
-    "wColor256" : "alpha"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wandalen/wLogger.git"
   },
-  "devDependencies" : { "wLogger" : "file:.", "wFiles" : "alpha", "wTesting" : "alpha" },
-  "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
+  "bugs": {
+    "url": "https://github.com/Wandalen/wLogger/issues"
+  },
+  "dependencies": {
+    "wTools": "alpha",
+    "wCopyable": "alpha",
+    "wEventHandler": "alpha",
+    "wstringer": "alpha",
+    "wstringsextra": "alpha",
+    "wColor256": "alpha"
+  },
+  "devDependencies": {
+    "eslint": "7.1.0",
+    "wFiles": "alpha",
+    "wLogger": "file:.",
+    "wTesting": "alpha"
+  },
+  "keywords": [
+    "wTools",
+    "logger",
+    "logging",
+    "log",
+    "colorful log",
+    "multilevel log"
+  ]
 }
