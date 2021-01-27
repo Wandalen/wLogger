@@ -300,6 +300,8 @@ function input( test )
   return con;
 }
 
+input.timeOut = 15000;
+
 //
 
 function output( test )
