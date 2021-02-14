@@ -1003,9 +1003,6 @@ function _colorSet( layer, color )
   {
     let originalName = color;
 
-    if( originalName === 'bright magenta' )
-    debugger;
-
     if( Config.interpreter === 'browser' ) /* xxx qqq : use field instead of Config.interpreter */
     {
       color = _.color.rgbaFromTry( color );
