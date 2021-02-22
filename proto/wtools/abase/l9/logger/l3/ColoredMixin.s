@@ -833,7 +833,7 @@ function _rgbToCode_nodejs( rgb, isBackground )
   if( isBackground )
   code += 10; /* add 10 to convert fg code to bg code */
 
-  return _.toStr( code );
+  return _.entity.exportString( code );
 }
 
 //
@@ -1348,7 +1348,7 @@ function escape( src )
 function str()
 {
   debugger;
-  return _.toStrSimple.apply( _, arguments );
+  return _.entity.exportStringSimple.apply( _, arguments );
 }
 
 // --

@@ -160,14 +160,14 @@ function _chain( o )
 
   if( Config.debug )
   if( inputChainer.hasOutputClose( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'inputPrinter', _.toStrShort( o.inputPrinter ), o.inputPrinter.name, 'already has outputPrinter', _.toStrShort( o.outputPrinter ), 'in outputs' ] ) );
+  _.assert( 0, () => _.strConcat([ 'inputPrinter', _.entity.exportStringShort( o.inputPrinter ), o.inputPrinter.name, 'already has outputPrinter', _.entity.exportStringShort( o.outputPrinter ), 'in outputs' ] ) );
 
   /* input check */
 
   if( Config.debug )
   if( !o.originalOutput )
   if( inputChainer.hasInputClose( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
+  _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.entity.exportStringShort( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShort( o.outputPrinter ) ]) );
 
   /*
     no need to check inputs if chaining is originalOutput
@@ -176,7 +176,7 @@ function _chain( o )
   if( Config.debug )
   if( !o.originalOutput )
   if( inputChainer.hasInputDeep( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.toStrShort( o.inputPrinter ), 'to outputPrinter', _.toStrShort( o.outputPrinter ) ]) );
+  _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.entity.exportStringShort( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShort( o.outputPrinter ) ]) );
 
   if( cd.outputCombining === 'prepend' )
   {
@@ -225,7 +225,7 @@ function _chain( o )
 
   if( cd.exclusiveOutput )
   {
-    _.assert( !inputChainer.exclusiveOutputPrinter, 'console is already excluded by printer', _.toStrShort( inputChainer.exclusiveOutputPrinter ) );
+    _.assert( !inputChainer.exclusiveOutputPrinter, 'console is already excluded by printer', _.entity.exportStringShort( inputChainer.exclusiveOutputPrinter ) );
     inputChainer.exclusiveOutputPrinter = o.outputPrinter;
   }
 

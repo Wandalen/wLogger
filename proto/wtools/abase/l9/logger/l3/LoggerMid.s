@@ -127,7 +127,7 @@ function _begin( key, val )
   let self = this;
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ), 'Expects string {-key-}, got', _.strType( key ) );
+  _.assert( _.strIs( key ), 'Expects string {-key-}, got', _.entity.strType( key ) );
 
   if( val === undefined )
   {
@@ -240,8 +240,8 @@ function _rbegin( key, val )
   }
 
   _.assert( arguments.length === 2, 'Expects exactly two arguments' );
-  _.assert( _.strIs( key ), 'Expects string {-key-}, got', () => _.strType( key ) );
-  _.assert( _.numberIs( val ), 'Expects number {-val-}, got', () => _.strType( val ) );
+  _.assert( _.strIs( key ), 'Expects string {-key-}, got', () => _.entity.strType( key ) );
+  _.assert( _.numberIs( val ), 'Expects number {-val-}, got', () => _.entity.strType( val ) );
   _.assert( _.numberIs( attribute ), () => _.args( 'Expects number, but attribute', _.strQuote( key ), 'had value', _.strQuote( attribute ) ) );
 
   return self._begin( key, val + attribute )
@@ -329,9 +329,9 @@ function _attributeError( key, begin, end )
   return _.err
   (
     '{-begin-} does not have complemented {-end-}'
-    + '\nkey : ' + _.toStr( key )
-    + '\nbegin : ' + _.toStr( begin )
-    + '\nend : ' + _.toStr( end )
+    + '\nkey : ' + _.entity.exportString( key )
+    + '\nbegin : ' + _.entity.exportString( begin )
+    + '\nend : ' + _.entity.exportString( end )
     + '\nlength : ' + ( self._attributesStacks[ key ] ? self._attributesStacks[ key ].length : 0 )
   );
 

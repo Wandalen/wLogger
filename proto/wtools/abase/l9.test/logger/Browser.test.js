@@ -11,7 +11,7 @@ let Parent = wTester;
 
 function toStrEscaping( str )
 {
-  return _.toStr( str, { escaping : 1 } );
+  return _.entity.exportString( str, { escaping : 1 } );
 }
 
 //

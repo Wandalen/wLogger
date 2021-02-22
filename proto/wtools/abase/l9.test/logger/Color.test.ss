@@ -24,7 +24,7 @@ var isUnix = process.platform !== 'win32';
 
 var escape = function( str )
 {
-  return _.toStr( str, { escaping : 1 } );
+  return _.entity.exportString( str, { escaping : 1 } );
 }
 
 //
@@ -318,7 +318,7 @@ function colorConsoleDirectives( test )
   function runCase( o )
   {
     test.case =
-    _.toStr
+    _.entity.exportString
     ({
       ig : o.inputGray,
       og : o.outputGray,

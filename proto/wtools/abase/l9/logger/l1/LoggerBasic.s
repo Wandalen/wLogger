@@ -306,7 +306,7 @@ function _strConcat( args )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
-  return _.toStrSimple.apply( _, args );
+  return _.entity.exportStringSimple.apply( _, args );
 
   let o2 =
   {
@@ -328,7 +328,7 @@ function _strConcat( args )
       result = _.ct.format( result, 'negative' );
       return result;
     }
-    return _.toStr( src, op.optionsForToStr );
+    return _.entity.exportString( src, op.optionsForToStr );
   }
 }
 
