@@ -608,6 +608,23 @@ function finit( test )
 
 }
 
+//
+
+function exportStringShortDiagnosticLogger( test )
+{
+  test.case = 'string representation of logger';
+  var logger = new _.Logger();
+  var expected = '{- wLoggerTop.constructible -}';
+  var got = _.entity.exportStringShortDiagnostic( logger )
+  test.identical( got, expected );
+
+  test.case = 'string representation of logger with ouput to console';
+  var logger = new _.Logger({ output : console });
+  var expected = '{- wLoggerTop.constructible -}';
+  var got = _.entity.exportStringShortDiagnostic( logger )
+  test.identical( got, expected );
+} 
+
 // --
 // declare
 // --
@@ -632,6 +649,8 @@ let Self =
 
     clone,
     finit,
+
+    exportStringShortDiagnosticLogger
 
   },
 
