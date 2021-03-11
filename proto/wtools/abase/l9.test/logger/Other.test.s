@@ -815,7 +815,7 @@ function clone( test )
 
 //
 
-function consoleBarExperiment( test )
+function consoleBar( test ) /* xxx qqq : logging to the console is performed in spite of barring */
 {
   let context = this;
   let a = test.assetFor( false );
@@ -857,8 +857,8 @@ program();
 
 }
 
-consoleBarExperiment.timeOut = 30000;
-consoleBarExperiment.description =
+consoleBar.timeOut = 30000;
+consoleBar.description =
 `
 console is barred
 console.error works without context
@@ -901,7 +901,7 @@ let Self =
     coloringNoColor,
     // processWarning, /* qqq : repair? */
     // TransformCssStylingToDirectives, /* qqq : implement pelase */
-    consoleBarExperiment
+    consoleBar
   },
 
 }
