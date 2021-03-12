@@ -866,7 +866,36 @@ console.error works without context
 
 //
 
-function consoleBarDeprecationWarning( test ) /* xxx qqq : deprecation warning is logged to the console in spite of barring */
+/*
+  xxx qqq : deprecation warning is logged to the console in spite of barring
+
+  In a subprocess _.Logger.ConsoleBar() is called.
+  Then runs code that causes deprecation warning.
+  Deprecation warning shouldn't appear in the console, but it does.
+
+  node proto/wtools/abase/l9.test/logger/Other.test.s r:consoleBarDeprecationWarning s:0
+  Launching several ( 1 ) test suite(s) ..
+    Running test suite ( Tools.logger.Other ) ..
+    Located at /Users/jackiejo/main/BFS/wLogger/wLogger/proto/wtools/abase/l9.test/logger/Other.test.s:956:8
+  > /private/var/folders/cw/sbbjfvxj2hnggb61vf0p_w200000gn/T/PrinterOther-2021-3-12-17-59-10-230-2ea5.tmp/consoleBarDeprecationWarning/Program.js
+  (node:48166) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+
+
+      /Users/jackiejo/main/BFS/wLogger/wLogger/proto/wtools/abase/l9.test/logger/Other.test.s:892:15
+        888 :   a.appStartNonThrowing({ execPath : a.abs( 'Program.js' ) })
+        889 :   .then( ( op ) =>
+        890 :   {
+        891 :     test.identical( op.exitCode, 0 );
+      * 892 :     test.false( _.strHas( op.output, 'DeprecationWarning: Buffer() is deprecated due to security and usability issues' ) ) / fails /
+
+      Test check ( TestSuite::Tools.logger.Other / TestRoutine::consoleBarDeprecationWarning /  # 2 ) : expected false ... failed
+    Failed TestSuite::Tools.logger.Other / TestRoutine::consoleBarDeprecationWarning in 0.449s
+  Passed test checks 1 / 2
+  Passed test cases 0 / 0
+  Passed test routines 0 / 1
+  Test suite ( Tools.logger.Other ) ... in 0.837s ... failed
+*/
+function consoleBarDeprecationWarning( test )
 {
   let context = this;
   let a = test.assetFor( false );
@@ -899,7 +928,7 @@ program();
     let _ = require( toolsPath );
     _.include( 'wLogger' );
     _.Logger.ConsoleBar();
-    new BufferNode( 5 );
+    new BufferNode( 5 ); /* DeprecationWarning: Buffer() is deprecated ... */
   }
 
 }
