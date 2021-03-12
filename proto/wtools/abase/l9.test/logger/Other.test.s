@@ -815,7 +815,7 @@ function clone( test )
 
 //
 
-function consoleBar( test ) /* xxx qqq : logging to the console is performed in spite of barring */
+function consoleBar( test )
 {
   let context = this;
   let a = test.assetFor( false );
@@ -866,6 +866,46 @@ console.error works without context
 
 //
 
+function consoleBarDeprecationWarning( test ) /* xxx qqq : deprecation warning is logged to the console in spite of barring */
+{
+  let context = this;
+  let a = test.assetFor( false );
+  let toolsPath = _globals_.testing.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
+  let programSourceCode =
+`
+var toolsPath = '${toolsPath}';
+${program.toString()}
+program();
+`
+
+  /* */
+
+  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
+  a.appStartNonThrowing({ execPath : a.abs( 'Program.js' ) })
+  .then( ( op ) =>
+  {
+    test.identical( op.exitCode, 0 );
+    // test.false( _.strHas( op.output, 'DeprecationWarning: Buffer() is deprecated due to security and usability issues' ) ) /* fails */
+
+    return null;
+  });
+
+  /* */
+
+  return a.ready;
+
+  function program()
+  {
+    let _ = require( toolsPath );
+    _.include( 'wLogger' );
+    _.Logger.ConsoleBar();
+    new BufferNode( 5 );
+  }
+
+}
+
+//
+
 let Self =
 {
 
@@ -901,7 +941,8 @@ let Self =
     coloringNoColor,
     // processWarning, /* qqq : repair? */
     // TransformCssStylingToDirectives, /* qqq : implement pelase */
-    consoleBar
+    consoleBar,
+    consoleBarDeprecationWarning
   },
 
 }
