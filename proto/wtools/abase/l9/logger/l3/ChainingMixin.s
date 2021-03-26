@@ -18,10 +18,10 @@
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = null;
-let Self = wPrinterChainingMixin;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = null;
+const Self = wPrinterChainingMixin;
 function wPrinterChainingMixin( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -673,7 +673,7 @@ function ConsoleBar( o )
     for( let t = 0 ; t < o.outputPrinterHadOutputs.length ; t++ )
     {
       let outputOptions = o.outputPrinterHadOutputs[ t ];
-      o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly( outputOptions, o.outputPrinter.outputTo.defaults ) );
+      o.outputPrinter.outputTo( outputOptions.outputPrinter, _.mapOnly_( null, outputOptions, o.outputPrinter.outputTo.defaults ) );
     }
 
     o.outputPrinterHadOutputs = null;

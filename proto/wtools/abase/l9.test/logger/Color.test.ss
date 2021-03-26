@@ -7,17 +7,17 @@ if( typeof module !== 'undefined' )
 {
 
   require( '../../l9/logger/entry/Logger.s' );
-  let _global = _global_;
-  let _ = _global_.wTools;
+  const _global = _global_;
+  const _ = _global_.wTools;
 
   _.include( 'wTesting' );
 
 }
 
 //
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = wTester;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = wTester;
 var isUnix = process.platform !== 'win32';
 
 //
@@ -776,7 +776,7 @@ function shellColors( test )
 
 //
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.logger.Color.Shell',
@@ -793,7 +793,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self )
+const Self = wTestSuite( Proto )
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

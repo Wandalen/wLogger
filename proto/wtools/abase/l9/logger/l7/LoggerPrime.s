@@ -10,10 +10,10 @@
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.Logger;
-let Self = wLoggerPrime;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.Logger;
+const Self = wLoggerPrime;
 function wLoggerPrime( o )
 {
   return _.workpiece.construct( Self, this, arguments );

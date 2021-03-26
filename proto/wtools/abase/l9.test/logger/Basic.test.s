@@ -11,9 +11,9 @@ if( typeof module !== 'undefined' )
 
 //
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = wTester;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = wTester;
 
 // --
 // tests
@@ -610,18 +610,18 @@ function finit( test )
 
 //
 
-function exportStringShortDiagnosticLogger( test )
+function exportStringShallowDiagnosticLogger( test )
 {
   test.case = 'string representation of logger';
   var logger = new _.Logger();
   var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShortDiagnostic( logger )
+  var got = _.entity.exportStringShallowDiagnostic( logger )
   test.identical( got, expected );
 
   test.case = 'string representation of logger with ouput to console';
   var logger = new _.Logger({ output : console });
   var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShortDiagnostic( logger )
+  var got = _.entity.exportStringShallowDiagnostic( logger )
   test.identical( got, expected );
 } 
 
@@ -629,7 +629,7 @@ function exportStringShortDiagnosticLogger( test )
 // declare
 // --
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.logger.Basic',
@@ -650,7 +650,7 @@ let Self =
     clone,
     finit,
 
-    exportStringShortDiagnosticLogger
+    exportStringShallowDiagnosticLogger
 
   },
 
@@ -658,7 +658,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self )
+const Self = wTestSuite( Proto )
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

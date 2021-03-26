@@ -11,9 +11,9 @@ if( typeof module !== 'undefined' )
   _.include( 'wTesting' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = wTester;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = wTester;
 
 //
 
@@ -75,7 +75,7 @@ function colorConsole( test )
 
 //
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.logger.Color.Browser',
@@ -91,7 +91,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self )
+const Self = wTestSuite( Proto )
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

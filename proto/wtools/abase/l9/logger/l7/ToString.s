@@ -9,10 +9,10 @@
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.LoggerMid;
-let Self = wLoggerToString;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.LoggerMid;
+const Self = wLoggerToString;
 function wLoggerToString( o )
 {
   return _.workpiece.construct( Self, this, arguments );

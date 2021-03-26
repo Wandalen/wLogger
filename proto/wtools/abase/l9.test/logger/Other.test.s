@@ -10,10 +10,11 @@ if( typeof module !== 'undefined' )
   // _.include( 'wConsequence' );
 }
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = wTester;
-let fileProvider = _globals_.testing.wTools.fileProvider;
+const _global = _global_;
+const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
+const Parent = wTester;
+let fileProvider = __.fileProvider;
 let path = fileProvider.path;
 
 //
@@ -819,7 +820,7 @@ function consoleBarExperiment( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let toolsPath = _globals_.testing.wTools.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
+  let toolsPath = __.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
@@ -866,7 +867,7 @@ console.error works without context
 
 //
 
-let Self =
+const Proto =
 {
 
   name : 'Tools.logger.Other',
@@ -908,7 +909,7 @@ let Self =
 
 //
 
-Self = wTestSuite( Self );
+const Self = wTestSuite( Proto );
 if( typeof module !== 'undefined' && !module.parent )
 wTester.test( Self.name );
 

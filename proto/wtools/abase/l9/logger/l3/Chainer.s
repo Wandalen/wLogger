@@ -10,10 +10,10 @@
    @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = null;
-let Self = wChainer;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = null;
+const Self = wChainer;
 function wChainer( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -160,14 +160,14 @@ function _chain( o )
 
   if( Config.debug )
   if( inputChainer.hasOutputClose( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'inputPrinter', _.entity.exportStringShort( o.inputPrinter ), o.inputPrinter.name, 'already has outputPrinter', _.entity.exportStringShort( o.outputPrinter ), 'in outputs' ] ) );
+  _.assert( 0, () => _.strConcat([ 'inputPrinter', _.entity.exportStringShallow( o.inputPrinter ), o.inputPrinter.name, 'already has outputPrinter', _.entity.exportStringShallow( o.outputPrinter ), 'in outputs' ] ) );
 
   /* input check */
 
   if( Config.debug )
   if( !o.originalOutput )
   if( inputChainer.hasInputClose( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.entity.exportStringShort( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShort( o.outputPrinter ) ]) );
+  _.assert( 0, () => _.strConcat([ 'Close loop, inputPrinter', _.entity.exportStringShallow( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShallow( o.outputPrinter ) ]) );
 
   /*
     no need to check inputs if chaining is originalOutput
@@ -176,7 +176,7 @@ function _chain( o )
   if( Config.debug )
   if( !o.originalOutput )
   if( inputChainer.hasInputDeep( o.outputPrinter ) )
-  _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.entity.exportStringShort( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShort( o.outputPrinter ) ]) );
+  _.assert( 0, () => _.strConcat([ 'Deep loop, inputPrinter', _.entity.exportStringShallow( o.inputPrinter ), 'to outputPrinter', _.entity.exportStringShallow( o.outputPrinter ) ]) );
 
   if( cd.outputCombining === 'prepend' )
   {
@@ -225,7 +225,7 @@ function _chain( o )
 
   if( cd.exclusiveOutput )
   {
-    _.assert( !inputChainer.exclusiveOutputPrinter, 'console is already excluded by printer', _.entity.exportStringShort( inputChainer.exclusiveOutputPrinter ) );
+    _.assert( !inputChainer.exclusiveOutputPrinter, 'console is already excluded by printer', _.entity.exportStringShallow( inputChainer.exclusiveOutputPrinter ) );
     inputChainer.exclusiveOutputPrinter = o.outputPrinter;
   }
 
@@ -703,7 +703,7 @@ function _chainDescriptorMake( o )
   _.assert( arguments.length === 1 );
   let r = new ChainDescriptor();
 
-  let options = _.mapOnly( o, self.ChainDescriptorFields );
+  let options = _.mapOnly_( null, o, self.ChainDescriptorFields );
 
   Object.assign( r, self.ChainDescriptorFields );
 

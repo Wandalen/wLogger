@@ -8,7 +8,7 @@ catch( err )
   require( 'wTools' );
 }
 
-let _ = _global_.wTools
+const _ = _global_.wTools
 
 _.include( 'wConsequence' );
 _.include( 'wLogger' );

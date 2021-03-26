@@ -10,10 +10,10 @@
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = null;
-let Self = wPrinterColoredMixin;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = null;
+const Self = wPrinterColoredMixin;
 function wPrinterColoredMixin( o )
 {
   _.assert( arguments.length === 0 || arguments.length === 1 );
@@ -76,7 +76,7 @@ function _transformActHtml( o )
   _.assert( _.arrayIs( o._outputSplitted ) );
   _.assert( !o._outputForTerminal );
 
-  let options = _.mapOnly( o, _transformActHtml.defaults );
+  let options = _.mapOnly_( null, o, _transformActHtml.defaults );
   _.routineOptions( _transformActHtml, options );
 
   for( let i = 0; i < splitted.length; i++ )

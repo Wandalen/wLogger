@@ -10,10 +10,10 @@
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = null;
-let Self = wLoggerBasic;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = null;
+const Self = wLoggerBasic;
 function wLoggerBasic( o )
 {
   return _.workpiece.construct( Self, this, arguments );
@@ -53,7 +53,7 @@ function transform_head( routine, args )
 
   _.assert( args.length === 1 );
   _.assert( arguments.length === 2 );
-  _.assertMapHasAll( o, routine.defaults );
+  _.map.assertHasAll( o, routine.defaults );
 
   o.output = null;
   o.discarding = false;
@@ -70,7 +70,7 @@ function transform_body( o )
 {
   let self = this;
 
-  // _.assertMapHasAll( o, transform_body.defaults );
+  // _.map.assertHasAll( o, transform_body.defaults );
 
   let o2 = self._transformBegin( o );
   _.assert( o2 === o );
@@ -107,7 +107,7 @@ function _transformBegin( o )
   let self = this;
 
   _.assert( arguments.length === 1, 'Expects single argument' );
-  _.assertMapHasAll( o, self.transform.defaults );
+  _.map.assertHasAll( o, self.transform.defaults );
 
   o.output = null;
   o.discarding = false;

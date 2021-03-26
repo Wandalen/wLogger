@@ -25,10 +25,10 @@ return;
  */
 
 let $ = jQuery;
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.Logger;
-let Self = wPrinterToLayeredHtml;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.Logger;
+const Self = wPrinterToLayeredHtml;
 function wPrinterToLayeredHtml( o )
 {
   return _.workpiece.construct( Self, this, arguments );

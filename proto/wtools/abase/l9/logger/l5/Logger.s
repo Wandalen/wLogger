@@ -30,10 +30,10 @@ self -> original -> printer
  * @module Tools/base/Logger
  */
 
-let _global = _global_;
-let _ = _global_.wTools;
-let Parent = _.LoggerMid;
-let Self = wLoggerTop;
+const _global = _global_;
+const _ = _global_.wTools;
+const Parent = _.LoggerMid;
+const Self = wLoggerTop;
 function wLoggerTop( o )
 {
   return _.workpiece.construct( Self, this, arguments );
