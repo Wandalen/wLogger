@@ -562,7 +562,7 @@ let verbositySymbol = Symbol.for( 'verbosity' );
 let Composes =
 {
 
-  verbosity : 0,
+  verbosity : 1,
   usingVerbosity : 1,
 
   // onTransformBegin : null,
