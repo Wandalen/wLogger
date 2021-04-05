@@ -271,14 +271,12 @@ function _writeAct( channelName, args )
   _.assert( arguments.length === 2 );
   _.assert( _.longHas( self.Channel, channelName ) );
 
-  debugger;
   let transformation =
   {
     input : args,
     channelName,
   }
 
-  // xxx
   self.transform.head.call( self, self.transform, [ transformation ] );
 
   if( self.onWriteBegin )
