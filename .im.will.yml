@@ -92,8 +92,8 @@ path:
       raw: compiled
       content: prime
   npm.proto.entry:
-    - /pro/module/wLogger/proto/wtools/abase/l9/logger/entry/Logger.s
-    - /pro/module/wLogger/proto/node_modules/wLogger
+    - proto/wtools/abase/l9/logger/entry/Logger.s
+    - proto/node_modules/wLogger
 reflector:
   reflect.proto:
     inherit: predefined.*
