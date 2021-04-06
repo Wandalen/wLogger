@@ -1,7 +1,7 @@
 
 try
 {
-  require( '../../../../wtools/Tools.s' );
+  require( '../../../../node_modules/Tools' );
 }
 catch( err )
 {

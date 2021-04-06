@@ -820,7 +820,7 @@ function consoleBarExperiment( test )
 {
   let context = this;
   let a = test.assetFor( false );
-  let toolsPath = __.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../wtools/Tools.s' ) ) );
+  let toolsPath = __.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../node_modules/Tools' ) ) );
   let programSourceCode =
 `
 var toolsPath = '${toolsPath}';
