@@ -7,7 +7,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../l9/logger/entry/Logger.s' );
+  const _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
 }
 

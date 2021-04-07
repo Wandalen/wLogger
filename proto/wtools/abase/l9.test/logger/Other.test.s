@@ -5,7 +5,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( '../../l9/logger/entry/Logger.s' );
+  const _ = require( '../../l9/logger/entry/Logger.s' );
   _.include( 'wTesting' );
   // _.include( 'wConsequence' );
 }
@@ -847,7 +847,7 @@ program();
 
   function program()
   {
-    let _ = require( toolsPath );
+    const _ = require( toolsPath );
     _.include( 'wLogger' );
     _.Logger.ConsoleBar();
     if( _.Logger.ConsoleIsBarred( console ) )

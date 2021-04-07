@@ -7,7 +7,7 @@
 
 if( typeof module !== 'undefined' )
 {
-  let _ = require( './Basic.s' );
+  const _ = require( './Basic.s' );
 
   require( '../l1/LoggerBasic.s' );
 
