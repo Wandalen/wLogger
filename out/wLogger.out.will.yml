@@ -1611,6 +1611,4 @@ module:
       ../.im.will.yml:
         hash: 9752723014fcc3a29b8f98709376acd0
         size: 5294
-      wLogger.out.will.yml:
-        hash: 55801b64ecb9fa23702b2f44f940341c
-        size: 42999
+      wLogger.out.will.yml: *ref_0
