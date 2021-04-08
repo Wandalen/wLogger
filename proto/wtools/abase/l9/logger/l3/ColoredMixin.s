@@ -23,7 +23,7 @@ function wPrinterColoredMixin( o )
 Self.shortName = 'PrinterColoredMixin';
 
 _.assert( _.routineIs( _.strSplitInlined ) );
-_.assert( _.routineIs( _.strSplitInlinedStereo ) );
+// _.assert( _.routineIs( _.strSplitInlinedStereo_ ) );
 
 // --
 // stack
