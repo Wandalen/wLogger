@@ -580,8 +580,8 @@ function _split( src )
   ({
     src,
     onInlined : self._splitHandle.bind( self ),
-    preservingEmpty : 0,
-    stripping : 0,
+    // preservingEmpty : 0,
+    // stripping : 0,
   });
   return splitted;
 }
