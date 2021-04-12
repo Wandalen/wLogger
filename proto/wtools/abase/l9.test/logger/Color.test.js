@@ -7,8 +7,9 @@
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( '../../l9/logger/entry/Logger.s' );
+  const _ = require( 'Tools' );
   _.include( 'wTesting' );
+  require( '../../l9/logger/entry/Logger.s' );
 }
 
 const _global = _global_;

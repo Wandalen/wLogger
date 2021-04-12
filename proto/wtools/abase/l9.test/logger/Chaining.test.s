@@ -5,8 +5,9 @@
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( '../../l9/logger/entry/Logger.s' );
+  const _ = require( 'Tools' );
   _.include( 'wTesting' );
+  require( '../../l9/logger/entry/Logger.s' );
 }
 
 //
@@ -2579,8 +2580,8 @@ function output( test )
     [
       // 'begin : printerB : printerEx : for printerB',
       // 'end : printerB : printerEx : for printerB'
-      'onTransformBegin2.printerEx : for printerB', 
-      'onWriteBegin.printerB : for printerB', 
+      'onTransformBegin2.printerEx : for printerB',
+      'onWriteBegin.printerB : for printerB',
       'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );
@@ -2615,8 +2616,8 @@ function output( test )
     [
       // 'begin : printerB : printerEx : for printerB',
       // 'end : printerB : printerEx : for printerB'
-      'onTransformBegin2.printerEx : for printerB', 
-      'onWriteBegin.printerB : for printerB', 
+      'onTransformBegin2.printerEx : for printerB',
+      'onWriteBegin.printerB : for printerB',
       'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );
@@ -2643,8 +2644,8 @@ function output( test )
     [
       // 'begin : printerB : printerEx : for printerB',
       // 'end : printerB : printerEx : for printerB'
-      'onTransformBegin2.printerEx : for printerB', 
-      'onWriteBegin.printerB : for printerB', 
+      'onTransformBegin2.printerEx : for printerB',
+      'onWriteBegin.printerB : for printerB',
       'onWriteEnd.printerB : for printerB'
     ];
     test.identical( track, expected );

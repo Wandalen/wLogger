@@ -5,127 +5,20 @@
 
 if( typeof module !== 'undefined' )
 {
-  const _ = require( '../../l9/logger/entry/Logger.s' );
+  const _ = require( 'Tools' );
   _.include( 'wTesting' );
+  require( '../../l9/logger/entry/Logger.s' );
 }
 
 //
 
 const _global = _global_;
 const _ = _global_.wTools;
-const Parent = wTester;
+const __ = _globals_.testing.wTools;
 
 // --
 // tests
 // --
-
-function consoleIs( test )
-{
-  test.case = 'LoggerBasic';
-  var src = _.LoggerBasic;
-  var got = _.consoleIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerMid';
-  var src = _.LoggerMid;
-  var got = _.consoleIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerTop';
-  var src = _.LoggerTop;
-  var got = _.consoleIs( src );
-  test.identical( got, false );
-
-  test.case = 'instance of Logger';
-  var src = new _.Logger();
-  var got = _.consoleIs( src );
-  test.identical( got, false );
-}
-
-//
-
-function printerIs( test )
-{
-
-  test.case = 'LoggerBasic';
-  var src = _.LoggerBasic;
-
-  var got = _.printerIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerMid';
-  var src = _.LoggerMid;
-  var got = _.printerIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerTop';
-  var src = _.LoggerTop;
-  var got = _.printerIs( src );
-  test.identical( got, false );
-
-  test.case = 'instance of Logger';
-  var src = new _.Logger();
-  var got = _.printerIs( src );
-  test.identical( got, true );
-
-}
-
-//
-
-function printerLike( test )
-{
-  test.case = 'LoggerBasic';
-  var src = _.LoggerBasic;
-  var got = _.printerLike( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerMid';
-  var src = _.LoggerMid;
-  var got = _.printerLike( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerTop';
-  var src = _.LoggerTop;
-  var got = _.printerLike( src );
-  test.identical( got, false );
-
-  test.case = 'instance of Logger';
-  var src = new _.Logger();
-  var got = _.printerLike( src );
-  test.identical( got, true );
-
-  test.case = 'console';
-  var got = _.printerLike( console );
-  test.identical( got, true );
-
-}
-
-//
-
-function loggerIs( test )
-{
-  test.case = 'LoggerBasic';
-  var src = _.LoggerBasic;
-  var got = _.loggerIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerMid';
-  var src = _.LoggerMid;
-  var got = _.loggerIs( src );
-  test.identical( got, false );
-
-  test.case = 'LoggerTop';
-  var src = _.LoggerTop;
-  var got = _.loggerIs( src );
-  test.identical( got, false );
-
-  test.case = 'instance of Logger';
-  var src = new _.Logger();
-  var got = _.loggerIs( src );
-  test.identical( got, true );
-}
-
-//
 
 function clone( test )
 {
@@ -608,23 +501,6 @@ function finit( test )
 
 }
 
-//
-
-function exportStringShallowDiagnosticLogger( test )
-{
-  test.case = 'string representation of logger';
-  var logger = new _.Logger();
-  var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShallowDiagnostic( logger )
-  test.identical( got, expected );
-
-  test.case = 'string representation of logger with ouput to console';
-  var logger = new _.Logger({ output : console });
-  var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShallowDiagnostic( logger )
-  test.identical( got, expected );
-} 
-
 // --
 // declare
 // --
@@ -633,25 +509,12 @@ const Proto =
 {
 
   name : 'Tools.logger.Basic',
-
-  // routineTimeOut : 999999,
-
   silencing : 1,
-  /* verbosity : 1, */
 
   tests :
   {
-
-    consoleIs,
-    printerIs,
-    printerLike,
-    loggerIs,
-
     clone,
     finit,
-
-    exportStringShallowDiagnosticLogger
-
   },
 
 }

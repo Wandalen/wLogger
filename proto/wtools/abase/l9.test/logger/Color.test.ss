@@ -5,16 +5,13 @@
 
 if( typeof module !== 'undefined' )
 {
-
-  require( '../../l9/logger/entry/Logger.s' );
-  const _global = _global_;
-  const _ = _global_.wTools;
-
+  const _ = require( 'Tools' );
   _.include( 'wTesting' );
-
+  require( '../../l9/logger/entry/Logger.s' );
 }
 
 //
+
 const _global = _global_;
 const _ = _global_.wTools;
 const Parent = wTester;
