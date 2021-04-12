@@ -518,6 +518,13 @@ function relativeMaybe( test )
 
   /* */
 
+  test.case = 'console second argument'
+  var src = console;
+  var got = _.logger.relativeMaybe( null, console );
+  test.identical( got, src );
+
+  /* */
+
   if( !Config.debug )
   return;
 
@@ -527,6 +534,7 @@ function relativeMaybe( test )
   test.shouldThrowErrorSync( () => _.logger.relativeMaybe( null, 'abc' ) )
   test.shouldThrowErrorSync( () => _.logger.relativeMaybe( 'abc' ) )
   test.shouldThrowErrorSync( () => _.logger.relativeMaybe( Object.create( null ) ) )
+  test.shouldThrowErrorSync( () => _.logger.relativeMaybe( console ) )
 
 }
 
@@ -534,6 +542,7 @@ function relativeMaybe( test )
 
 function absoluteMaybe( test )
 {
+
   /* */
 
   test.case = 'src: null, verbosity:undefined'
