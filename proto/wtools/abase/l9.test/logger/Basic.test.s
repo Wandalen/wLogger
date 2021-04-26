@@ -20,6 +20,111 @@ const __ = _globals_.testing.wTools;
 // tests
 // --
 
+
+//
+
+function consoleIs( test )
+{
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.consoleIs( src );
+  test.identical( got, false );
+}
+
+//
+
+function printerIs( test )
+{
+
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
+  var got = _.printerIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
+  var got = _.printerIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
+  var got = _.printerIs( src );
+  test.identical( got, false );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.printerIs( src );
+  test.identical( got, true );
+
+}
+
+//
+
+function printerLike( test )
+{
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
+  var got = _.printerLike( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
+  var got = _.printerLike( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
+  var got = _.printerLike( src );
+  test.identical( got, false );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.printerLike( src );
+  test.identical( got, true );
+}
+
+//
+
+function loggerIs( test )
+{
+  test.case = 'LoggerBasic';
+  var src = _.LoggerBasic;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerMid';
+  var src = _.LoggerMid;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
+  test.case = 'LoggerTop';
+  var src = _.LoggerTop;
+  var got = _.loggerIs( src );
+  test.identical( got, false );
+
+  test.case = 'instance of Logger';
+  var src = new _.Logger();
+  var got = _.loggerIs( src );
+  test.identical( got, true );
+}
+
+//
+
 function clone( test )
 {
   test.case = 'clone chainer';
@@ -451,12 +556,12 @@ function finit( test )
       let chainer = chainerGet( printer );
 
       info.name = printer.name;
-      info.keys = _.mapOnlyOwnKeys( printer );
+      info.keys = _.props.onlyOwnKeys( printer );
 
-      if( _.arrayLike( chainer.outputs ) )
+      if( _.argumentsArray.like( chainer.outputs ) )
       info.outputs = chainer.outputs.slice();
 
-      if( _.arrayLike( chainer.inputs ) )
+      if( _.argumentsArray.like( chainer.inputs ) )
       info.inputs = chainer.inputs.slice();
 
       return info;
@@ -513,8 +618,15 @@ const Proto =
 
   tests :
   {
+
+    consoleIs, // Dmytro : the second part of routine consoleIs in module wTools
+    printerIs, // Dmytro : the second part of routine printerIs in module wTools
+    printerLike, // Dmytro : the second part of routine printerLike in module wTools
+    loggerIs, // Dmytro : the second part of routine loggerIs in module wTools
+
     clone,
     finit,
+
   },
 
 }

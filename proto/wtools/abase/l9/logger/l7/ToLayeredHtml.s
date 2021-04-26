@@ -134,7 +134,7 @@ function _makeBranchDom( )
   let self = this;
   let result = $( '<' + self.elementCssTag + '>' );
 
-  if( _.mapKeys( self.attributes ).length )
+  if( _.props.keys( self.attributes ).length )
   _.dom.s.attr( result, self.attributes );
 
   self.currentDom.append( result );
@@ -158,7 +158,7 @@ function _makeTerminalDom()
   let self = this;
   let result = $( '<' + self.elementCssTag + '>' );
 
-  if( _.mapKeys( self.attributes ).length )
+  if( _.props.keys( self.attributes ).length )
   _.dom.s.attr( result, self.attributes );
 
   self.currentDom.append( result );

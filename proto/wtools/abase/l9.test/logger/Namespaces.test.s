@@ -145,7 +145,7 @@ function exportStringShallowDiagnosticLogger( test )
 
 //
 
-function bisector( test )
+function dichotomy( test )
 {
 
   test.true( !_.logger.is( console ) );
@@ -980,7 +980,7 @@ const Proto =
     loggerIs,
     exportStringShallowDiagnosticLogger,
 
-    bisector,
+    dichotomy,
     fromStrictly,
     maybe,
     relativeMaybe,

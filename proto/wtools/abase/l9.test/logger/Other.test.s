@@ -816,57 +816,6 @@ function clone( test )
 
 //
 
-function consoleBarExperiment( test )
-{
-  let context = this;
-  let a = test.assetFor( false );
-  let toolsPath = __.strEscape( a.path.nativize( a.path.join( __dirname, '../../../../node_modules/Tools' ) ) );
-  let programSourceCode =
-`
-var toolsPath = '${toolsPath}';
-${program.toString()}
-program();
-`
-
-  /* */
-
-  a.fileProvider.fileWrite( a.abs( 'Program.js' ), programSourceCode );
-  a.appStartNonThrowing({ execPath : a.abs( 'Program.js' ) })
-  .then( ( op ) =>
-  {
-    test.identical( op.exitCode, 0 );
-    test.identical( _.strCount( op.output, 'Console is barred' ), 1 );
-    test.identical( _.strCount( op.output, 'Something wrong' ), 1 );
-
-    return null;
-  });
-
-  /* */
-
-  return a.ready;
-
-  function program()
-  {
-    const _ = require( toolsPath );
-    _.include( 'wLogger' );
-    _.Logger.ConsoleBar();
-    if( _.Logger.ConsoleIsBarred( console ) )
-    console.log( 'Console is barred' )
-    var message = 'Something wrong';
-    console.error.call( undefined, [ message ] );
-  }
-
-}
-
-consoleBarExperiment.timeOut = 30000;
-consoleBarExperiment.description =
-`
-console is barred
-console.error works without context
-`
-
-//
-
 const Proto =
 {
 
@@ -878,7 +827,6 @@ const Proto =
 
   onSuiteBegin,
   onSuiteEnd,
-
 
   context :
   {
@@ -902,7 +850,7 @@ const Proto =
     coloringNoColor,
     // processWarning, /* qqq : repair? */
     // TransformCssStylingToDirectives, /* qqq : implement pelase */
-    consoleBarExperiment
+    // consoleBarExperiment
   },
 
 }

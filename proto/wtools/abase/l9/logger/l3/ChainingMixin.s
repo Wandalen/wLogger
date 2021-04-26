@@ -403,10 +403,10 @@ function outputTo( output, o )
 {
   let self = this;
 
-  o = _.routineOptions( self.outputTo, o );
+  o = _.routine.options( self.outputTo, o || null );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  let o2 = _.mapExtend( null, o );
+  let o2 = _.props.extend( null, o );
   o2.inputPrinter = self;
   o2.outputPrinter = output;
   o2.inputCombining = o.combining;
@@ -511,10 +511,10 @@ function inputFrom( input, o )
 {
   let self = this;
 
-  o = _.routineOptions( self.inputFrom, o );
+  o = _.routine.options( self.inputFrom, o || null );
   _.assert( arguments.length === 1 || arguments.length === 2 );
 
-  let o2 = _.mapExtend( null, o );
+  let o2 = _.props.extend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self;
   o2.outputCombining = o.combining;
@@ -610,7 +610,7 @@ function ConsoleBar( o )
 {
   let self = this;
 
-  o = _.routineOptions( ConsoleBar, arguments );
+  o = _.routine.options( ConsoleBar, arguments );
 
   /* */
 
@@ -619,10 +619,13 @@ function ConsoleBar( o )
 
     if( !o.barPrinter )
     o.barPrinter = new self.Self({ output : null, name : 'barPrinter' });
-    if( !o.outputPrinter && self.instanceIs() )
-    o.outputPrinter = self;
+    // if( !o.outputPrinter && self.instanceIs() )
+    // o.outputPrinter = self;
     if( !o.outputPrinter )
-    o.outputPrinter = new self.Self();
+    {
+      o.outputPrinter = new self.Self({ output : false, name : 'outputPrinter' });
+      _.assert( o.outputPrinter.outputs.length === 0 );
+    }
 
     if( o.verbose )
     {
@@ -636,6 +639,7 @@ function ConsoleBar( o )
 
     o.outputPrinterHadOutputs = o.outputPrinter.outputs.slice();
     o.outputPrinter.outputUnchain();
+    if( o.outputingToConsole )
     o.outputPrinter.outputTo( console, { originalOutput : 1, combining : 'rewrite' } );
 
     o.barPrinter.permanentStyle = 'exclusiveOutput.neutral';
@@ -666,6 +670,9 @@ function ConsoleBar( o )
     _.assert( bar.outputPrinterHadOutputs === o.outputPrinterHadOutputs );
 
     o.barPrinter.unchain();
+    if( o.outputPrinter.outputs.length )
+    debugger
+    if( o.outputPrinter.hasOutput( console, { withoutOutputToOriginal : 0, deep : 0 } ) )
     o.outputPrinter.outputUnchain( console );
 
     _.assert( !!o.outputPrinterHadOutputs );
@@ -704,6 +711,7 @@ ConsoleBar.defaults =
   outputPrinter : null,
   barPrinter : null,
   outputPrinterHadOutputs : null,
+  outputingToConsole : 0,
   on : 1,
   verbose : 0,
 }
@@ -713,9 +721,9 @@ ConsoleBar.defaults =
 function Chain( o )
 {
   _.assert( arguments.length === 1 );
-  _.routineOptions( Chain, o )
-  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) );
-  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) );
+  _.routine.options( Chain, o )
+  _.assert( _.printerLike( o.inputPrinter ) || _.argumentsArray.like( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.argumentsArray.like( o.outputPrinter ) );
 
   return _.Chainer._chain( o );
 }
@@ -723,7 +731,7 @@ function Chain( o )
 var defaults = Chain.defaults = Object.create( _.Chainer.prototype._chain.defaults );
 
 // --
-// checker
+// dichotomy
 // --
 
 function hasInput( input, o )
@@ -1006,7 +1014,7 @@ let Extension =
   ConsoleBar,
   ConsoleIsBarred,
 
-  // checker
+  // dichotomy
 
   hasInput,
   hasInputClose,

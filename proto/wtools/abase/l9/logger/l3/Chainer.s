@@ -55,7 +55,7 @@ function _chain( o )
   let self = this;
   let result = 1;
 
-  o = _.routineOptions( self._chain, arguments );
+  o = _.routine.options_( self._chain, arguments );
 
   if( self._chainDescriptorLike( o.outputPrinter ) )
   o.outputPrinter = o.outputPrinter.outputPrinter;
@@ -63,8 +63,8 @@ function _chain( o )
   o.inputPrinter = o.inputPrinter.inputPrinter;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.printerLike( o.outputPrinter ) || _.arrayLike( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
-  _.assert( _.printerLike( o.inputPrinter ) || _.arrayLike( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
+  _.assert( _.printerLike( o.outputPrinter ) || _.argumentsArray.like( o.outputPrinter ) || _.streamIs( o.outputPrinter ) );
+  _.assert( _.printerLike( o.inputPrinter ) || _.argumentsArray.like( o.inputPrinter ) || _.streamIs( o.inputPrinter ) );
   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.outputCombining ), () => 'unknown outputCombining mode ' + _.strQuote( o.outputCombining ) );
   _.assert( _.longHas( _.PrinterChainingMixin.Combining, o.inputCombining ), () => 'unknown inputCombining mode ' + _.strQuote( o.inputCombining ) );
 
@@ -102,13 +102,13 @@ function _chain( o )
 
   /* */
 
-  if( _.arrayLike( o.outputPrinter ) )
+  if( _.argumentsArray.like( o.outputPrinter ) )
   {
     result = 0;
 
     o.outputPrinter.forEach( ( outputPrinter ) =>
     {
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.outputPrinter = outputPrinter;
 
       if( self._chainDescriptorLike( outputPrinter ) )
@@ -125,13 +125,13 @@ function _chain( o )
 
   /* */
 
-  if( _.arrayLike( o.inputPrinter ) )
+  if( _.argumentsArray.like( o.inputPrinter ) )
   {
     result = 0;
 
     o.inputPrinter.forEach( ( inputPrinter ) =>
     {
-      let o2 = _.mapExtend( null, o );
+      let o2 = _.props.extend( null, o );
       o2.inputPrinter = inputPrinter;
 
       if( self._chainDescriptorLike( inputPrinter ) )
@@ -418,9 +418,9 @@ function outputTo( output, o )
   let self = this;
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  o = _.routineOptions( self.outputTo, o );
+  o = _.routine.options_( self.outputTo, o || null );
 
-  let o2 = _.mapExtend( null, o );
+  let o2 = _.props.extend( null, o );
   o2.inputPrinter = self.printer;
   o2.outputPrinter = output;
   o2.inputCombining = o.combining;
@@ -474,9 +474,9 @@ function inputFrom( input, o )
   let self = this;
 
   _.assert( arguments.length === 1 || arguments.length === 2 );
-  o = _.routineOptions( self.outputTo, o );
+  o = _.routine.options_( self.outputTo, o || null );
 
-  let o2 = _.mapExtend( null, o );
+  let o2 = _.props.extend( null, o );
   o2.inputPrinter = input;
   o2.outputPrinter = self.printer;
   o2.outputCombining = o.combining;
@@ -869,17 +869,22 @@ function _nameSet( src )
 }
 
 // --
-// checker
+// dichotomy
 // --
 
 function _hasInput( input, o )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  o = _.routine.options_( _hasInput, o || null );
   _.assert( _.mapIs( o ) );
   _.assert( _.printerLike( input ) || _.processIs( input ) || _.streamIs( input ) );
-  _.routineOptions( _hasInput, o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
+
+  // _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  // _.assert( _.mapIs( o ) );
+  // _.assert( _.printerLike( input ) || _.processIs( input ) || _.streamIs( input ) );
+  // _.routine.options_( _hasInput, o );
 
   for( let d = 0 ; d < self.inputs.length ; d++ )
   {
@@ -909,7 +914,7 @@ function _hasInput( input, o )
 
 _hasInput.defaults =
 {
-  deep : 1,
+  deep : 0,
   withoutOutputToOriginal : 1,
 }
 
@@ -941,10 +946,10 @@ function _hasOutput( output, o )
 {
   let self = this;
 
-  _.assert( arguments.length === 2, 'Expects exactly two arguments' );
+  o = _.routine.options_( _hasOutput, o || null );
   _.assert( _.mapIs( o ) );
   _.assert( _.printerLike( output ) || _.processIs( output ) || _.streamIs( output ) );
-  _.routineOptions( _hasOutput, o );
+  _.assert( arguments.length === 1 || arguments.length === 2 );
 
   for( let d = 0 ; d < self.outputs.length ; d++ )
   {
@@ -974,7 +979,7 @@ function _hasOutput( output, o )
 
 _hasOutput.defaults =
 {
-  deep : 1,
+  deep : 0,
   withoutOutputToOriginal : 1,
 }
 
@@ -1145,7 +1150,7 @@ let Extension =
   _nameGet,
   _nameSet,
 
-  // checker
+  // dichotomy
 
   _hasInput,
   hasInputClose,

@@ -84,7 +84,7 @@ function prepareInfo()
 
   var result = [];
 
-  var splitCombinationKey = ( src ) => _.mapOnlyOwnKeys( src )[ 0 ].split( splitter );
+  var splitCombinationKey = ( src ) => _.props.onlyOwnKeys( src )[ 0 ].split( splitter );
 
   function addToTable( src )
   {
@@ -107,7 +107,7 @@ function prepareInfo()
 
   list.forEach( function( c )
   {
-    var key = _.mapOnlyOwnKeys( c )[ 0 ];
+    var key = _.props.onlyOwnKeys( c )[ 0 ];
     var combination = key.split( splitter );
     var fg = combination[ 0 ];
     var bg = combination[ 1 ];
@@ -149,14 +149,14 @@ function drawTable()
 
   function leftHeadFrom( table )
   {
-    return table.map( ( e ) => wTools.mapKeys( e )[ 0 ] );
+    return table.map( ( e ) => wTools.props.keys( e )[ 0 ] );
   }
 
   /* */
 
   function onTableDim( table )
   {
-    return [ table.length, table[ 0 ][ _.mapKeys( table[ 0 ] )[ 0 ] ].length ];
+    return [ table.length, table[ 0 ][ _.props.keys( table[ 0 ] )[ 0 ] ].length ];
   }
 
   /* */
@@ -172,7 +172,7 @@ function drawTable()
   function onCellGet( i2d, o )
   {
     let row = o.data[ i2d[ 0 ] ];
-    return row[ _.mapKeys( row )[ 0 ] ][ i2d[ 1 ] ];
+    return row[ _.props.keys( row )[ 0 ] ][ i2d[ 1 ] ];
   }
 
 }

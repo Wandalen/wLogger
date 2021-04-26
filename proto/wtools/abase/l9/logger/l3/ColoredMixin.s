@@ -77,7 +77,7 @@ function _transformActHtml( o )
   _.assert( !o._outputForTerminal );
 
   let options = _.mapOnly_( null, o, _transformActHtml.defaults );
-  _.routineOptions( _transformActHtml, options );
+  _.routine.options_( _transformActHtml, options );
 
   for( let i = 0; i < splitted.length; i++ )
   {
@@ -905,7 +905,7 @@ function _diagnoseColorCollapse( fg, bg )
   let self = this;
   let collapse = false;
 
-  if( _.longIdentical( self.foregroundColor, self.backgroundColor ) )
+  if( _.long.identical( self.foregroundColor, self.backgroundColor ) )
   {
     if( fg.originalName !== bg.originalName )
     {
@@ -1078,9 +1078,9 @@ function _colorSet( layer, color )
 
   function _getColorName( map, color )
   {
-    let keys = _.mapOnlyOwnKeys( map );
+    let keys = _.props.onlyOwnKeys( map );
     for( let i = 0; i < keys.length; i++ )
-    if( _.longIdentical( map[ keys[ i ] ], color ) )
+    if( _.long.identical( map[ keys[ i ] ], color ) )
     return keys[ i ];
 
   }
@@ -1116,7 +1116,7 @@ function styleSet( src )
 
   _.assert( _.objectLike( style ), 'Unknown style:', src );
 
-  let _style = _.mapExtend( null, style );
+  let _style = _.props.extend( null, style );
 
   self._styleApply( _style );
   self._styleComplement( _style );

@@ -22,7 +22,7 @@ function wLoggerMid( o )
 Self.shortName = 'LoggerMid';
 
 // --
-// routines
+// implementation
 // --
 
 function init( o )

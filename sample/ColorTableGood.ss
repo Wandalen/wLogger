@@ -118,7 +118,7 @@ function prepareTableInfo()
   var row2  = {};
   var row, i;
 
-  var keys = _.mapOnlyOwnKeys( map );
+  var keys = _.props.onlyOwnKeys( map );
   keys.forEach( ( fg ) =>
   {
     var c = map[ fg ];
@@ -179,7 +179,7 @@ function drawTable()
   function onTableDim( table )
   {
     debugger;
-    return [ table.length, table[ 0 ][ _.mapKeys( table[ 0 ] )[ 0 ] ].length ];
+    return [ table.length, table[ 0 ][ _.props.keys( table[ 0 ] )[ 0 ] ].length ];
   }
 
   /* */
@@ -195,7 +195,7 @@ function drawTable()
   function onCellGet( i2d, o )
   {
     let row = o.data[ i2d[ 0 ] ];
-    return row[ _.mapKeys( row )[ 0 ] ][ i2d[ 1 ] ];
+    return row[ _.props.keys( row )[ 0 ] ][ i2d[ 1 ] ];
   }
 
 }
