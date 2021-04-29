@@ -274,7 +274,7 @@ function _outputToConsole( cd )
   _.assert( _.consoleIs( cd.outputPrinter ) );
   _.assert( cd.outputPrinter.outputs === undefined );
   _.assert( !cd.outputPrinter.isPrinter );
-  _.assert( _.objectIs( outputChainer ) );
+  _.assert( _.object.isBasic( outputChainer ) );
 
   cd.write = Object.create( null );
 
@@ -292,7 +292,7 @@ function _outputToStream( cd )
   let self = this;
   let stream = cd.outputPrinter;
 
-  _.assert( stream.writable && _.routineIs( stream._write ) && _.objectIs( stream._writableState ), 'Provided stream is not writable!.' );
+  _.assert( stream.writable && _.routineIs( stream._write ) && _.object.isBasic( stream._writableState ), 'Provided stream is not writable!.' );
   _.assert( cd.write === null );
 
   cd.write = Object.create( null );
@@ -316,7 +316,7 @@ function _inputFromStream( cd )
   let stream = cd.inputPrinter;
   let outputPrinter = cd.outputPrinter;
 
-  _.assert( stream.readable && _.routineIs( stream._read ) && _.objectIs( stream._readableState ), 'Provided stream is not readable!.' );
+  _.assert( stream.readable && _.routineIs( stream._read ) && _.object.isBasic( stream._readableState ), 'Provided stream is not readable!.' );
   _.assert( !cd.onDataHandler );
 
   cd.onDataHandler = onDataHandler;
@@ -680,7 +680,7 @@ function _restoreOriginalWriteConsole( chainer )
   let self = this;
 
   _.assert( arguments.length === 1 );
-  _.assert( _.objectIs( chainer ) );
+  _.assert( _.object.isBasic( chainer ) );
   _.assert( _.consoleIs( chainer.printer ) );
   _.assert( !chainer.outputs.length, 'Can\'t restore original write methods when console has outputs' );
 

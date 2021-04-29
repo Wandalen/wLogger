@@ -157,7 +157,7 @@ function begin()
   {
     let argument = arguments[ a ];
 
-    if( _.objectIs( argument ) )
+    if( _.object.isBasic( argument ) )
     {
       for( let key in argument )
       self._begin( key, argument[ key ] )
@@ -213,7 +213,7 @@ function end()
   {
     let argument = arguments[ a ];
 
-    if( _.objectIs( argument ) )
+    if( _.object.isBasic( argument ) )
     {
       for( let key in argument )
       self._end( key, argument[ key ] )
@@ -257,7 +257,7 @@ function rbegin()
   {
     let argument = arguments[ a ];
 
-    if( _.objectIs( argument ) )
+    if( _.object.isBasic( argument ) )
     {
       for( let key in argument )
       self._rbegin( key, argument[ key ] )
@@ -305,7 +305,7 @@ function rend()
   {
     let argument = arguments[ a ];
 
-    if( _.objectIs( argument ) )
+    if( _.object.isBasic( argument ) )
     {
       for( let key in argument )
       self._rend( key, argument[ key ] )
