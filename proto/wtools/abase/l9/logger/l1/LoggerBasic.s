@@ -304,7 +304,7 @@ function _strConcat( args )
   _.assert( arguments.length === 1, 'Expects single argument' );
 
   if( !_.strConcat )
-  return _.entity.exportStringSimple.apply( _, args );
+  return _.entity.exportStringDiagnosticShallow/*exportStringSimple*/.apply( _, args );
 
   let o2 =
   {

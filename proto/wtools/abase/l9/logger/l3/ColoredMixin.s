@@ -1348,7 +1348,7 @@ function escape( src )
 function str()
 {
   debugger;
-  return _.entity.exportStringSimple.apply( _, arguments );
+  return _.entity.exportStringDiagnosticShallow/*exportStringSimple*/.apply( _, arguments );
 }
 
 // --
