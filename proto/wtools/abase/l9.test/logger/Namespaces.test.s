@@ -128,18 +128,18 @@ function loggerIs( test )
 
 //
 
-function exportStringShallowDiagnosticLogger( test )
+function exportStringDiagnosticShallowLogger( test )
 {
   test.case = 'string representation of logger';
   var logger = new _.Logger();
   var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShallowDiagnostic( logger )
+  var got = _.entity.exportStringDiagnosticShallow( logger )
   test.identical( got, expected );
 
   test.case = 'string representation of logger with ouput to console';
   var logger = new _.Logger({ output : console });
   var expected = '{- wLoggerTop.constructible -}';
-  var got = _.entity.exportStringShallowDiagnostic( logger )
+  var got = _.entity.exportStringDiagnosticShallow( logger )
   test.identical( got, expected );
 }
 
@@ -978,7 +978,7 @@ const Proto =
     printerIs,
     printerLike,
     loggerIs,
-    exportStringShallowDiagnosticLogger,
+    exportStringDiagnosticShallowLogger,
 
     dichotomy,
     fromStrictly,
