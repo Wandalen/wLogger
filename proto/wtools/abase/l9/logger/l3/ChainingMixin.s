@@ -670,8 +670,8 @@ function ConsoleBar( o )
     _.assert( bar.outputPrinterHadOutputs === o.outputPrinterHadOutputs );
 
     o.barPrinter.unchain();
-    if( o.outputPrinter.outputs.length )
-    debugger
+    // if( o.outputPrinter.outputs.length )
+    // debugger
     if( o.outputPrinter.hasOutput( console, { withoutOutputToOriginal : 0, deep : 0 } ) )
     o.outputPrinter.outputUnchain( console );
 

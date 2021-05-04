@@ -1764,7 +1764,7 @@ function output( test )
 
     test.open( 'printer -> ordinary -> console' );
 
-    /* xxx qqq for Yevhen : not good solution. it crashes. | aaa : fixed group */
+    /* xxx qqq for junior : not good solution. it crashes. | aaa : fixed group */
     test.case = 'combining : rewrite, printers have no other chains';
 
     var printerA = new _.Logger({ name : 'printerA' });
@@ -2842,7 +2842,7 @@ function output( test )
 
 }
 
-/* qqq for Yevhen : put subroutines inside | aaa : Done. */
+/* qqq for junior : put subroutines inside | aaa : Done. */
 
 function input( test )
 {
