@@ -1,6 +1,6 @@
 {
   "name" : "wLogger",
-  "version" : "0.5.413",
+  "version" : "0.5.414",
   "engine" : "node >= 10.0.0",
   "description" : "Class to log data consistently which supports colorful formatting, verbosity control, chaining, combining several loggers/consoles into logging network. Logger provides 10 levels of verbosity [ 0,9 ] any value beyond clamped and multiple approaches to control verbosity. Logger may use console/stream/process/file as input or output. Unlike alternatives, colorful formatting is cross-platform and works similarly in the browser and on the server side. Use the module to make your diagnostic code working on any platform you work with and to been able to redirect your output to/from any destination/source.",
   "author" : "Kostiantyn Wandalen <wanalen@01.school>",
@@ -20,13 +20,13 @@
   },
   "dependencies" :
   {
-    "wTools" : "delta",
-    "wCopyable" : "delta",
-    "wEventHandler" : "delta",
-    "wstringer" : "delta",
-    "wstringsextra" : "delta",
-    "wColor256" : "delta"
+    "wTools" : "stable",
+    "wCopyable" : "stable",
+    "wEventHandler" : "stable",
+    "wstringer" : "stable",
+    "wstringsextra" : "stable",
+    "wColor256" : "stable"
   },
-  "devDependencies" : { "wFiles" : "delta", "wTesting" : "delta" },
+  "devDependencies" : { "wFiles" : "stable", "wTesting" : "stable" },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }
