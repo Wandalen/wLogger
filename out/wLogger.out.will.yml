@@ -2,12 +2,9 @@ format: outwillfile-2.0
 root:
   - wLogger.out
 consistency:
-  ../.ex.will.yml: &ref_0
-    hash: be93875ee4d54fb2042d369c70a12f7f
-    size: 2361
-  ../.im.will.yml: &ref_1
-    hash: 9752723014fcc3a29b8f98709376acd0
-    size: 5294
+  ../will.yml: &ref_0
+    hash: f456f1c722f08c23527ed392bb5038c2
+    size: 7457
 module:
   wLogger.out:
     about:
@@ -25,24 +22,24 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: &ref_2
-        - njs >= 10.0.0
-        - chrome >= 60.0.0
-        - firefox >= 60.0.0
-      keywords: &ref_3
+      license: MIT
+      npm.name: wLogger
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: &ref_1
         - wTools
         - logger
         - logging
         - log
         - colorful log
         - multilevel log
-      license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: &ref_4
+      contributors: &ref_2
         - Kostiantyn Wandalen <wanalen@01.school>
         - Volodymyr M. <volodymyr.migdal@gmail.com>
-      npm.name: wLogger
-      npm.scripts: &ref_5
+      interpreters: &ref_3
+        - njs >= 10.0.0
+        - chrome >= 60.0.0
+        - firefox >= 60.0.0
+      npm.scripts: &ref_4
         test: wtest .run proto/**
         docgen: wdocgen .build proto
     path:
@@ -57,15 +54,11 @@ module:
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
-        path:
-          - ../.ex.will.yml
-          - ../.im.will.yml
+        path: ../will.yml
       module.peer.in:
         criterion:
           predefined: 1
@@ -234,11 +227,11 @@ module:
         path: 'npm:///wEventHandler'
         autoExporting: 0
         enabled: 0
-      wStringer:
+      wstringer:
         path: 'npm:///wstringer'
         autoExporting: 0
         enabled: 0
-      wStringsExtra:
+      wstringsextra:
         path: 'npm:///wstringsextra'
         autoExporting: 0
         enabled: 0
@@ -859,8 +852,7 @@ module:
           content: proto
           export: 1
     consistency:
-      ../.ex.will.yml: *ref_0
-      ../.im.will.yml: *ref_1
+      ../will.yml: *ref_0
   ../:
     about:
       name: wLogger
@@ -877,26 +869,22 @@ module:
         to redirect your output to/from any destination/source.
       enabled: 1
       version: 0.6.0
-      interpreters: *ref_2
-      keywords: *ref_3
       license: MIT
-      author: Kostiantyn Wandalen <wanalen@01.school>
-      contributors: *ref_4
       npm.name: wLogger
-      npm.scripts: *ref_5
+      author: Kostiantyn Wandalen <wanalen@01.school>
+      keywords: *ref_1
+      contributors: *ref_2
+      interpreters: *ref_3
+      npm.scripts: *ref_4
     path:
       module.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.original.willfiles:
         criterion:
           predefined: 1
-        path:
-          - .ex.will.yml
-          - .im.will.yml
+        path: will.yml
       module.peer.willfiles:
         criterion:
           predefined: 1
@@ -1010,11 +998,11 @@ module:
         path: 'npm:///wEventHandler'
         autoExporting: 0
         enabled: 0
-      wStringer:
+      wstringer:
         path: 'npm:///wstringer'
         autoExporting: 0
         enabled: 0
-      wStringsExtra:
+      wstringsextra:
         path: 'npm:///wstringsextra'
         autoExporting: 0
         enabled: 0
@@ -1571,9 +1559,6 @@ module:
           - 'build::release'
           - 'build::npm'
     consistency:
-      ../.ex.will.yml:
-        hash: be93875ee4d54fb2042d369c70a12f7f
-        size: 2361
-      ../.im.will.yml:
-        hash: 9752723014fcc3a29b8f98709376acd0
-        size: 5294
+      ../will.yml:
+        hash: f456f1c722f08c23527ed392bb5038c2
+        size: 7457
