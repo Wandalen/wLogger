@@ -45,7 +45,7 @@ function init( o )
   Parent.prototype.init.call( self, o );
 
   self.containerDom = $( self.containerDom );
-  _.assert( self.containerDom.length, 'wPrinterToLayeredHtml : not found containerDom' );
+  _.assert( self.containerDom.length > 0, 'wPrinterToLayeredHtml : not found containerDom' );
 
   self.containerDom.addClass( self.contentCssClass );
 

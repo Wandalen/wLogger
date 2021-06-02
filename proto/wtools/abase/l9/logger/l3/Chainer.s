@@ -682,7 +682,7 @@ function _restoreOriginalWriteConsole( chainer )
   _.assert( arguments.length === 1 );
   _.assert( _.object.isBasic( chainer ) );
   _.assert( _.consoleIs( chainer.printer ) );
-  _.assert( !chainer.outputs.length, 'Can\'t restore original write methods when console has outputs' );
+  _.assert( !chainer.outputs.length > 0, 'Can\'t restore original write methods when console has outputs' );
 
   self.Channel.forEach( ( channel, c ) =>
   {
