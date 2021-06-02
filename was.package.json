@@ -27,6 +27,6 @@
     "wstringsextra" : "",
     "wColor256" : ""
   },
-  "devDependencies" : { "wFiles" : "", "wTesting" : "" },
+  "devDependencies" : { "wFiles" : "",  "eslint" : "7.1.0", "wTesting" : "" },
   "keywords" : [ "wTools", "logger", "logging", "log", "colorful log", "multilevel log" ]
 }
