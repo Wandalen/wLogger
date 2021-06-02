@@ -3,8 +3,8 @@ root:
   - wLogger.out
 consistency:
   ../will.yml: &ref_0
-    hash: f456f1c722f08c23527ed392bb5038c2
-    size: 7457
+    hash: c59f01f8de0557698d197415ae8f6bea
+    size: 7550
 module:
   wLogger.out:
     about:
@@ -247,6 +247,12 @@ module:
           development: 1
       wFiles:
         path: 'npm:///wFiles'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
         autoExporting: 0
         enabled: 0
         criterion:
@@ -1022,6 +1028,12 @@ module:
         enabled: 0
         criterion:
           development: 1
+      eslint:
+        path: 'npm:///eslint#7.1.0'
+        autoExporting: 0
+        enabled: 0
+        criterion:
+          development: 1
       wTesting:
         path: 'npm:///wTesting'
         autoExporting: 0
@@ -1560,5 +1572,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: f456f1c722f08c23527ed392bb5038c2
-        size: 7457
+        hash: c59f01f8de0557698d197415ae8f6bea
+        size: 7550
