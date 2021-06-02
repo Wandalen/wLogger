@@ -30,7 +30,7 @@ function init( o )
   let self = this;
   o = o || Object.create( null );
 
-  _.assert( arguments.length === 0 | arguments.length === 1 );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
 
   // if( Config.debug )
   // if( o.scriptStack === undefined )

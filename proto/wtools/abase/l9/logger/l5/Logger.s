@@ -48,7 +48,7 @@ Self.shortName = 'Logger';
 function init( o )
 {
   let self = this;
-  _.assert( arguments.length === 0 | arguments.length === 1 );
+  _.assert( arguments.length === 0 || arguments.length === 1 );
   Parent.prototype.init.call( self, o );
 }
 
