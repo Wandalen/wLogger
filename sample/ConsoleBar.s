@@ -38,7 +38,9 @@ _.Logger.ConsoleBar
 ({
   barPrinter,
   outputPrinter,
+  outputingToConsole : 1,
   on : 1
 });
 
 console.log( 'Message from console' );
+
