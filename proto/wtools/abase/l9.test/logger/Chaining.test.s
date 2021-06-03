@@ -4182,6 +4182,8 @@ function chain( test )
 
 }
 
+chain.timeOut = 30000;
+
 //
 
 function chainWithEmptyConsole( test )
@@ -4703,11 +4705,8 @@ const Proto =
 {
 
   name : 'Tools.logger.Chaining',
-
-  // routineTimeOut : 999999,
-
+  routineTimeOut : 10000,
   silencing : 1,
-  /* verbosity : 1, */
 
   tests :
   {
