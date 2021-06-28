@@ -4657,7 +4657,7 @@ function consoleBarBasic( test )
 
   /* */
 
-  let parogramPath = a.program( program ).programPath;
+  let parogramPath = a.program( program ).filePath/*programPath*/;
   a.appStartNonThrowing({ execPath : parogramPath, outputColoring : 0, outputGraying : 0 })
   .then( ( op ) =>
   {
