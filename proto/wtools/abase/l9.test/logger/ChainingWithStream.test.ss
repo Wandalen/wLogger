@@ -10,7 +10,6 @@ if( typeof module !== 'undefined' )
 {
   const _ = require( 'Tools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
   require( '../../l9/logger/entry/Logger.s' );
 }
 
@@ -18,6 +17,7 @@ if( typeof module !== 'undefined' )
 
 const _global = _global_;
 const _ = _global_.wTools;
+const __ = _globals_.testing.wTools;
 const Parent = wTester;
 
 //
@@ -25,7 +25,7 @@ const Parent = wTester;
 function onSuiteBegin()
 {
   let self = this;
-  self.testDirPath = _.path.tempOpen( _.path.join( __dirname, '../..'  ), 'ChainingWithStream' )
+  self.testDirPath = __.path.tempOpen( __.path.join( __dirname, '../..'  ), 'ChainingWithStream' );
 }
 
 //
@@ -33,28 +33,27 @@ function onSuiteBegin()
 function onSuiteEnd()
 {
   let self = this;
-  _.path.tempClose( self.testDirPath );
+  __.path.tempClose( self.testDirPath );
 }
 
 //
 
 function input( test )
 {
-  let self = this;
-  let con = _.take( null );
+  const context = this;
+  const a = test.assetFor( false );
 
   test.open( 'readStream -> multiple printers, chain/unchain in different ways' );
 
-  con
-  .then( () =>
+  a.ready.then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( 'file.txt' );
 
     let data = _.strDup( '1', 10 );
     let got = [];
 
-    _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.streamRead( filePath );
+    a.fileProvider.fileWrite( filePath, data );
+    let readStream = a.fileProvider.streamRead( filePath );
 
     function onTransformEnd( o )
     {
@@ -73,7 +72,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -111,13 +110,13 @@ function input( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( 'file.txt' );
 
     let data = _.strDup( '1', 10 );
     let got = [];
 
-    _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.streamRead( filePath );
+    a.fileProvider.fileWrite( filePath, data );
+    let readStream = a.fileProvider.streamRead( filePath );
 
     function onTransformEnd( o )
     {
@@ -136,7 +135,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -174,13 +173,13 @@ function input( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( 'file.txt' );
 
     let data = _.strDup( '1', 10 );
     let got = [];
 
-    _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.streamRead( filePath );
+    a.fileProvider.fileWrite( filePath, data );
+    let readStream = a.fileProvider.streamRead( filePath );
     let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
@@ -200,7 +199,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -237,13 +236,13 @@ function input( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( 'file.txt' );
 
     let data = _.strDup( '1', 10 );
     let got = [];
 
-    _.fileProvider.fileWrite( filePath, data );
-    let readStream = _.fileProvider.streamRead( filePath );
+    a.fileProvider.fileWrite( filePath, data );
+    let readStream = a.fileProvider.streamRead( filePath );
     let chainerReadStream = _.Chainer.MakeFor( readStream );
 
     function onTransformEnd( o )
@@ -263,7 +262,7 @@ function input( test )
       'printerB : ' + data,
     ];
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       readStream.close();
       test.identical( got, expected );
@@ -298,7 +297,7 @@ function input( test )
 
   test.close( 'readStream -> multiple printers, chain/unchain in different ways' );
 
-  return con;
+  return a.ready;
 }
 
 input.timeOut = 15000;
@@ -307,21 +306,20 @@ input.timeOut = 15000;
 
 function output( test )
 {
-  let self = this;
-
-  let con = _.take( null );
+  const context = this;
+  const a = test.assetFor( false );
 
   test.open( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
-  con
-  .then( () =>
+  a.ready.then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( '../file.txt' );
+    console.log( filePath );
 
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.streamWrite( filePath );
+    let writeStream = a.fileProvider.streamWrite( filePath );
 
     function onTransformEnd( o )
     {
@@ -334,11 +332,11 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       writeStream.close();
 
-      var file = _.fileProvider.fileRead( filePath );
+      var file = a.fileProvider.fileRead( filePath );
       test.identical( file, expected.join( '' ) );
 
       let onDataListeners = writeStream.listeners( 'data' );
@@ -369,12 +367,12 @@ function output( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( '../file.txt' );
 
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.streamWrite( filePath );
+    let writeStream = a.fileProvider.streamWrite( filePath );
 
     function onTransformEnd( o )
     {
@@ -387,11 +385,11 @@ function output( test )
     printerA.outputTo( writeStream );
     printerB.outputTo( writeStream );
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       writeStream.close();
 
-      var file = _.fileProvider.fileRead( filePath );
+      var file = a.fileProvider.fileRead( filePath );
       test.identical( file, expected.join( '' ) );
 
       let onDataListeners = writeStream.listeners( 'data' );
@@ -422,12 +420,12 @@ function output( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( '../file.txt' );
 
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.streamWrite( filePath );
+    let writeStream = a.fileProvider.streamWrite( filePath );
     let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
@@ -441,11 +439,11 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       writeStream.close();
 
-      var file = _.fileProvider.fileRead( filePath );
+      var file = a.fileProvider.fileRead( filePath );
       test.identical( file, expected.join( '' ) );
 
       let onDataListeners = writeStream.listeners( 'data' );
@@ -474,12 +472,12 @@ function output( test )
 
   .then( () =>
   {
-    let filePath = _.path.join( self.testDirPath, 'file.txt' )
+    let filePath = a.abs( '../file.txt' );
 
     let data = _.strDup( '1', 10 );
     let expected = [];
 
-    let writeStream = _.fileProvider.streamWrite( filePath );
+    let writeStream = a.fileProvider.streamWrite( filePath );
     let chainerWriteStream = _.Chainer.MakeFor( writeStream );
 
     function onTransformEnd( o )
@@ -493,11 +491,11 @@ function output( test )
     chainerWriteStream.inputFrom( printerA );
     chainerWriteStream.inputFrom( printerB );
 
-    return _.time.out( 1000, () =>
+    return __.time.out( 1000, () =>
     {
       writeStream.close();
 
-      var file = _.fileProvider.fileRead( filePath );
+      var file = a.fileProvider.fileRead( filePath );
       test.identical( file, expected.join( '' ) );
 
       let onDataListeners = writeStream.listeners( 'data' );
@@ -524,7 +522,7 @@ function output( test )
 
   test.close( 'multiple printers -> writeStream, chain/unchain in different ways' );
 
-  return con;
+  return a.ready;
 }
 
 // --
