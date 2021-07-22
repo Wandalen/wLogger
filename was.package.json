@@ -44,7 +44,6 @@
   },
   "devDependencies": {
     "wTesting": "",
-    "wFiles": "",
     "eslint": "7.1.0"
   },
   "keywords": [
