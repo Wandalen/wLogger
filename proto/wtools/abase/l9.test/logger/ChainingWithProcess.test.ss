@@ -10,7 +10,7 @@ if( typeof module !== 'undefined' )
 {
   const _ = require( 'Tools' );
   _.include( 'wTesting' );
-  _.include( 'wFiles' );
+  // _.include( 'wFiles' );
   require( '../../l9/logger/entry/Logger.s' );
 }
 
