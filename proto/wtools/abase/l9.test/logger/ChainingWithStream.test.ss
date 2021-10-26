@@ -525,6 +525,8 @@ function output( test )
   return a.ready;
 }
 
+output.timeOut = 10000;
+
 // --
 // proto
 // --
