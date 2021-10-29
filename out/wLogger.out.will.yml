@@ -3,8 +3,8 @@ root:
   - wLogger.out
 consistency:
   ../will.yml: &ref_0
-    hash: f63c74aa63d2d078337303b9128dd9ca
-    size: 7463
+    hash: 4495a1b059c0ff7753604189bc271292
+    size: 7322
 module:
   wLogger.out:
     about:
@@ -438,9 +438,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -776,12 +773,6 @@ module:
           - 'step::doc.export'
         criterion:
           content: doc
-          export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
           export: 1
       export:
         steps:
@@ -1158,9 +1149,6 @@ module:
           content: npm
         inherit:
           - module.export
-      npm.publish:
-        opts:
-          shell: npm publish
       npm.generate.debug.raw:
         opts:
           entryPath: 'path::entry.out.*=1'
@@ -1497,12 +1485,6 @@ module:
         criterion:
           content: doc
           export: 1
-      npm.export:
-        steps:
-          - 'step::npm.publish'
-        criterion:
-          content: npm
-          export: 1
       export:
         steps:
           - 'build::proto.export'
@@ -1560,5 +1542,5 @@ module:
           - 'build::npm'
     consistency:
       ../will.yml:
-        hash: f63c74aa63d2d078337303b9128dd9ca
-        size: 7463
+        hash: 4495a1b059c0ff7753604189bc271292
+        size: 7322
